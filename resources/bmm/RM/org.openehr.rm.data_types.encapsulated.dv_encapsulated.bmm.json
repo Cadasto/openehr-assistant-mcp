@@ -1,0 +1,25 @@
+{
+    "name": "DV_ENCAPSULATED",
+    "documentation": "Abstract class defining the common meta-data of all types of encapsulated data.",
+    "is_abstract": true,
+    "ancestors": [
+        "DATA_VALUE"
+    ],
+    "properties": {
+        "charset": {
+            "name": "charset",
+            "documentation": "Name of character encoding scheme in which this value is encoded. Coded from openEHR Code Set  character sets . Unicode is the default assumption in openEHR, with UTF-8 being the assumed encoding. This attribute allows for variations from these assumptions. ",
+            "type": "CODE_PHRASE"
+        },
+        "language": {
+            "name": "language",
+            "documentation": "Optional indicator of the localised language in which the data is written, if relevant. Coded from openEHR Code Set `languages`.",
+            "type": "CODE_PHRASE"
+        }
+    },
+    "invariants": {
+        "Size_valid": "size >= 0",
+        "Language_valid": "language /= Void implies code_set (Code_set_id_languages).has_code (language)",
+        "Charset_valid": "charset /= Void implies code_set (Code_set_id_character_sets).has_code (charset)"
+    }
+}

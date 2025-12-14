@@ -1,0 +1,146 @@
+{
+    "name": "DV_QUANTITY",
+    "documentation": "Quantitified type representing  scientific  quantities, i.e. quantities expressed as a magnitude and units. Units are expressed in the UCUM syntax (http://unitsofmeasure.org/ucum.html[Unified Code for Units of Measure (UCUM)], by Gunther Schadow and Clement J. McDonald of The Regenstrief Institute)  (case-sensitive form) by default, or another system if `_units_system_` is set. \n\nCan also be used for time durations, where it is more convenient to treat these as simply a number of seconds rather than days, months, years (in the latter case, `DV_DURATION` may be used).",
+    "ancestors": [
+        "DV_AMOUNT"
+    ],
+    "properties": {
+        "magnitude": {
+            "name": "magnitude",
+            "documentation": "Numeric magnitude of the quantity.",
+            "is_mandatory": true,
+            "type": "Real"
+        },
+        "precision": {
+            "name": "precision",
+            "documentation": "Precision to which the value of the quantity is expressed, in terms of number of decimal places. The value 0 implies an integral quantity.\nThe value -1 implies no limit, i.e. any number of decimal places.",
+            "type": "Integer"
+        },
+        "units": {
+            "name": "units",
+            "documentation": "Quantity units, expressed as a code or syntax string from either UCUM (the default) or the units system specified in `_units_system_`, when set.\n\nIn either case, the value is the code or syntax - normally formed of standard ASCII - which is in principal not the same as the display string, although in simple cases such as 'm' (for meters) it will be.\n\nIf the `_units_display_name_` field is set, this may be used for display. If not, the implementations must effect the resolution of the `_units_` value to a display form locally, e.g. by lookup of reference tables, request to a terminology service etc.\n\nExample values from UCUM: \"kg/m^2\", “mm[Hg]\", \"ms-1\", \"km/h\".",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "normal_range": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "normal_range",
+            "documentation": "Optional normal range. ",
+            "type_def": {
+                "root_type": "DV_INTERVAL",
+                "generic_parameters": [
+                    "DV_QUANTITY"
+                ]
+            }
+        },
+        "other_reference_ranges": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "other_reference_ranges",
+            "documentation": "Optional tagged other reference ranges for this value in its particular measurement context.",
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "REFERENCE_RANGE",
+                    "generic_parameters": [
+                        "DV_QUANTITY"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "units_system": {
+            "name": "units_system",
+            "documentation": "Optional field used to specify a units system from which codes in `_units_` are defined. Value is a URI identifying a terminology containing units concepts from the  (https://www.hl7.org/fhir/terminologies-systems.html[HL7 FHIR terminologies list]).\n\nIf not set, the UCUM standard (case-sensitive codes) is assumed as the units system.",
+            "type": "String"
+        },
+        "units_display_name": {
+            "name": "units_display_name",
+            "documentation": "Optional field containing the displayable form of the `_units_` field, e.g. `'°C'`.\n\nIf not set, the application environment needs to determine the displayable form.\n\nNOTE: The display name may be language-dependent for various older and non-systematic units. For this reason, it is not recommended to add unit display names to archetypes, only to templates (for localisation purposes).",
+            "type": "String"
+        }
+    },
+    "functions": {
+        "add": {
+            "name": "add",
+            "documentation": "Sum of this `DV_QUANTITY` and `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_QUANTITY"
+                }
+            },
+            "result": {
+                "type": "DV_QUANTITY"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Difference of this `DV_QUANTITY` and `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_QUANTITY"
+                }
+            },
+            "result": {
+                "type": "DV_QUANTITY"
+            }
+        },
+        "multiply": {
+            "name": "multiply",
+            "documentation": "Product of this `DV_QUANTITY` and `_factor_`.",
+            "parameters": {
+                "factor": {
+                    "name": "factor",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "DV_QUANTITY"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "True if this Quantified object is less than `_other_`. Based on comparison of `_magnitude_`. Only valid if `_is_strictly_comparable_to()_` is True.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_QUANTITY"
+                }
+            },
+            "pre_conditions": {
+                "Pre_comparable": "is_strictly_comparable()"
+            },
+            "post_conditions": {
+                "Post_result": "Result = magnitude < other.magnitude"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_integral": {
+            "name": "is_integral",
+            "documentation": "True if `_precision_` = 0, meaning that the `_magnitude_` is a whole number.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_strictly_comparable_to": {
+            "name": "is_strictly_comparable_to",
+            "documentation": "True if this quantity and `_other_` have the same `_units_` and also `_units_system_` if it exists.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_ORDERED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

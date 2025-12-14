@@ -1,0 +1,82 @@
+{
+    "name": "DV_QUANTIFIED",
+    "documentation": "Abstract class defining the concept of true quantified values, i.e. values which are not only ordered, but which have a precise magnitude.",
+    "is_abstract": true,
+    "ancestors": [
+        "DV_ORDERED"
+    ],
+    "properties": {
+        "magnitude_status": {
+            "name": "magnitude_status",
+            "documentation": "Optional status of magnitude with values: \n\n* `\"=\"`   :   magnitude is a point value \n* `\"<\"`   :   value is < magnitude \n* `\">\"`   :   value is > magnitude \n* `\"<=\"` : value is <= magnitude \n* `\">=\"` : value is >= magnitude \n* `\"~\"`   :   value is approximately magnitude \n\nIf not present, assumed meaning is  `\"=\"` . \n",
+            "type": "String"
+        },
+        "accuracy": {
+            "name": "accuracy",
+            "documentation": "Accuracy of measurement. Exact form of expression determined in descendants.",
+            "type": "Any"
+        }
+    },
+    "functions": {
+        "valid_magnitude_status": {
+            "name": "valid_magnitude_status",
+            "documentation": "Test whether a string value is one of the valid values for the magnitude_status attribute. ",
+            "post_conditions": {
+                "Post": "Result = s in {\"=\", \"<\", \">\", \"<=\", \">=\", \"~\"}"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "magnitude": {
+            "name": "magnitude",
+            "is_abstract": true,
+            "result": {
+                "type": "Ordered_Numeric"
+            }
+        },
+        "accuracy_unknown": {
+            "name": "accuracy_unknown",
+            "documentation": "True if accuracy is not known, e.g. due to not being recorded or discernable.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_equal": {
+            "name": "is_equal",
+            "documentation": "Return True if this `DV_QUANTIFIED` is considered equal to `_other_`.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_QUANTIFIED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "True if `_other_` is less than this Quantified object. Based on comparison of `_magnitude_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_QUANTIFIED"
+                }
+            },
+            "pre_conditions": {
+                "Pre_comparable": "is_strictly_comparable()"
+            },
+            "post_conditions": {
+                "Post_result": "Result = magnitude < other.magnitude"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Magnitude_status_valid": "magnitude_status /= Void implies valid_magnitude_status (magnitude_status)"
+    }
+}

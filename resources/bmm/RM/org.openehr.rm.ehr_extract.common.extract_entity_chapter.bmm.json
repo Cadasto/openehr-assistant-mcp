@@ -1,0 +1,15 @@
+{
+    "name": "EXTRACT_ENTITY_CHAPTER",
+    "documentation": "Type of chapter that contains information relating to a single demographic entity.",
+    "ancestors": [
+        "EXTRACT_CHAPTER"
+    ],
+    "properties": {
+        "extract_id_key": {
+            "name": "extract_id_key",
+            "documentation": "Reference to entity, usually a demographic entity such as a patient that the content of this chapter relates to.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    }
+}

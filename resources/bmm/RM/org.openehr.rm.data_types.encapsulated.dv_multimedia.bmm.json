@@ -1,0 +1,110 @@
+{
+    "name": "DV_MULTIMEDIA",
+    "documentation": "A specialisation of `DV_ENCAPSULATED` for audiovisual and bio-signal types. Includes further metadata relating to multimedia types which are not applicable to other subtypes of `DV_ENCAPSULATED`.",
+    "ancestors": [
+        "DV_ENCAPSULATED"
+    ],
+    "properties": {
+        "alternate_text": {
+            "name": "alternate_text",
+            "documentation": "Text to display in lieu of multimedia display/replay.",
+            "type": "String"
+        },
+        "uri": {
+            "name": "uri",
+            "documentation": "URI reference to electronic information stored outside the record as a file, database entry etc, if supplied as a reference. \n",
+            "type": "DV_URI"
+        },
+        "data": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "data",
+            "documentation": "The actual data found at `_uri_`, if supplied inline.",
+            "type_def": {
+                "container_type": "Array",
+                "type": "Octet"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "media_type": {
+            "name": "media_type",
+            "documentation": "Data media type coded from openEHR code set  media types  (interface for the IANA MIME types code set). \n",
+            "is_mandatory": true,
+            "type": "CODE_PHRASE"
+        },
+        "compression_algorithm": {
+            "name": "compression_algorithm",
+            "documentation": "Compression type, a coded value from the openEHR Integrity check code set. Void means no compression. ",
+            "type": "CODE_PHRASE"
+        },
+        "integrity_check": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "integrity_check",
+            "documentation": "Binary cryptographic integrity checksum.",
+            "type_def": {
+                "container_type": "Array",
+                "type": "Octet"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "integrity_check_algorithm": {
+            "name": "integrity_check_algorithm",
+            "documentation": "Type of integrity check, a coded value from the openEHR `Integrity check` code set. ",
+            "type": "CODE_PHRASE"
+        },
+        "thumbnail": {
+            "name": "thumbnail",
+            "documentation": "The thumbnail for this item, if one exists; mainly for graphics formats.",
+            "type": "DV_MULTIMEDIA"
+        },
+        "size": {
+            "name": "size",
+            "documentation": "Original size in bytes of unencoded encapsulated data. I.e. encodings such as base64, hexadecimal etc do not change the value of this attribute.",
+            "is_mandatory": true,
+            "type": "Integer"
+        }
+    },
+    "functions": {
+        "is_external": {
+            "name": "is_external",
+            "documentation": "Computed from the value of the `_uri_` attribute: True if  the data is stored externally to the record, as indicated by `_uri_`. A copy may also be stored internally, in which case `_is_expanded_` is also true.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_inline": {
+            "name": "is_inline",
+            "documentation": "Computed from the value of the data attribute. True if  the  data is stored  in  expanded  form, ie within the EHR itself. ",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_compressed": {
+            "name": "is_compressed",
+            "documentation": "Computed from the value of the `_compression_algorithm_` attribute: True if  the  data is stored in compressed form. ",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "has_integrity_check": {
+            "name": "has_integrity_check",
+            "documentation": "Computed from the value of the `_integrity_check_algorithm_` attribute: True if an integrity check has been computed. ",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Not_empty": "is_inline or is_external",
+        "Media_type_valid": "media_type /= Void and then code_set (Code_set_id_media_types).has_code (media_type)",
+        "Compression_algorithm_validity": "compression_algorithm /= Void implies code_set (Code_set_id_compression_algorithms).has_code (compression_algorithm)",
+        "Integrity_check_validity": "integrity_check /= Void implies integrity_check_algorithm /= Void",
+        "Integrity_check_algorithm_validity": "integrity_check_algorithm /= Void implies code_set (Code_set_id_integrity_check_algorithms).has_code (integrity_check_algorithm)",
+        "Size_valid": "size >= 0"
+    }
+}

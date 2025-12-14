@@ -1,0 +1,97 @@
+{
+    "name": "DV_ORDERED",
+    "documentation": "Abstract class defining the concept of ordered values, which includes ordinals as well as true quantities. It defines the functions  `<` and `_is_strictly_comparable_to()_`, the latter of which must evaluate to `True` for instances being compared with the  `<` function, or used as limits in the `DV_INTERVAL<T>` class. \n\nData value types which are to be used as limits in the `DV_INTERVAL<T>` class must inherit from this class, and implement the function `_is_strictly_comparable_to()_` to ensure that instances compare meaningfully. For example, instances of `DV_QUANTITY` can only be compared if they measure the same kind of physical quantity. \n",
+    "is_abstract": true,
+    "ancestors": [
+        "DATA_VALUE",
+        "Ordered"
+    ],
+    "properties": {
+        "normal_status": {
+            "name": "normal_status",
+            "documentation": "Optional normal status indicator of value with respect to normal range for this value. Often included by lab, even if the normal range itself is not included. Coded by ordinals in series HHH, HH, H, (nothing), L, LL, LLL; see openEHR terminology group  `normal_status`. ",
+            "type": "CODE_PHRASE"
+        },
+        "normal_range": {
+            "name": "normal_range",
+            "documentation": "Optional normal range. ",
+            "type": "DV_INTERVAL"
+        },
+        "other_reference_ranges": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "other_reference_ranges",
+            "documentation": "Optional tagged other reference ranges for this value in its particular measurement context.",
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "REFERENCE_RANGE",
+                    "generic_parameters": [
+                        "DV_ORDERED"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "is_strictly_comparable_to": {
+            "name": "is_strictly_comparable_to",
+            "documentation": "Test if two instances are strictly comparable. Effected in descendants.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_ORDERED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_simple": {
+            "name": "is_simple",
+            "documentation": "True if this quantity has no reference ranges.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_normal": {
+            "name": "is_normal",
+            "documentation": "Value is in the normal range, determined by comparison of the value to `_normal_range_` if present, or by the `_normal_status_` marker if present. \n",
+            "pre_conditions": {
+                "Pre": "normal_range /= Void or normal_status /= Void"
+            },
+            "post_conditions": {
+                "Post_range": "normal_range /= Void implies Result = normal_range.has (self)",
+                "Post_status": "normal_status /= Void implies normal_status.code_string.is_equal (“N”)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "True if this Ordered object is less than `_other_`. Redefined in descendants.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_ORDERED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Other_reference_ranges_validity": "other_reference_ranges /= Void implies not other_reference_ranges.is_empty",
+        "Is_simple_validity": "(normal_range = Void and other_reference_ranges = Void) implies is_simple",
+        "Normal_status_validity": "normal_status /= Void implies code_set (Code_set_id_normal_statuses).has_code (normal_status)",
+        "Normal_range_and_status_consistency": "(normal_range /= Void and normal_status /= Void) implies (normal_status.code_string.is_equal (“N”) xor not normal_range.has (self))"
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "name": "BASIC_DEFINITIONS",
+    "documentation": "Defines globally used constant values.",
+    "constants": {
+        "CR": {
+            "name": "CR",
+            "documentation": "Carriage return character.",
+            "type": "Character",
+            "value": "'\\015'"
+        },
+        "LF": {
+            "name": "LF",
+            "documentation": "Line feed character.",
+            "type": "Character",
+            "value": "'\\012'"
+        },
+        "Any_type_name": {
+            "name": "Any_type_name",
+            "type": "String",
+            "value": "\"Any\""
+        },
+        "Regex_any_pattern": {
+            "name": "Regex_any_pattern",
+            "type": "String",
+            "value": "\".*\""
+        },
+        "Default_encoding": {
+            "name": "Default_encoding",
+            "type": "String",
+            "value": "\"UTF-8\""
+        },
+        "None_type_name": {
+            "name": "None_type_name",
+            "type": "String",
+            "value": "\"None\""
+        }
+    }
+}

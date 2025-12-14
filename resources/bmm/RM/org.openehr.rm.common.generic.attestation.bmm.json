@@ -1,0 +1,48 @@
+{
+    "name": "ATTESTATION",
+    "documentation": "Record an attestation of a party (the committer) to item(s) of record content. An attestation is an explicit signing by one healthcare agent of particular content for various particular purposes, including:\n\n* for authorisation of a controlled substance or procedure (e.g. sectioning of patient under mental health act); \n* witnessing of content by senior clinical professional; \n* indicating acknowledgement of content by intended recipient, e.g. GP who ordered a test result. \n",
+    "ancestors": [
+        "AUDIT_DETAILS"
+    ],
+    "properties": {
+        "attested_view": {
+            "name": "attested_view",
+            "documentation": "Optional visual representation of content attested e.g. screen image. ",
+            "type": "DV_MULTIMEDIA"
+        },
+        "proof": {
+            "name": "proof",
+            "documentation": "Proof of attestation. ",
+            "type": "String"
+        },
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "Items attested, expressed as fully qualified runtime paths to the items in question. Although not recommended, these may include fine-grained items which have been attested in some other system. Otherwise it is assumed to be for the entire VERSION with which it is associated. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "DV_EHR_URI"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "reason": {
+            "name": "reason",
+            "documentation": "Reason of this attestation. Optionally coded by the openEHR Terminology group  attestation reason ; includes values like  authorisation ,  witness  etc. ",
+            "is_mandatory": true,
+            "type": "DV_TEXT"
+        },
+        "is_pending": {
+            "name": "is_pending",
+            "documentation": "True if this attestation is outstanding; False means it has been completed.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "invariants": {
+        "Items_valid": "items /= Void implies not items.is_empty",
+        "Reason_valid": "(reason.generating_type.is_equal (“DV_CODED_TEXT”) implies terminology (Terminology_id_openehr).has_code_for_group_id (Group_id_attestation_reason, reason.defining_code))"
+    }
+}

@@ -1,0 +1,73 @@
+{
+    "name": "Any",
+    "documentation": "Abstract ancestor class for all other classes. Usually maps to a type like `Any` or `Object` in an object-oriented technology. Defined here to provide value and reference equality semantics.",
+    "is_abstract": true,
+    "functions": {
+        "is_equal": {
+            "name": "is_equal",
+            "documentation": "Value equality: return True if `this` and `_other_` are attached to objects considered to be equal in value.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Any"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "equal": {
+            "name": "equal",
+            "documentation": "Reference equality for reference types, value equality for value types.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Any"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "instance_of": {
+            "name": "instance_of",
+            "documentation": "Create new instance of a type.",
+            "parameters": {
+                "a_type": {
+                    "name": "a_type",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Any"
+            }
+        },
+        "type_of": {
+            "name": "type_of",
+            "documentation": "Type name of an object as a string. May include generic parameters, as in `\"Interval<Time>\"`.",
+            "parameters": {
+                "an_object": {
+                    "name": "an_object",
+                    "type": "Any"
+                }
+            },
+            "result": {
+                "type": "String"
+            }
+        },
+        "not_equal": {
+            "name": "not_equal",
+            "documentation": "True if current object not equal to `_other_`. Returns not `_equal_()`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Ordered"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

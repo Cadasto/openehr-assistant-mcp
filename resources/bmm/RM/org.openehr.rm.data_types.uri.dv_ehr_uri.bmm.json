@@ -1,0 +1,10 @@
+{
+    "name": "DV_EHR_URI",
+    "documentation": "A `DV_EHR_URI` is a `DV_URI` which has the scheme name 'ehr', and which can only reference items in EHRs. \n\nUsed to reference items in an EHR, which may be the same as the current EHR (containing this link), or another.",
+    "ancestors": [
+        "DV_URI"
+    ],
+    "invariants": {
+        "Scheme_valid": "scheme.is_equal (Ehr_scheme)"
+    }
+}

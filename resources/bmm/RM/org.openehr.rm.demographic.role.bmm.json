@@ -1,0 +1,42 @@
+{
+    "name": "ROLE",
+    "documentation": "Generic description of a role performed by an Actor. The role corresponds to a competency of the Party. Roles are used to define the responsibilities undertaken by a Party for a purpose. Roles should have credentials qualifying the performer to perform the role.",
+    "ancestors": [
+        "PARTY"
+    ],
+    "properties": {
+        "time_validity": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "time_validity",
+            "documentation": "Valid time interval for this role.",
+            "type_def": {
+                "root_type": "DV_INTERVAL",
+                "generic_parameters": [
+                    "DV_DATE"
+                ]
+            }
+        },
+        "performer": {
+            "name": "performer",
+            "documentation": "Reference to Version container of Actor playing the role.",
+            "is_mandatory": true,
+            "type": "PARTY_REF"
+        },
+        "capabilities": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "capabilities",
+            "documentation": "The capabilities of this role.",
+            "type_def": {
+                "container_type": "List",
+                "type": "CAPABILITY"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Capabilities_valid": "capabilities /= Void implies not capabilities.empty"
+    }
+}

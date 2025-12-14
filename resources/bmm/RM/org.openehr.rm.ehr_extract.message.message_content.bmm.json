@@ -1,0 +1,5 @@
+{
+    "name": "MESSAGE_CONTENT",
+    "documentation": "Abstract parent of message payload types.",
+    "is_abstract": true
+}

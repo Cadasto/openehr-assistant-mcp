@@ -1,0 +1,18 @@
+{
+    "name": "ASSERTION_VARIABLE",
+    "documentation": "Definition of a named variable used in an assertion expression.",
+    "properties": {
+        "name": {
+            "name": "name",
+            "documentation": "Name of variable.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "definition": {
+            "name": "definition",
+            "documentation": "Formal definition of the variable.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    }
+}

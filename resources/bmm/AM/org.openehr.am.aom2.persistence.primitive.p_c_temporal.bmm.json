@@ -1,0 +1,22 @@
+{
+    "name": "P_C_TEMPORAL",
+    "documentation": "Purpose Abstract parent of C_ORDERED types whose base type is an ISO date/time type.",
+    "is_abstract": true,
+    "ancestors": [
+        "P_C_ORDERED"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Temporal"
+        }
+    },
+    "properties": {
+        "pattern_constraint": {
+            "name": "pattern_constraint",
+            "documentation": "Optional alternative constraint in the form of a pattern based on ISO8601. See descendants for details.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    }
+}

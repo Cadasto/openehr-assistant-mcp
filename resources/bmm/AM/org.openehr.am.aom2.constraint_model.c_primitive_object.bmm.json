@@ -1,0 +1,30 @@
+{
+    "name": "C_PRIMITIVE_OBJECT",
+    "documentation": "Constraint on a primitive type.",
+    "ancestors": [
+        "C_DEFINED_OBJECT"
+    ],
+    "properties": {
+        "item": {
+            "name": "item",
+            "documentation": "Object actually defining the constraint.",
+            "is_mandatory": true,
+            "type": "C_PRIMITIVE"
+        }
+    },
+    "functions": {
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if any value of the type being constrained in item is allowed.",
+            "post_conditions": {
+                "Post": "Result = item = Void"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Item_valid": "any_allowed xor item /= Void"
+    }
+}

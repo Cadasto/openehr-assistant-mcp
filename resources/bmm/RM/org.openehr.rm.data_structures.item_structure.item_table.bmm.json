@@ -1,0 +1,181 @@
+{
+    "name": "ITEM_TABLE",
+    "documentation": "Logical relational database style table data structure, in which columns are named and ordered with respect to each other. Implemented using Cluster-per-row encoding. Each row Cluster must have an identical number of Elements, each of which in turn must have identical names and value types in the corresponding positions in each row. \n\nSome columns may be designated  key' columns, containing key data for each row, in the manner of relational tables. This allows row-naming, where each row represents a body site, a blood antigen etc. All values in a column have the same data type. \n\nUsed for representing any data which is logically a table of values, such as blood pressure, most protocols, many blood tests etc. \n\nMisuse: Not to be used for time-based data, which should be represented with the temporal class `HISTORY`. The table may be empty. ",
+    "ancestors": [
+        "ITEM_STRUCTURE"
+    ],
+    "properties": {
+        "rows": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "rows",
+            "documentation": "Physical representation of the table as a list of `CLUSTERs`, each containing the data of one row of the table. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "CLUSTER"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "row_count": {
+            "name": "row_count",
+            "documentation": "Number of rows in the table.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "column_count": {
+            "name": "column_count",
+            "documentation": "Return number of columns in the table.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "row_names": {
+            "name": "row_names",
+            "documentation": "Return set of row names.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "DV_TEXT"
+            },
+            "is_nullable": true
+        },
+        "column_names": {
+            "name": "column_names",
+            "documentation": "Return set of column names.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "DV_TEXT"
+            },
+            "is_nullable": true
+        },
+        "ith_row": {
+            "name": "ith_row",
+            "documentation": "Return i-th row.",
+            "parameters": {
+                "i": {
+                    "name": "i",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "CLUSTER"
+            }
+        },
+        "has_row_with_name": {
+            "name": "has_row_with_name",
+            "documentation": "Return `True` if there is a column with name = `_a_key_`.",
+            "parameters": {
+                "a_key": {
+                    "name": "a_key",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "has_column_with_name": {
+            "name": "has_column_with_name",
+            "documentation": "Return `True` if there is a column with name = `_a_key_`.",
+            "parameters": {
+                "a_key": {
+                    "name": "a_key",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "named_row": {
+            "name": "named_row",
+            "documentation": "Return row with name = `_a_key_`.",
+            "parameters": {
+                "a_key": {
+                    "name": "a_key",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "CLUSTER"
+            }
+        },
+        "has_row_with_key": {
+            "name": "has_row_with_key",
+            "documentation": "Return `True` if there is a row with key `_keys_`.",
+            "parameters": {
+                "keys": {
+                    "_type": "P_BMM_CONTAINER_FUNCTION_PARAMETER",
+                    "name": "keys",
+                    "is_nullable": true,
+                    "type_def": {
+                        "container_type": "List",
+                        "type": "String"
+                    },
+                    "cardinality": {
+                        "lower": 0,
+                        "upper_unbounded": true
+                    }
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "row_with_key": {
+            "name": "row_with_key",
+            "documentation": "Return rows with particular keys.",
+            "parameters": {
+                "keys": {
+                    "_type": "P_BMM_CONTAINER_FUNCTION_PARAMETER",
+                    "name": "keys",
+                    "is_nullable": true,
+                    "type_def": {
+                        "container_type": "List",
+                        "type": "String"
+                    },
+                    "cardinality": {
+                        "lower": 0,
+                        "upper_unbounded": true
+                    }
+                }
+            },
+            "result": {
+                "type": "CLUSTER"
+            }
+        },
+        "element_at_cell_ij": {
+            "name": "element_at_cell_ij",
+            "documentation": "Return cell at a particular location.",
+            "parameters": {
+                "i": {
+                    "name": "i",
+                    "type": "Integer"
+                },
+                "j": {
+                    "name": "j",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "ELEMENT"
+            }
+        },
+        "as_hierarchy": {
+            "name": "as_hierarchy",
+            "documentation": "Generate a CEN EN13606-compatible hierarchy consisting of a single `CLUSTER` containing the `CLUSTERs` representing the columns of this table. ",
+            "result": {
+                "type": "CLUSTER"
+            }
+        }
+    },
+    "invariants": {
+        "Valid_structure": "rows.for_all (items.for_all (instance_of (\"ELEMENT\")))"
+    }
+}

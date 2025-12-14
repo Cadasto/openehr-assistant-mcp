@@ -1,0 +1,46 @@
+{
+    "name": "CONTACT",
+    "documentation": "Description of a means of contact of a Party. Actual structure is archetyped.",
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "properties": {
+        "addresses": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "addresses",
+            "documentation": "A set of address alternatives for this contact purpose and time validity combination.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "ADDRESS"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "time_validity": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "time_validity",
+            "documentation": "Valid time interval for this contact descriptor.",
+            "type_def": {
+                "root_type": "DV_INTERVAL",
+                "generic_parameters": [
+                    "DV_DATE"
+                ]
+            }
+        }
+    },
+    "functions": {
+        "purpose": {
+            "name": "purpose",
+            "documentation": "Purpose for which this contact is used, e.g. mail,  daytime phone, etc. Taken from value of inherited `_name_` attribute.",
+            "result": {
+                "type": "DV_TEXT"
+            }
+        }
+    },
+    "invariants": {
+        "Purpose_valid": "purpose = name"
+    }
+}

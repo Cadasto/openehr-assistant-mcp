@@ -1,0 +1,20 @@
+{
+    "name": "VERSIONED_COMPOSITION",
+    "documentation": "Version-controlled composition abstraction, defined by inheriting `VERSIONED_OBJECT<COMPOSITION>`. ",
+    "ancestors": [
+        "VERSIONED_OBJECT"
+    ],
+    "functions": {
+        "is_persistent": {
+            "name": "is_persistent",
+            "documentation": "Indicates whether this composition set is persistent; derived from first version.",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Archetype_node_id_valid": "for_all v in all_versions | v.archetype_node_id.is_equal (all_versions.first.archetype_node_id)",
+        "Persistent_validity": "for_all v in all_versions | v.is_persistent = all_versions.first.data.is_persistent"
+    }
+}

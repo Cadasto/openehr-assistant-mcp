@@ -1,0 +1,41 @@
+{
+    "name": "EXTRACT_UPDATE_SPEC",
+    "documentation": "Specification of the how the request should be processed by server. The request can be persisted in the server, meaning that a) it can be re-activated by the requesting system simply by indicating Request id, and b) that a changes-only pattern of Extract updates can be set up. To achieve this, the server has to remember what was sent in the previous response.\n\nThe update mode may be event-driven and periodic update or a mixture of both. The candidate items to be sent each time are the result of re-evaluating the content and versioning parts of the specification; what is actually sent is determined by the `_send_changes_only_` flag.",
+    "properties": {
+        "persist_in_server": {
+            "name": "persist_in_server",
+            "documentation": "If True, this Request is persisted in the server until further notice.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "repeat_period": {
+            "name": "repeat_period",
+            "documentation": "Period for resending update Extracts in response to original Request.",
+            "type": "DV_DURATION"
+        },
+        "trigger_events": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "trigger_events",
+            "documentation": "Set of Event names that will cause sending of update Extracts. Event types include:   \n\n* `|any_change|` - any change in content items matched by content specification, e.g. new versions of persistent compositions. If the content list allows matching of any, or a wide range of archetypes, this event type will match any additions to the record.\n* `|correction|` - match error corrections only, including deletions.\n* `|update|` - match updates (i.e. new versions) of included content items.\n\nCoded by openEHR Terminology group 'extract update trigger event type'.",
+            "type_def": {
+                "container_type": "List",
+                "type": "DV_CODED_TEXT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "update_method": {
+            "name": "update_method",
+            "documentation": "Indicate mode of update. Can be: send only items that are changed (including logical deletions) or new since last send. For `_persist_in_server_` Requests only.",
+            "is_mandatory": true,
+            "type": "CODE_PHRASE"
+        }
+    },
+    "invariants": {
+        "Overall_validity": "repeat_period /= Void or trigger_events /= Void",
+        "Trigger_events_validity": "trigger_events /= Void implies not trigger_events.is_empty",
+        "Send_changes_only_validity": "send_changes_only implies persist_in_server"
+    }
+}

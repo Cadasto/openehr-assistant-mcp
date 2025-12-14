@@ -1,0 +1,13 @@
+{
+    "name": "P_C_ARCHETYPE_ROOT",
+    "ancestors": [
+        "P_C_COMPLEX_OBJECT"
+    ],
+    "properties": {
+        "archetype_ref": {
+            "name": "archetype_ref",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    }
+}

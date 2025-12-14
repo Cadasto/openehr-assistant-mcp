@@ -1,0 +1,8 @@
+{
+    "name": "C_REFERENCE_OBJECT",
+    "documentation": "Abstract parent type of C_OBJECT subtypes that are defined by reference.",
+    "is_abstract": true,
+    "ancestors": [
+        "C_OBJECT"
+    ]
+}

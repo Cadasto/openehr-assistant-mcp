@@ -1,0 +1,76 @@
+{
+    "name": "TERMINOLOGY_ACCESS",
+    "documentation": "Defines an object providing proxy access to a terminology. ",
+    "functions": {
+        "id": {
+            "name": "id",
+            "documentation": "Identification of this Terminology.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "all_codes": {
+            "name": "all_codes",
+            "documentation": "Return all codes known in this terminology.",
+            "result": {
+                "type": "CODE_PHRASE"
+            }
+        },
+        "codes_for_group_id": {
+            "name": "codes_for_group_id",
+            "documentation": "Return all codes under grouper 'a_group_id' from this terminology.",
+            "parameters": {
+                "a_group_id": {
+                    "name": "a_group_id",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "CODE_PHRASE"
+            },
+            "is_nullable": true
+        },
+        "codes_for_group_name": {
+            "name": "codes_for_group_name",
+            "documentation": "Return all codes under grouper whose name in 'a_lang' is 'a_name' from this terminology.",
+            "parameters": {
+                "a_lang": {
+                    "name": "a_lang",
+                    "type": "String"
+                },
+                "a_name": {
+                    "name": "a_name",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "CODE_PHRASE"
+            },
+            "is_nullable": true
+        },
+        "has_code_for_group_id": {
+            "name": "has_code_for_group_id",
+            "documentation": "True if  a_code' is known in group  group_id' in the openEHR terminology.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "rubric_for_code": {
+            "name": "rubric_for_code",
+            "documentation": "Return all rubric of code  code' in language  lang'.",
+            "parameters": {
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "String"
+            }
+        }
+    }
+}

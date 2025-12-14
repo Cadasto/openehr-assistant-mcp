@@ -1,0 +1,15 @@
+{
+    "name": "OPENEHR_DEFINITIONS",
+    "documentation": "Inheritance class to provide access to constants defined in other packages.",
+    "ancestors": [
+        "BASIC_DEFINITIONS"
+    ],
+    "constants": {
+        "Local_terminology_id": {
+            "name": "Local_terminology_id",
+            "documentation": "Predefined terminology identifier to indicate it is local to the knowledge resource in which it occurs, e.g. an archetype",
+            "type": "String",
+            "value": "\"local\""
+        }
+    }
+}

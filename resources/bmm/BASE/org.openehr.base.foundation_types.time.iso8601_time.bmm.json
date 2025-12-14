@@ -1,0 +1,142 @@
+{
+    "name": "Iso8601_time",
+    "documentation": "Represents an ISO 8601 time, including partial and extended forms. Value may be:\n\n* `hh:mm:ss[(,|.)sss][Z|±hh[:mm]]` (extended, preferred) or\n* `hhmmss[(,|.)sss][Z|±hh[mm]]` (compact)\n* or a partial invariant.\n\nSee `_valid_iso8601_time()_` for validity.\n\nNOTE: A small deviation to the ISO 8601:2004 standard in this class is that the time `24:00:00` is not allowed, for consistency with `Iso8601_date_time`.",
+    "ancestors": [
+        "Iso8601_type"
+    ],
+    "functions": {
+        "hour": {
+            "name": "hour",
+            "documentation": "Extract the hour part of the date/time as an Integer.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "minute": {
+            "name": "minute",
+            "documentation": "Extract the minute part of the time as an Integer, or return 0 if not present.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "second": {
+            "name": "second",
+            "documentation": "Extract the integral seconds part of the time (i.e. prior to any decimal sign) as an Integer, or return 0 if not present.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "fractional_second": {
+            "name": "fractional_second",
+            "documentation": "Extract the fractional seconds part of the time (i.e. following to any decimal sign) as a Real, or return 0.0 if not present.",
+            "pre_conditions": {
+                "Pre": "not second_unknown"
+            },
+            "result": {
+                "type": "Real"
+            }
+        },
+        "timezone": {
+            "name": "timezone",
+            "documentation": "Timezone; may be Void.",
+            "result": {
+                "type": "Iso8601_timezone"
+            }
+        },
+        "minute_unknown": {
+            "name": "minute_unknown",
+            "documentation": "Indicates whether minute is unknown. If so, the time is of the form “hh”.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "second_unknown": {
+            "name": "second_unknown",
+            "documentation": "Indicates whether second is unknown. If so and month is known, the time is of the form `\"hh:mm\"` or `\"hhmm\"`.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_decimal_sign_comma": {
+            "name": "is_decimal_sign_comma",
+            "documentation": "True if this time has a decimal part indicated by `','` (comma) rather than `'.'` (period).",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_partial": {
+            "name": "is_partial",
+            "documentation": "True if this time is partial, i.e. if seconds or more is missing.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_extended": {
+            "name": "is_extended",
+            "documentation": "True if this time uses `'-'`, `':'` separators.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "has_fractional_second": {
+            "name": "has_fractional_second",
+            "documentation": "True if the `_fractional_second_` part is significant (i.e. even if = 0.0).",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "as_string": {
+            "name": "as_string",
+            "documentation": "Return string value in extended format.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "add": {
+            "name": "add",
+            "documentation": "Arithmetic addition of a duration to a time.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_time"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Arithmetic subtraction of a duration from a time.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_time"
+            }
+        },
+        "diff": {
+            "name": "diff",
+            "documentation": "Difference of two times.",
+            "parameters": {
+                "a_time": {
+                    "name": "a_time",
+                    "type": "Iso8601_time"
+                }
+            },
+            "result": {
+                "type": "Iso8601_duration"
+            }
+        }
+    },
+    "invariants": {
+        "Hour_valid": "valid_hour(hour, minute, second)",
+        "Minute_valid": "not minute_unknown implies valid_minute (minute)",
+        "Second_valid": "not second_unknown implies valid_second (second)",
+        "Fractional_second_valid": "has_fractional_second implies (not second_unknown and valid_fractional_second (fractional_second))",
+        "Partial_validity": "minute_unknown implies second_unknown"
+    }
+}

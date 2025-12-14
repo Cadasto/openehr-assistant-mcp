@@ -1,0 +1,39 @@
+{
+    "name": "ARCHETYPE_TERM",
+    "documentation": "Representation of any coded entity (term or constraint) in the archetype ontology.",
+    "properties": {
+        "code": {
+            "name": "code",
+            "documentation": "Code of this term. ",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "items": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "items",
+            "documentation": "Hash of keys (“text”, “description” etc) and corresponding values.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        }
+    },
+    "functions": {
+        "keys": {
+            "name": "keys",
+            "documentation": "List of all keys used in this term.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            },
+            "is_nullable": true
+        }
+    },
+    "invariants": {
+        "Code_valid": "not code.is_empty"
+    }
+}

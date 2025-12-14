@@ -1,6 +1,33 @@
-composer.phar
+# Composer
 /vendor/
-
 # Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
-# You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+/logs/
+*.log
+
+# Testing
+/coverage/
+.phpunit.cache/
+phpunit.xml.bak
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp

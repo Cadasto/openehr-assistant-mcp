@@ -1,0 +1,58 @@
+{
+    "name": "C_ATTRIBUTE",
+    "documentation": "Abstract model of constraint on any kind of attribute node.",
+    "is_abstract": true,
+    "ancestors": [
+        "ARCHETYPE_CONSTRAINT"
+    ],
+    "properties": {
+        "rm_attribute_name": {
+            "name": "rm_attribute_name",
+            "documentation": "Reference model attribute within the enclosing type represented by a C_OBJECT.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "existence": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "existence",
+            "documentation": "Constraint on every attribute, regardless of whether it is singular or of a container type, which indicates whether its target object exists or not (i.e. is mandatory or not).",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Interval",
+                "generic_parameters": [
+                    "Integer"
+                ]
+            }
+        },
+        "children": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "children",
+            "documentation": "Child C_OBJECT nodes. Each such node represents a constraint on the type of this attribute in its reference model. Multiples occur both for multiple items in the case of container attributes, and alternatives in the case of singular attributes. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "C_OBJECT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if any value (i.e. instance) of the reference model attribute represented by this C_ATTIRBUTE is allowed.",
+            "post_conditions": {
+                "Post": "Result := children = Void or else children.is_empty"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Rm_attribute_name_valid": "not rm_attribute_name.is_empty",
+        "Existence_set": "existence.lower >= 0 and existence.upper <= 1",
+        "Children_validity": "any_allowed xor children /= Void"
+    }
+}

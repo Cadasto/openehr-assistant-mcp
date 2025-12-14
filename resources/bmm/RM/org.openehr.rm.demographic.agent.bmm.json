@@ -1,0 +1,7 @@
+{
+    "name": "AGENT",
+    "documentation": "Generic concept of any kind of agent, including devices, software systems, but not humans or organisations.",
+    "ancestors": [
+        "ACTOR"
+    ]
+}

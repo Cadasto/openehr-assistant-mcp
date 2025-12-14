@@ -1,0 +1,49 @@
+{
+    "name": "P_C_ATTRIBUTE",
+    "documentation": "Abstract model of constraint on any kind of attribute node.",
+    "ancestors": [
+        "P_ARCHETYPE_CONSTRAINT"
+    ],
+    "properties": {
+        "rm_attribute_name": {
+            "name": "rm_attribute_name",
+            "documentation": "Reference model attribute within the enclosing type represented by a C_OBJECT.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "existence": {
+            "name": "existence",
+            "documentation": "Constraint on every attribute, regardless of whether it is singular or of a container type, which indicates whether its target object exists or not (i.e. is mandatory or not).",
+            "type": "String"
+        },
+        "children": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "children",
+            "documentation": "Child C_OBJECT nodes. Each such node represents a constraint on the type of this attribute in its reference model. Multiples occur both for multiple items in the case of container attributes, and alternatives in the case of singular attributes. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "P_C_OBJECT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "differential_path": {
+            "name": "differential_path",
+            "documentation": "Within a differential specialised archetype, may be set to represent a deep path within the structure to which this constraint and its child constraints apply.",
+            "type": "String"
+        },
+        "cardinality": {
+            "name": "cardinality",
+            "documentation": "Cardinality constraint of attribute, if a container attribute.",
+            "type": "String"
+        },
+        "is_multiple": {
+            "name": "is_multiple",
+            "documentation": "Flag indicating whether this attribute constraint is on a container (i.e. multiply-valued) attribute.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    }
+}

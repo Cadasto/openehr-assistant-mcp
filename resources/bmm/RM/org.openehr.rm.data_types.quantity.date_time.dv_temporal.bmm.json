@@ -1,0 +1,59 @@
+{
+    "name": "DV_TEMPORAL",
+    "documentation": "Specialised temporal variant of `DV_ABSOLUTE_QUANTITY` whose diff type is `DV_DURATION`. ",
+    "is_abstract": true,
+    "ancestors": [
+        "DV_ABSOLUTE_QUANTITY"
+    ],
+    "properties": {
+        "accuracy": {
+            "name": "accuracy",
+            "documentation": "Time accuracy, expressed as a duration.",
+            "type": "DV_DURATION"
+        }
+    },
+    "functions": {
+        "add": {
+            "name": "add",
+            "documentation": "Addition of a Duration to this temporal entity.",
+            "is_abstract": true,
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "DV_DURATION"
+                }
+            },
+            "result": {
+                "type": "DV_TEMPORAL"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Subtract a Duration from this temporal entity.",
+            "is_abstract": true,
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "DV_DURATION"
+                }
+            },
+            "result": {
+                "type": "DV_TEMPORAL"
+            }
+        },
+        "diff": {
+            "name": "diff",
+            "documentation": "Difference between this temporal entity and `_other_`.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_TEMPORAL"
+                }
+            },
+            "result": {
+                "type": "DV_DURATION"
+            }
+        }
+    }
+}

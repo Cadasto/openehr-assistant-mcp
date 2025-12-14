@@ -1,0 +1,14 @@
+{
+    "name": "OPENEHR_CONTENT_ITEM",
+    "documentation": "Form of `EHR EXTRACT_ITEM` containing openEHR serialised `VERSIONED_OBJECTs`.",
+    "ancestors": [
+        "EXTRACT_CONTENT_ITEM"
+    ],
+    "properties": {
+        "item": {
+            "name": "item",
+            "documentation": "Content object.",
+            "type": "X_VERSIONED_OBJECT"
+        }
+    }
+}

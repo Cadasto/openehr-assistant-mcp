@@ -1,0 +1,211 @@
+{
+    "name": "ARCHETYPE_ONTOLOGY",
+    "documentation": "Local ontology of an archetype.",
+    "properties": {
+        "term_codes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "term_codes",
+            "documentation": "List of all term codes in the ontology. Most of these correspond to “at” codes in an ADL archetype, which are the node_ids on C_OBJECT descendants. There may be an extra one, if a different term is used as the overall archetype concept from that used as the node_id of the outermost C_OBJECT in the definition part.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "constraint_codes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "constraint_codes",
+            "documentation": "List of all term codes in the ontology. These correspond to the “ac” codes in an ADL archetype, or equivalently, the CONSTRAINT_REF.reference values in the archetype definition.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "parent_archetype": {
+            "name": "parent_archetype",
+            "documentation": "Archetype which owns this terminology.",
+            "is_mandatory": true,
+            "type": "ARCHETYPE"
+        },
+        "terminologies_available": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "terminologies_available",
+            "documentation": "List of terminologies to which term or constraint bindings exist in this terminology.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "specialisation_depth": {
+            "name": "specialisation_depth",
+            "documentation": "Specialisation depth of this archetype. Unspecialised archetypes have depth 0, with each additional level of specialisation adding 1 to the specialisation_depth.",
+            "is_mandatory": true,
+            "type": "Integer"
+        },
+        "term_attribute_names": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "term_attribute_names",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "has_language": {
+            "name": "has_language",
+            "documentation": "True if terminology ‘a_terminology’ is present in archetype ontology.",
+            "parameters": {
+                "a_lang": {
+                    "name": "a_lang",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "has_terminology": {
+            "name": "has_terminology",
+            "documentation": "True if terminology `a_terminology' is present in archetype ontology. ",
+            "parameters": {
+                "a_terminology_id": {
+                    "name": "a_terminology_id",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "has_term_code": {
+            "name": "has_term_code",
+            "documentation": "True if term_codes has a_code.",
+            "parameters": {
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "has_constraint_code": {
+            "name": "has_constraint_code",
+            "documentation": "True if constraint_codes has a_code.",
+            "parameters": {
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "term_definition": {
+            "name": "term_definition",
+            "documentation": "Term definition for a code, in a specified language. ",
+            "parameters": {
+                "a_lang": {
+                    "name": "a_lang",
+                    "type": "String"
+                },
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "has_language (a_lang)",
+                "Pre2": "has_term_code (a_code)"
+            },
+            "result": {
+                "type": "ARCHETYPE_TERM"
+            }
+        },
+        "constraint_definition": {
+            "name": "constraint_definition",
+            "documentation": "Constraint definition for a code, in a specified language.",
+            "parameters": {
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                },
+                "a_lang": {
+                    "name": "a_lang",
+                    "type": "String"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "has_language (a_lang)",
+                "Pre_2": "has_constraint_code (a_code)"
+            },
+            "result": {
+                "type": "ARCHETYPE_TERM"
+            }
+        },
+        "term_binding": {
+            "name": "term_binding",
+            "documentation": "Binding of constraint corresponding to a_code in target external terminology a_terminology_id, as a string, which is usually a formal query expression.",
+            "parameters": {
+                "a_terminology": {
+                    "name": "a_terminology",
+                    "type": "String"
+                },
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "has_term_binding (a_terminology_id, a_code)"
+            },
+            "result": {
+                "type": "CODE_PHRASE"
+            }
+        },
+        "constraint_binding": {
+            "name": "constraint_binding",
+            "documentation": "Binding of constraint corresponding to a_code in target external terminology a_terminology_id, as a string, which is usually a formal query expression.",
+            "parameters": {
+                "a_terminology_id": {
+                    "name": "a_terminology_id",
+                    "type": "String"
+                },
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "String"
+            }
+        }
+    },
+    "invariants": {
+        "Original_language_validity": "code_set (Code_set_id_languages).has_concept_id (original_language)",
+        "concept_code_validity": "id_codes.has (concept_code)",
+        "Term_bindings_validity": "bindings /= void implies not bindings.is_empty",
+        "Parent_archetype_valid": "parent_archetype.ontology = Current"
+    }
+}

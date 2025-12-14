@@ -1,0 +1,91 @@
+{
+    "name": "C_TEMPORAL",
+    "documentation": "Purpose Abstract parent of `C_ORDERED` types whose base type is an ISO date/time type.",
+    "is_abstract": true,
+    "ancestors": [
+        "C_ORDERED"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Temporal"
+        }
+    },
+    "properties": {
+        "pattern_constraint": {
+            "name": "pattern_constraint",
+            "documentation": "Optional alternative constraint in the form of a pattern based on ISO8601. See descendants for details.",
+            "type": "String"
+        }
+    },
+    "functions": {
+        "valid_pattern_constraint": {
+            "name": "valid_pattern_constraint",
+            "documentation": "True if `_a_pattern_` is a valid constraint. Define in concrete descendants.",
+            "is_abstract": true,
+            "parameters": {
+                "a_pattern": {
+                    "name": "a_pattern",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_pattern_constraint_replacement": {
+            "name": "valid_pattern_constraint_replacement",
+            "documentation": "Return True if `_a_pattern_` can be replaced by `_an_other_pattern_` in a specialised constraint. Define in concrete subtypes.",
+            "is_abstract": true,
+            "parameters": {
+                "a_pattern": {
+                    "name": "a_pattern",
+                    "type": "String"
+                },
+                "an_other_pattern": {
+                    "name": "an_other_pattern",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if any value (i.e. instance) of the reference model type would be allowed. Redefined in descendants.",
+            "post_conditions": {
+                "Post": "Result = precursor and pattern_constraint.is_empty"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "c_value_conforms_to": {
+            "name": "c_value_conforms_to",
+            "documentation": "True if `precursor()` or else `_other.pattern_constraint_` is empty, or else `_pattern_constraint_` is a valid (narrower) replacement for `_other.pattern_constraint_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "C_ORDERED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "c_value_congruent_to": {
+            "name": "c_value_congruent_to",
+            "documentation": "True if `precursor (other)` and `_pattern_constraint_ ~ _other.pattern_constraint_`, i.e. either both `Void` or else both non-`Void` and identical.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "C_ORDERED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

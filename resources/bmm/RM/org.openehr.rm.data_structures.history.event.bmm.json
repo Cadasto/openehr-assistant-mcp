@@ -1,0 +1,50 @@
+{
+    "name": "EVENT",
+    "documentation": "Defines the abstract notion of a single event in a series. This class is generic, allowing types to be generated which are locked to particular spatial types, such as `EVENT<ITEM_LIST>`. Subtypes express point or intveral data. ",
+    "is_abstract": true,
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "ITEM_STRUCTURE"
+        }
+    },
+    "properties": {
+        "time": {
+            "name": "time",
+            "documentation": "Time of this event. If the width is non-zero, it is the time point of the trailing edge of the event. ",
+            "is_mandatory": true,
+            "type": "DV_DATE_TIME"
+        },
+        "state": {
+            "name": "state",
+            "documentation": "Optional state data for this event.",
+            "type": "ITEM_STRUCTURE"
+        },
+        "data": {
+            "_type": "P_BMM_SINGLE_PROPERTY_OPEN",
+            "name": "data",
+            "documentation": "The data of this event.",
+            "is_mandatory": true,
+            "type": "T"
+        }
+    },
+    "functions": {
+        "offset": {
+            "name": "offset",
+            "documentation": "Offset of this event from origin, computed as time.diff(parent.origin).",
+            "post_conditions": {
+                "Post_condition": "Result = time.diff(parent.origin)"
+            },
+            "result": {
+                "type": "DV_DURATION"
+            }
+        }
+    },
+    "invariants": {
+        "Offset_validity": "",
+        "Offset_validity1": "offset /= Void and then offset = time.diff (parent.origin)"
+    }
+}

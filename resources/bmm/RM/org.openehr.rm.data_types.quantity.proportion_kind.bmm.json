@@ -1,0 +1,29 @@
+{
+    "_type": "P_BMM_ENUMERATION_INTEGER",
+    "name": "PROPORTION_KIND",
+    "documentation": "Class of enumeration constants defining types of proportion for the `DV_PROPORTION` class. ",
+    "ancestors": [
+        "Integer"
+    ],
+    "item_names": [
+        "pk_ratio",
+        "pk_unitary",
+        "pk_percent",
+        "pk_fraction",
+        "pk_integer_fraction"
+    ],
+    "item_values": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "item_documentations": [
+        "Ratio type. Numerator and denominator may be any value.\n",
+        "Denominator must be 1.",
+        "Denominator is 100, numerator is understood as a percentage value.",
+        "Numerator and denominator are integral, and the presentation method uses a slash, e.g.  1/2 . \n",
+        "Numerator and denominator are integral, and the presentation method uses a slash, e.g.  1/2 ; if the numerator is greater than the denominator, e.g. n=3, d=2, the presentation is  1 1/2 ."
+    ]
+}

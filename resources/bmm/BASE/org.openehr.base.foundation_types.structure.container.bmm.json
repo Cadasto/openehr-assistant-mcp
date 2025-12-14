@@ -1,0 +1,103 @@
+{
+    "name": "Container",
+    "documentation": "Abstract ancestor of container types whose items are addressable in some way.",
+    "is_abstract": true,
+    "ancestors": [
+        "Any"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Any"
+        }
+    },
+    "functions": {
+        "has": {
+            "name": "has",
+            "documentation": "Test for membership of a value.",
+            "is_abstract": true,
+            "parameters": {
+                "v": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER_OPEN",
+                    "name": "v",
+                    "type": "T"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "count": {
+            "name": "count",
+            "documentation": "Number of items in container.",
+            "is_abstract": true,
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "is_empty": {
+            "name": "is_empty",
+            "documentation": "True if container is empty.",
+            "is_abstract": true,
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "there_exists": {
+            "name": "there_exists",
+            "documentation": "Existential quantifier applied to container, taking one agent argument `_test_` whose signature is `(v:T): Boolean`.",
+            "parameters": {
+                "test": {
+                    "name": "test",
+                    "type": "Operation"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "for_all": {
+            "name": "for_all",
+            "documentation": "Universal quantifier applied to container, taking one agent argument `_test_` whose signature is `(v:T): Boolean`.",
+            "parameters": {
+                "test": {
+                    "name": "test",
+                    "type": "Operation"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "matching": {
+            "name": "matching",
+            "documentation": "Return a List all items matching the predicate function `_test_` which has signature `(v:T): Boolean`. If no matches, an empty List is returned.",
+            "parameters": {
+                "test": {
+                    "name": "test",
+                    "type": "Operation"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "T"
+            },
+            "is_nullable": true
+        },
+        "select": {
+            "name": "select",
+            "documentation": "Return first item matching the predicate function `_test_` which has signature `(v:T): Boolean`, or Void if no match.",
+            "parameters": {
+                "test": {
+                    "name": "test",
+                    "type": "Operation"
+                }
+            },
+            "result": {
+                "type": "T"
+            },
+            "is_nullable": true
+        }
+    }
+}

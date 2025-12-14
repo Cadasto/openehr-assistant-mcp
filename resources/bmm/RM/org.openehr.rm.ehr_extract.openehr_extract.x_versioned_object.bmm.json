@@ -1,0 +1,65 @@
+{
+    "name": "X_VERSIONED_OBJECT",
+    "documentation": "Variety of Extract content that consists is a sharable data-oriented version of `VERSIONED_OBJECT<T>`.",
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T"
+        }
+    },
+    "properties": {
+        "uid": {
+            "name": "uid",
+            "documentation": "Uid of original `VERSIONED_OBJECT`.",
+            "is_mandatory": true,
+            "type": "HIER_OBJECT_ID"
+        },
+        "owner_id": {
+            "name": "owner_id",
+            "documentation": "Owner_id from original `VERSIONED_OBJECT`, which identifies source EHR.",
+            "is_mandatory": true,
+            "type": "OBJECT_REF"
+        },
+        "time_created": {
+            "name": "time_created",
+            "documentation": "Creation time of original `VERSIONED_OBJECT`.",
+            "is_mandatory": true,
+            "type": "DV_DATE_TIME"
+        },
+        "total_version_count": {
+            "name": "total_version_count",
+            "documentation": "Total number of versions in original `VERSIONED_OBJECT` at time of creation of this `X_VERSIONED_OBJECT`.",
+            "is_mandatory": true,
+            "type": "Integer"
+        },
+        "extract_version_count": {
+            "name": "extract_version_count",
+            "documentation": "The number of Versions in this extract for this Versioned object, i.e. the count of items in the versions attribute. May be 0 if only revision history is requested.",
+            "is_mandatory": true,
+            "type": "Integer"
+        },
+        "revision_history": {
+            "name": "revision_history",
+            "documentation": "Optional revision history of the original `VERSIONED_OBJECT`. If included, it is the complete revision history.",
+            "type": "REVISION_HISTORY"
+        },
+        "versions": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "versions",
+            "documentation": "0 or more Versions from the original `VERSIONED_OBJECT`, according to the Extract specification.",
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "ORIGINAL_VERSION",
+                    "generic_parameters": [
+                        "T"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

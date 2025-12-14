@@ -1,0 +1,37 @@
+{
+    "name": "OBJECT_VERSION_ID",
+    "documentation": "Globally unique identifier for one version of a versioned object; lexical form: `object_id  '::' creating_system_id  '::' version_tree_id`.",
+    "ancestors": [
+        "UID_BASED_ID"
+    ],
+    "functions": {
+        "object_id": {
+            "name": "object_id",
+            "documentation": "Unique identifier for logical object of which this identifier identifies one version; normally the `_object_id_` will be the unique identifier of the version container containing the version referred to by this `OBJECT_VERSION_ID` instance. ",
+            "result": {
+                "type": "UID"
+            }
+        },
+        "creating_system_id": {
+            "name": "creating_system_id",
+            "documentation": "Identifier of the system that created the Version corresponding to this Object version id.",
+            "result": {
+                "type": "UID"
+            }
+        },
+        "version_tree_id": {
+            "name": "version_tree_id",
+            "documentation": "Tree identifier of this version with respect to other versions in the same version tree, as either 1 or 3 part dot-separated numbers, e.g.  1 ,  2.1.4 . ",
+            "result": {
+                "type": "VERSION_TREE_ID"
+            }
+        },
+        "is_branch": {
+            "name": "is_branch",
+            "documentation": "True if this version identifier represents a branch.",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

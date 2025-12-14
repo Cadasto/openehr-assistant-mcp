@@ -1,0 +1,35 @@
+{
+    "name": "SYNC_EXTRACT_SPEC",
+    "documentation": "Details of specification of Extract, used in a request to specify an Extract, or in a response, to describe what is actually in the Extract.",
+    "properties": {
+        "includes_versions": {
+            "name": "includes_versions",
+            "documentation": "True if the Versions from the Contribution are included; False if just the Contribution and its Audit are included.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "contribution_list": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "contribution_list",
+            "documentation": "List of Contributions to include / that are included in the Extract.",
+            "type_def": {
+                "container_type": "List",
+                "type": "HIER_OBJECT_ID"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "contributions_since": {
+            "name": "contributions_since",
+            "documentation": "Specify Contributions included in Extract by threshold date.",
+            "type": "DV_DATE_TIME"
+        },
+        "all_contributions": {
+            "name": "all_contributions",
+            "documentation": "True if all Contributions in the record are included.",
+            "type": "Boolean"
+        }
+    }
+}

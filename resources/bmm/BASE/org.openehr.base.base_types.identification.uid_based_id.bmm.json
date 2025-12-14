@@ -1,0 +1,34 @@
+{
+    "name": "UID_BASED_ID",
+    "documentation": "Abstract model of UID-based identifiers consisting of a root part and an optional extension; lexical form: `root '::' extension`.",
+    "is_abstract": true,
+    "ancestors": [
+        "OBJECT_ID"
+    ],
+    "functions": {
+        "root": {
+            "name": "root",
+            "documentation": "The identifier of the conceptual namespace in which the object exists, within the identification scheme. Returns the part to the left of the first '::' separator, if any, or else the whole string. ",
+            "result": {
+                "type": "UID"
+            }
+        },
+        "extension": {
+            "name": "extension",
+            "documentation": "Optional local identifier of the object within the context of the root identifier. Returns the part to the right of the first '::' separator if any, or else any empty String.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "has_extension": {
+            "name": "has_extension",
+            "documentation": "True if not `_extension_.is_empty()`.",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Has_extension_valid": "extension.is_empty xor has_extension"
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "name": "RM_ATTRIBUTE_VISIBILITY",
+    "documentation": "Definition of visibility of an RM attribute within a larger archetype structure.",
+    "properties": {
+        "visibility": {
+            "name": "visibility",
+            "documentation": "Visibility setting of a non-archetyped RM attribute (RM attributes that are constrained or within the archetyped structure are visible by default).",
+            "type": "VISIBILITY_TYPE"
+        },
+        "alias": {
+            "name": "alias",
+            "documentation": "Optional alias for the attribute referenced by the path.",
+            "type": "Terminology_code"
+        }
+    },
+    "invariants": {
+        "Inv_alias_validity": "alias /= Void implies visibility /= Void"
+    }
+}

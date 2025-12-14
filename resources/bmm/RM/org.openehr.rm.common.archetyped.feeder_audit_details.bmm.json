@@ -1,0 +1,45 @@
+{
+    "name": "FEEDER_AUDIT_DETAILS",
+    "documentation": "Audit details for any system in a feeder system chain. Audit details here means the general notion of who/where/when the information item to which the audit is attached was created. None of the attributes is defined as mandatory, however, in different scenarios, various combinations of attributes will usually be mandatory. This can be controlled by specifying feeder audit details in legacy archetypes. ",
+    "properties": {
+        "system_id": {
+            "name": "system_id",
+            "documentation": "Identifier of the system which handled the information item. This is the IT system owned by the organisation legally responsible for handling the data, and at which the data were previously created or passed by an earlier system.\n",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "location": {
+            "name": "location",
+            "documentation": "Identifier of the particular site/facility within an organisation which handled the item. For computability, this identifier needs to be e.g. a PKI identifier which can be included in the identifier list of the `PARTY_IDENTIFIED` object. ",
+            "type": "PARTY_IDENTIFIED"
+        },
+        "subject": {
+            "name": "subject",
+            "documentation": "Identifiers for subject of the received information item. ",
+            "type": "PARTY_PROXY"
+        },
+        "provider": {
+            "name": "provider",
+            "documentation": "Optional provider(s) who created, committed, forwarded or otherwise handled the item. ",
+            "type": "PARTY_IDENTIFIED"
+        },
+        "time": {
+            "name": "time",
+            "documentation": "Time of handling the item. For an originating system, this will be time of creation, for an intermediate feeder system, this will be a time of accession or other time of handling, where available.",
+            "type": "DV_DATE_TIME"
+        },
+        "version_id": {
+            "name": "version_id",
+            "documentation": "Any identifier used in the system such as  \"interim\" ,  \"final\" , or numeric versions if available. ",
+            "type": "String"
+        },
+        "other_details": {
+            "name": "other_details",
+            "documentation": "Optional attribute to carry any custom meta-data. May be archetyped.",
+            "type": "ITEM_STRUCTURE"
+        }
+    },
+    "invariants": {
+        "System_id_valid": "not system_id.is_empty"
+    }
+}

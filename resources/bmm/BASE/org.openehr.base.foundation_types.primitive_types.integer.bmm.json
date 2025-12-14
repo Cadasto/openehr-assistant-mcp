@@ -1,0 +1,133 @@
+{
+    "name": "Integer",
+    "documentation": "Type representing minimal interface of built-in Integer type.",
+    "ancestors": [
+        "Ordered_Numeric"
+    ],
+    "functions": {
+        "add": {
+            "name": "add",
+            "documentation": "Integer addition.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Integer subtraction.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "multiply": {
+            "name": "multiply",
+            "documentation": "Integer multiplication.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "divide": {
+            "name": "divide",
+            "documentation": "Integer division.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "Double"
+            }
+        },
+        "exponent": {
+            "name": "exponent",
+            "documentation": "Integer exponentiation.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Double"
+                }
+            },
+            "result": {
+                "type": "Double"
+            }
+        },
+        "modulo": {
+            "name": "modulo",
+            "documentation": "Return self modulo other.",
+            "parameters": {
+                "mod": {
+                    "name": "mod",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "Returns True if current Integer is less than `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "negative": {
+            "name": "negative",
+            "documentation": "Generate negative of current Integer value.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "is_equal": {
+            "name": "is_equal",
+            "documentation": "Value equality: return True if `this` and `_other_` are attached to objects considered to be equal in value.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "equal": {
+            "name": "equal",
+            "documentation": "Reference equality for reference types, value equality for value types.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

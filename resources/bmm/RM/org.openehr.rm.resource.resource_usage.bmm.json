@@ -1,0 +1,28 @@
+{
+    "name": "RESOURCE_USAGE",
+    "properties": {
+        "prospective": {
+            "name": "prospective",
+            "is_mandatory": true,
+            "type": "RESOURCE_USE"
+        },
+        "actual": {
+            "name": "actual",
+            "is_mandatory": true,
+            "type": "RESOURCE_USE"
+        },
+        "type": {
+            "name": "type",
+            "is_mandatory": true,
+            "type": "DV_TEXT"
+        },
+        "description": {
+            "name": "description",
+            "type": "String"
+        },
+        "reference": {
+            "name": "reference",
+            "type": "Any"
+        }
+    }
+}

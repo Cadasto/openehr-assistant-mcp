@@ -1,0 +1,32 @@
+{
+    "name": "PARTY_IDENTIFIED",
+    "documentation": "Proxy data for an identified party other than the subject of the record, minimally consisting of human-readable identifier(s), such as name, formal (and possibly computable) identifiers such as NHS number, and an optional link to external data. There must be at least one of name, identifier or external_ref present.\n\nUsed to describe parties where only identifiers may be known, and there is no entry at all in the demographic system (or even no demographic system). Typically for health care providers, e.g. name and provider number of an institution. \n\nShould not be used to include patient identifying information. ",
+    "ancestors": [
+        "PARTY_PROXY"
+    ],
+    "properties": {
+        "name": {
+            "name": "name",
+            "documentation": "Optional human-readable name (in String form).",
+            "type": "String"
+        },
+        "identifiers": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "identifiers",
+            "documentation": "One or more formal identifiers (possibly computable). \n",
+            "type_def": {
+                "container_type": "List",
+                "type": "DV_IDENTIFIER"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Basic_validity": "name /= Void or identifiers /= Void or external_ref /= Void",
+        "Name_valid": "name /= Void implies not name.is_empty",
+        "Identifiers_valid": "identifiers /= Void implies not identifiers.is_empty"
+    }
+}

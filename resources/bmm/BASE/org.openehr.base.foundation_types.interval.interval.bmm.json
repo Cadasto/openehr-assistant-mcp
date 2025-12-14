@@ -1,0 +1,120 @@
+{
+    "name": "Interval",
+    "documentation": "Interval abstraction, featuring upper and lower limits that may be open or closed, included or not included.",
+    "is_abstract": true,
+    "ancestors": [
+        "Any"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Ordered"
+        }
+    },
+    "properties": {
+        "lower": {
+            "_type": "P_BMM_SINGLE_PROPERTY_OPEN",
+            "name": "lower",
+            "documentation": "Lower bound.",
+            "type": "T"
+        },
+        "upper": {
+            "_type": "P_BMM_SINGLE_PROPERTY_OPEN",
+            "name": "upper",
+            "documentation": "Upper bound.",
+            "type": "T"
+        },
+        "lower_unbounded": {
+            "name": "lower_unbounded",
+            "documentation": "`lower` boundary open (i.e. = -infinity).",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "upper_unbounded": {
+            "name": "upper_unbounded",
+            "documentation": "`upper` boundary open (i.e. = +infinity).",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "lower_included": {
+            "name": "lower_included",
+            "documentation": "`lower` boundary value included in range if not `lower_unbounded`.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "upper_included": {
+            "name": "upper_included",
+            "documentation": "`upper` boundary value included in range if not `upper_unbounded`.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "has": {
+            "name": "has",
+            "documentation": "True if the value `e` is properly contained in this Interval.",
+            "is_abstract": true,
+            "parameters": {
+                "e": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER_OPEN",
+                    "name": "e",
+                    "type": "T"
+                }
+            },
+            "post_conditions": {
+                "Post_result": "Result = (lower_unbounded or lower_included and v >= lower) or v > lower and (upper_unbounded or upper_included and v <= upper or v < upper)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "intersects": {
+            "name": "intersects",
+            "documentation": "True if there is any overlap between intervals represented by Current and `_other_`. True if at least one limit of other is strictly inside the limits of this interval.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Interval"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "contains": {
+            "name": "contains",
+            "documentation": "True if current interval properly contains `_other_`? True if all points of `_other_` are inside the current interval.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Interval"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_equal": {
+            "name": "is_equal",
+            "documentation": "True if current object's interval is semantically same as `_other_`.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Any"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Lower_included_valid": "lower_unbounded implies not lower_included",
+        "Upper_included_valid": "upper_unbounded implies not upper_included",
+        "Limits_consistent": "(not upper_unbounded and not lower_unbounded) implies lower <= upper",
+        "Limits_comparable": "(not upper_unbounded and not lower_unbounded) implies lower.strictly_comparable_to (upper)"
+    }
+}

@@ -1,0 +1,59 @@
+{
+    "name": "EVENT_CONTEXT",
+    "documentation": "Documents the context information of a healthcare event involving the subject of care and the health system. The context information recorded here are independent of the attributes recorded in the version audit, which document the  system interaction  context, i.e. the context of a user interacting with the health record system. Healthcare events include patient contacts, and any other business activity, such as pathology investigations which take place on behalf of the patient. ",
+    "ancestors": [
+        "PATHABLE"
+    ],
+    "properties": {
+        "start_time": {
+            "name": "start_time",
+            "documentation": "Start time of the clinical session or other kind of event during which a provider performs a service of any kind for the patient. ",
+            "is_mandatory": true,
+            "type": "DV_DATE_TIME"
+        },
+        "end_time": {
+            "name": "end_time",
+            "documentation": "Optional end time of the clinical session. \n",
+            "type": "DV_DATE_TIME"
+        },
+        "location": {
+            "name": "location",
+            "documentation": "The actual location where the session occurred, e.g. 'microbiology lab 2', 'home', 'ward A3'  and so on.",
+            "type": "String"
+        },
+        "setting": {
+            "name": "setting",
+            "documentation": "The setting in which the clinical session took place. Coded using the openEHR Terminology,  setting  group. ",
+            "is_mandatory": true,
+            "type": "DV_CODED_TEXT"
+        },
+        "other_context": {
+            "name": "other_context",
+            "documentation": "Other optional context which will be archetyped.",
+            "type": "ITEM_STRUCTURE"
+        },
+        "health_care_facility": {
+            "name": "health_care_facility",
+            "documentation": "The health care facility under whose care the event took place. This is the most specific workgroup or delivery unit within a care delivery enterprise that has an official identifier in the health system, and can be used to ensure medico-legal accountability. ",
+            "type": "PARTY_IDENTIFIED"
+        },
+        "participations": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "participations",
+            "documentation": "Parties involved in the healthcare event. These would normally include the physician(s) and often the patient (but not the latter if the clinical session is a pathology test for example). ",
+            "type_def": {
+                "container_type": "List",
+                "type": "PARTICIPATION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Setting_valid": "Terminology (Terminology_id_openehr).has_code_for_group_id (Group_id_setting, setting.defining_code)",
+        "Participations_validity": "participations /= Void implies not participations.is_empty",
+        "location_valid": "location /= Void implies not location.is_empty"
+    }
+}

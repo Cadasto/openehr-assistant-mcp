@@ -1,0 +1,7 @@
+{
+    "name": "X_VERSIONED_EHR_STATUS",
+    "documentation": "Form of `X_VERSIONED_OBJECT` for `EHR_STATUS` EHR object.",
+    "ancestors": [
+        "X_VERSIONED_OBJECT"
+    ]
+}

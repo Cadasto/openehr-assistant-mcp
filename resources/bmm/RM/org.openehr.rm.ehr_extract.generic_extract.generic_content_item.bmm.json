@@ -1,0 +1,76 @@
+{
+    "name": "GENERIC_CONTENT_ITEM",
+    "documentation": "Single item in generic extract, designed for 13606 and CDA data.",
+    "ancestors": [
+        "EXTRACT_CONTENT_ITEM"
+    ],
+    "properties": {
+        "item_type": {
+            "name": "item_type",
+            "documentation": "Identifier of model or schema used to create the content.",
+            "type": "DV_CODED_TEXT"
+        },
+        "item_type_version": {
+            "name": "item_type_version",
+            "documentation": "Version of model or schema used to create the content item.",
+            "type": "String"
+        },
+        "author": {
+            "name": "author",
+            "documentation": "Reference to a demographic entity elsewhere in this Extract representing the author of the item version. The reference should be a UID corresponding to the UID of a `GENERIC_CONTENT_ITEM` containing the demographic information.",
+            "type": "String"
+        },
+        "creation_time": {
+            "name": "creation_time",
+            "documentation": "Time of creation of this item version on the original system. This may be an earlier commit time, or it may be the time at which the item was created during the Extract generation process.",
+            "type": "Iso8601_date_time"
+        },
+        "authoriser": {
+            "name": "authoriser",
+            "documentation": "Reference to a demographic entity elsewhere in this Extract representing an authoriser of the item version, if relevant. The reference should be a UID corresponding to the UID of a `GENERIC_CONTENT_ITEM` containing the demographic information.",
+            "type": "String"
+        },
+        "authorisation_time": {
+            "name": "authorisation_time",
+            "documentation": "Time of authorisation of this item version on the original system where relevant.",
+            "type": "Iso8601_date_time"
+        },
+        "item_status": {
+            "name": "item_status",
+            "documentation": "Coded lifecycle status of the item.",
+            "type": "DV_CODED_TEXT"
+        },
+        "version_id": {
+            "name": "version_id",
+            "documentation": "Version id of this item in original system.",
+            "type": "String"
+        },
+        "version_set_id": {
+            "name": "version_set_id",
+            "documentation": "Version set id of this item in original system, where applicable.",
+            "type": "String"
+        },
+        "system_id": {
+            "name": "system_id",
+            "documentation": "Identifier of EMR or other system from which the item was created / extracted. Typically in the form of a domain name.",
+            "type": "String"
+        },
+        "other_details": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "other_details",
+            "documentation": "Other details about the content item.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "item": {
+            "name": "item",
+            "documentation": "Content object.",
+            "type": "LOCATABLE"
+        }
+    }
+}

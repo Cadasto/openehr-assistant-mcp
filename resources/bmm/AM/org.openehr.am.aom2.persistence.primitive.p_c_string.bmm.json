@@ -1,0 +1,32 @@
+{
+    "name": "P_C_STRING",
+    "documentation": "Constraint on instances of STRING. ",
+    "ancestors": [
+        "P_C_PRIMITIVE_OBJECT"
+    ],
+    "properties": {
+        "constraint": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "constraint",
+            "documentation": "String constraint - a list of literal strings and / or regular expression strings delimited by the ‘/’ character.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "default_value": {
+            "name": "default_value",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "assumed_value": {
+            "name": "assumed_value",
+            "type": "String"
+        }
+    }
+}

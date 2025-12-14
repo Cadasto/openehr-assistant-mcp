@@ -1,0 +1,69 @@
+{
+    "name": "HISTORY",
+    "documentation": "Root object of a linear history, i.e. time series structure. This is a generic class whose type parameter must be a descendant of `ITEM_STRUCTURE`, ensuring that each Event in the `_events_` of a given instance is of the same structural type, i.e. `ITEM_TREE`, `ITEM_LIST` etc.\n\nFor a periodic series of events, period will be set, and the time of each Event in the History must correspond; i.e. the `EVENT._offset_` must be a multiple of period for each Event. Missing events in a period History are however allowed. ",
+    "ancestors": [
+        "DATA_STRUCTURE"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "ITEM_STRUCTURE"
+        }
+    },
+    "properties": {
+        "origin": {
+            "name": "origin",
+            "documentation": "Time origin of this event history. The first event is not necessarily at the origin point. ",
+            "is_mandatory": true,
+            "type": "DV_DATE_TIME"
+        },
+        "period": {
+            "name": "period",
+            "documentation": "Period between samples in this segment if periodic.",
+            "type": "DV_DURATION"
+        },
+        "duration": {
+            "name": "duration",
+            "documentation": "Duration of the entire History; either corresponds to the duration of all the events, and/or the duration represented by the summary, if it exists. ",
+            "type": "DV_DURATION"
+        },
+        "summary": {
+            "name": "summary",
+            "documentation": "Optional summary data that aggregates, organizes, reduces and transforms the event series. This may be a text or image that presents a graphical presentation, or some data that assists with the interpretation of the data.",
+            "type": "ITEM_STRUCTURE"
+        },
+        "events": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "events",
+            "documentation": "The events in the series. This attribute is of a generic type whose parameter must be a descendant of `ITEM_SUTRUCTURE`.",
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "EVENT",
+                    "generic_parameters": [
+                        "T"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "is_periodic": {
+            "name": "is_periodic",
+            "documentation": "Indicates whether history is periodic. \n",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Events_valid": "(events /= Void and then not events.is_empty) or summary /= Void",
+        "Periodic_validity": "is_periodic xor period = Void",
+        "Period_consistency": "is_periodic implies events.for_all (e: EVENT | e.offset. to_seconds.mod(period.to_seconds) = 0)"
+    }
+}

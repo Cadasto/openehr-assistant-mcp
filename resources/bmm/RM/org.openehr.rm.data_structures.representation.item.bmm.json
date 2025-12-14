@@ -1,0 +1,8 @@
+{
+    "name": "ITEM",
+    "documentation": "The abstract parent of `CLUSTER` and `ELEMENT` representation classes. ",
+    "is_abstract": true,
+    "ancestors": [
+        "LOCATABLE"
+    ]
+}

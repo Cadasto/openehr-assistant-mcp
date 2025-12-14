@@ -1,0 +1,13 @@
+{
+    "name": "Set",
+    "documentation": "Unordered container that may not contain duplicates.",
+    "ancestors": [
+        "Container"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Any"
+        }
+    }
+}

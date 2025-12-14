@@ -1,0 +1,20 @@
+{
+    "name": "VIEW_SECTION",
+    "ancestors": [
+        "VIEW_ITEM"
+    ],
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "type_def": {
+                "container_type": "List",
+                "type": "VIEW_ITEM"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

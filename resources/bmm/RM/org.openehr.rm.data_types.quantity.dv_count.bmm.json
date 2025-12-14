@@ -1,0 +1,117 @@
+{
+    "name": "DV_COUNT",
+    "documentation": "Countable quantities. Used for countable types such as pregnancies and steps (taken by a physiotherapy patient), number of cigarettes smoked in a day. \n\nMisuse: Not to be used for amounts of physical entities (which all have units).",
+    "ancestors": [
+        "DV_AMOUNT"
+    ],
+    "properties": {
+        "magnitude": {
+            "name": "magnitude",
+            "is_mandatory": true,
+            "type": "Integer64"
+        },
+        "normal_range": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "normal_range",
+            "documentation": "Optional normal range. ",
+            "type_def": {
+                "root_type": "DV_INTERVAL",
+                "generic_parameters": [
+                    "DV_COUNT"
+                ]
+            }
+        },
+        "other_reference_ranges": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "other_reference_ranges",
+            "documentation": "Optional tagged other reference ranges for this value in its particular measurement context.",
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "REFERENCE_RANGE",
+                    "generic_parameters": [
+                        "DV_COUNT"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "add": {
+            "name": "add",
+            "documentation": "Sum of this `DV_COUNT` and `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_COUNT"
+                }
+            },
+            "result": {
+                "type": "DV_COUNT"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Difference of this `DV_COUNT` and `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_COUNT"
+                }
+            },
+            "result": {
+                "type": "DV_COUNT"
+            }
+        },
+        "multiply": {
+            "name": "multiply",
+            "documentation": "Product of this `DV_COUNT` and `_factor_`.",
+            "parameters": {
+                "factor": {
+                    "name": "factor",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "DV_COUNT"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "True if `_other_` is less than this Quantified object. Based on comparison of `_magnitude_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_COUNT"
+                }
+            },
+            "pre_conditions": {
+                "Pre_comparable": "is_strictly_comparable()"
+            },
+            "post_conditions": {
+                "Post_result": "Result = magnitude < other.magnitude"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_strictly_comparable_to": {
+            "name": "is_strictly_comparable_to",
+            "documentation": "Return True.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_ORDERED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

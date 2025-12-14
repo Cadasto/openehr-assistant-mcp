@@ -1,0 +1,42 @@
+{
+    "name": "REVISION_HISTORY",
+    "documentation": "Purpose Defines the notion of a revision history of audit items, each associated with the version for which that audit was committed. The list is in most-recent-first order. ",
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "The items in this history in most-recent-last order. ",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "REVISION_HISTORY_ITEM"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "most_recent_version": {
+            "name": "most_recent_version",
+            "documentation": "The version id of the most recent item, as a String.",
+            "post_conditions": {
+                "Post": "Result.is_equal (items.last.version_id.value)"
+            },
+            "result": {
+                "type": "String"
+            }
+        },
+        "most_recent_version_time_committed": {
+            "name": "most_recent_version_time_committed",
+            "documentation": "The commit date/time of the most recent item, as a String. ",
+            "post_conditions": {
+                "Post": "Result.is_equal (items.last.audits.first. time_committed.value)"
+            },
+            "result": {
+                "type": "String"
+            }
+        }
+    }
+}

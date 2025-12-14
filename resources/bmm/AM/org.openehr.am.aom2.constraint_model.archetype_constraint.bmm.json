@@ -1,0 +1,52 @@
+{
+    "name": "ARCHETYPE_CONSTRAINT",
+    "documentation": "Archetype equivalent to LOCATABLE class in openEHR Common reference model. Defines common constraints for any inheritor of LOCATABLE in any reference model. ",
+    "is_abstract": true,
+    "functions": {
+        "is_subset_of": {
+            "name": "is_subset_of",
+            "documentation": "True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. \nTypically used during validation of special-ised archetype nodes.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "ARCHETYPE_CONSTRAINT"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_valid": {
+            "name": "is_valid",
+            "is_abstract": true,
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "path": {
+            "name": "path",
+            "documentation": "Path of this node relative to root of archetype.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "has_path": {
+            "name": "has_path",
+            "documentation": "True if the relative path a_path exists at this node.",
+            "parameters": {
+                "a_path": {
+                    "name": "a_path",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Post": "Result = soc_parent /= Void or parent.soc_parent /= Void",
+        "Path_exists": "path /= Void"
+    }
+}

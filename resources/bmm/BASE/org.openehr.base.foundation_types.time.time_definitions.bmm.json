@@ -1,0 +1,277 @@
+{
+    "name": "Time_Definitions",
+    "documentation": "Definitions for date/time classes. Note that the timezone limits are set by where the international dateline is. Thus, time in New Zealand is quoted using `+12:00`, not `-12:00`.",
+    "constants": {
+        "Seconds_in_minute": {
+            "name": "Seconds_in_minute",
+            "documentation": "Number of seconds in a minute.",
+            "type": "Integer",
+            "value": 60
+        },
+        "Minutes_in_hour": {
+            "name": "Minutes_in_hour",
+            "documentation": "Number of minutes in an hour.",
+            "type": "Integer",
+            "value": 60
+        },
+        "Hours_in_day": {
+            "name": "Hours_in_day",
+            "documentation": "Number of clock hours in a day, i.e. 24.",
+            "type": "Integer",
+            "value": 24
+        },
+        "Average_days_in_month": {
+            "name": "Average_days_in_month",
+            "documentation": "Used for conversions of durations containing months to days and / or seconds.",
+            "type": "Real",
+            "value": 30.42
+        },
+        "Max_days_in_month": {
+            "name": "Max_days_in_month",
+            "documentation": "Maximum number of days in any month.",
+            "type": "Integer",
+            "value": 31
+        },
+        "Days_in_year": {
+            "name": "Days_in_year",
+            "documentation": "Calendar days in a normal year, i.e. 365.",
+            "type": "Integer",
+            "value": 365
+        },
+        "Average_days_in_year": {
+            "name": "Average_days_in_year",
+            "documentation": "Used for conversions of durations containing years to days and / or seconds.",
+            "type": "Real",
+            "value": 365.24
+        },
+        "Days_in_leap_year": {
+            "name": "Days_in_leap_year",
+            "documentation": "Calendar days in a standard leap year, i.e. 366.",
+            "type": "Integer",
+            "value": 366
+        },
+        "Max_days_in_year": {
+            "name": "Max_days_in_year",
+            "documentation": "Maximum number of days in a year, i.e. accounting for leap years.",
+            "type": "Integer"
+        },
+        "Days_in_week": {
+            "name": "Days_in_week",
+            "documentation": "Number of days in a week.",
+            "type": "Integer",
+            "value": 7
+        },
+        "Months_in_year": {
+            "name": "Months_in_year",
+            "documentation": "Number of months in a year.",
+            "type": "Integer",
+            "value": 12
+        },
+        "Min_timezone_hour": {
+            "name": "Min_timezone_hour",
+            "documentation": "Minimum hour value of a timezone  according to ISO 8601 (note that the -ve sign is supplied in the `ISO8601_TIMEZONE` class).",
+            "type": "Integer",
+            "value": 12
+        },
+        "Max_timezone_hour": {
+            "name": "Max_timezone_hour",
+            "documentation": "Maximum hour value of a timezone according to ISO 8601.",
+            "type": "Integer",
+            "value": 14
+        },
+        "Nominal_days_in_month": {
+            "name": "Nominal_days_in_month",
+            "documentation": "Used for conversions of durations containing months to days and / or seconds.",
+            "type": "Real",
+            "value": 30.42
+        },
+        "Nominal_days_in_year": {
+            "name": "Nominal_days_in_year",
+            "documentation": "Used for conversions of durations containing years to days and / or seconds.",
+            "type": "Real",
+            "value": 365.24
+        }
+    },
+    "functions": {
+        "valid_year": {
+            "name": "valid_year",
+            "documentation": "True if `y >= 0`.",
+            "parameters": {
+                "y": {
+                    "name": "y",
+                    "type": "Integer"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = y >= 0"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_month": {
+            "name": "valid_month",
+            "documentation": "True if `m >= 1 and m <= months_in_year`.",
+            "parameters": {
+                "m": {
+                    "name": "m",
+                    "type": "Integer"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = m >= 1 and m <= Months_in_year"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_day": {
+            "name": "valid_day",
+            "documentation": "True if `d >= 1 and d <= days_in_month (m, y)`.",
+            "parameters": {
+                "y": {
+                    "name": "y",
+                    "type": "Integer"
+                },
+                "m": {
+                    "name": "m",
+                    "type": "Integer"
+                },
+                "d": {
+                    "name": "d",
+                    "type": "Integer"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = d >= 1 and d <= days_in_month (m, y)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_hour": {
+            "name": "valid_hour",
+            "documentation": "True if `(h >= 0 and h < Hours_in_day) or (h = Hours_in_day and m = 0 and s = 0)` .",
+            "parameters": {
+                "h": {
+                    "name": "h",
+                    "type": "Integer"
+                },
+                "m": {
+                    "name": "m",
+                    "type": "Integer"
+                },
+                "s": {
+                    "name": "s",
+                    "type": "Integer"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = (h >= 0 and h < Hours_in_day) or (h = Hours_in_day and m = 0 and s = 0)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_minute": {
+            "name": "valid_minute",
+            "documentation": "True if `m >= 0 and m < Minutes_in_hour`.",
+            "parameters": {
+                "m": {
+                    "name": "m",
+                    "type": "Integer"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = m >= 0 and m < Minutes_in_hour"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_second": {
+            "name": "valid_second",
+            "documentation": "True if `s >= 0 and s < Seconds_in_minute` .",
+            "parameters": {
+                "s": {
+                    "name": "s",
+                    "type": "Integer"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = s >= 0 and s < Seconds_in_minute"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_fractional_second": {
+            "name": "valid_fractional_second",
+            "documentation": "True if `fs >= 0.0` and `fs < 1.0` .",
+            "parameters": {
+                "fs": {
+                    "name": "fs",
+                    "type": "Double"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = fs >= 0.0 and fs < 1.0"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_iso8601_date": {
+            "name": "valid_iso8601_date",
+            "documentation": "String is a valid ISO 8601 date, i.e. takes the complete form:\n\n* `YYYY-MM-DD` (extended, preferred) or one of the partial forms `YYYY-MM` or `YYYY`\n* `YYYYMMDD` (compact) or a partial variant `YYYYMM`.\n\nWhere:\n\n* `YYYY` is the string form of any positive number in the range `0000` - `9999` (zero-filled to four digits)\n* `MM` is `01` - `12` (zero-filled to two digits)\n* `DD` is `01` - `31` (zero-filled to two digits)\n\nThe combinations of `YYYY`, `MM`, `DD` numbers must be correct with respect to the Gregorian calendar.",
+            "parameters": {
+                "s": {
+                    "name": "s",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_iso8601_time": {
+            "name": "valid_iso8601_time",
+            "documentation": "String is a valid ISO 8601 date, i.e. takes the form:\n\n* `hh:mm:ss[(,|.)s+][Z|±hh[:mm]]` (extended)\n* `hhmmss[(,|.)s+][Z|±hh[mm]]` (compact)\n* or one of the partial forms:\n** `hh:mm` (extended)\n** `hhmm` or `hh` (compact)\n\nwith an additional optional timezone indicator of:\n\n* `Z` or `±hh[:mm]` (extended)  `±hh[mm]` (compact)\n\nWhere:\n\n* `hh` is \"00\" - \"23\" (0-filled to two digits)\n* `mm` is \"00\" - \"59\" (0-filled to two digits)\n* `ss` is \"00\" - \"60\" (0-filled to two digits)\n* `[(,|.)s+]` is an optional string consisting of a comma or decimal point followed by numeric string of 1 or more digits, representing a fractional second\n* `Z` is a literal meaning UTC (modern replacement for GMT), i.e. timezone `+0000`\n",
+            "parameters": {
+                "s": {
+                    "name": "s",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_iso8601_date_time": {
+            "name": "valid_iso8601_date_time",
+            "documentation": "String is a valid ISO 8601 date-time, i.e. takes the form:\n\n* `YYYY-MM-DDThh:mm:ss[(,|.)s+][Z|±hh[:mm]]` (extended)\n* `YYYYMMDDThhmmss[(,|.)s+][Z|±hh[mm]]` (compact)\n* or one of the partial forms:\n** `YYYY-MM-DDThh:mm` or `YYYY-MM-DDThh` (extended)\n** `YYYYMMDDThhmm` or `YYYYMMDDThh` (compact)",
+            "parameters": {
+                "s": {
+                    "name": "s",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_iso8601_duration": {
+            "name": "valid_iso8601_duration",
+            "documentation": "String is a valid ISO 8601 duration, i.e. takes the form:\n\n* `P[nnY][nnM][nnW][nnD][T[nnH][nnM][nnS]]`\n\nWhere each nn represents a number of years, months, etc. `nnW` represents a number of 7-day weeks.\n\nNote: allowing the `W` designator in the same expression as other designators is an exception to the published standard, but necessary in clinical information (typically for representing pregnancy duration).",
+            "parameters": {
+                "s": {
+                    "name": "s",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

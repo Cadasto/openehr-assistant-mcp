@@ -1,0 +1,19 @@
+{
+    "name": "P_C_DEFINED_OBJECT",
+    "documentation": "Abstract parent type of C_OBJECT subtypes that are defined by value, i.e. whose definitions are actually in the archetype rather than being by reference. ",
+    "is_abstract": true,
+    "ancestors": [
+        "P_C_OBJECT"
+    ],
+    "properties": {
+        "is_frozen": {
+            "name": "is_frozen",
+            "type": "Boolean"
+        },
+        "default_value": {
+            "name": "default_value",
+            "is_mandatory": true,
+            "type": "Any"
+        }
+    }
+}

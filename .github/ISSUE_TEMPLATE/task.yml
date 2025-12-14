@@ -1,0 +1,29 @@
+name: Task
+description: Track a maintenance or follow-up task
+labels: [chore]
+title: "chore: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for non-feature, non-bug tasks: refactoring, docs, CI, etc.
+  - type: input
+    id: summary
+    attributes:
+      label: Task summary
+      description: Short description of the task
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What needs to be done? Acceptance criteria?
+      placeholder: |
+        - [ ] Item 1
+        - [ ] Item 2
+  - type: textarea
+    id: context
+    attributes:
+      label: Context / references
+      description: Links to related issues/PRs or external references

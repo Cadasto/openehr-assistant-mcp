@@ -1,0 +1,21 @@
+{
+    "name": "EXPR_BINARY_OPERATOR",
+    "documentation": "Binary operator expression node.",
+    "ancestors": [
+        "EXPR_OPERATOR"
+    ],
+    "properties": {
+        "left_operand": {
+            "name": "left_operand",
+            "documentation": "Left operand node.",
+            "is_mandatory": true,
+            "type": "EXPR_ITEM"
+        },
+        "right_operand": {
+            "name": "right_operand",
+            "documentation": "Right operand node.",
+            "is_mandatory": true,
+            "type": "EXPR_ITEM"
+        }
+    }
+}

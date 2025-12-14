@@ -1,0 +1,40 @@
+{
+    "name": "ARCHETYPE_SLOT",
+    "documentation": "Constraint describing a  slot' where another archetype can occur. ",
+    "ancestors": [
+        "C_REFERENCE_OBJECT"
+    ],
+    "properties": {
+        "includes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "includes",
+            "documentation": "List of constraints defining other archetypes that could be included at this point. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "ASSERTION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "excludes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "excludes",
+            "documentation": "List of constraints defining other archetypes that cannot be included at this point. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "ASSERTION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Includes_valid": "includes /= Void implies not includes.is_empty",
+        "Excludes_valid": "excludes /= Void implies not excludes.is_empty",
+        "Validity": "any_allowed xor (includes /= Void or excludes /= Void)"
+    }
+}

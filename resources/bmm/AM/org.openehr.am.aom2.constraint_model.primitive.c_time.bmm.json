@@ -1,0 +1,61 @@
+{
+    "name": "C_TIME",
+    "documentation": "ISO 8601-compatible constraint on instances of Time. There is no validity flag for ‘hour’, since it must always be by definition mandatory in order to have a sensible time at all. Syntax expressions of instances of this class include “HH:??:xx” (time with optional minutes and seconds not allowed).",
+    "ancestors": [
+        "C_PRIMITIVE"
+    ],
+    "properties": {
+        "minute_validity": {
+            "name": "minute_validity",
+            "documentation": "Validity of minute in constrained time.",
+            "type": "VALIDITY_KIND"
+        },
+        "second_validity": {
+            "name": "second_validity",
+            "documentation": "Validity of second in constrained time.",
+            "type": "VALIDITY_KIND"
+        },
+        "millisecond_validity": {
+            "name": "millisecond_validity",
+            "documentation": "Validity of millisecond in constrained time.",
+            "type": "VALIDITY_KIND"
+        },
+        "timezone_validity": {
+            "name": "timezone_validity",
+            "documentation": "Validity of timezone in constrained date.",
+            "type": "VALIDITY_KIND"
+        },
+        "range": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "range",
+            "documentation": "Interval of Times specifying constraint.",
+            "type_def": {
+                "root_type": "Interval",
+                "generic_parameters": [
+                    "Iso8601_time"
+                ]
+            }
+        },
+        "assumed_value": {
+            "name": "assumed_value",
+            "documentation": "The value to assume if this item is not included in data, due to being part of an optional structure.",
+            "type": "Iso8601_time"
+        }
+    },
+    "functions": {
+        "validity_is_range": {
+            "name": "validity_is_range",
+            "documentation": "True if validity is in the form of a range; useful for developers to check which kind of constraint has been set.",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Pattern_validity": "pattern /= Void implies valid_iso8601_time_constraint_pattern (pattern)",
+        "Minute_validity_optional": "minute_validity = {VALIDITY_KIND}.optional implies (second_validity = {VALIDITY_KIND}.optional or second_validity = {VALIDITY_KIND}.disallowed)",
+        "Minute_validity_disallowed": "minute_validity = {VALIDITY_KIND}.disallowed implies second_validity = {VALIDITY_KIND}.disallowed",
+        "Second_validity_optional": "second_validity = {VALIDITY_KIND}.optional implies (millisecond_validity = {VALIDITY_KIND}.optional or millisecond_validity = {VALIDITY_KIND}.disallowed)",
+        "Second_validity_disallowed": "second_validity = {VALIDITY_KIND}.disallowed implies millisecond_validity = {VALIDITY_KIND}.disallowed Validity_is_range: validity_is_range = (range /= Void)"
+    }
+}

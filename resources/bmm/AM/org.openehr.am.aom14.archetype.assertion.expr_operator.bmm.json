@@ -1,0 +1,21 @@
+{
+    "name": "EXPR_OPERATOR",
+    "documentation": "Abstract parent of operator types.",
+    "is_abstract": true,
+    "ancestors": [
+        "EXPR_ITEM"
+    ],
+    "properties": {
+        "precedence_overridden": {
+            "name": "precedence_overridden",
+            "documentation": "True if the natural precedence of operators is overridden in the expression represented by this node of the expression tree. If True, parentheses should be introduced around the totality of the syntax expression corresponding to this operator node and its operands.",
+            "type": "Boolean"
+        },
+        "operator": {
+            "name": "operator",
+            "documentation": "Code of operator.",
+            "is_mandatory": true,
+            "type": "OPERATOR_KIND"
+        }
+    }
+}

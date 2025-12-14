@@ -1,0 +1,49 @@
+{
+    "name": "P_ARCHETYPE",
+    "documentation": "Archetype equivalent to ARCHETYPED class in Common reference model. Defines semantics of identfication, lifecycle, versioning, composition and specialisation.\n\nAn archetype is a modelled as a particular kind of AUTHORED_RESOURCE, and as such, includes descriptive meta-data, language information and revision history. The ARCHETYPE class adds identifying information, a definition - expressed in terms of constraints on instances of an object model, and an ontology.",
+    "is_abstract": true,
+    "properties": {
+        "parent_archetype_id": {
+            "name": "parent_archetype_id",
+            "documentation": "Identifier of the specialisation parent of this archetype.",
+            "type": "String"
+        },
+        "archetype_id": {
+            "name": "archetype_id",
+            "documentation": "Identifier of this archetype.",
+            "is_mandatory": true,
+            "type": "P_ARCHETYPE_HRID"
+        },
+        "is_differential": {
+            "name": "is_differential",
+            "documentation": "Flag indicating whether this archetype is differential or flat in its contents. Top-level source archetypes have this flag set to True.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "definition": {
+            "name": "definition",
+            "documentation": "Root node of the definition of this archetype.",
+            "is_mandatory": true,
+            "type": "P_C_COMPLEX_OBJECT"
+        },
+        "terminology": {
+            "name": "terminology",
+            "documentation": "The terminology of the archetype.",
+            "is_mandatory": true,
+            "type": "P_ARCHETYPE_TERMINOLOGY"
+        },
+        "rules": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "rules",
+            "documentation": "Rules relating to this archetype. Statements are expressed in first order predicate logic, and usually refer to at least two attributes.",
+            "type_def": {
+                "container_type": "List",
+                "type": "EL_BOOLEAN_EXPRESSION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

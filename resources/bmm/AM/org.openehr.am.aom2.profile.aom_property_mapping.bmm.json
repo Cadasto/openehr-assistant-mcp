@@ -1,0 +1,18 @@
+{
+    "name": "AOM_PROPERTY_MAPPING",
+    "documentation": "Data object expressing a mapping between two class properties.",
+    "properties": {
+        "source_property_name": {
+            "name": "source_property_name",
+            "documentation": "Name of property in source class.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "target_property_name": {
+            "name": "target_property_name",
+            "documentation": "Name of property in target class.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "name": "Array",
+    "documentation": "Container whose storage is assumed to be contiguous.",
+    "ancestors": [
+        "Container"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Any"
+        }
+    },
+    "functions": {
+        "item": {
+            "name": "item",
+            "documentation": "Return item for key  `_a_key_`.",
+            "parameters": {
+                "a_key": {
+                    "name": "a_key",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "T"
+            }
+        }
+    }
+}

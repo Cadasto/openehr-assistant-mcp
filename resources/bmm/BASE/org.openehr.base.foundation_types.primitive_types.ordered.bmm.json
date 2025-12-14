@@ -1,0 +1,72 @@
+{
+    "name": "Ordered",
+    "documentation": "Abstract parent class of ordered types i.e. types on which the '<' operator is defined.",
+    "is_abstract": true,
+    "ancestors": [
+        "Any"
+    ],
+    "functions": {
+        "less_than": {
+            "name": "less_than",
+            "documentation": "Arithmetic value comparison. Returns True if current object is less than `_other_`. This operator is effected and/or redefined in descendants to provide the appropriate ordering semantics for concrete types.\n\nIn conjunction with `=`, enables the definition of the related functions `_greater_than_()` etc.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Ordered"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "less_than_or_equal": {
+            "name": "less_than_or_equal",
+            "documentation": "True if current object less than or equal to `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Ordered"
+                }
+            },
+            "post_conditions": {
+                "Post_result": "not (other < self)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "greater_than": {
+            "name": "greater_than",
+            "documentation": "True if current object greater than `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Ordered"
+                }
+            },
+            "post_conditions": {
+                "Post_result": "Result = (other < self)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "greater_than_or_equal": {
+            "name": "greater_than_or_equal",
+            "documentation": "True if current object greater than or equal to `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Ordered"
+                }
+            },
+            "post_conditions": {
+                "Post_result": "Result = (other <= self)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

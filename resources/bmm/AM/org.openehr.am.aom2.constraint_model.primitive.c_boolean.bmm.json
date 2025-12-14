@@ -1,0 +1,26 @@
+{
+    "name": "C_BOOLEAN",
+    "documentation": "Constraint on instances of Boolean. Both attributes cannot be set to False, since this would mean that the Boolean value being constrained cannot be True or False.",
+    "ancestors": [
+        "C_PRIMITIVE"
+    ],
+    "properties": {
+        "true_valid": {
+            "name": "true_valid",
+            "documentation": "True if the value True is allowed.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "false_valid": {
+            "name": "false_valid",
+            "documentation": "True if the value False is allowed.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "assumed_value": {
+            "name": "assumed_value",
+            "documentation": "The value to assume if this item is not included in data, due to being part of an optional structure.",
+            "type": "Boolean"
+        }
+    }
+}

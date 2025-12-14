@@ -1,0 +1,46 @@
+{
+    "name": "Hash",
+    "documentation": "Type representing a keyed table of values. V is the value type, and K the type of the keys. ",
+    "ancestors": [
+        "Container"
+    ],
+    "generic_parameter_defs": {
+        "K": {
+            "name": "K",
+            "conforms_to_type": "Ordered"
+        },
+        "V": {
+            "name": "V"
+        }
+    },
+    "functions": {
+        "has_key": {
+            "name": "has_key",
+            "documentation": "Test for presence of `_a_key_`.",
+            "parameters": {
+                "a_key": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER_OPEN",
+                    "name": "a_key",
+                    "type": "K"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "item": {
+            "name": "item",
+            "documentation": "Return item for key `_a_key_`.",
+            "parameters": {
+                "a_key": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER_OPEN",
+                    "name": "a_key",
+                    "type": "K"
+                }
+            },
+            "result": {
+                "type": "V"
+            }
+        }
+    }
+}

@@ -1,0 +1,222 @@
+{
+    "name": "Iso8601_date_time",
+    "documentation": "Represents an ISO 8601 date/time, including partial and extended forms. Value may be:\n\n* `YYYY-MM-DDThh:mm:ss[(,|.)sss][Z | ±hh[:mm]]` (extended, preferred) or\n* `YYYYMMDDThhmmss[(,|.)sss][Z | ±hh[mm]]` (compact)\n* or a partial variant.\n\nSee `_valid_iso8601_date_time()_` for validity.\n\nNote that this class includes 2 deviations from ISO 8601:2004:\n\n* for partial date/times, any part of the date/time up to the month may be missing, not just seconds and minutes as in the standard;\n* the time `24:00:00` is not allowed, since it would mean the date was really on the next day.",
+    "ancestors": [
+        "Iso8601_type"
+    ],
+    "functions": {
+        "year": {
+            "name": "year",
+            "documentation": "Extract the year part of the date as an Integer.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "month": {
+            "name": "month",
+            "documentation": "Extract the month part of the date/time as an Integer, or return 0 if not present.",
+            "pre_conditions": {
+                "Pre": "not month_unknown"
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "day": {
+            "name": "day",
+            "documentation": "Extract the day part of the date/time as an Integer, or return 0 if not present.",
+            "pre_conditions": {
+                "Pre": "not day_unknown"
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "hour": {
+            "name": "hour",
+            "documentation": "Extract the hour part of the date/time as an Integer, or return 0 if not present.",
+            "pre_conditions": {
+                "Pre": "not hour_unknown"
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "minute": {
+            "name": "minute",
+            "documentation": "Extract the minute part of the date/time as an Integer, or return 0 if not present.",
+            "pre_conditions": {
+                "Pre": "not minute_unknown"
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "second": {
+            "name": "second",
+            "documentation": "Extract the integral seconds part of the date/time (i.e. prior to any decimal sign) as an Integer, or return 0 if not present.",
+            "pre_conditions": {
+                "Pre": "not second_unknown"
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "fractional_second": {
+            "name": "fractional_second",
+            "documentation": "Extract the fractional seconds part of the date/time (i.e. following to any decimal sign) as a Real, or return 0.0 if not present.",
+            "result": {
+                "type": "Real"
+            }
+        },
+        "timezone": {
+            "name": "timezone",
+            "documentation": "Timezone; may be Void.",
+            "result": {
+                "type": "Iso8601_timezone"
+            }
+        },
+        "month_unknown": {
+            "name": "month_unknown",
+            "documentation": "Indicates whether month in year is unknown.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "day_unknown": {
+            "name": "day_unknown",
+            "documentation": "Indicates whether day in month is unknown.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "minute_unknown": {
+            "name": "minute_unknown",
+            "documentation": "Indicates whether minute in hour is known.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "second_unknown": {
+            "name": "second_unknown",
+            "documentation": "Indicates whether minute in hour is known.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_decimal_sign_comma": {
+            "name": "is_decimal_sign_comma",
+            "documentation": "True if this time has a decimal part indicated by `','` (comma) rather than `'.'` (period).",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_partial": {
+            "name": "is_partial",
+            "documentation": "True if this date time is partial, i.e. if seconds or more is missing.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_extended": {
+            "name": "is_extended",
+            "documentation": "True if this date/time uses `'-'`, `':'` separators.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "has_fractional_second": {
+            "name": "has_fractional_second",
+            "documentation": "True if the `_fractional_second_` part is significant (i.e. even if = 0.0).",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "as_string": {
+            "name": "as_string",
+            "documentation": "Return the string value in extended format.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "add": {
+            "name": "add",
+            "documentation": "Arithmetic addition of a duration to a date/time.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_date_time"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Arithmetic subtraction of a duration from a date/time.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_date_time"
+            }
+        },
+        "diff": {
+            "name": "diff",
+            "documentation": "Difference of two date/times.",
+            "parameters": {
+                "a_date_time": {
+                    "name": "a_date_time",
+                    "type": "Iso8601_date_time"
+                }
+            },
+            "result": {
+                "type": "Iso8601_duration"
+            }
+        },
+        "add_nominal": {
+            "name": "add_nominal",
+            "documentation": "Addition of nominal duration represented by `_a_diff_`. See `Iso8601_date._add_nominal_()` for semantics.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_date"
+            }
+        },
+        "subtract_nominal": {
+            "name": "subtract_nominal",
+            "documentation": "Subtraction of nominal duration represented by `_a_diff_`. See `_add_nominal_()` for semantics.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_date"
+            }
+        }
+    },
+    "invariants": {
+        "Year_valid": "valid_year (year)",
+        "Month_valid": "valid_month (month)",
+        "Day_valid": "valid_day(year, month, day)",
+        "Hour_valid": "valid_hour (hour, minute, second)",
+        "Minute_valid": "not minute_unknown implies valid_minute(minute)",
+        "Second_valid": "not second_unknown implies valid_second (second)",
+        "Fractional_second_valid": "has_fractional_second implies (not second_unknown and valid_fractional_second (fractional_second))",
+        "Partial_validity_year": "not month_unknown",
+        "Partial_validity_month": "not month_unknown",
+        "Partial_validity_day": "not day_unknown",
+        "Partial_validity_hour": "not hour_unknown",
+        "Partial_validity_minute": "minute_unknown implies second_unknown"
+    }
+}

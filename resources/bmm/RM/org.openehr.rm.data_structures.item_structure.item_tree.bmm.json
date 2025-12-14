@@ -1,0 +1,57 @@
+{
+    "name": "ITEM_TREE",
+    "documentation": "Logical tree data structure. The tree may be empty. Used for representing data which are logically a tree such as audiology results, microbiology results, biochemistry results.",
+    "ancestors": [
+        "ITEM_STRUCTURE"
+    ],
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "The items comprising the `ITEM_TREE`. Can include 0 or more `CLUSTERs` and/or 0 or more individual `ELEMENTs`.",
+            "type_def": {
+                "container_type": "List",
+                "type": "ITEM"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "has_element_path": {
+            "name": "has_element_path",
+            "documentation": "True if path  a_path' is a valid leaf path.\n",
+            "parameters": {
+                "a_path": {
+                    "name": "a_path",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "element_at_path": {
+            "name": "element_at_path",
+            "documentation": "Return the leaf element at the path  a_path'.",
+            "parameters": {
+                "a_path": {
+                    "name": "a_path",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "ELEMENT"
+            }
+        },
+        "as_hierarchy": {
+            "name": "as_hierarchy",
+            "documentation": "Generate a CEN EN13606-compatible hierarchy, which is the same as the tree's physical representation.",
+            "result": {
+                "type": "CLUSTER"
+            }
+        }
+    }
+}

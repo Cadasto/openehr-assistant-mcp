@@ -1,0 +1,7 @@
+{
+    "name": "P_TEMPLATE",
+    "documentation": "Class representing source template, i.e. a kind of archetype that may include template overlays, and may be restricted by tools to only defining mandations, prohibitions, and restrictions on elements already defined in the flat parent.",
+    "ancestors": [
+        "P_AUTHORED_ARCHETYPE"
+    ]
+}

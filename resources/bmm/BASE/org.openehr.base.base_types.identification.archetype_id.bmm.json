@@ -1,0 +1,58 @@
+{
+    "name": "ARCHETYPE_ID",
+    "documentation": "Identifier for archetypes. Ideally these would identify globally unique archetypes.\n\nLexical form: `rm_originator  '-' rm_name  '-' rm_entity  '.' concept_name {  '-' specialisation }*  '.v' number`.",
+    "ancestors": [
+        "OBJECT_ID"
+    ],
+    "functions": {
+        "qualified_rm_entity": {
+            "name": "qualified_rm_entity",
+            "documentation": "Globally qualified reference model entity, e.g.  `openehr-EHR-OBSERVATION`.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "domain_concept": {
+            "name": "domain_concept",
+            "documentation": "Name of the concept represented by this archetype, including specialisation, e.g. `Biochemistry_result-cholesterol`. ",
+            "result": {
+                "type": "String"
+            }
+        },
+        "rm_originator": {
+            "name": "rm_originator",
+            "documentation": "Organisation originating the reference model on which this archetype is based, e.g. openehr,  cen,  hl7 . ",
+            "result": {
+                "type": "String"
+            }
+        },
+        "rm_name": {
+            "name": "rm_name",
+            "documentation": "Name of the reference model, e.g. rim,  ehr_rm,  en13606 . ",
+            "result": {
+                "type": "String"
+            }
+        },
+        "rm_entity": {
+            "name": "rm_entity",
+            "documentation": "Name of the ontological level within the reference model to which this archetype is targeted, e.g. for openEHR,  folder ,  composition ,  section ,  entry .",
+            "result": {
+                "type": "String"
+            }
+        },
+        "specialisation": {
+            "name": "specialisation",
+            "documentation": "Name of specialisation of concept, if this archetype is a specialisation of another archetype, e.g.  cholesterol .",
+            "result": {
+                "type": "String"
+            }
+        },
+        "version_id": {
+            "name": "version_id",
+            "documentation": "Version of this archetype. \n",
+            "result": {
+                "type": "String"
+            }
+        }
+    }
+}

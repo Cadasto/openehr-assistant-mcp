@@ -1,0 +1,16 @@
+{
+    "_type": "P_BMM_ENUMERATION_STRING",
+    "name": "VISIBILITY_TYPE",
+    "documentation": "Enumeration of visibility settings for model elements.",
+    "ancestors": [
+        "String"
+    ],
+    "item_names": [
+        "hide",
+        "show"
+    ],
+    "item_documentations": [
+        "Indicates to a tool to hide the model element to which this marker is attached.",
+        "Indicates to a tool to show the model element to which this marker is attached."
+    ]
+}

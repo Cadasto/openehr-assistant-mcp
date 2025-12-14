@@ -1,0 +1,38 @@
+{
+    "name": "C_REAL",
+    "documentation": "Constraint on instances of Real.",
+    "ancestors": [
+        "C_PRIMITIVE"
+    ],
+    "properties": {
+        "list": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "list",
+            "documentation": "Set of Reals specifying constraint.",
+            "type_def": {
+                "container_type": "List",
+                "type": "Real"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "range": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "range",
+            "documentation": "Range of Real specifying constraint.",
+            "type_def": {
+                "root_type": "Interval",
+                "generic_parameters": [
+                    "Real"
+                ]
+            }
+        },
+        "assumed_value": {
+            "name": "assumed_value",
+            "documentation": "The value to assume if this item is not included in data, due to being part of an optional structure.",
+            "type": "Real"
+        }
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "_type": "P_BMM_ENUMERATION_STRING",
+    "name": "OPERATOR_KIND",
+    "documentation": "Enumeration type for operator types in assertion expressions.",
+    "ancestors": [
+        "String"
+    ],
+    "item_names": [
+        "op_eq",
+        "op_ne",
+        "op_le",
+        "op_lt",
+        "op_ge",
+        "op_gt",
+        "op_matches",
+        "op_not",
+        "op_and",
+        "op_or",
+        "op_xor",
+        "op_implies",
+        "op_for_all",
+        "op_exists",
+        "op_plus",
+        "op_minus",
+        "op_multiply",
+        "op_divide",
+        "op_exponent"
+    ],
+    "item_documentations": [
+        "Equals operator (= or ==)",
+        "Not equals operator (!= or /=)",
+        "Less-than or equals operator (<=)",
+        "Less-than operator (<=)",
+        "Greater-than or equals operator (>=)",
+        "Greater-than operator (>)",
+        "Matches operator (matches or is_in)",
+        "Not logical operator",
+        "And logical operator",
+        "Or logical operator.",
+        "Xor logical operator",
+        "Implies logical operator",
+        "For-all (universal) quantifier",
+        "Exists quantifier",
+        "Arithmetic plus operator (+)",
+        "Arithmetic minus operator (-)",
+        "Arithmetic multiplication operator (*)",
+        "Arithmetic division operator (/)",
+        "Arithmetic exponentiation operator (^)"
+    ]
+}

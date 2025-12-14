@@ -1,0 +1,15 @@
+{
+    "name": "EXPR_ARCHETYPE_ID_CONSTRAINT",
+    "documentation": "Expression tree leaf item representing a constraint on an archetype identifier.",
+    "ancestors": [
+        "EXPR_CONSTRAINT"
+    ],
+    "properties": {
+        "item": {
+            "name": "item",
+            "documentation": "A C_STRING representing a regular expression for matching Archetype identifiers.",
+            "is_mandatory": true,
+            "type": "C_STRING"
+        }
+    }
+}

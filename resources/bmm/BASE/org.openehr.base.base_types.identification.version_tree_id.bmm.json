@@ -1,0 +1,51 @@
+{
+    "name": "VERSION_TREE_ID",
+    "documentation": "Version tree identifier for one version. Lexical form: \n\n`trunk_version [  '.' branch_number  '.' branch_version ]`",
+    "properties": {
+        "value": {
+            "name": "value",
+            "documentation": "String form of this identifier.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "functions": {
+        "trunk_version": {
+            "name": "trunk_version",
+            "documentation": "Trunk version number; numbering starts at 1. ",
+            "result": {
+                "type": "String"
+            }
+        },
+        "is_branch": {
+            "name": "is_branch",
+            "documentation": "True if this version identifier represents a branch, i.e. has branch_number and branch_version parts.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "branch_number": {
+            "name": "branch_number",
+            "documentation": "Number of branch from the trunk point; numbering starts at 1. ",
+            "result": {
+                "type": "String"
+            }
+        },
+        "branch_version": {
+            "name": "branch_version",
+            "documentation": "Version of the branch; numbering starts at 1. ",
+            "result": {
+                "type": "String"
+            }
+        }
+    },
+    "invariants": {
+        "Value_valid": "not value.is_empty",
+        "Trunk_version_valid": "trunk_version /= Void and then trunk_version.is_integer and then trunk_version.as_integer >= 1",
+        "Branch_number_valid": "branch_number /= Void implies branch_number.is_integer and then branch_number.as_integer >= 1",
+        "Branch_version_valid": "branch_version /= Void implies branch_version.is_integer and then branch_version.as_integer >= 1",
+        "Branch_validity": "(branch_number = Void and branch_version = Void ) xor (branch_number /= Void and branch_version /= Void )",
+        "Is_branch_validity": "is_branch xor branch_number = Void",
+        "Is_first_validity": "not is_first xor trunk_version.is_equal(“1”)"
+    }
+}

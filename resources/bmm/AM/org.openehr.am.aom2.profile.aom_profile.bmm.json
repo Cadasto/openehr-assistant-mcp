@@ -1,0 +1,75 @@
+{
+    "name": "AOM_PROFILE",
+    "documentation": "Profile of common settings relating to use of reference model(s) and terminology for a given archetype developing organisation.",
+    "properties": {
+        "profile_name": {
+            "name": "profile_name",
+            "documentation": "Name of this profile, usually based on the publisher it pertains to e.g. \"openEHR\", \"CDISC\", etc.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "archetype_parent_class": {
+            "name": "archetype_parent_class",
+            "documentation": "States a class from the Reference Model that provides archetyping capability in RM data structures. This attribute is optional, and there need be no such class in the RM. Defining it here has the effect in tools that the class tree under which archetypes are arranged contains only RM classes inheriting from this class.",
+            "type": "String"
+        },
+        "archetype_data_value_parent_class": {
+            "name": "archetype_data_value_parent_class",
+            "documentation": "This attribute defines a base class from the Reference Model whose descendants are considered to be 'logical data types', i.e. of some higher level than the built-in primitive types String, Integer etc. This attribute is optional, even if the RM does have such a class, and is only used to help tooling to provide more intelligent display.",
+            "type": "String"
+        },
+        "aom_rm_type_mappings": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "aom_rm_type_mappings",
+            "documentation": "Mappings from AOM built-in types to actual types in RM: whenever the type name is encountered in an archetype, it is mapped to a specific RM type.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "AOM_TYPE_MAPPING"
+                ]
+            }
+        },
+        "archetype_visualise_descendants_of": {
+            "name": "archetype_visualise_descendants_of",
+            "documentation": "If `_archetype_parent_class_` is not set, designate a class whose descendants should be made visible in tree and grid renderings of the archetype definition.",
+            "type": "String"
+        },
+        "aom_rm_type_substitutions": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "aom_rm_type_substitutions",
+            "documentation": "Allowed type substitutions: Actual RM type names keyed by AOM built-in types which can substitute for them in an archetype. E.g. `<key = \"ISO8601_DATE\", value = \"String\">` means that if RM property `TYPE._some_property_` is of type `String`, an `ISO8601_DATE` is allowed at that position in the archetype.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "aom_lifecycle_mappings": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "aom_lifecycle_mappings",
+            "documentation": "List of mappings of lifecycle state names used in archetypes to AOM lifecycle state names: \n\n* key = source lifecycle state; \n* value = AOM lifecycle state.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "rm_primitive_type_equivalences": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "rm_primitive_type_equivalences",
+            "documentation": "Equivalences of RM primitive types to in-built set of primitive types. Used to determine which AOM `C_PRIMITIVE_OBJECT` descendant is used for a primitive type. Typical entries:\n\n* `value`\t`key`\n* \"Real\"\t\"Double\"\n* \"Integer\"\t\"Integer64\"",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "name": "DATA_VALUE",
+    "documentation": "Abstract parent of all `DV_` data value types.",
+    "is_abstract": true,
+    "ancestors": [
+        "OPENEHR_DEFINITIONS"
+    ]
+}

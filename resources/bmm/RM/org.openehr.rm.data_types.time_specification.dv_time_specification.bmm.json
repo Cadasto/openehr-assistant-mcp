@@ -1,0 +1,42 @@
+{
+    "name": "DV_TIME_SPECIFICATION",
+    "documentation": "This is an abstract class of which all timing specifications are specialisations. Specifies points in time, possibly linked to the calendar, or a real world repeating event, such as  breakfast. ",
+    "is_abstract": true,
+    "ancestors": [
+        "DATA_VALUE"
+    ],
+    "properties": {
+        "value": {
+            "name": "value",
+            "documentation": "The specification, in the HL7v3 syntax for `PIVL` or `EIVL` types.",
+            "is_mandatory": true,
+            "type": "DV_PARSABLE"
+        }
+    },
+    "functions": {
+        "calendar_alignment": {
+            "name": "calendar_alignment",
+            "documentation": "Indicates what prototypical point in the calendar the specification is aligned to, e.g.  5th of the month . Empty if not aligned. Extracted from the  value' attribute.",
+            "is_abstract": true,
+            "result": {
+                "type": "String"
+            }
+        },
+        "event_alignment": {
+            "name": "event_alignment",
+            "documentation": "Indicates what real-world event the specification is aligned to if any. Extracted from the  value' attribute. ",
+            "is_abstract": true,
+            "result": {
+                "type": "String"
+            }
+        },
+        "institution_specified": {
+            "name": "institution_specified",
+            "documentation": "Indicates if the specification is aligned with institution schedules, e.g. a hospital nursing changeover or meal serving times. Extracted from the  value' attribute.",
+            "is_abstract": true,
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

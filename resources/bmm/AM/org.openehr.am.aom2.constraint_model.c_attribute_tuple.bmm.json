@@ -1,0 +1,70 @@
+{
+    "name": "C_ATTRIBUTE_TUPLE",
+    "documentation": "Object representing a constraint on an attribute tuple, i.e. a group of attributes that are constrained together. Typically used for representing co-varying constraints like `{units, range}` constraints.",
+    "ancestors": [
+        "C_SECOND_ORDER"
+    ],
+    "properties": {
+        "tuples": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "tuples",
+            "documentation": "Tuple definitions.",
+            "type_def": {
+                "container_type": "List",
+                "type": "C_PRIMITIVE_TUPLE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "members": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "members",
+            "documentation": "List of `C_ATTRIBUTEs` forming the definition of the tuple.",
+            "type_def": {
+                "container_type": "List",
+                "type": "C_ATTRIBUTE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "c_conforms_to": {
+            "name": "c_conforms_to",
+            "documentation": "True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. Typically used during validation of specialised archetype nodes.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "C_ATTRIBUTE_TUPLE"
+                },
+                "rmcc": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "rmcc",
+                    "type_def": {
+                        "root_type": "FUNCTION"
+                    }
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "c_congruent_to": {
+            "name": "c_congruent_to",
+            "documentation": "True if constraints represented by this node contain no further redefinitions with respect to the node other. Typically used to test if an inherited node locally contains any constraints.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "C_SECOND_ORDER"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

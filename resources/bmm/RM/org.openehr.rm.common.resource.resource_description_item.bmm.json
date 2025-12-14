@@ -1,0 +1,77 @@
+{
+    "name": "RESOURCE_DESCRIPTION_ITEM",
+    "documentation": "Language-specific detail of resource description. When a resource is translated for use in another language environment, each `RESOURCE_DESCRIPTION_ITEM` needs to be copied and translated into the new language.",
+    "properties": {
+        "language": {
+            "name": "language",
+            "documentation": "The localised language in which the items in this description item are written. Coded from openEHR code set `languages`.",
+            "is_mandatory": true,
+            "type": "CODE_PHRASE"
+        },
+        "purpose": {
+            "name": "purpose",
+            "documentation": "Purpose of the resource.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "keywords": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "keywords",
+            "documentation": "Keywords which characterise this resource, used e.g. for indexing and searching. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "use": {
+            "name": "use",
+            "documentation": "Description of the uses of the resource, i.e. contexts in which it could be used. \n",
+            "type": "String"
+        },
+        "misuse": {
+            "name": "misuse",
+            "documentation": "Description of any misuses of the resource, i.e. contexts in which it should not be used.",
+            "type": "String"
+        },
+        "copyright": {
+            "name": "copyright",
+            "documentation": "Optional copyright statement for the resource as a knowledge resource. \n",
+            "type": "String"
+        },
+        "original_resource_uri": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "original_resource_uri",
+            "documentation": "URIs of original clinical document(s) or description of which resource is a formalisation, in the language of this description item; keyed by meaning. ",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "other_details": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "other_details",
+            "documentation": "Additional language-senstive resource metadata, as a list of name/value pairs. ",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        }
+    },
+    "invariants": {
+        "Language_valid": "code_set (Code_set_id_languages).has_code (language)",
+        "Purpose_valid": "not purpose.is_empty",
+        "Use_valid": "use /= Void implies not use.is_empty",
+        "misuse_valid": "misuse /= Void implies not misuse.is_empty",
+        "copyright_valid": "copyright /= Void implies not copyright.is_empty"
+    }
+}

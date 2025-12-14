@@ -1,0 +1,34 @@
+{
+    "name": "C_OBJECT",
+    "documentation": "Abstract model of constraint on any kind of object node. ",
+    "is_abstract": true,
+    "ancestors": [
+        "ARCHETYPE_CONSTRAINT"
+    ],
+    "properties": {
+        "rm_type_name": {
+            "name": "rm_type_name",
+            "documentation": "Reference model type that this node corresponds to. ",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "occurrences": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "occurrences",
+            "documentation": "Occurrences of this object node in the data, under the owning attribute. Upper limit can only be greater than 1 if owning attribute has a cardinality of more than 1).",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Interval",
+                "generic_parameters": [
+                    "Integer"
+                ]
+            }
+        },
+        "node_id": {
+            "name": "node_id",
+            "documentation": "Semantic identifier of this node, used to dis-tinguish sibling nodes. All nodes must have a node_id; for nodes under a container C_ATTRIBUTE, the id must be an id-code must be defined in the archetype terminolo-gy. For valid structures, all node ids are id-codes.\nFor C_PRIMITIVE_OBJECTs, it will have the special value Primitive_node_id.\n",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    }
+}

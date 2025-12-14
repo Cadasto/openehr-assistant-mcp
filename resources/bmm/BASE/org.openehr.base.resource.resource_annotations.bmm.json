@@ -1,0 +1,37 @@
+{
+    "name": "RESOURCE_ANNOTATIONS",
+    "documentation": "Object representing annotations on an archetype. These can be of various forms, with a documentation form defined so far, which has a multi-level tabular structure [ [ [String value, String key], path key], language key]. Example instance, showing the documentation structure.\n\n--------\n    documentation = <\n        [\"en\"] = <\n           [\"/data[id2]\"] = <\n               [\"ui\"] = <\"passthrough\">\n           >\n           [\"/data[id2]/items[id3]\"] = <\n               [\"design note\"] = <\"this is a design note on Statement\">\n               [\"requirements note\"] = <\"this is a requirements note on Statement\">\n               [\"medline ref\"] = <\"this is a medline ref on Statement\">\n           >\n        >\n    >\n--------\n\nOther sub-structures might have different keys, e.g.  based on programming languages, UI toolkits etc.\n",
+    "properties": {
+        "documentation": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "documentation",
+            "documentation": "Documentary annotations in a multi-level keyed structure.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameter_defs": {
+                    "K": {
+                        "type": "String"
+                    },
+                    "V": {
+                        "_type": "P_BMM_GENERIC_TYPE",
+                        "root_type": "Hash",
+                        "generic_parameter_defs": {
+                            "K": {
+                                "type": "String"
+                            },
+                            "V": {
+                                "_type": "P_BMM_GENERIC_TYPE",
+                                "root_type": "Hash",
+                                "generic_parameters": [
+                                    "String",
+                                    "String"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

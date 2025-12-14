@@ -1,0 +1,49 @@
+{
+    "name": "DV_SCALE",
+    "documentation": "A data type that represents scale values, where there is:\n\na) implied ordering, \nb) no implication that the distance between each value is constant, and \nc) the total number of values is finite;\nd) non-integer values are allowed.\n\nExample:\n\n----\nBorg CR 10 Scale\n\n0    No Breathlessness at all\n0.5  Very Very Slight (Just Noticeable)\n1    Very Slight\n2    Slight Breathlessness\n3    Moderate\n... etc\n----\n\nFor scores that include only Integers, `DV_SCALE` may also be used, but `DV_ORDINAL` should be supported to accommodate existing data instances of that type.",
+    "ancestors": [
+        "DV_ORDERED"
+    ],
+    "properties": {
+        "symbol": {
+            "name": "symbol",
+            "documentation": "Coded textual representation of this value in the scale range, which may be strings made from symbols or other enumerations of terms such as  `no breathlessness`, `very very slight`, `slight breathlessness`. Codes come from archetypes.\n\nIn some cases, a scale may include values that have no code/symbol. In this case, the symbol will be a `DV-CODED_TEXT` including the `_terminology_id_` and a blank String value for `_code_string_`.",
+            "is_mandatory": true,
+            "type": "DV_CODED_TEXT"
+        },
+        "value": {
+            "name": "value",
+            "documentation": "Real number value of Scale item.\n",
+            "is_mandatory": true,
+            "type": "Real"
+        }
+    },
+    "functions": {
+        "is_strictly_comparable_to": {
+            "name": "is_strictly_comparable_to",
+            "documentation": "Test if this Scale value is strictly comparable to `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_SCALE"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "True if this Scale value is less than `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_SCALE"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

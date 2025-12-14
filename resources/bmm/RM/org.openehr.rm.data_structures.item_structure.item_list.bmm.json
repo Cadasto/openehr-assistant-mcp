@@ -1,0 +1,77 @@
+{
+    "name": "ITEM_LIST",
+    "documentation": "Logical list data structure, where each item has a value and can be referred to by a name and a positional index in the list. The list may be empty. \n\n`ITEM_LIST` is used to represent any data which is logically a list of values, such as blood pressure, most protocols, many blood tests etc. \n\nNot to be used for time-based lists, which should be represented with the proper temporal class, i.e. `HISTORY`.",
+    "ancestors": [
+        "ITEM_STRUCTURE"
+    ],
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "Physical representation of the list. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "ELEMENT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "item_count": {
+            "name": "item_count",
+            "documentation": "Count of all items.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "names": {
+            "name": "names",
+            "documentation": "Retrieve the names of all items.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "DV_TEXT"
+            },
+            "is_nullable": true
+        },
+        "named_item": {
+            "name": "named_item",
+            "documentation": "Retrieve the item with name ‘a_name’.",
+            "parameters": {
+                "a_name": {
+                    "name": "a_name",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "ELEMENT"
+            }
+        },
+        "ith_item": {
+            "name": "ith_item",
+            "documentation": "Retrieve the i-th item with name.",
+            "parameters": {
+                "i": {
+                    "name": "i",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "ELEMENT"
+            }
+        },
+        "as_hierarchy": {
+            "name": "as_hierarchy",
+            "documentation": "Generate a CEN EN13606-compatible hierarchy consisting of a single `CLUSTER` containing the `ELEMENTs` of this list.",
+            "result": {
+                "type": "CLUSTER"
+            }
+        }
+    },
+    "invariants": {
+        "Valid_structure": " items.forall (i:ITEM | i.type = \"ELEMENT\")"
+    }
+}

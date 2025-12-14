@@ -1,0 +1,104 @@
+{
+    "name": "ARCHETYPE_HRID",
+    "documentation": "Human-readable structured identifier (HRID) for an archetype or template.",
+    "properties": {
+        "namespace": {
+            "name": "namespace",
+            "documentation": "Reverse domain name namespace identifier.",
+            "type": "String"
+        },
+        "rm_publisher": {
+            "name": "rm_publisher",
+            "documentation": "Name of the Reference Model publisher.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "rm_package": {
+            "name": "rm_package",
+            "documentation": "Name of the package in whose reachability graph the `_rm_class_` class is found (there can be more than one possibility in many reference models).",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "rm_class": {
+            "name": "rm_class",
+            "documentation": "Name of the root class of this archetype.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "concept_id": {
+            "name": "concept_id",
+            "documentation": "The short concept name of the archetype as used in the multi-axial `_archetype_hrid_`.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "release_version": {
+            "name": "release_version",
+            "documentation": "The full numeric version of this archetype consisting of 3 parts, e.g. `\"1.8.2\"`. The `_archetype_hrid_` feature includes only the major version.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "version_status": {
+            "name": "version_status",
+            "documentation": "The status of the version, i.e.:\n\n* released: (empty string)\n* release_candidate: `\"rc\"`\n* alpha: `\"alpha\"`\n* beta: `\"beta\"`",
+            "is_mandatory": true,
+            "type": "VERSION_STATUS"
+        },
+        "build_count": {
+            "name": "build_count",
+            "documentation": "The build count since last increment of any version part.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "functions": {
+        "semantic_id": {
+            "name": "semantic_id",
+            "documentation": "The 'interface' form of the HRID, i.e. down to the major version.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "physical_id": {
+            "name": "physical_id",
+            "documentation": "The 'physical' form of the HRID, i.e. with complete version information specified by `_version_id()_`.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "version_id": {
+            "name": "version_id",
+            "documentation": "Full version identifier string, based on `_release_version_`, `_version_status_`, and `_build_count_` e.g. `\"1.8.2-rc.4\"`.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "major_version": {
+            "name": "major_version",
+            "documentation": "Major version of this archetype, extracted from `_release_version_`.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "minor_version": {
+            "name": "minor_version",
+            "documentation": "Minor version of this archetype, extracted from `_release_version_`.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "patch_version": {
+            "name": "patch_version",
+            "documentation": "Patch version of this archetype, extracted from `_release_version_`. Equivalent to patch version in patch version in `semver.org` sytem.",
+            "result": {
+                "type": "String"
+            }
+        }
+    },
+    "invariants": {
+        "Inv_rm_publisher_validity": "not rm_publisher.is_empty",
+        "Inv_rm_package_validity": "not rm_package.is_empty",
+        "Inv_class_name_validity": "not rm_class.is_empty",
+        "Inv_concept_id_validity": "not concept_id.is_empty",
+        "Inv_release_version_validity": "valid_version (release_version)"
+    }
+}

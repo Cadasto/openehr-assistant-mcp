@@ -1,0 +1,39 @@
+{
+    "name": "P_C_OBJECT",
+    "documentation": "Abstract model of constraint on any kind of object node. ",
+    "is_abstract": true,
+    "ancestors": [
+        "P_ARCHETYPE_CONSTRAINT"
+    ],
+    "properties": {
+        "rm_type_name": {
+            "name": "rm_type_name",
+            "documentation": "Reference model type that this node corresponds to. ",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "occurrences": {
+            "name": "occurrences",
+            "documentation": "Occurrences of this object node in the data, under the owning attribute. Upper limit can only be greater than 1 if owning attribute has a cardinality of more than 1.",
+            "type": "String"
+        },
+        "node_id": {
+            "name": "node_id",
+            "documentation": "Semantic id of this node, used to differentiate sibling nodes of the same type. Each node_id must be defined in the archetype ontology as a term code. \n",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "is_deprecated": {
+            "name": "is_deprecated",
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "specialisation_depth": {
+            "name": "specialisation_depth",
+            "result": {
+                "type": "Integer"
+            }
+        }
+    }
+}

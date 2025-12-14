@@ -1,0 +1,15 @@
+{
+    "name": "EXPR_UNARY_OPERATOR",
+    "documentation": "Unary operator expression node.",
+    "ancestors": [
+        "EXPR_OPERATOR"
+    ],
+    "properties": {
+        "operand": {
+            "name": "operand",
+            "documentation": "Operand node.",
+            "is_mandatory": true,
+            "type": "EXPR_ITEM"
+        }
+    }
+}

@@ -1,0 +1,86 @@
+{
+    "name": "PARTY",
+    "documentation": "Ancestor of all Party types, including real world entities and their roles. A Party is any entity which can participate in an activity. The `_name_` attribute inherited from `LOCATABLE` is used to indicate the actual type of party (note that the actual names, i.e. identities of parties are indicated in the `_identities_` attribute, not the `_name_` attribute).\n\nNOTE: It is strongly recommended that the inherited attribute `_uid_` be populated in `PARTY` objects, using the UID copied from the `_object_id()_` of the `_uid_` field of the enclosing `VERSION` object. +\nFor example, the `ORIGINAL_VERSION.uid` `87284370-2D4B-4e3d-A3F3-F303D2F4F34B::uk.nhs.ehr1::2`  would be copied to the `_uid_` field of the `PARTY` object.",
+    "is_abstract": true,
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "properties": {
+        "identities": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "identities",
+            "documentation": "Identities used by the party to identify itself, such as legal name, stage names, aliases, nicknames and so on.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "PARTY_IDENTITY"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "contacts": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "contacts",
+            "documentation": "Contacts for this party.",
+            "type_def": {
+                "container_type": "List",
+                "type": "CONTACT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "details": {
+            "name": "details",
+            "documentation": "All other details for this Party.",
+            "type": "ITEM_STRUCTURE"
+        },
+        "reverse_relationships": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "reverse_relationships",
+            "documentation": "References to relationships in which this Party takes part as target.",
+            "type_def": {
+                "container_type": "List",
+                "type": "LOCATABLE_REF"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "relationships": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "relationships",
+            "documentation": "Relationships in which this Party takes part as source.",
+            "type_def": {
+                "container_type": "List",
+                "type": "PARTY_RELATIONSHIP"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "type": {
+            "name": "type",
+            "documentation": "Type of party, such as  `PERSON`,  `ORGANISATION`, etc. Role name, e.g.  general practitioner ,  nurse ,  private citizen . Taken from inherited `_name_` attribute.",
+            "result": {
+                "type": "DV_TEXT"
+            }
+        }
+    },
+    "invariants": {
+        "Type_valid": "type = name",
+        "Identities_valid": "not identities.is_empty",
+        "Contacts_valid": "contacts /= Void implies not contacts.is_empty",
+        "Relationships_validity": "relationships /= Void implies (not relationships.is_empty and then relationships.for_all (r | r.source = self)",
+        "Reverse_relationships_validity": "reverse_relationships /= Void implies (not reverse_relationships.empty and then reverse_relationships.for_all (item | repository (\"demographics\").all_party_relationships.has_object (item) and then repository(\"demographics\").all_party_relationships.object (item).target = self))",
+        "Is_archetype_root": "is_archetype_root",
+        "Uid_mandatory": "uid /= Void"
+    }
+}

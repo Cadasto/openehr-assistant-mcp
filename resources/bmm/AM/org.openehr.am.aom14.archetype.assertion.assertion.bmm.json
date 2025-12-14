@@ -1,0 +1,39 @@
+{
+    "name": "ASSERTION",
+    "documentation": "Structural model of a typed first order predicate logic assertion, in the form of an expression tree, including optional variable definitions. ",
+    "properties": {
+        "tag": {
+            "name": "tag",
+            "documentation": "Expression tag, used for differentiating multiple assertions.",
+            "type": "String"
+        },
+        "string_expression": {
+            "name": "string_expression",
+            "documentation": "String form of expression, in case an expression evaluator taking String expressions is used for evaluation. ",
+            "type": "String"
+        },
+        "expression": {
+            "name": "expression",
+            "documentation": "Root of expression tree.",
+            "is_mandatory": true,
+            "type": "EXPR_ITEM"
+        },
+        "variables": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "variables",
+            "documentation": "Definitions of variables used in the assertion expression.",
+            "type_def": {
+                "container_type": "List",
+                "type": "ASSERTION_VARIABLE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Tag_valid": "tag /= Void implies not tag.is_empty",
+        "Expression_valid": "expression /= Void and then expression.type.is_equal(“BOOLEAN”)"
+    }
+}

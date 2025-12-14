@@ -1,0 +1,106 @@
+{
+    "name": "DV_DURATION",
+    "documentation": "Represents a period of time with respect to a notional point in time, which is not specified. A sign may be used to indicate the duration is  backwards  in time rather than forwards. \n\nNOTE: two deviations from ISO 8601 are supported, the first, to allow a negative sign, and the second allowing the 'W' designator to be mixed with other designators. See time types section in the Foundation Types model. \n\nUsed for recording the duration of something in the real world, particularly when there is a need a) to represent the duration in customary format, i.e. days, hours, minutes etc, and b) if it will be used in computational operations with date/time quantities, i.e. additions, subtractions etc. \n\nMisuse: Durations cannot be used to represent points in time, or intervals of time. ",
+    "ancestors": [
+        "DV_AMOUNT",
+        "Iso8601_duration"
+    ],
+    "properties": {
+        "value": {
+            "name": "value",
+            "documentation": "ISO8601 duration string, including described deviations to support negative values and weeks.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "functions": {
+        "add": {
+            "name": "add",
+            "documentation": "Sum of this Duration and `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_DURATION"
+                }
+            },
+            "result": {
+                "type": "DV_DURATION"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Difference of this Duration and `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_DURATION"
+                }
+            },
+            "result": {
+                "type": "DV_DURATION"
+            }
+        },
+        "multiply": {
+            "name": "multiply",
+            "documentation": "Product of this Duration and `_factor_`.",
+            "parameters": {
+                "factor": {
+                    "name": "factor",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "DV_DURATION"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "True if `_other_` is less than this Quantified object. Based on comparison of `_magnitude_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_DURATION"
+                }
+            },
+            "pre_conditions": {
+                "Pre_comparable": "is_strictly_comparable()"
+            },
+            "post_conditions": {
+                "Post_result": "Result = magnitude < other.magnitude"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_strictly_comparable_to": {
+            "name": "is_strictly_comparable_to",
+            "documentation": "True, for any two Durations.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_DURATION"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "negative": {
+            "name": "negative",
+            "documentation": "Negated version of current duration.\n\nAssuming the current duration is positive, the negated version represents a time prior to some origin point, or a negative age (e.g. so-called 'adjusted age' of premature infant).",
+            "result": {
+                "type": "DV_DURATION"
+            }
+        },
+        "magnitude": {
+            "name": "magnitude",
+            "documentation": "Numeric value of the duration as a number of seconds. Computed using the method `_to_seconds()_` inherited from `Iso8601_duration`.",
+            "result": {
+                "type": "Double"
+            }
+        }
+    },
+    "invariants": {
+        "Value_valid": "valid_iso8601_duration (value)"
+    }
+}

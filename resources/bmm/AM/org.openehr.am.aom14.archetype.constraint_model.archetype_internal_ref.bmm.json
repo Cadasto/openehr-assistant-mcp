@@ -1,0 +1,19 @@
+{
+    "name": "ARCHETYPE_INTERNAL_REF",
+    "documentation": "A constraint defined by proxy, using a reference to an object constraint defined elsewhere in the same\narchetype.\n\nNote that since this object refers to another node, there are two objects with available occurrences values. The local occurrences value on an ARCHETYPE_INTERNAL_REF should always be used; when setting this from a serialised form, if no occurrences is mentioned, the target occurrences should be used (not the standard default of {1..1}); otherwise the locally specified occurrences should be used as normal. When serialising out, if the occurrences is the same as that of the target, it can be left out.",
+    "ancestors": [
+        "C_REFERENCE_OBJECT"
+    ],
+    "properties": {
+        "target_path": {
+            "name": "target_path",
+            "documentation": "Reference to an object node using archetype path notation.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "invariants": {
+        "Consistency": "not any_allowed",
+        "Target_path_valid": "target_path /= Void and then not target_path.is_empty"
+    }
+}

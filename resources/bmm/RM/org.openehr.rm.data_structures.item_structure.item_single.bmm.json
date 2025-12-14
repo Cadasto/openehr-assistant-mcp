@@ -1,0 +1,23 @@
+{
+    "name": "ITEM_SINGLE",
+    "documentation": "Logical single value data structure. Used to represent any data which is logically a single value, such as a person's height or weight.",
+    "ancestors": [
+        "ITEM_STRUCTURE"
+    ],
+    "properties": {
+        "item": {
+            "name": "item",
+            "is_mandatory": true,
+            "type": "ELEMENT"
+        }
+    },
+    "functions": {
+        "as_hierarchy": {
+            "name": "as_hierarchy",
+            "documentation": "Generate a CEN EN13606-compatible hierarchy consisting of a single `ELEMENT`.",
+            "result": {
+                "type": "ELEMENT"
+            }
+        }
+    }
+}

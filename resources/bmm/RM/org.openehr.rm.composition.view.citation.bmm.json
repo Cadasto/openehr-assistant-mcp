@@ -1,0 +1,37 @@
+{
+    "name": "CITATION",
+    "ancestors": [
+        "VIEW_ENTRY"
+    ],
+    "generic_parameter_defs": {
+        "L": {
+            "name": "L",
+            "conforms_to_type": "LOCATABLE"
+        }
+    },
+    "properties": {
+        "source_type": {
+            "name": "source_type",
+            "type": "String"
+        },
+        "source_ref": {
+            "name": "source_ref",
+            "documentation": "Reference to original object.",
+            "is_mandatory": true,
+            "type": "LOCATABLE_REF"
+        },
+        "source_parent_ref": {
+            "name": "source_parent_ref",
+            "documentation": "Reference to target's owning object.",
+            "is_mandatory": true,
+            "type": "LOCATABLE_REF"
+        },
+        "resolved": {
+            "_type": "P_BMM_SINGLE_PROPERTY_OPEN",
+            "name": "resolved",
+            "documentation": "Resolved form.",
+            "is_mandatory": true,
+            "type": "L"
+        }
+    }
+}

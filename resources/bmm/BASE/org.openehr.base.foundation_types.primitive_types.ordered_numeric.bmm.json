@@ -1,0 +1,9 @@
+{
+    "name": "Ordered_Numeric",
+    "documentation": "Abstract notional parent class of ordered, numeric types, which are types with both the `_less_than_()` and arithmetic functions defined.",
+    "is_abstract": true,
+    "ancestors": [
+        "Ordered",
+        "Numeric"
+    ]
+}

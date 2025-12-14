@@ -1,0 +1,53 @@
+{
+    "name": "DV_ORDINAL",
+    "documentation": "A data type that represents integral score values, e.g. pain, Apgar values, etc, where there is:\n\na) implied ordering, \nb) no implication that the distance between each value is constant, and \nc) the total number of values is finite;\nd) integer values only.\n\nNote that although the term 'ordinal' in mathematics means natural numbers only, here any integer is allowed, since negative and zero values are often used by medical professionals for values around a neutral point. Examples of sets of ordinal values: \n\n*   -3, -2, -1, 0, 1, 2, 3  -- reflex response values \n*    0, 1, 2                  -- Apgar values \n\nThis class is used for recording any clinical datum which is customarily recorded using symbolic values. Example: the results on a urinalysis strip, e.g. `{neg, trace, +, ++, +++}` are used for leucocytes, protein, nitrites etc; for non-haemolysed blood `{neg, trace, moderate}`; for haemolysed blood `{small, moderate, large}`.\n\nFor scores or scales that include Real numbers (or might in the future, i.e. not fixed for all time, such as Apgar), use `DV_SCALE`. `DV_SCALE` may also be used in future for representing purely Integer-based scales, however, the `DV_ORDINAL` type should continue to be supported in software implementations in order to accommodate existing data that are instances of this type.",
+    "ancestors": [
+        "DV_ORDERED"
+    ],
+    "properties": {
+        "symbol": {
+            "name": "symbol",
+            "documentation": "Coded textual representation of this value in the enumeration, which may be strings made from  +  symbols, or other enumerations of terms such as  `mild`, `moderate`, `severe`, or even the same number series as the values, e.g. 1, 2, 3.",
+            "is_mandatory": true,
+            "type": "DV_CODED_TEXT"
+        },
+        "value": {
+            "name": "value",
+            "documentation": "Value in ordered enumeration of values. Any integer value can be used. \n",
+            "is_mandatory": true,
+            "type": "Integer"
+        }
+    },
+    "functions": {
+        "less_than": {
+            "name": "less_than",
+            "documentation": "True if this Ordinal value is less than `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_ORDINAL"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_strictly_comparable_to": {
+            "name": "is_strictly_comparable_to",
+            "documentation": "Test if this Ordinal is strictly comparable to `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_ORDINAL"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Limits_valid": "limits.meaning.is_equal (“limits”)",
+        "Reference_range_valid": "other_reference_ranges.has (limits)"
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "name": "SECTION",
+    "documentation": "Represents a heading in a heading structure, or  section tree.  Created according to archetyped structures for typical headings such as SOAP,  physical examination, but also pathology result heading structures.  Should not be used instead of `ENTRY` hierarchical structures. \n",
+    "ancestors": [
+        "CONTENT_ITEM"
+    ],
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "Ordered list of content items under this section, which may include:\n\n* more `SECTIONs`;\n* `ENTRYs`.",
+            "type_def": {
+                "container_type": "List",
+                "type": "CONTENT_ITEM"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Items_valid": "items /= Void implies not items.is_empty"
+    }
+}

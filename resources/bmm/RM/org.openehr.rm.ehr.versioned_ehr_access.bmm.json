@@ -1,0 +1,7 @@
+{
+    "name": "VERSIONED_EHR_ACCESS",
+    "documentation": "Version container for EHR_ACCESS instance.",
+    "ancestors": [
+        "VERSIONED_OBJECT"
+    ]
+}

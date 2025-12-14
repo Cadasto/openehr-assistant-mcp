@@ -1,0 +1,40 @@
+{
+    "name": "ACTOR",
+    "documentation": "Ancestor of all real-world types, including people and organisations. An actor is any real-world entity capable of taking on a role.",
+    "is_abstract": true,
+    "ancestors": [
+        "PARTY"
+    ],
+    "properties": {
+        "languages": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "languages",
+            "documentation": "Languages which can be used to communicate with this actor, in preferred order of use (if known, else order irrelevant).",
+            "type_def": {
+                "container_type": "List",
+                "type": "DV_TEXT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "roles": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "roles",
+            "documentation": "Identifiers of the Version container for each Role played by this Party.",
+            "type_def": {
+                "container_type": "List",
+                "type": "PARTY_REF"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Roles_valid": "roles /= Void implies not roles.is_empty",
+        "Legal_identity_exists": "has_legal_identity"
+    }
+}

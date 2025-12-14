@@ -1,0 +1,23 @@
+{
+    "name": "CLUSTER",
+    "documentation": "The grouping variant of `ITEM`, which may contain further instances of `ITEM`, in an ordered list. ",
+    "ancestors": [
+        "ITEM"
+    ],
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "Ordered list of items - `CLUSTER` or `ELEMENT` objects - under this `CLUSTER`. ",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "ITEM"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

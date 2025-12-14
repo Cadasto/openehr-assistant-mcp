@@ -1,0 +1,70 @@
+{
+    "name": "P_ARCHETYPE_TERMINOLOGY",
+    "documentation": "Local ontology of an archetype.",
+    "properties": {
+        "is_differential": {
+            "name": "is_differential",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "original_language": {
+            "name": "original_language",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "term_definitions": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "term_definitions",
+            "documentation": "Directory of term definitions as a two-level \ntable. The outer hash keys are term codes, \ne.g. \"at0004\", and the inner hash key are term \nattribute names, e.g. \"text\", \"description\" etc.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameter_defs": [
+                    {
+                        "type": "String"
+                    },
+                    {
+                        "_type": "P_BMM_GENERIC_TYPE",
+                        "root_type": "Hash",
+                        "generic_parameters": [
+                            "String",
+                            "ARCHETYPE_TERM"
+                        ]
+                    }
+                ]
+            }
+        },
+        "term_bindings": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "term_bindings",
+            "documentation": "Directory of term bindings as a two-level \ntable. The outer hash keys are local term codes, \ne.g. \"at0004\", and the inner hash keys are terminology \ncode phrases, e.g. \"SNOMED(2003)::163034007\" etc.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameter_defs": [
+                    {
+                        "type": "String"
+                    },
+                    {
+                        "_type": "P_BMM_GENERIC_TYPE",
+                        "root_type": "Hash",
+                        "generic_parameters": [
+                            "String",
+                            "Uri"
+                        ]
+                    }
+                ]
+            }
+        },
+        "value_sets": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "value_sets",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "VALUE_SET"
+                ]
+            }
+        }
+    }
+}

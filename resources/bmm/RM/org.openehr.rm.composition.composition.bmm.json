@@ -1,0 +1,71 @@
+{
+    "name": "COMPOSITION",
+    "documentation": "Content of one version in a `VERSIONED_COMPOSITION`. A Composition is considered the unit of modification of the record, the unit of transmission in record Extracts, and the unit of attestation by authorising clinicians. In this latter sense, it may be considered equivalent to a signed document.\n\nNOTE: It is strongly recommended that the inherited attribute `_uid_` be populated in Compositions, using the UID copied from the `_object_id()_` of the `_uid_` field of the enclosing `VERSION` object. +\nFor example, the `ORIGINAL_VERSION.uid` `87284370-2D4B-4e3d-A3F3-F303D2F4F34B::uk.nhs.ehr1::2` would be copied to the `_uid_` field of the Composition.",
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "properties": {
+        "language": {
+            "name": "language",
+            "documentation": "Mandatory indicator of the localised language in which this Composition is written. Coded from openEHR Code Set  `languages`. The language of an Entry if different from the Composition is indicated in `ENTRY._language_`. ",
+            "is_mandatory": true,
+            "type": "CODE_PHRASE"
+        },
+        "territory": {
+            "name": "territory",
+            "documentation": "Name of territory in which this Composition was written. Coded from openEHR  countries  code set, which is an expression of the ISO 3166 standard.",
+            "is_mandatory": true,
+            "type": "CODE_PHRASE"
+        },
+        "category": {
+            "name": "category",
+            "documentation": "Temporal category of this Composition, i.e. \n\n* `431|persistent|` - of potential life-time validity;\n* `451|episodic|` - valid over the life of a care episode;\n* `433|event|` - valid at the time of recording (long-term validity requires subsequent clinical assessment).\n\nor any other code defined in the openEHR terminology group 'category'.\n",
+            "is_mandatory": true,
+            "type": "DV_CODED_TEXT"
+        },
+        "context": {
+            "name": "context",
+            "documentation": "The clinical session context of this Composition, i.e. the contextual attributes of the clinical session. ",
+            "type": "EVENT_CONTEXT"
+        },
+        "composer": {
+            "name": "composer",
+            "documentation": "The person primarily responsible for the content of the Composition (but not necessarily its committal into the EHR system). This is the identifier which should appear on the screen. It may or may not be the person who entered the data. When it is the patient, the special self  instance of `PARTY_PROXY` will be used.",
+            "is_mandatory": true,
+            "type": "PARTY_PROXY"
+        },
+        "content": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "content",
+            "documentation": "The content of this Composition. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "CONTENT_ITEM"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "is_persistent": {
+            "name": "is_persistent",
+            "documentation": "True if category is `431|persistent|`, False otherwise. Useful for finding Compositions in an EHR which are guaranteed to be of interest to most users. ",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Setting_valid": "",
+        "unnamed2": "",
+        "unnamed3": "Terminology (Terminology_id_openehr).has_code_for_group_id (Group_id_setting, setting.defining_code)",
+        "Category_validity": "terminology (Terminology_id_openehr).has_code_for_group_id (Group_id_composition_category, category.defining_code)",
+        "Is_persistent_validity": "is_persistent implies context = Void",
+        "Territory_valid": "code_set(Code_set_id_countries).has_code(territory)",
+        "Language_valid": "code_set(Code_set_id_languages).has_code(language)",
+        "Content_valid": "content /= Void implies not content.is_empty",
+        "Is_archetype_root": "is_archetype_root"
+    }
+}

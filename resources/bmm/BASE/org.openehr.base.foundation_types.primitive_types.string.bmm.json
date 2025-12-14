@@ -1,0 +1,69 @@
+{
+    "name": "String",
+    "documentation": "Type representing minimal interface of built-in String type, as used to represent textual data in any natural or formal language.",
+    "ancestors": [
+        "Ordered"
+    ],
+    "functions": {
+        "is_empty": {
+            "name": "is_empty",
+            "documentation": "True if string is empty, i.e. equal to \"\".",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_integer": {
+            "name": "is_integer",
+            "documentation": "True if string can be parsed as an integer.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "as_integer": {
+            "name": "as_integer",
+            "documentation": "Return the integer corresponding to the integer value represented in this string.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "append": {
+            "name": "append",
+            "documentation": "Concatenation operator - causes `_other_` to be appended to this string.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "String"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "Lexical comparison of string content based on ordering in relevant character set.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "contains": {
+            "name": "contains",
+            "documentation": "Return True if this String contains `_other_` (case-sensitive).",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

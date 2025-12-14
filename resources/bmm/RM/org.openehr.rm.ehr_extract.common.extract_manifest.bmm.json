@@ -1,0 +1,20 @@
+{
+    "name": "EXTRACT_MANIFEST",
+    "documentation": "Specification of the candidate entities and optionally top-level items (e.g. Compositions) to be included in the Extract.",
+    "properties": {
+        "entities": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "entities",
+            "documentation": "List of entity manifests uids of items included in the Extract; for openEHR data, these are uids identifying the version containers.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "EXTRACT_ENTITY_MANIFEST"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

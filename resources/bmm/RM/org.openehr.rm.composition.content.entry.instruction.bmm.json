@@ -1,0 +1,41 @@
+{
+    "name": "INSTRUCTION",
+    "documentation": "Used to specify actions in the future. Enables simple and complex specifications to be expressed, including in a fully-computable workflow form. Used for any actionable statement such as medication and therapeutic orders, monitoring, recall and review. Enough details must be provided for the specification to be directly executed by an actor, either human or machine. \n\nNot to be used for plan items which are only specified in general terms. ",
+    "ancestors": [
+        "CARE_ENTRY"
+    ],
+    "properties": {
+        "narrative": {
+            "name": "narrative",
+            "documentation": "Mandatory human-readable version of what the Instruction is about. ",
+            "is_mandatory": true,
+            "type": "DV_TEXT"
+        },
+        "expiry_time": {
+            "name": "expiry_time",
+            "documentation": "Optional expiry date/time to assist determination of when an Instruction can be assumed to have expired. This helps prevent false listing of Instructions as Active when they clearly must have been terminated in some way or other. ",
+            "type": "DV_DATE_TIME"
+        },
+        "wf_definition": {
+            "name": "wf_definition",
+            "documentation": "Optional workflow engine executable expression of the Instruction. ",
+            "type": "DV_PARSABLE"
+        },
+        "activities": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "activities",
+            "documentation": "List of all activities in Instruction. \n",
+            "type_def": {
+                "container_type": "List",
+                "type": "ACTIVITY"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Activities_valid": "activities /= Void implies not activities.is_empty"
+    }
+}

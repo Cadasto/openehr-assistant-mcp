@@ -1,0 +1,7 @@
+{
+    "name": "HIER_OBJECT_ID",
+    "documentation": "Concrete type corresponding to hierarchical identifiers of the form defined by `UID_BASED_ID`. ",
+    "ancestors": [
+        "UID_BASED_ID"
+    ]
+}

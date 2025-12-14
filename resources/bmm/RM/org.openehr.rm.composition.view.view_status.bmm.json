@@ -1,0 +1,15 @@
+{
+    "_type": "P_BMM_ENUMERATION_STRING",
+    "name": "VIEW_STATUS",
+    "ancestors": [
+        "String"
+    ],
+    "item_names": [
+        "active",
+        "inactive"
+    ],
+    "item_documentations": [
+        "",
+        ""
+    ]
+}

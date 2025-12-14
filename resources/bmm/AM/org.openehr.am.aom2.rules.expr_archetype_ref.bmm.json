@@ -1,0 +1,20 @@
+{
+    "name": "EXPR_ARCHETYPE_REF",
+    "documentation": "Expression tree leaf item representing a reference to a value found in data at a location specified by a path in the archetype definition.\n\n* A path referring to a value in the archetype (paths with a leading ‘/’ are in the definition section.\n* Paths with no leading ‘/’ are in the outer part of the archetype, e.g. “archetype_id/value” refers to the String value of the archetype_id attribute of the enclosing archetype.\n",
+    "ancestors": [
+        "EXPR_VALUE_REF"
+    ],
+    "properties": {
+        "path": {
+            "name": "path",
+            "documentation": "The path to the archetype node.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "item": {
+            "name": "item",
+            "is_mandatory": true,
+            "type": "ARCHETYPE_CONSTRAINT"
+        }
+    }
+}

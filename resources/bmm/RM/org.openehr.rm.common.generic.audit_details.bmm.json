@@ -1,0 +1,39 @@
+{
+    "name": "AUDIT_DETAILS",
+    "documentation": "The set of attributes required to document the committal of an information item to a repository. ",
+    "properties": {
+        "system_id": {
+            "name": "system_id",
+            "documentation": "Identifier of the logical EHR system where the change was committed. This is almost always owned by the organisation legally responsible for the EHR, and is distinct from any application, or any hosting infrastructure.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "time_committed": {
+            "name": "time_committed",
+            "documentation": "Time of committal of the item. ",
+            "is_mandatory": true,
+            "type": "DV_DATE_TIME"
+        },
+        "change_type": {
+            "name": "change_type",
+            "documentation": "Type of change. Coded using the openEHR Terminology  audit change type  group.",
+            "is_mandatory": true,
+            "type": "DV_CODED_TEXT"
+        },
+        "description": {
+            "name": "description",
+            "documentation": "Reason for committal. This may be used to qualify the value in the `_change_type_` field. For example, if the change affects only the EHR directory, this field might be used to indicate 'Folder \"episode 2018-02-16\" added' or similar.",
+            "type": "DV_TEXT"
+        },
+        "committer": {
+            "name": "committer",
+            "documentation": "Identity and optional reference into identity management service, of user who committed the item. ",
+            "is_mandatory": true,
+            "type": "PARTY_PROXY"
+        }
+    },
+    "invariants": {
+        "System_id_valid": "not system_id.is_empty",
+        "Change_type_valid": "terminology (Terminology_id_openehr).has_code_for_group_id (Group_id_audit_change_type, change_type.defining_code)"
+    }
+}

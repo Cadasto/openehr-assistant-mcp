@@ -1,0 +1,44 @@
+{
+    "name": "INTERVAL_EVENT",
+    "documentation": "Defines a single interval event in a series. ",
+    "ancestors": [
+        "EVENT"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T"
+        }
+    },
+    "properties": {
+        "width": {
+            "name": "width",
+            "documentation": "Duration of the time interval during which the values recorded under `data` are true and, if set, the values recorded under `state` are true. Void if an instantaneous event.",
+            "is_mandatory": true,
+            "type": "DV_DURATION"
+        },
+        "sample_count": {
+            "name": "sample_count",
+            "documentation": "Optional count of original samples to which this event corresponds.",
+            "type": "Integer"
+        },
+        "math_function": {
+            "name": "math_function",
+            "documentation": "Mathematical function of the data of this event, e.g.  maximum, mean etc. Coded using https://github.com/openEHR/terminology/blob/master/openEHR_RM/en/openehr_terminology.xml[openEHR vocabulary `event math function`]. Default value `640|actual|`, meaning 'actual value'.",
+            "is_mandatory": true,
+            "type": "DV_CODED_TEXT"
+        }
+    },
+    "functions": {
+        "interval_start_time": {
+            "name": "interval_start_time",
+            "documentation": "Start time of the interval of this event.",
+            "result": {
+                "type": "DV_DATE_TIME"
+            }
+        }
+    },
+    "invariants": {
+        "Math_function_validity": "terminology (Terminology_id_openehr).has_code_for_group_id (Group_id_event_math_function, math_function.defining_code)",
+        "Interval_start_time_valid": "interval_start_time = time - width"
+    }
+}

@@ -1,0 +1,139 @@
+{
+    "name": "RESOURCE_DESCRIPTION",
+    "documentation": "Defines the descriptive meta-data of a resource.",
+    "properties": {
+        "original_author": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "original_author",
+            "documentation": "Original author of this resource, with all relevant details, including organisation.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "original_namespace": {
+            "name": "original_namespace",
+            "documentation": "Namespace of original author's organisation, in reverse internet form, if applicable.",
+            "type": "String"
+        },
+        "original_publisher": {
+            "name": "original_publisher",
+            "documentation": "Plain text name of organisation that originally published this artefact, if any.",
+            "type": "String"
+        },
+        "other_contributors": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "other_contributors",
+            "documentation": "Other contributors to the resource, each listed in \"name <email>\"  form. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "lifecycle_state": {
+            "name": "lifecycle_state",
+            "documentation": "Lifecycle state of the resource, typically including states such as: initial, in_development, in_review, published, superseded, obsolete. ",
+            "is_mandatory": true,
+            "type": "Terminology_code"
+        },
+        "parent_resource": {
+            "name": "parent_resource",
+            "documentation": "Reference to owning resource. ",
+            "is_mandatory": true,
+            "type": "AUTHORED_RESOURCE"
+        },
+        "custodian_namespace": {
+            "name": "custodian_namespace",
+            "documentation": "Namespace in reverse internet id form, of current custodian organisation.",
+            "type": "String"
+        },
+        "custodian_organisation": {
+            "name": "custodian_organisation",
+            "documentation": "Plain text name of current custodian organisation.",
+            "type": "String"
+        },
+        "copyright": {
+            "name": "copyright",
+            "documentation": "Optional copyright statement for the resource as a knowledge resource. \n",
+            "type": "String"
+        },
+        "licence": {
+            "name": "licence",
+            "documentation": "Licence of current artefact, in format \"short licence name <URL of licence>\", e.g. \"Apache 2.0 License <http://www.apache.org/licenses/LICENSE-2.0.html>\"",
+            "type": "String"
+        },
+        "ip_acknowledgements": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "ip_acknowledgements",
+            "documentation": "List of acknowledgements of other IP directly referenced in this archetype, typically terminology codes, ontology ids etc. Recommended keys are the widely known name or namespace for the IP source, as shown in the following example:\n\n----\nip_acknowledgements = <\n    [\"loinc\"] = <\"This content from LOINC® is copyright © 1995 Regenstrief Institute, Inc. and the LOINC Committee, and available at no cost under the license at http://loinc.org/terms-of-use\">\n    [\"snomedct\"] = <\"Content from SNOMED CT® is copyright © 2007 IHTSDO <ihtsdo.org>\">\n>\n----",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "references": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "references",
+            "documentation": "List of references of material on which this artefact is based, as a keyed list of strings. The keys should be in a standard citation format.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "resource_package_uri": {
+            "name": "resource_package_uri",
+            "documentation": "URI of package to which this resource belongs.",
+            "type": "String"
+        },
+        "conversion_details": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "conversion_details",
+            "documentation": "Details related to conversion process that generated this model from an original, if relevant, as a list of name/value pairs. Typical example with recommended tags:\n\n----\nconversion_details = <\n    [\"source_model\"] = <\"CEM model xyz <http://location.in.clinicalelementmodels.com>\">\n    [\"tool\"] = <\"cem2adl v6.3.0\">\n    [\"time\"] = <\"2014-11-03T09:05:00\">\n>\n----",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "other_details": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "other_details",
+            "documentation": "Additional non-language-sensitive resource meta-data, as a list of name/value pairs.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "details": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "details",
+            "documentation": "Details of all parts of resource description that are natural language-dependent, keyed by language code.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "RESOURCE_DESCRIPTION_ITEM"
+                ]
+            }
+        }
+    }
+}

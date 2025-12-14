@@ -1,0 +1,46 @@
+{
+    "name": "C_DATE",
+    "documentation": "ISO 8601-compatible constraint on instances of Date in the form either of a set of validity values, or an actual date range. There is no validity flag for ‘year’, since it must always be by definition mandatory in order to have a sensible date at all. Syntax expressions of instances of this class include “YYYY-??-??” (date with optional month and day).",
+    "ancestors": [
+        "C_PRIMITIVE"
+    ],
+    "properties": {
+        "day_validity": {
+            "name": "day_validity",
+            "documentation": "Validity of day in constrained date.",
+            "type": "VALIDITY_KIND"
+        },
+        "month_validity": {
+            "name": "month_validity",
+            "documentation": "Validity of month in constrained date.",
+            "type": "VALIDITY_KIND"
+        },
+        "timezone_validity": {
+            "name": "timezone_validity",
+            "documentation": "Validity of timezone in constrained date.",
+            "type": "VALIDITY_KIND"
+        },
+        "range": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "range",
+            "documentation": "Interval of Dates specifying constraint.",
+            "type_def": {
+                "root_type": "Interval",
+                "generic_parameters": [
+                    "Iso8601_date"
+                ]
+            }
+        },
+        "assumed_value": {
+            "name": "assumed_value",
+            "documentation": "The value to assume if this item is not included in data, due to being part of an optional structure.",
+            "type": "Iso8601_date"
+        }
+    },
+    "invariants": {
+        "Pattern_validity": "pattern /= Void implies valid_iso8601_date_constraint_pattern(pattern)",
+        "Month_validity_optional": "month_validity = {VALIDITY_KIND}.optional implies (day_validity = {VALIDITY_KIND}.optional or day_validity = {VALIDITY_KIND}.disallowed)",
+        "Month_validity_disallowed": "month_validity = {VALIDITY_KIND}.disallowed implies day_validity = {VALIDITY_KIND}.disallowed",
+        "Validity_is_range": "validity_is_range = (range /= Void)"
+    }
+}

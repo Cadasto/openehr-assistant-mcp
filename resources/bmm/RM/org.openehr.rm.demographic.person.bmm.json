@@ -1,0 +1,7 @@
+{
+    "name": "PERSON",
+    "documentation": "Generic description of persons. Provides a dedicated type to which Person archetypes can be targeted.",
+    "ancestors": [
+        "ACTOR"
+    ]
+}

@@ -1,0 +1,62 @@
+{
+    "name": "C_DURATION",
+    "documentation": "ISO 8601-compatible constraint on instances of Duration. In ISO 8601 terms, constraints might are of the form “PWD” (weeks and/or days), “PDTHMS” (days, hours, minutes, seconds) and so on.\n\nBoth range and the constraint pattern can be set at the same time, corresponding to the ADL constraint `\"PWD/|P0W..P50W|\"`.\n\nAs for all of openEHR, two ISO 8601 exceptions are allowed: \n\n* the ‘W’ (week) designator can be mixed in - the allowed patterns are: `P[Y|y][M|m][D|d][T[H|h][M|m][S|s]]` and `P[W|w]`;\n* the values used in an interval constraint may be negated, i.e. a leading minus (`'-'`) sign may be used.\n",
+    "ancestors": [
+        "C_PRIMITIVE"
+    ],
+    "properties": {
+        "years_allowed": {
+            "name": "years_allowed",
+            "type": "Boolean"
+        },
+        "months_allowed": {
+            "name": "months_allowed",
+            "documentation": "True if months are allowed in the constrained Duration.",
+            "type": "Boolean"
+        },
+        "weeks_allowed": {
+            "name": "weeks_allowed",
+            "type": "Boolean"
+        },
+        "days_allowed": {
+            "name": "days_allowed",
+            "documentation": "True if days are allowed in the constrained Duration.",
+            "type": "Boolean"
+        },
+        "hours_allowed": {
+            "name": "hours_allowed",
+            "documentation": "True if hours are allowed in the constrained Duration.",
+            "type": "Boolean"
+        },
+        "minutes_allowed": {
+            "name": "minutes_allowed",
+            "documentation": "True if minutes are allowed in the constrained Duration.",
+            "type": "Boolean"
+        },
+        "seconds_allowed": {
+            "name": "seconds_allowed",
+            "type": "Boolean"
+        },
+        "fractional_seconds_allowed": {
+            "name": "fractional_seconds_allowed",
+            "documentation": "True if fractional seconds are allowed in the constrained Duration.",
+            "type": "Boolean"
+        },
+        "range": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "range",
+            "documentation": "Range of Durations specifying constraint.",
+            "type_def": {
+                "root_type": "Interval",
+                "generic_parameters": [
+                    "Iso8601_duration"
+                ]
+            }
+        },
+        "assumed_value": {
+            "name": "assumed_value",
+            "documentation": "The value to assume if this item is not included in data, due to being part of an optional structure.",
+            "type": "Iso8601_duration"
+        }
+    }
+}

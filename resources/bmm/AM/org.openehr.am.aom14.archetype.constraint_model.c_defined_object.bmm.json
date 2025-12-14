@@ -1,0 +1,69 @@
+{
+    "name": "C_DEFINED_OBJECT",
+    "documentation": "Abstract parent type of C_OBJECT subtypes that are defined by value, i.e. whose definitions are actually in the archetype rather than being by reference. ",
+    "is_abstract": true,
+    "ancestors": [
+        "C_OBJECT"
+    ],
+    "properties": {
+        "assumed_value": {
+            "name": "assumed_value",
+            "documentation": "Value to be assumed if none sent in data.",
+            "type": "Any"
+        }
+    },
+    "functions": {
+        "valid_value": {
+            "name": "valid_value",
+            "documentation": "True if a_value is valid with respect to constraint expressed in concrete instance of this type.",
+            "is_abstract": true,
+            "parameters": {
+                "a_value": {
+                    "name": "a_value",
+                    "type": "Any"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "prototype_value": {
+            "name": "prototype_value",
+            "documentation": "Generate a prototype value from this constraint object.",
+            "is_abstract": true,
+            "result": {
+                "type": "Any"
+            }
+        },
+        "has_assumed_value": {
+            "name": "has_assumed_value",
+            "documentation": "True if there is an assumed value.\n",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "default_value": {
+            "name": "default_value",
+            "documentation": "Generate a default value from this constraint object.",
+            "is_abstract": true,
+            "result": {
+                "type": "Any"
+            },
+            "is_nullable": true
+        },
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if any value of the reference model type being constrained is allowed. Redefine in descendants.",
+            "is_abstract": true,
+            "post_conditions": {
+                "Post": "Result = attributes.is_empty"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Assumed_value_valid": "has_assumed_value implies valid_value(assumed_value)"
+    }
+}

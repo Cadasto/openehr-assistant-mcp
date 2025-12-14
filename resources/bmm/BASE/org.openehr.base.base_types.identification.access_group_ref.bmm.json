@@ -1,0 +1,10 @@
+{
+    "name": "ACCESS_GROUP_REF",
+    "documentation": "Reference to access group in an access control service.",
+    "ancestors": [
+        "OBJECT_REF"
+    ],
+    "invariants": {
+        "Type_validity": "type.is_equal (“ACCESS_GROUP”)"
+    }
+}

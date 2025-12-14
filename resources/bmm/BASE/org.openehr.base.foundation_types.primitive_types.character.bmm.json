@@ -1,0 +1,7 @@
+{
+    "name": "Character",
+    "documentation": "Type representing minimal interface of built-in Character type.",
+    "ancestors": [
+        "Ordered"
+    ]
+}

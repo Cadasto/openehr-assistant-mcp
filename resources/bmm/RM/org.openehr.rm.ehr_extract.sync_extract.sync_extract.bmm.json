@@ -1,0 +1,27 @@
+{
+    "name": "SYNC_EXTRACT",
+    "ancestors": [
+        "MESSAGE_CONTENT"
+    ],
+    "properties": {
+        "specification": {
+            "name": "specification",
+            "documentation": "Details of specification of this Extract.",
+            "is_mandatory": true,
+            "type": "SYNC_EXTRACT_SPEC"
+        },
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "Content, in the form of a serialised Contributions.",
+            "type_def": {
+                "container_type": "List",
+                "type": "X_CONTRIBUTION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

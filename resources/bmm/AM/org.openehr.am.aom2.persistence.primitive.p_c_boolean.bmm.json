@@ -1,0 +1,30 @@
+{
+    "name": "P_C_BOOLEAN",
+    "documentation": "Constraint on instances of Boolean. Both attributes cannot be set to False, since this would mean that the Boolean value being constrained cannot be True or False.",
+    "ancestors": [
+        "P_C_PRIMITIVE_OBJECT"
+    ],
+    "properties": {
+        "constraint": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "constraint",
+            "type_def": {
+                "container_type": "List",
+                "type": "Boolean"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "assumed_value": {
+            "name": "assumed_value",
+            "type": "Boolean"
+        },
+        "default_value": {
+            "name": "default_value",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    }
+}

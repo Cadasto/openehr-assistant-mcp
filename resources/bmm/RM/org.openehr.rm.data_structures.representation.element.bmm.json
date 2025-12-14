@@ -1,0 +1,39 @@
+{
+    "name": "ELEMENT",
+    "documentation": "The leaf variant of `ITEM`, to which a `DATA_VALUE` instance is attached. ",
+    "ancestors": [
+        "ITEM"
+    ],
+    "properties": {
+        "null_flavour": {
+            "name": "null_flavour",
+            "documentation": "Flavour of null value, e.g. `253|unknown|`, `271|no information|`, `272|masked|`, and `273|not applicable|`.",
+            "type": "DV_CODED_TEXT"
+        },
+        "value": {
+            "name": "value",
+            "documentation": "Property representing leaf value object of `ELEMENT`. In real data, any concrete subtype of `DATA_VALUE` can be used.",
+            "type": "DATA_VALUE"
+        },
+        "null_reason": {
+            "name": "null_reason",
+            "documentation": "Optional specific reason for null value; if set, `_null_flavour_` must be set. Null reason may apply only to a minority of clinical data, commonly needed in reporting contexts.",
+            "type": "DV_TEXT"
+        }
+    },
+    "functions": {
+        "is_null": {
+            "name": "is_null",
+            "documentation": "True if value logically not known, e.g. if indeterminate, not asked etc. ",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Inv_is_null_valid": "is_null() = (value = Void)",
+        "Inv_null_flavour_indicated": "is_null() xor null_flavour = Void",
+        "Inv_null_flavour_valid": "is_null implies terminology (Terminology_id_openehr).has_code_for_group_id (Group_id_null_flavour, null_flavour.defining_code)",
+        "Inv_null_reason_valid": "null_reason /= Void implies is_null()"
+    }
+}

@@ -1,0 +1,172 @@
+{
+    "name": "DV_PROPORTION",
+    "documentation": "Models a ratio of values, i.e. where the numerator and denominator are both pure numbers. The `_valid_proportion_kind_` property of the `PROPORTION_KIND` class is used to control the type attribute to be one of a defined set.\n\nUsed for recording titers (e.g. 1:128), concentration ratios, e.g. Na:K (unitary denominator), albumin:creatinine ratio, and percentages, e.g. red cell distirbution width (RDW). \n \nMisuse: Should not be used to represent things like blood pressure which are often written using a  '/' character, giving the misleading impression that the item is a ratio, when in fact it is a structured value. Similarly, visual acuity, often written as (e.g.) \"6/24\" in clinical notes is not a ratio but an ordinal (which includes non-numeric symbols like CF = count fingers etc). Should not be used for formulations. ",
+    "ancestors": [
+        "PROPORTION_KIND",
+        "DV_AMOUNT"
+    ],
+    "properties": {
+        "numerator": {
+            "name": "numerator",
+            "documentation": "Numerator of ratio",
+            "is_mandatory": true,
+            "type": "Real"
+        },
+        "denominator": {
+            "name": "denominator",
+            "documentation": "Denominator of ratio.",
+            "is_mandatory": true,
+            "type": "Real"
+        },
+        "type": {
+            "name": "type",
+            "documentation": "Indicates semantic type of proportion, including percent, unitary etc.",
+            "is_mandatory": true,
+            "type": "Integer"
+        },
+        "precision": {
+            "name": "precision",
+            "documentation": "Precision  to  which  the  `_numerator_` and `_denominator_` values of  the  proportion are expressed, in terms of number  of decimal places. The value 0 implies an integral quantity. The value -1 implies no limit, i.e. any number of decimal places. ",
+            "type": "Integer"
+        },
+        "normal_range": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "normal_range",
+            "documentation": "Optional normal range. ",
+            "type_def": {
+                "root_type": "DV_INTERVAL",
+                "generic_parameters": [
+                    "DV_PROPORTION"
+                ]
+            }
+        },
+        "other_reference_ranges": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "other_reference_ranges",
+            "documentation": "Optional tagged other reference ranges for this value in its particular measurement context.",
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "REFERENCE_RANGE",
+                    "generic_parameters": [
+                        "DV_PROPORTION"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "magnitude": {
+            "name": "magnitude",
+            "documentation": "Effective magnitude represented by ratio.",
+            "result": {
+                "type": "Real"
+            }
+        },
+        "is_integral": {
+            "name": "is_integral",
+            "documentation": "True if the `_numerator_` and `_denominator_` values are integers, i.e. if `_precision_` is 0.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "add": {
+            "name": "add",
+            "documentation": "Sum of two strictly comparable proportions.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_PROPORTION"
+                }
+            },
+            "result": {
+                "type": "DV_PROPORTION"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Difference between two strictly comparable proportions.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_PROPORTION"
+                }
+            },
+            "result": {
+                "type": "DV_PROPORTION"
+            }
+        },
+        "is_equal": {
+            "name": "is_equal",
+            "documentation": "Return True if this `DV_AMOUNT` is considered equal to `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_PROPORTION"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "multiply": {
+            "name": "multiply",
+            "documentation": "Product of this Proportion and `_factor_`.",
+            "parameters": {
+                "factor": {
+                    "name": "factor",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "DV_PROPORTION"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "True if this Proportion is less than  `_other_`. Only valid if `_is_strictly_comparable_to()_` is True.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_PROPORTION"
+                }
+            },
+            "pre_conditions": {
+                "Pre_comparable": "is_strictly_comparable()"
+            },
+            "post_conditions": {
+                "Post_result": "Result = magnitude < other.magnitude"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_strictly_comparable_to": {
+            "name": "is_strictly_comparable_to",
+            "documentation": "Return True if the `_type_` of this proportion is the same as the `_type_` of `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_ORDERED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Type_validity": "valid_proportion_kind (type)",
+        "Precision_validity": "precision = 0 implies is_integral",
+        "Is_integral_validity": "is_integral implies (numerator.floor = numerator and denominator.floor = denominator)",
+        "Fraction_validity": "(type = pk_fraction or type = pk_integer_fraction) implies is_integral",
+        "Unitary_validity": "type = pk_unitary implies denominator = 1",
+        "Percent_validity": "type = pk_percent implies denominator = 100",
+        "Valid_denominator": "denominator /= 0.0"
+    }
+}

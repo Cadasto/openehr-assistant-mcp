@@ -1,0 +1,29 @@
+{
+    "name": "MESSAGE",
+    "documentation": "A “message” is an authored, possibly signed, piece of content intended for one or more recipients. Since the recipient may or may not be known directly, recipients are specified in the `ADDRESSED_MESSAGE` class.",
+    "properties": {
+        "audit": {
+            "name": "audit",
+            "documentation": "Details of who actually created the message and when. This is the person who entered the data or otherwise caused the message to be created, or might be a piece of software.",
+            "is_mandatory": true,
+            "type": "AUDIT_DETAILS"
+        },
+        "author": {
+            "name": "author",
+            "documentation": "Party responsible for the message content, who may or may not be technically responsible for its creation (e.g. by data entry etc).",
+            "is_mandatory": true,
+            "type": "PARTY_PROXY"
+        },
+        "content": {
+            "name": "content",
+            "documentation": "Content of the message.",
+            "is_mandatory": true,
+            "type": "MESSAGE_CONTENT"
+        },
+        "signature": {
+            "name": "signature",
+            "documentation": "Optional signature by the author of message content in openPGP format. The signature is created as a Hash and optional signing of the serialisation of this message object with this signature field Void.",
+            "type": "String"
+        }
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "name": "P_ARCHETYPE_HRID",
+    "documentation": "Human_readable identifier (HRID) for an archetype or template.",
+    "properties": {
+        "namespace": {
+            "name": "namespace",
+            "documentation": "Reverse domain name namespace identifier.",
+            "type": "String"
+        },
+        "rm_publisher": {
+            "name": "rm_publisher",
+            "documentation": "Name of the Reference Model publisher.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "rm_package": {
+            "name": "rm_package",
+            "documentation": "Name of the package in whose reachability graph the rm_class class is found (there can be more than one possibility in many reference models).",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "rm_class": {
+            "name": "rm_class",
+            "documentation": "Name of the root class of this archetype.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "concept_id": {
+            "name": "concept_id",
+            "documentation": "The short concept name of the archetype as used in the multi-axial archetype_hrid.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "release_version": {
+            "name": "release_version",
+            "documentation": "The full numeric version of this archetype consisting of 3 parts, e.g. 1.8.2. The archetype_hrid feature includes only the major version.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "version_status": {
+            "name": "version_status",
+            "documentation": "The status of the version, i.e. released, release_candidate etc.",
+            "is_mandatory": true,
+            "type": "VERSION_STATUS"
+        },
+        "build_count": {
+            "name": "build_count",
+            "documentation": "The build count since last increment of any version part.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    }
+}

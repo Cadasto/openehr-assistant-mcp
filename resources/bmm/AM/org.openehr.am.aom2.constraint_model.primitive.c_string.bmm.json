@@ -1,0 +1,53 @@
+{
+    "name": "C_STRING",
+    "documentation": "Constraint on instances of STRING. ",
+    "ancestors": [
+        "C_PRIMITIVE"
+    ],
+    "properties": {
+        "pattern": {
+            "name": "pattern",
+            "documentation": "Regular expression pattern for proposed instances of String to match.",
+            "type": "String"
+        },
+        "list": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "list",
+            "documentation": "Set of Strings specifying constraint.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "list_open": {
+            "name": "list_open",
+            "documentation": "True if the list is being used to specify the constraint but is not considered exhaustive.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "assumed_value": {
+            "name": "assumed_value",
+            "documentation": "The value to assume if this item is not included in data, due to being part of an optional structure.",
+            "type": "String"
+        }
+    },
+    "functions": {
+        "valid_value": {
+            "name": "valid_value",
+            "documentation": "True if a_value is valid with respect to constraint expressed in concrete instance of this type. ",
+            "parameters": {
+                "a_value": {
+                    "name": "a_value",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

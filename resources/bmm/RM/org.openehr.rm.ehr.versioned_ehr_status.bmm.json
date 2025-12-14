@@ -1,0 +1,7 @@
+{
+    "name": "VERSIONED_EHR_STATUS",
+    "documentation": "Version container for EHR_STATUS instance.",
+    "ancestors": [
+        "VERSIONED_OBJECT"
+    ]
+}

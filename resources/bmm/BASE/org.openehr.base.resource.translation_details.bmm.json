@@ -1,0 +1,60 @@
+{
+    "name": "TRANSLATION_DETAILS",
+    "documentation": "Class providing details of a natural language translation.",
+    "properties": {
+        "language": {
+            "name": "language",
+            "documentation": "Language of the translation, coded using ISO 639-1 (2 character) language codes.",
+            "is_mandatory": true,
+            "type": "Terminology_code"
+        },
+        "author": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "author",
+            "documentation": "Primary translator name and other demographic details.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "accreditation": {
+            "name": "accreditation",
+            "documentation": "Accreditation of primary translator or group, usually a national translator's registration or association membership id.",
+            "type": "String"
+        },
+        "other_details": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "other_details",
+            "documentation": "Any other meta-data.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "version_last_translated": {
+            "name": "version_last_translated",
+            "documentation": "Version of this resource last time it was translated into the language represented by this `TRANSLATION_DETAILS` object.",
+            "type": "String"
+        },
+        "other_contributors": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "other_contributors",
+            "documentation": "Additional contributors to this translation, each listed in the preferred format of the relevant organisation for the artefacts in question. A typical default is `\"name <email>\"` if nothing else is specified. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

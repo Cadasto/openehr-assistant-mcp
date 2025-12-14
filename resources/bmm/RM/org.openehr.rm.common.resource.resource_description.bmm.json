@@ -1,0 +1,81 @@
+{
+    "name": "RESOURCE_DESCRIPTION",
+    "documentation": "Defines the descriptive meta-data of a resource.",
+    "properties": {
+        "original_author": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "original_author",
+            "documentation": "Original author of this resource, with all relevant details, including organisation.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "other_contributors": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "other_contributors",
+            "documentation": "Other contributors to the resource, probably listed in  `'name <email>'`  form. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "lifecycle_state": {
+            "name": "lifecycle_state",
+            "documentation": "Lifecycle state of the resource, typically including states such as: `initial | submitted | experimental | awaiting_approval | approved | superseded | obsolete`.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "resource_package_uri": {
+            "name": "resource_package_uri",
+            "documentation": "URI of package to which this resource belongs.",
+            "type": "String"
+        },
+        "other_details": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "other_details",
+            "documentation": "Additional non language-senstive resource meta-data, as a list of name/value pairs. ",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "parent_resource": {
+            "name": "parent_resource",
+            "documentation": "Reference to owning resource. ",
+            "is_mandatory": true,
+            "type": "AUTHORED_RESOURCE"
+        },
+        "details": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "details",
+            "documentation": "Details of all parts of resource description that are natural language-dependent, keyed by language code. ",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "RESOURCE_DESCRIPTION_ITEM"
+                ]
+            }
+        }
+    },
+    "invariants": {
+        "Original_author_valid": "not original_author.is_empty",
+        "Lifecycle_state_valid": "not lifecycle_state.is_empty",
+        "Details_valid": "not details.is_empty",
+        "Language_valid": "parent_resource /= Void implies details.for_all (d | parent_resource.languages_available.has (d.language.code_string))",
+        "Parent_resource_valid": "parent_resource /= Void implies parent_resource.description = self"
+    }
+}

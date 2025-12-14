@@ -1,0 +1,182 @@
+{
+    "name": "C_TEMPORAL_DEFINITIONS",
+    "documentation": "Definitions related to `C_TEMPORAL` constraints.",
+    "properties": {
+        "valid_date_constraint_patterns": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "valid_date_constraint_patterns",
+            "documentation": "List of allowed date constraints. Contains the values:\n\n```\n\"YYYY-MM-DD\"    -- full date required\n\"YYYY-MM-??\"    -- day optional\n\"YYYY-MM-XX\"    -- day prohibited\n\"YYYY-??-??\"    -- any partial or full date\n\"YYYY-??-XX\"    -- day prohibited\n\"YYYY-XX-XX\"    -- only prohibited\n```",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "valid_date_constraint_replacements": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "valid_date_constraint_replacements",
+            "documentation": "List of allowed date constraint replacements e.g. in specialised archetype. Contains the values:\n\n----\n\"YYYY-MM-DD\": [],\n\n\"YYYY-MM-??\": [\"YYYY-MM-DD\", \n               \"YYYY-MM-XX\"],\n\n\"YYYY-MM-XX\": [],\n\n\"YYYY-??-??\": [\"YYYY-MM-??\",\n               \"YYYY-MM-DD\",\n               \"YYYY-MM-XX\",\n               \"YYYY-??-XX\",\n               \"YYYY-XX-XX\"],\n\n\"YYYY-??-XX\": [\"YYYY-MM-XX\", \n              \"YYYY-XX-XX\"],\n\n\"YYYY-XX-XX\": []\n----\n\nIn the above, an empty list value indicates no replacements possible.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameter_defs": [
+                    {
+                        "type": "String"
+                    },
+                    {
+                        "_type": "P_BMM_GENERIC_TYPE",
+                        "root_type": "List",
+                        "generic_parameters": [
+                            "String"
+                        ]
+                    }
+                ]
+            }
+        },
+        "valid_time_constraint_patterns": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "valid_time_constraint_patterns",
+            "documentation": "List of allowed time constraints. Contains the values:\n\n```\n\"HH:MM:SS\"    -- full time required\n\"HH:MM:??\"    -- seconds optional\n\"HH:MM:XX\"    -- minutes required, seconds prohibited\n\"HH:??:??\"    -- minutes and seconds optional\n\"HH:??:XX\"    -- minutes optional, seconds prohibited\n```",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "valid_time_constraint_replacements": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "valid_time_constraint_replacements",
+            "documentation": "List of allowed time constraint replacements e.g. in specialised archetype. Contains the values:\n\n----\n\"HH:MM:SS\": [],\n\n\"HH:MM:??\": [\"HH:MM:SS\",\n             \"HH:MM:XX\"],\n\n\"HH:MM:XX\": [],\n\n\"HH-??-??\": [\"HH:MM:??\",\n             \"HH:MM:SS\",\n             \"HH:MM:XX\",\n             \"HH:??:XX\"],\n\n\"HH-??-XX\": [\"HH:MM:XX\"]\n----\n\nIn the above, an empty list value indicates no replacements possible.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameter_defs": [
+                    {
+                        "type": "String"
+                    },
+                    {
+                        "_type": "P_BMM_GENERIC_TYPE",
+                        "root_type": "List",
+                        "generic_parameters": [
+                            "String"
+                        ]
+                    }
+                ]
+            }
+        },
+        "valid_date_time_constraint_patterns": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "valid_date_time_constraint_patterns",
+            "documentation": "List of allowed date/time constraints. Contains the values:\n\n```\n\"YYYY-MM-DDTHH:MM:SS\"    -- full date/time required\n\"YYYY-MM-DDTHH:MM:??\"    -- seconds optional\n\"YYYY-MM-DDTHH:MM:XX\"    -- seconds prohibited\n\"YYYY-MM-DDTHH:??:??\"    -- minutes and seconds optional\n\"YYYY-MM-DDTHH:??:XX\"    -- minutes optional, seconds prohibited\n\"YYYY-??-??T??:??:??\"    -- any date/time ok\n```",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "valid_date_time_constraint_replacements": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "valid_date_time_constraint_replacements",
+            "documentation": "List of allowed date/time constraint replacements e.g. in specialised archetype. Contains the values:\n\n----\n\"YYYY-MM-DDTHH:MM:SS\": [],\n\n\"YYYY-MM-DDTHH:MM:??\": [\"YYYY-MM-DDTHH:MM:SS\",\n                        \"YYYY-MM-DDTHH:MM:XX\"],\n\n\"YYYY-MM-DDTHH:MM:XX\": [],\n\n\"YYYY-MM-DDTHH:??:??\": [\"YYYY-MM-DDTHH:??:XX\",\n                        \"YYYY-MM-DDTHH:MM:SS\",\n                        \"YYYY-MM-DDTHH:MM:??\",\n                        \"YYYY-MM-DDTHH:MM:XX\"],\n\n\"YYYY-MM-DDTHH:??:XX\": [\"YYYY-MM-DDTHH:MM:XX\"],\n\n\"YYYY-??-??T??:??:??\": [\"YYYY-MM-DDTHH:MM:SS\",\n                        \"YYYY-MM-DDTHH:MM:??\",\n                        \"YYYY-MM-DDTHH:MM:XX\",\n                        \"YYYY-MM-DDTHH:??:??\",\n                        \"YYYY-MM-DDTHH:??:XX\"]\n----",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameter_defs": [
+                    {
+                        "type": "String"
+                    },
+                    {
+                        "_type": "P_BMM_GENERIC_TYPE",
+                        "root_type": "List",
+                        "generic_parameters": [
+                            "String"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "functions": {
+        "valid_duration_constraint_replacement": {
+            "name": "valid_duration_constraint_replacement",
+            "documentation": "True if ISO8601 duration string `_other_dur_` contains every character element in `_a_dur_`. For example: 'PYD' (period with year and days only) conforms to 'PYMD', but doesn't conform to 'PY'.",
+            "parameters": {
+                "a_dur": {
+                    "name": "a_dur",
+                    "type": "String"
+                },
+                "other_dur": {
+                    "name": "other_dur",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_iso8601_date_constraint_pattern": {
+            "name": "valid_iso8601_date_constraint_pattern",
+            "documentation": "True if string literal like `\"yyyy-MM-dd\"` containing `\"XX\"` or `\"??\"` in `MM` or `dd` slots in pattern constraint is in `_valid_date_constraint_patterns_`.",
+            "parameters": {
+                "s": {
+                    "name": "s",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_iso8601_time_constraint_pattern": {
+            "name": "valid_iso8601_time_constraint_pattern",
+            "documentation": "True if string literal like `\"hh:mm:ss[.ssss]\"` containing `\"XX\"` or `\"??\"` in `mm` or `ss` slots in pattern constraint is in `_valid_time_constraint_patterns_`.",
+            "parameters": {
+                "s": {
+                    "name": "s",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_iso8601_date_time_constraint_pattern": {
+            "name": "valid_iso8601_date_time_constraint_pattern",
+            "documentation": "True if string literal in form `\"yyyy-MM-dd hh:mm:ss[.ssss]\"` containing `\"XX\"` or `\"??\"` in variable slots in pattern constraint is in `_valid_date_time_constraint_patterns_`.",
+            "parameters": {
+                "s": {
+                    "name": "s",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "valid_iso8601_duration_constraint_pattern": {
+            "name": "valid_iso8601_duration_constraint_pattern",
+            "documentation": "True if string in form `P[Y|y][M|m][W|w][D|d][T[H|h][M|m][S|s]]` (note: allowing 'W' to be mixed in is an openEHR deviation of ISO 8601).",
+            "parameters": {
+                "s": {
+                    "name": "s",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

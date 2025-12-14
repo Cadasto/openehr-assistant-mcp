@@ -1,0 +1,51 @@
+{
+    "name": "PARTY_RELATIONSHIP",
+    "documentation": "Generic description of a relationship between parties.",
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "properties": {
+        "details": {
+            "name": "details",
+            "documentation": "The detailed description of the relationship.",
+            "type": "ITEM_STRUCTURE"
+        },
+        "target": {
+            "name": "target",
+            "documentation": "Target of relationship.",
+            "is_mandatory": true,
+            "type": "PARTY_REF"
+        },
+        "time_validity": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "time_validity",
+            "documentation": "Valid time interval for this relationship.",
+            "type_def": {
+                "root_type": "DV_INTERVAL",
+                "generic_parameters": [
+                    "DV_DATE"
+                ]
+            }
+        },
+        "source": {
+            "name": "source",
+            "documentation": "Source of relationship.",
+            "is_mandatory": true,
+            "type": "PARTY_REF"
+        }
+    },
+    "functions": {
+        "type": {
+            "name": "type",
+            "documentation": "Type of relationship, such as  employment,  authority,  health provision ",
+            "result": {
+                "type": "DV_TEXT"
+            }
+        }
+    },
+    "invariants": {
+        "Source_valid": "source /= Void and then source.relationships.has (self)",
+        "Target_valid": "target /= Void and then not target.reverse_relationships.has (self)",
+        "Type_validity": "type = name"
+    }
+}

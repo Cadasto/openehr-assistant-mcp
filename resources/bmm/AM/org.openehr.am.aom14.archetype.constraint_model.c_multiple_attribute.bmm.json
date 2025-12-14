@@ -1,0 +1,27 @@
+{
+    "name": "C_MULTIPLE_ATTRIBUTE",
+    "documentation": "Concrete model of constraint on multiply-valued (ie. container) attribute node.",
+    "ancestors": [
+        "C_ATTRIBUTE"
+    ],
+    "properties": {
+        "cardinality": {
+            "name": "cardinality",
+            "documentation": "Cardinality of this attribute constraint, if it constraints a container attribute.",
+            "is_mandatory": true,
+            "type": "CARDINALITY"
+        }
+    },
+    "functions": {
+        "members": {
+            "name": "members",
+            "documentation": "List of constraints representing members of the container value of this attribute within the data. Semantics of the uniqueness and ordering of items in the container are given by the cardinality.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "C_OBJECT"
+            },
+            "is_nullable": true
+        }
+    }
+}

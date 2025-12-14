@@ -1,0 +1,12 @@
+{
+    "name": "CONSUMABLE_USE",
+    "ancestors": [
+        "RESOURCE_USE"
+    ],
+    "properties": {
+        "amount": {
+            "name": "amount",
+            "type": "DATA_VALUE"
+        }
+    }
+}

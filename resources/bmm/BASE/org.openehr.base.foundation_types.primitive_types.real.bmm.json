@@ -1,0 +1,127 @@
+{
+    "name": "Real",
+    "documentation": "Type used to represent decimal numbers. Corresponds to a single-precision floating point value in most languages.",
+    "ancestors": [
+        "Ordered_Numeric"
+    ],
+    "functions": {
+        "floor": {
+            "name": "floor",
+            "documentation": "Return the greatest integer no greater than the value of this object.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "add": {
+            "name": "add",
+            "documentation": "Real number addition.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "Real"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Real number subtraction.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "Real"
+            }
+        },
+        "multiply": {
+            "name": "multiply",
+            "documentation": "Real number multiplication.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "Real"
+            }
+        },
+        "divide": {
+            "name": "divide",
+            "documentation": "Real number division.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "Double"
+            }
+        },
+        "exponent": {
+            "name": "exponent",
+            "documentation": "Real number exponentiation.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Double"
+                }
+            },
+            "result": {
+                "type": "Double"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "Returns True if current Real is less than `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "negative": {
+            "name": "negative",
+            "documentation": "Generate negative of current Real value.",
+            "result": {
+                "type": "Real"
+            }
+        },
+        "is_equal": {
+            "name": "is_equal",
+            "documentation": "Value equality: return True if `this` and `_other_` are attached to objects considered to be equal in value.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "equal": {
+            "name": "equal",
+            "documentation": "Reference equality for reference types, value equality for value types.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

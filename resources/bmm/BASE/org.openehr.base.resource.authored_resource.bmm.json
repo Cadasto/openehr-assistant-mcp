@@ -1,0 +1,74 @@
+{
+    "name": "AUTHORED_RESOURCE",
+    "documentation": "Abstract idea of an online resource created by a human author. \n",
+    "is_abstract": true,
+    "properties": {
+        "uid": {
+            "name": "uid",
+            "documentation": "Unique identifier of the family of archetypes having the same interface identifier (same major version).",
+            "type": "UUID"
+        },
+        "original_language": {
+            "name": "original_language",
+            "documentation": "Language in which this resource was initially authored. Although there is no language primacy of resources overall, the language of original authoring is required to ensure natural language translations can preserve quality. Language is relevant in both the description and ontology sections. ",
+            "is_mandatory": true,
+            "type": "Terminology_code"
+        },
+        "description": {
+            "name": "description",
+            "documentation": "Description and lifecycle information of the resource.",
+            "type": "RESOURCE_DESCRIPTION"
+        },
+        "is_controlled": {
+            "name": "is_controlled",
+            "documentation": "True if this resource is under any kind of change control (even file copying), in which case revision history is created. ",
+            "type": "Boolean"
+        },
+        "annotations": {
+            "name": "annotations",
+            "documentation": "Annotations on individual items within the resource, keyed by path. The inner table takes the form of a Hash table of String values keyed by String tags.",
+            "type": "RESOURCE_ANNOTATIONS"
+        },
+        "translations": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "translations",
+            "documentation": "List of details for each natural translation made of this resource, keyed by language code. For each translation listed here, there must be corresponding sections in all language-dependent parts of the resource. The `_original_language_` does not appear in this list.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "TRANSLATION_DETAILS"
+                ]
+            }
+        }
+    },
+    "functions": {
+        "current_revision": {
+            "name": "current_revision",
+            "documentation": "Most recent revision in revision_history if is_controlled else  (uncontrolled) . ",
+            "post_conditions": {
+                "Post": "Result = revision_history.most_recent_version"
+            },
+            "result": {
+                "type": "String"
+            }
+        },
+        "languages_available": {
+            "name": "languages_available",
+            "documentation": "Total list of languages available in this resource, derived from original_language and translations. ",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        }
+    },
+    "invariants": {
+        "Original_language_valid": "code_set (Code_set_id_languages).has_code (original_language.as_string)",
+        "Current_revision_valid": "(current_revision /= Void and not is_controlled) implies current_revision.is_equal (\"(uncontrolled)\")",
+        "Translations_valid": "translations /= Void implies (not translations.is_empty and not translations.has (orginal_language.code_string))",
+        "Description_valid": "translations /= Void implies (description.details.for_all (d &#124;\ntranslations.has_key (d.language.code_string)))",
+        "Languages_available_valid": "languages_available.has (original_language)",
+        "Revision_history_valid": "is_controlled xor revision_history = Void"
+    }
+}

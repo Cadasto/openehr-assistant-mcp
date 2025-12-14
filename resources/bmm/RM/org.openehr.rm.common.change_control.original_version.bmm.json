@@ -1,0 +1,76 @@
+{
+    "name": "ORIGINAL_VERSION",
+    "documentation": "A Version containing locally created content and optional attestations. ",
+    "ancestors": [
+        "VERSION"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T"
+        }
+    },
+    "properties": {
+        "uid": {
+            "name": "uid",
+            "documentation": "Stored version of inheritance precursor. ",
+            "is_mandatory": true,
+            "type": "OBJECT_VERSION_ID"
+        },
+        "preceding_version_uid": {
+            "name": "preceding_version_uid",
+            "documentation": "Stored version of inheritance precursor. ",
+            "type": "OBJECT_VERSION_ID"
+        },
+        "other_input_version_uids": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "other_input_version_uids",
+            "documentation": "Identifiers of other versions whose content was merged into this version, if any. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "OBJECT_VERSION_ID"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "lifecycle_state": {
+            "name": "lifecycle_state",
+            "documentation": "Lifecycle state of the content item in this version; coded by openEHR vocabulary `version lifecycle state`.",
+            "is_mandatory": true,
+            "type": "DV_CODED_TEXT"
+        },
+        "attestations": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "attestations",
+            "documentation": "Set of attestations relating to this version. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "ATTESTATION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "data": {
+            "name": "data",
+            "documentation": "Data content of this Version.",
+            "type": "T"
+        }
+    },
+    "functions": {
+        "is_merged": {
+            "name": "is_merged",
+            "documentation": "True if this Version was created from more than just the preceding (checked out) version.",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Attestations_valid": "attestations /= Void implies not attestations.is_empty",
+        "Is_merged_validity": "other_input_version_ids = Void xor is_merged",
+        "Other_input_version_uids_valid": "other_input_version_uids /= Void implies not other_input_version_uids.is_empty"
+    }
+}

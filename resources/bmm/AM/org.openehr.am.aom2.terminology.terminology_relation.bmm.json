@@ -1,0 +1,27 @@
+{
+    "name": "TERMINOLOGY_RELATION",
+    "documentation": "Class whose instances represent any kind of 1:N relationship between a source term and 1-N target terms.",
+    "is_abstract": true,
+    "properties": {
+        "id": {
+            "name": "id",
+            "documentation": "Code of source term of this relation.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "members": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "members",
+            "documentation": "List of target terms in this relation.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

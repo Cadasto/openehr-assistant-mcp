@@ -1,0 +1,17 @@
+services:
+
+  mcp:
+    image: cadasto/openehr-assistant-mcp-dev:latest
+    build:
+      target: development
+    ports:
+      - "8343:8343"
+      - "443:443"
+      - "443:443/udp"
+    tty: true
+    volumes:
+      - ./:/app
+      - composer-cache:/data/.cache/composer
+
+volumes:
+  composer-cache:

@@ -1,0 +1,27 @@
+{
+    "name": "SIBLING_ORDER",
+    "documentation": "Defines the order indicator that can be used on a `C_OBJECT` within a container attribute in a specialised archetype to indicate its order with respect to a sibling defined in a higher specialisation level.\n\nMisuse: This type cannot be used on a `C_OBJECT` other than one within a container attribute in a specialised archetype.",
+    "properties": {
+        "is_before": {
+            "name": "is_before",
+            "documentation": "True if the order relationship is ‘before’, if False, it is ‘after’.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "sibling_node_id": {
+            "name": "sibling_node_id",
+            "documentation": "Node identifier of sibling before or after which this node should come.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "functions": {
+        "is_after": {
+            "name": "is_after",
+            "documentation": "True if the order relationship is `_after_`, computed as the negation of `_is_before_`.",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

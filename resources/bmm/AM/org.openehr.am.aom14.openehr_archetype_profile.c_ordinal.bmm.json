@@ -1,0 +1,22 @@
+{
+    "name": "C_ORDINAL",
+    "documentation": "Constrainer class for Ordinal data.",
+    "ancestors": [
+        "C_DOMAIN_TYPE"
+    ],
+    "properties": {
+        "list": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "list",
+            "documentation": "Value set of allowed Ordinals in the constraint.",
+            "type_def": {
+                "container_type": "List",
+                "type": "ORDINAL"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

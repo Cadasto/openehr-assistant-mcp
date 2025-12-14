@@ -1,0 +1,15 @@
+{
+    "name": "EVALUATION",
+    "documentation": "Entry type for evaluation statements. Used for all kinds of statements which evaluate other information, such as interpretations of observations, diagnoses, differential diagnoses, hypotheses, risk assessments, goals and plans. \n\nShould not be used for actionable statements such as medication orders - these are represented using the `INSTRUCTION` type. ",
+    "ancestors": [
+        "CARE_ENTRY"
+    ],
+    "properties": {
+        "data": {
+            "name": "data",
+            "documentation": "The data of this evaluation, in the form of a spatial data structure.",
+            "is_mandatory": true,
+            "type": "ITEM_STRUCTURE"
+        }
+    }
+}

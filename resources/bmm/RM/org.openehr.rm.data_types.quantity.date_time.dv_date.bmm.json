@@ -1,0 +1,112 @@
+{
+    "name": "DV_DATE",
+    "documentation": "Represents an absolute point in time, as measured on the Gregorian calendar, and specified only to the day. Semantics defined by ISO 8601. Used for recording dates in real world time. The partial form is used for approximate birth dates, dates of death, etc.\n",
+    "ancestors": [
+        "DV_TEMPORAL",
+        "Iso8601_date"
+    ],
+    "properties": {
+        "value": {
+            "name": "value",
+            "documentation": "ISO8601 date string.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "functions": {
+        "magnitude": {
+            "name": "magnitude",
+            "documentation": "Numeric value of the date as days since the calendar origin date `0001-01-01`.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "is_equal": {
+            "name": "is_equal",
+            "documentation": "Return True if this `DV_QUANTIFIED` is considered equal to `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_QUANTIFIED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "add": {
+            "name": "add",
+            "documentation": "Addition of a Duration to this Date.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "DV_DURATION"
+                }
+            },
+            "result": {
+                "type": "DV_DATE"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Subtract a Duration from this Date.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "DV_DURATION"
+                }
+            },
+            "result": {
+                "type": "DV_DATE"
+            }
+        },
+        "diff": {
+            "name": "diff",
+            "documentation": "Difference between this Date and `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_DATE"
+                }
+            },
+            "result": {
+                "type": "DV_DURATION"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "True if `_other_` is less than this Quantified object. Based on comparison of `_magnitude_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_DATE"
+                }
+            },
+            "pre_conditions": {
+                "Pre_comparable": "is_strictly_comparable()"
+            },
+            "post_conditions": {
+                "Post_result": "Result = magnitude > other.magnitude"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_strictly_comparable_to": {
+            "name": "is_strictly_comparable_to",
+            "documentation": "True, for any two Dates.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_DATE"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Value_valid": "valid_iso8601_date(value)"
+    }
+}

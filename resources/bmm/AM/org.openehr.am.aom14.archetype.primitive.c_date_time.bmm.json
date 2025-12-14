@@ -1,0 +1,83 @@
+{
+    "name": "C_DATE_TIME",
+    "documentation": "ISO 8601-compatible constraint on instances of Date_Time. There is no validity flag for ‘year’, since it must always be by definition mandatory in order to have a sensible date/time at all. Syntax expressions of instances of this class include “YYYY-MM-DDT??:??:??” (date/time with optional time) and “YYYY-MMDDTHH:MM:xx” (date/time, seconds not allowed).",
+    "ancestors": [
+        "C_PRIMITIVE"
+    ],
+    "properties": {
+        "month_validity": {
+            "name": "month_validity",
+            "documentation": "Validity of month in constrained date.",
+            "type": "VALIDITY_KIND"
+        },
+        "day_validity": {
+            "name": "day_validity",
+            "documentation": "Validity of day in constrained date.",
+            "type": "VALIDITY_KIND"
+        },
+        "hour_validity": {
+            "name": "hour_validity",
+            "documentation": "Validity of hour in constrained time.",
+            "type": "VALIDITY_KIND"
+        },
+        "minute_validity": {
+            "name": "minute_validity",
+            "documentation": "Validity of minute in constrained time.",
+            "type": "VALIDITY_KIND"
+        },
+        "second_validity": {
+            "name": "second_validity",
+            "documentation": "Validity of second in constrained time.",
+            "type": "VALIDITY_KIND"
+        },
+        "millisecond_valdity": {
+            "name": "millisecond_valdity",
+            "documentation": "Validity of millisecond in constrained time.",
+            "type": "VALIDITY_KIND"
+        },
+        "timezone_valdity": {
+            "name": "timezone_valdity",
+            "documentation": "Validity of timezone in constrained date.",
+            "type": "VALIDITY_KIND"
+        },
+        "range": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "range",
+            "documentation": "Range of Date_times specifying constraint.",
+            "type_def": {
+                "root_type": "Interval",
+                "generic_parameters": [
+                    "Iso8601_date_time"
+                ]
+            }
+        },
+        "assumed_value": {
+            "name": "assumed_value",
+            "documentation": "The value to assume if this item is not included in data, due to being part of an optional structure.",
+            "type": "Iso8601_date_time"
+        }
+    },
+    "functions": {
+        "validity_is_range": {
+            "name": "validity_is_range",
+            "documentation": "True if validity is in the form of a range; useful for developers to check which kind of constraint has been set.",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Pattern_validity": "pattern /= Void implies valid_iso8601_date_time_constraint_pattern(pattern)",
+        "Month_validity_optional:": "month_validity = {VALIDITY_KIND}.optional implies (day_validity = {VALIDITY_KIND}.optional or day_validity = {VALIDITY_KIND}.disallowed)",
+        "Month_validity_disallowed": "month_validity = {VALIDITY_KIND}.disallowed implies day_validity = {VALIDITY_KIND}.disallowed",
+        "Day_validity_optional": "day_validity = {VALIDITY_KIND}.optional implies (hour_validity = {VALIDITY_KIND}.optional or hour_validity = {VALIDITY_KIND}.disallowed)",
+        "Day_validity_disallowed": "day_validity = {VALIDITY_KIND}.disallowed implies hour_validity = {VALIDITY_KIND}.disallowed",
+        "Hour_validity_optional": "hour_validity = {VALIDITY_KIND}.optional implies (minute_validity = {VALIDITY_KIND}.optional or minute_validity = {VALIDITY_KIND}.disallowed)",
+        "Hour_validity_disallowed": "hour_validity = {VALIDITY_KIND}.disallowed implies minute_validity = {VALIDITY_KIND}.disallowed",
+        "Minute_validity_optional": "minute_validity = {VALIDITY_KIND}.optional implies (second_validity = {VALIDITY_KIND}.optional or second_validity = {VALIDITY_KIND}.disallowed)",
+        "Minute_validity_disallowed": "minute_validity = {VALIDITY_KIND}.disallowed implies second_validity = {VALIDITY_KIND}.disallowed",
+        "Second_validity_optional": "second_validity = {VALIDITY_KIND}.optional implies (millisecond_validity = {VALIDITY_KIND}.optional or millisecond_validity = {VALIDITY_KIND}.disallowed)",
+        "Second_validity_disallowed": "second_validity = {VALIDITY_KIND}.disallowed implies millisecond_validity = {VALIDITY_KIND}.disallowed",
+        "Validity_is_range": "validity_is_range = (range /= Void)"
+    }
+}

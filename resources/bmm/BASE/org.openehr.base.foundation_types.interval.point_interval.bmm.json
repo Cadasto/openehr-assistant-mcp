@@ -1,0 +1,42 @@
+{
+    "name": "Point_interval",
+    "documentation": "Type representing an Interval that happens to be a point value. Provides an efficient representation that is substitutable for `Interval<T>` where needed.",
+    "ancestors": [
+        "Interval"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Ordered"
+        }
+    },
+    "properties": {
+        "lower_unbounded": {
+            "name": "lower_unbounded",
+            "documentation": "Lower boundary open (i.e. = -infinity).",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "upper_unbounded": {
+            "name": "upper_unbounded",
+            "documentation": "Upper boundary open (i.e. = +infinity).",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "lower_included": {
+            "name": "lower_included",
+            "documentation": "Lower boundary value included in range if not `_lower_unbounded_`.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "upper_included": {
+            "name": "upper_included",
+            "documentation": "Upper boundary value included in range if not `_upper_unbounded_`.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "invariants": {
+        "Inv_point": "lower = upper"
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "name": "C_QUANTITY_ITEM",
+    "documentation": "Constrainer class for a single Quantity.",
+    "properties": {
+        "magnitude": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "magnitude",
+            "documentation": "Quantity magnitude constraint.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Interval",
+                "generic_parameters": [
+                    "Real"
+                ]
+            }
+        },
+        "units": {
+            "name": "units",
+            "documentation": "Optional units constraint.",
+            "type": "String"
+        }
+    }
+}

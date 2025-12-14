@@ -1,0 +1,7 @@
+{
+    "name": "VALUE_SET",
+    "documentation": "Representation of a flat value set within the archetype terminology.",
+    "ancestors": [
+        "TERMINOLOGY_RELATION"
+    ]
+}

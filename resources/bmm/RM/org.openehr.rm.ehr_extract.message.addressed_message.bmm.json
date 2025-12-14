@@ -1,0 +1,43 @@
+{
+    "name": "ADDRESSED_MESSAGE",
+    "documentation": "The concept of a message addressed to nominated recipients.",
+    "properties": {
+        "sender": {
+            "name": "sender",
+            "documentation": "Party sending the message.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "sender_reference": {
+            "name": "sender_reference",
+            "documentation": "Identification of message used by sender. This will be the same no matter how many times this message is sent to these recipients.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "addressees": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "addressees",
+            "documentation": "Intended recipients, in the form of internet addresses.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "urgency": {
+            "name": "urgency",
+            "documentation": "Urgency with which destination should deal with message:\n\n* -1 - low\n* 0 - normal\n* 1 - high",
+            "type": "Integer"
+        },
+        "message": {
+            "name": "message",
+            "documentation": "The content of the message.",
+            "is_mandatory": true,
+            "type": "MESSAGE"
+        }
+    }
+}

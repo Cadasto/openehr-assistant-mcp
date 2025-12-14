@@ -1,0 +1,40 @@
+{
+    "name": "DV_PERIODIC_TIME_SPECIFICATION",
+    "documentation": "Specifies periodic points in time, linked to the calendar (phase-linked), or a real world repeating event, such as  breakfast  (event-linked). Based on the HL7v3 data types `PIVL<T>` and `EIVL<T>`. \n\nUsed in therapeutic prescriptions, expressed as `INSTRUCTIONs` in the openEHR model. ",
+    "ancestors": [
+        "DV_TIME_SPECIFICATION"
+    ],
+    "functions": {
+        "period": {
+            "name": "period",
+            "documentation": "The period of the repetition, computationally derived from the syntax representation. Extracted from the  value' attribute.",
+            "result": {
+                "type": "DV_DURATION"
+            }
+        },
+        "calendar_alignment": {
+            "name": "calendar_alignment",
+            "documentation": "Calendar alignment extracted from value. ",
+            "result": {
+                "type": "String"
+            }
+        },
+        "event_alignment": {
+            "name": "event_alignment",
+            "documentation": "Event alignment extracted from value. ",
+            "result": {
+                "type": "String"
+            }
+        },
+        "institution_specified": {
+            "name": "institution_specified",
+            "documentation": "Extracted from value.",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Value_valid": "value.formalism.is_equal (“HL7:PIVL”) or value.formalism. is_equal (“HL7:EIVL”)"
+    }
+}

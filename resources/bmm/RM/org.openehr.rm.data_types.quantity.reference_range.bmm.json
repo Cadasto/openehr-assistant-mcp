@@ -1,0 +1,42 @@
+{
+    "name": "REFERENCE_RANGE",
+    "documentation": "Defines a named range to be associated with any `DV_ORDERED` datum. Each such range is particular to the patient and context, e.g. sex, age, and any other factor which affects ranges. May be used to represent normal, therapeutic, dangerous, critical etc ranges.",
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "DV_ORDERED"
+        }
+    },
+    "properties": {
+        "meaning": {
+            "name": "meaning",
+            "documentation": "Term whose value indicates the meaning of this range, e.g.  normal,  critical,  therapeutic  etc.",
+            "is_mandatory": true,
+            "type": "DV_TEXT"
+        },
+        "range": {
+            "name": "range",
+            "documentation": "The data range for this meaning, e.g. critical  etc.",
+            "is_mandatory": true,
+            "type": "DV_INTERVAL"
+        }
+    },
+    "functions": {
+        "is_in_range": {
+            "name": "is_in_range",
+            "documentation": "Indicates if the value  `_v_` is inside the range.\n",
+            "parameters": {
+                "v": {
+                    "name": "v",
+                    "type": "DV_ORDERED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Range_is_simple": "(range.lower_unbounded or else range.lower.is_simple) and (range.upper_unbounded or else range.upper.is_simple)"
+    }
+}

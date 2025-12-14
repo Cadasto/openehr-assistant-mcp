@@ -1,0 +1,10 @@
+{
+    "name": "RESOURCE_USE",
+    "is_abstract": true,
+    "properties": {
+        "cost_data": {
+            "name": "cost_data",
+            "type": "ITEM_STRUCTURE"
+        }
+    }
+}

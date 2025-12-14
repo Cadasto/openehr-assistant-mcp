@@ -1,0 +1,38 @@
+{
+    "name": "ITEM_TAG",
+    "documentation": "A tag with optional value that is associated with a target information entity identified by a UID.",
+    "properties": {
+        "target": {
+            "name": "target",
+            "documentation": "Identifier of target, which may be a `VERSIONED_OBJECT<T>` or a `VERSION<T>`.",
+            "is_mandatory": true,
+            "type": "UID_BASED_ID"
+        },
+        "target_path": {
+            "name": "target_path",
+            "documentation": "Optional archetype (i.e. AQL) or RM path within `_target_`, in order to tag a fine-grained element.",
+            "type": "String"
+        },
+        "key": {
+            "name": "key",
+            "documentation": "The tag key. May not be empty or contain leading or trailing whitespace.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "value": {
+            "name": "value",
+            "documentation": "The value. If set, may not be empty.",
+            "type": "String"
+        },
+        "owner_id": {
+            "name": "owner_id",
+            "documentation": "Identifier of owner object, such as EHR.",
+            "is_mandatory": true,
+            "type": "OBJECT_REF"
+        }
+    },
+    "invariants": {
+        "Inv_key_valid": "not key.is_empty and key.is_justified",
+        "Inv_value_valid": "value /= Void implies not value.is_empty"
+    }
+}

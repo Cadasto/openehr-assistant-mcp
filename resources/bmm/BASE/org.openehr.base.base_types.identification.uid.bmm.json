@@ -1,0 +1,16 @@
+{
+    "name": "UID",
+    "documentation": "Abstract parent of classes representing unique identifiers which identify information entities in a durable way. UIDs only ever identify one IE in time or space and are never re-used.",
+    "is_abstract": true,
+    "properties": {
+        "value": {
+            "name": "value",
+            "documentation": "The value of the id.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "invariants": {
+        "Value_valid": "not value.empty"
+    }
+}

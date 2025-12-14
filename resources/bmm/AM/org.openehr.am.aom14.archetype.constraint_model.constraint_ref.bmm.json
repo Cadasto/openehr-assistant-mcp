@@ -1,0 +1,18 @@
+{
+    "name": "CONSTRAINT_REF",
+    "documentation": "Reference to a constraint described in the same archetype, but outside the main constraint structure. This is used to refer to constraints expressed in terms of external resources, such as constraints on terminology value sets.",
+    "ancestors": [
+        "C_REFERENCE_OBJECT"
+    ],
+    "properties": {
+        "reference": {
+            "name": "reference",
+            "documentation": "Reference to a constraint in the archetype local ontology.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "invariants": {
+        "Consistency": "not any_allowed"
+    }
+}

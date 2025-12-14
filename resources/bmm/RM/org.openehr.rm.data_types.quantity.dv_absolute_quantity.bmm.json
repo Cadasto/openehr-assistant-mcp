@@ -1,0 +1,58 @@
+{
+    "name": "DV_ABSOLUTE_QUANTITY",
+    "documentation": "Abstract class defining the concept of quantified entities whose values are absolute with respect to an origin. Dates and Times are the main example.",
+    "is_abstract": true,
+    "ancestors": [
+        "DV_QUANTIFIED"
+    ],
+    "properties": {
+        "accuracy": {
+            "name": "accuracy",
+            "type": "DV_AMOUNT"
+        }
+    },
+    "functions": {
+        "add": {
+            "name": "add",
+            "documentation": "Addition of a differential amount to this quantity. \n\nThe value of accuracy in the result is either:\n\n* the sum of the accuracies of the operands, if both present, or;\n* unknown, if either or both operand accuracies are unknown.",
+            "is_abstract": true,
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "DV_AMOUNT"
+                }
+            },
+            "result": {
+                "type": "DV_ABSOLUTE_QUANTITY"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Result of subtracting a differential amount from this quantity.\n\nThe value of `_accuracy_` in the result is either:\n\n* the sum of the accuracies of the operands, if both present, or;\n* unknown, if either or both operand accuracies are unknown.",
+            "is_abstract": true,
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "DV_AMOUNT"
+                }
+            },
+            "result": {
+                "type": "DV_ABSOLUTE_QUANTITY"
+            }
+        },
+        "diff": {
+            "name": "diff",
+            "documentation": "Difference of two quantities.\n\nThe value of accuracy in the result is either:\n\n* the sum of the accuracies of the operands, if both present, or;\n* unknown, if either or both operand accuracies are unknown.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_ABSOLUTE_QUANTITY"
+                }
+            },
+            "result": {
+                "type": "DV_AMOUNT"
+            }
+        }
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "name": "P_C_COMPLEX_OBJECT",
+    "documentation": "Constraint on complex objects, i.e. any object that consists of other object constraints.",
+    "ancestors": [
+        "P_C_DEFINED_OBJECT"
+    ],
+    "properties": {
+        "attributes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "attributes",
+            "documentation": "List of constraints on attributes of the reference model type represented by this object.",
+            "type_def": {
+                "container_type": "List",
+                "type": "P_C_ATTRIBUTE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "attribute_tuples": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "attribute_tuples",
+            "documentation": "List of attribute tuple constraints under this object constraint, if any.",
+            "type_def": {
+                "container_type": "List",
+                "type": "P_C_ATTRIBUTE_TUPLE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

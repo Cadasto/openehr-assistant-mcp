@@ -1,0 +1,20 @@
+{
+    "name": "SERVICE_USE",
+    "ancestors": [
+        "RESOURCE_USE"
+    ],
+    "properties": {
+        "identifier": {
+            "name": "identifier",
+            "type": "GENERIC_ID"
+        },
+        "start_time": {
+            "name": "start_time",
+            "type": "Iso8601_date_time"
+        },
+        "duration": {
+            "name": "duration",
+            "type": "Iso8601_duration"
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "name": "Proper_interval",
+    "documentation": "Type representing a 'proper' Interval, i.e. any two-sided or one-sided interval.",
+    "ancestors": [
+        "Interval"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Ordered"
+        }
+    },
+    "invariants": {
+        "Inv_not_point": "lower /= upper"
+    }
+}

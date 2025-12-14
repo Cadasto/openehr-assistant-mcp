@@ -1,0 +1,94 @@
+{
+    "name": "PATHABLE",
+    "documentation": "The `PATHABLE` class defines the pathing capabilities used by nearly all classes in the openEHR reference model, mostly via inheritance of `LOCATABLE`. The defining characteristics of `PATHABLE` objects are that they can locate child objects using paths, and they know their parent object in a compositional hierarchy. The parent feature is defined as abstract in the model, and may be implemented in any way convenient.",
+    "is_abstract": true,
+    "ancestors": [
+        "Any"
+    ],
+    "functions": {
+        "parent": {
+            "name": "parent",
+            "documentation": "Parent of this node in a compositional hierarchy. \n",
+            "result": {
+                "type": "PATHABLE"
+            }
+        },
+        "item_at_path": {
+            "name": "item_at_path",
+            "documentation": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. ",
+            "parameters": {
+                "a_path": {
+                    "name": "a_path",
+                    "type": "String"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "path_unique (a_path)"
+            },
+            "result": {
+                "type": "Any"
+            }
+        },
+        "items_at_path": {
+            "name": "items_at_path",
+            "documentation": "List of items corresponding to a non-unique path.",
+            "parameters": {
+                "a_path": {
+                    "name": "a_path",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "Any"
+            },
+            "is_nullable": true
+        },
+        "path_exists": {
+            "name": "path_exists",
+            "documentation": "True if the path exists in the data with respect to the current item. ",
+            "parameters": {
+                "a_path": {
+                    "name": "a_path",
+                    "type": "String"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "not a_path.is_empty"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "path_unique": {
+            "name": "path_unique",
+            "documentation": "True if the path corresponds to a single item in the data. ",
+            "parameters": {
+                "a_path": {
+                    "name": "a_path",
+                    "type": "String"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "path_exists (a_path)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "path_of_item": {
+            "name": "path_of_item",
+            "documentation": "The path to an item relative to the root of this archetyped structure.",
+            "parameters": {
+                "a_loc": {
+                    "name": "a_loc",
+                    "type": "PATHABLE"
+                }
+            },
+            "result": {
+                "type": "String"
+            }
+        }
+    }
+}

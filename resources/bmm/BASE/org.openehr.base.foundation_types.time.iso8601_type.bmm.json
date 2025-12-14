@@ -1,0 +1,35 @@
+{
+    "name": "Iso8601_type",
+    "documentation": "Abstract ancestor type of ISO 8601 types, defining interface for 'extended' and 'partial' concepts from ISO 8601.",
+    "is_abstract": true,
+    "ancestors": [
+        "Temporal",
+        "Time_Definitions"
+    ],
+    "properties": {
+        "value": {
+            "name": "value",
+            "documentation": "Representation of all descendants is a single String.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "functions": {
+        "is_partial": {
+            "name": "is_partial",
+            "documentation": "True if this date time is partial, i.e. if trailing end (right hand) value(s) is/are missing.",
+            "is_abstract": true,
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_extended": {
+            "name": "is_extended",
+            "documentation": "True if this ISO8601 string is in the 'extended' form, i.e. uses `'-'` and / or `':'` separators. This is the preferred format.",
+            "is_abstract": true,
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

@@ -1,0 +1,51 @@
+{
+    "name": "Multiplicity_interval",
+    "documentation": "An Interval of Integer, used to represent multiplicity, cardinality and optionality in models. ",
+    "ancestors": [
+        "Proper_interval"
+    ],
+    "constants": {
+        "Multiplicity_range_marker": {
+            "name": "Multiplicity_range_marker",
+            "documentation": "Marker to use in string form of interval between limits.",
+            "type": "String",
+            "value": "\"..\""
+        },
+        "Multiplicity_unbounded_marker": {
+            "name": "Multiplicity_unbounded_marker",
+            "documentation": "Symbol to use to indicate upper limit unbounded.",
+            "type": "Character",
+            "value": "'*'"
+        }
+    },
+    "functions": {
+        "is_open": {
+            "name": "is_open",
+            "documentation": "True if this interval imposes no constraints, i.e. is set to `0..*`.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_optional": {
+            "name": "is_optional",
+            "documentation": "True if this interval expresses optionality, i.e. `0..1`.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_mandatory": {
+            "name": "is_mandatory",
+            "documentation": "True if this interval expresses mandation, i.e. `1..1`.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_prohibited": {
+            "name": "is_prohibited",
+            "documentation": "True if this interval is set to `0..0`.",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

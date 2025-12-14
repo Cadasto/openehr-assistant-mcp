@@ -1,0 +1,47 @@
+{
+    "name": "Cardinality",
+    "documentation": "Express constraints on the cardinality of container objects which are the values of multiply-valued attributes, including uniqueness and ordering, providing the means to state that a container acts like a logical list, set or bag.",
+    "properties": {
+        "interval": {
+            "name": "interval",
+            "documentation": "The interval of this cardinality. ",
+            "is_mandatory": true,
+            "type": "Multiplicity_interval"
+        },
+        "is_ordered": {
+            "name": "is_ordered",
+            "documentation": "True if the members of the container attribute to which this cardinality refers are ordered. ",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "is_unique": {
+            "name": "is_unique",
+            "documentation": "True if the members of the container attribute to which this cardinality refers are unique.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "is_bag": {
+            "name": "is_bag",
+            "documentation": "True if the semantics of this cardinality represent a bag, i.e. unordered, non-unique membership.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_list": {
+            "name": "is_list",
+            "documentation": "True if the semantics of this cardinality represent a list, i.e. ordered, non-unique membership.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_set": {
+            "name": "is_set",
+            "documentation": "True if the semantics of this cardinality represent a set, i.e. unordered, unique membership.",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

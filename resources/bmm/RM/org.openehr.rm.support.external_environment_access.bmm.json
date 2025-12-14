@@ -1,0 +1,9 @@
+{
+    "name": "EXTERNAL_ENVIRONMENT_ACCESS",
+    "documentation": "A mixin class providing access to services in the external environment.",
+    "is_abstract": true,
+    "ancestors": [
+        "TERMINOLOGY_SERVICE",
+        "MEASUREMENT_SERVICE"
+    ]
+}

@@ -1,0 +1,53 @@
+{
+    "name": "OPERATIONAL_TEMPLATE",
+    "documentation": "Root object of an operational template. An operational template is derived from a `TEMPLATE` definition and the `ARCHETYPEs` and/or `TEMPLATE_OVERLAYs` mentioned by that template by a process of flattening, and potentially removal of unneeded languages and terminologies.\n\nAn operational template is used for generating and validating RM-canonical instance data, and also as a source artefact for generating other downstream technical artefacts, including XML schemas, APIs and UI form definitions.",
+    "ancestors": [
+        "AUTHORED_ARCHETYPE"
+    ],
+    "properties": {
+        "component_terminologies": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "component_terminologies",
+            "documentation": "Compendium of flattened terminologies of archetypes  referenced from this template, keyed by archetype identifier. This will almost always be present in a template.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "ARCHETYPE_TERMINOLOGY"
+                ]
+            }
+        },
+        "terminology_extracts": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "terminology_extracts",
+            "documentation": "Compendium of flattened terminology extracts (i.e. from external terminologies) from archetypes referenced from this template, keyed by archetype identifier.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "ARCHETYPE_TERMINOLOGY"
+                ]
+            }
+        }
+    },
+    "functions": {
+        "component_terminology": {
+            "name": "component_terminology",
+            "parameters": {
+                "an_id": {
+                    "name": "an_id",
+                    "type": "String"
+                }
+            },
+            "post_conditions": {
+                "Inv_is_specialised": "is_specialised"
+            },
+            "result": {
+                "type": "ARCHETYPE_TERMINOLOGY"
+            }
+        }
+    },
+    "invariants": {
+        "Specialisation_validity": "is_specialised"
+    }
+}

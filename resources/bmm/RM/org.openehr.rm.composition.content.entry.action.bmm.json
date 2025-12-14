@@ -1,0 +1,32 @@
+{
+    "name": "ACTION",
+    "documentation": "Used to record a clinical action that has been performed, which may have been ad hoc, or due to the execution of an Activity in an Instruction workflow. Every Action corresponds to a careflow step of some kind or another. ",
+    "ancestors": [
+        "CARE_ENTRY"
+    ],
+    "properties": {
+        "time": {
+            "name": "time",
+            "documentation": "Point in time at which this action completed. ",
+            "is_mandatory": true,
+            "type": "DV_DATE_TIME"
+        },
+        "ism_transition": {
+            "name": "ism_transition",
+            "documentation": "Details of transition in the Instruction state machine caused by this Action.",
+            "is_mandatory": true,
+            "type": "ISM_TRANSITION"
+        },
+        "instruction_details": {
+            "name": "instruction_details",
+            "documentation": "Details of the Instruction that caused this Action to be performed, if there was one.",
+            "type": "INSTRUCTION_DETAILS"
+        },
+        "description": {
+            "name": "description",
+            "documentation": "Description of the action that has been performed, in the form of an archetyped structure.",
+            "is_mandatory": true,
+            "type": "ITEM_STRUCTURE"
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "name": "C_SINGLE_ATTRIBUTE",
+    "documentation": "Concrete model of constraint on a single-valued attribute node. The meaning of the inherited children attribute is that they are alternatives.",
+    "ancestors": [
+        "C_ATTRIBUTE"
+    ],
+    "functions": {
+        "alternatives": {
+            "name": "alternatives",
+            "documentation": "List of alternative constraints for the single child of this attribute within the data.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "C_OBJECT"
+            },
+            "is_nullable": true
+        }
+    },
+    "invariants": {
+        "Members_valid": "alternatives /= Void and then alternatives.for_all(co: C_OBJECT | co.occurrences.upper <= 1)"
+    }
+}

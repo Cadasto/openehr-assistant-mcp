@@ -1,0 +1,34 @@
+{
+    "name": "DV_PARSABLE",
+    "documentation": "Encapsulated data expressed as a parsable String. The internal model of the data item is not described in the openEHR model in common with other encapsulated types, but in this case, the form of the data is assumed to be plaintext, rather than compressed or other types of large binary data. ",
+    "ancestors": [
+        "DV_ENCAPSULATED"
+    ],
+    "properties": {
+        "value": {
+            "name": "value",
+            "documentation": "The string, which may validly be empty in some syntaxes.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "formalism": {
+            "name": "formalism",
+            "documentation": "Name of the formalism, e.g.  GLIF 1.0 ,  Proforma  etc.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "functions": {
+        "size": {
+            "name": "size",
+            "documentation": "Size in bytes of value.",
+            "result": {
+                "type": "Integer"
+            }
+        }
+    },
+    "invariants": {
+        "Formalism_valid": "not formalism.is_empty",
+        "Size_valid": "size >= 0"
+    }
+}

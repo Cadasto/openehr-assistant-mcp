@@ -1,0 +1,66 @@
+name: Bug report
+description: Report a reproducible problem to help us improve
+labels: [bug]
+title: "bug: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! Please provide as much detail as possible.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-checks
+      options:
+        - label: I have searched existing issues to ensure this hasn't been reported already.
+          required: true
+        - label: I have read the README, CONTRIBUTING.md, and relevant.
+          required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package/version
+      description: What version/commit are you using? (e.g., git SHA or tag)
+      placeholder: vX.Y.Z or commit SHA
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: PHP version, OS, Docker usage, any relevant environment details
+      placeholder: |
+        - PHP: 8.2
+        - OS: Ubuntu 22.04 / Windows 11 / macOS
+        - Docker: yes/no (docker-compose version)
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem description
+      description: Describe the bug and the expected vs actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Provide a minimal set of steps or code to reproduce the issue
+      placeholder: |
+        1. Go to ...
+        2. Run command ...
+        3. See error ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and stack traces
+      description: Paste relevant logs, error output, or stack traces
+      render: shell
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Any other context, links to related issues/PRs, screenshots

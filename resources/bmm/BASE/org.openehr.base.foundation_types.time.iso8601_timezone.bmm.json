@@ -1,0 +1,71 @@
+{
+    "name": "Iso8601_timezone",
+    "documentation": "ISO8601 timezone string, in format:\n\n* `Z | ±hh[mm]`\n\nwhere:\n\n* `hh` is \"00\" - \"23\" (0-filled to two digits)\n* `mm` is \"00\" - \"59\" (0-filled to two digits)\n* `Z` is a literal meaning UTC (modern replacement for GMT), i.e. timezone `+0000`\n",
+    "ancestors": [
+        "Iso8601_type"
+    ],
+    "functions": {
+        "hour": {
+            "name": "hour",
+            "documentation": "Extract the hour part of timezone, as an Integer in the range `00 - 14`.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "minute": {
+            "name": "minute",
+            "documentation": "Extract the hour part of timezone, as an Integer, usually either 0 or 30.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "sign": {
+            "name": "sign",
+            "documentation": "Direction of timezone expresssed as +1 or -1.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "minute_unknown": {
+            "name": "minute_unknown",
+            "documentation": "Indicates whether minute part known.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_partial": {
+            "name": "is_partial",
+            "documentation": "True if this time zone is partial, i.e. if minutes is missing.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_extended": {
+            "name": "is_extended",
+            "documentation": "True if this time-zone uses ‘:’ separators.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_gmt": {
+            "name": "is_gmt",
+            "documentation": "True if timezone is UTC, i.e. `+0000`.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "as_string": {
+            "name": "as_string",
+            "documentation": "Return timezone string in extended format.",
+            "result": {
+                "type": "String"
+            }
+        }
+    },
+    "invariants": {
+        "Min_hour_valid": "sign = -1 implies hour > 0 and hour <= Min_timezone_hour",
+        "Max_hour_valid": "sign = 1 implies hour > 0 and hour <= Max_timezone_hour",
+        "Minute_valid": "not minute_unknown implies valid_minute (minute)",
+        "Sign_valid": "sign = 1 or sign = -1"
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "name": "P_C_PRIMITIVE_OBJECT",
+    "documentation": "Parent of types representing constraints on primitive types.",
+    "is_abstract": true,
+    "ancestors": [
+        "P_C_DEFINED_OBJECT"
+    ],
+    "properties": {
+        "assumed_value": {
+            "name": "assumed_value",
+            "documentation": "Value to be assumed if none sent in data.",
+            "type": "Any"
+        },
+        "is_enumerated_type_constraint": {
+            "name": "is_enumerated_type_constraint",
+            "documentation": "True if this constraint is actually of an enumerated type that conforms to a primitive type, not a primitive.",
+            "type": "Boolean"
+        },
+        "constraint": {
+            "name": "constraint",
+            "documentation": "Constraint represented by this object; redefine in descendants.",
+            "is_mandatory": true,
+            "type": "Any"
+        }
+    }
+}

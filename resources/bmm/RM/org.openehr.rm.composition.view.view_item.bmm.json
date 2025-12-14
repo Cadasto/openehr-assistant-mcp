@@ -1,0 +1,13 @@
+{
+    "name": "VIEW_ITEM",
+    "is_abstract": true,
+    "ancestors": [
+        "CONTENT_ITEM"
+    ],
+    "properties": {
+        "meta_data": {
+            "name": "meta_data",
+            "type": "CLUSTER"
+        }
+    }
+}

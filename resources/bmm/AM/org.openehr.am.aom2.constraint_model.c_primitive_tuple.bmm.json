@@ -1,0 +1,58 @@
+{
+    "name": "C_PRIMITIVE_TUPLE",
+    "documentation": "Class representing a single object tuple instance in a tuple constraint. Each such instance is a vector of object constraints, where each member (each `C_PRIMITIVE_OBJECT`) corresponds to one of the `C_ATTRIBUTEs` referred to by the owning `C_ATTRIBUTE_TUPLE`.",
+    "ancestors": [
+        "C_SECOND_ORDER"
+    ],
+    "properties": {
+        "members": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "members",
+            "documentation": "Object constraint members of this tuple group.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "C_PRIMITIVE_OBJECT"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "c_conforms_to": {
+            "name": "c_conforms_to",
+            "documentation": "True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. Typically used during validation of specialised archetype nodes.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "C_PRIMITIVE_TUPLE"
+                },
+                "rmcc": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "rmcc",
+                    "type_def": {
+                        "root_type": "FUNCTION"
+                    }
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "c_congruent_to": {
+            "name": "c_congruent_to",
+            "documentation": "True if constraints represented by this node contain no further redefinitions with respect to the node other. Typically used to test if an inherited node locally contains any constraints.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "C_SECOND_ORDER"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

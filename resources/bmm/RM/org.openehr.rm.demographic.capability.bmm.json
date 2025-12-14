@@ -1,0 +1,26 @@
+{
+    "name": "CAPABILITY",
+    "documentation": "Capability of a role, such as  ehr modifier ,  health care provider . Capability should be backed up by credentials.",
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "properties": {
+        "credentials": {
+            "name": "credentials",
+            "documentation": "The qualifications of the performer of the role for this capability. This might include professional qualifications and official identifications such as provider numbers etc.",
+            "is_mandatory": true,
+            "type": "ITEM_STRUCTURE"
+        },
+        "time_validity": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "time_validity",
+            "documentation": "Valid time interval for the credentials of this capability.",
+            "type_def": {
+                "root_type": "DV_INTERVAL",
+                "generic_parameters": [
+                    "DV_DATE"
+                ]
+            }
+        }
+    }
+}

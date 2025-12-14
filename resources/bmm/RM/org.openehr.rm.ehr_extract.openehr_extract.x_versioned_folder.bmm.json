@@ -1,0 +1,7 @@
+{
+    "name": "X_VERSIONED_FOLDER",
+    "documentation": "Form of `X_VERSIONED_OBJECT` for `FOLDER` EHR object.",
+    "ancestors": [
+        "X_VERSIONED_OBJECT"
+    ]
+}

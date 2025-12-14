@@ -1,0 +1,69 @@
+{
+    "name": "AUTHORED_RESOURCE",
+    "documentation": "Abstract idea of an online resource created by a human author. \n",
+    "is_abstract": true,
+    "properties": {
+        "original_language": {
+            "name": "original_language",
+            "documentation": "Language in which this resource was initially authored. Although there is no language primacy of resources overall, the language of original authoring is required to ensure natural language translations can preserve quality. Language is relevant in both the description and ontology sections. ",
+            "is_mandatory": true,
+            "type": "CODE_PHRASE"
+        },
+        "is_controlled": {
+            "name": "is_controlled",
+            "documentation": "True if this resource is under any kind of change control (even file copying), in which case revision history is created. ",
+            "type": "Boolean"
+        },
+        "translations": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "translations",
+            "documentation": "List of details for each natural-language translation made of this resource, keyed by language. For each translation listed here, there must be corresponding sections in all language-dependent parts of the resource. The `_original_language_` does not appear in this list.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "TRANSLATION_DETAILS"
+                ]
+            }
+        },
+        "description": {
+            "name": "description",
+            "documentation": "Description and lifecycle information of the resource.",
+            "type": "RESOURCE_DESCRIPTION"
+        },
+        "revision_history": {
+            "name": "revision_history",
+            "documentation": "The revision history of the resource. Only required if `_is_controlled_ = True` (avoids large revision histories for informal or private editing situations). ",
+            "type": "REVISION_HISTORY"
+        }
+    },
+    "functions": {
+        "current_revision": {
+            "name": "current_revision",
+            "documentation": "Most recent revision in `_revision_history_` if `_is_controlled_` else  (uncontrolled) . ",
+            "post_conditions": {
+                "Post": "Result = revision_history.most_recent_version"
+            },
+            "result": {
+                "type": "String"
+            }
+        },
+        "languages_available": {
+            "name": "languages_available",
+            "documentation": "Total list of languages available in this resource, derived from `_original_language_` and `_translations_`.\n",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        }
+    },
+    "invariants": {
+        "Original_language_valid": "code_set (Code_set_id_languages).has_code (original_language.as_string)",
+        "Languages_available_valid": "languages_available.has (original_language)",
+        "Revision_history_valid": "is_controlled xor revision_history = Void",
+        "Current_revision_valid": "(current_revision /= Void and not is_controlled) implies current_revision.is_equal (“(uncontrolled)”)",
+        "Translations_valid": "translations /= Void implies (not translations.is_empty and not translations.has (orginal_language.code_string))",
+        "Description_valid": "translations /= Void implies (description.details.for_all (d |\ntranslations.has_key (d.language.code_string)))"
+    }
+}

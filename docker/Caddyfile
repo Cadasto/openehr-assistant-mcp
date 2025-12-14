@@ -1,0 +1,72 @@
+{
+
+    # see https://php.watch/articles/caddy-php
+    # see https://github.com/Baldinof/caddy-supervisor
+    supervisor {
+       php-fpm {
+           user www-data
+       }
+    }
+
+    # https://caddyserver.com/docs/caddyfile/options#log
+    log {
+        level INFO
+        output stdout
+        format console
+    }
+
+    # https://caddyserver.com/docs/caddyfile/options#admin
+    admin off
+    persist_config off
+
+    # both HTTP on 80 and HTTPS on 443, but no forced redirect
+    auto_https disable_redirects
+
+    # https://caddyserver.com/docs/caddyfile/patterns#caddy-proxying-to-another-caddy
+    servers {
+        trusted_proxies static private_ranges
+    }
+}
+
+(server_conf) {
+    # Enable PHP processing via FastCGI
+    php_fastcgi localhost:9000
+    root * /app/public
+
+    # Logging
+    log
+    @health-checks path_regexp ^(/health/\w+)
+    log_skip @health-checks
+    respond @health-checks 200
+
+    # Encode responses in zstd or gzip, depending on the availability indicated by the browser.
+    encode zstd gzip
+
+    # Security headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+}
+
+# HTTPS server with internal certificates
+{$HOSTNAME} {
+    import server_conf
+
+    # Use locally-trusted certificates for HTTPS
+    tls internal
+
+    # Serve static files
+    file_server
+}
+
+# HTTP development server (no TLS)
+:8343 {
+    import server_conf
+
+    # Serve static files
+    file_server
+}

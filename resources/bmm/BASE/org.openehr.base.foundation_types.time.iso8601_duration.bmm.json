@@ -1,0 +1,169 @@
+{
+    "name": "Iso8601_duration",
+    "documentation": "Represents an ISO 8601 duration, which may have multiple parts from years down to seconds. The `_value_` attribute is a String in the format:\n\n* `P[nnY][nnM][nnW][nnD][T[nnH][nnM][nnS]]`\n\nNOTE: two deviations from ISO 8601 are supported, the first, to allow a negative sign, and the second allowing the 'W' designator to be mixed with other designators.",
+    "ancestors": [
+        "Iso8601_type"
+    ],
+    "functions": {
+        "is_extended": {
+            "name": "is_extended",
+            "documentation": "Returns True.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_partial": {
+            "name": "is_partial",
+            "documentation": "Returns False.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "years": {
+            "name": "years",
+            "documentation": "Number of years in the `_value_`, i.e. the number preceding the `'Y'` in the `'YMD'` part, if one exists.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "months": {
+            "name": "months",
+            "documentation": "Number of months in the `_value_`, i.e. the value preceding the `'M'` in the `'YMD'` part, if one exists.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "days": {
+            "name": "days",
+            "documentation": "Number of days in the `_value_`, i.e. the number preceding the `'D'` in the `'YMD'` part, if one exists.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "hours": {
+            "name": "hours",
+            "documentation": "Number of hours in the `_value_`, i.e. the number preceding the `'H'` in the `'HMS'` part, if one exists.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "minutes": {
+            "name": "minutes",
+            "documentation": "Number of minutes in the `_value_`, i.e. the number preceding the `'M'` in the `'HMS'` part, if one exists.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "seconds": {
+            "name": "seconds",
+            "documentation": "Number of seconds in the `_value_`, i.e. the integer number preceding the `'S'` in the `'HMS'` part, if one exists.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "fractional_seconds": {
+            "name": "fractional_seconds",
+            "documentation": "Fractional seconds in the `_value_`, i.e. the decimal part of the number preceding the `'S'` in the `'HMS'` part, if one exists.",
+            "result": {
+                "type": "Real"
+            }
+        },
+        "weeks": {
+            "name": "weeks",
+            "documentation": "Number of weeks in the `_value_`, i.e. the value preceding the `W`, if one exists.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "is_decimal_sign_comma": {
+            "name": "is_decimal_sign_comma",
+            "documentation": "True if this time has a decimal part indicated by ',' (comma) rather than '.' (period).",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "to_seconds": {
+            "name": "to_seconds",
+            "documentation": "Total number of seconds equivalent (including fractional) of entire duration. Where non-definite elements such as year and month (i.e. 'Y' and 'M') are included, the corresponding 'average' durations from `Time_definitions` are used to compute the result.",
+            "result": {
+                "type": "Real"
+            }
+        },
+        "as_string": {
+            "name": "as_string",
+            "documentation": "Return the duration string value.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "add": {
+            "name": "add",
+            "documentation": "Arithmetic addition of a duration to a duration, via conversion to seconds, using `Time_definitions._Average_days_in_year_` and `Time_definitions._Average_days_in_month_`",
+            "parameters": {
+                "a_val": {
+                    "name": "a_val",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_duration"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Arithmetic subtraction of a duration from a duration, via conversion to seconds, using `Time_definitions._Average_days_in_year_` and `Time_definitions._Average_days_in_month_`",
+            "parameters": {
+                "a_val": {
+                    "name": "a_val",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_duration"
+            }
+        },
+        "multiply": {
+            "name": "multiply",
+            "documentation": "Arithmetic multiplication a duration by a number.",
+            "parameters": {
+                "a_val": {
+                    "name": "a_val",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "Iso8601_duration"
+            }
+        },
+        "divide": {
+            "name": "divide",
+            "documentation": "Arithmetic division of a duration by a number.",
+            "parameters": {
+                "a_val": {
+                    "name": "a_val",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "Iso8601_duration"
+            }
+        },
+        "negative": {
+            "name": "negative",
+            "documentation": "Generate negative of current duration value.",
+            "result": {
+                "type": "Iso8601_duration"
+            }
+        }
+    },
+    "invariants": {
+        "Years_valid": "years >= 0",
+        "Months_valid": "months >= 0",
+        "Weeks_valid": "weeks >= 0",
+        "Days_valid": "days >= 0",
+        "Hours_valid": "hours >= 0",
+        "Minutes_valid": "minutes >= 0",
+        "Seconds_valid": "seconds >= 0",
+        "Fractional_second_valid": "fractional_second >= 0.0 and fractional_second < 1.0"
+    }
+}

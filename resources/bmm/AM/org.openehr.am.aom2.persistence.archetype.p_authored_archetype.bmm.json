@@ -1,0 +1,46 @@
+{
+    "name": "P_AUTHORED_ARCHETYPE",
+    "documentation": "Root object of a standalone, authored archetype, including all meta-data, description, other identifiers and lifecycle.",
+    "ancestors": [
+        "P_ARCHETYPE",
+        "AUTHORED_RESOURCE",
+        "P_AUTHORED_RESOURCE"
+    ],
+    "properties": {
+        "adl_version": {
+            "name": "adl_version",
+            "documentation": "ADL version if archteype was read in from an ADL sharable archetype.",
+            "type": "String"
+        },
+        "build_uid": {
+            "name": "build_uid",
+            "documentation": "Unique identifier of this archetype artefact instance. A new identifier is assigned every time the content is changed by a tool. Used by tools to distinguish different revisions and/or interim snapshots of the same artefact.",
+            "is_mandatory": true,
+            "type": "UID"
+        },
+        "rm_release": {
+            "name": "rm_release",
+            "documentation": "Semver.org compatible release of the most recent reference model release on which the archetype in its current version is based. This does not imply conformance only to this release, since an archetype may be valid with respect to multiple releases of a reference model.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "is_generated": {
+            "name": "is_generated",
+            "documentation": "If True, indicates that this artefact was machine-generated from some other source, in which case, tools would expect to overwrite this artefact on a new generation. Editing tools should set this value to False when a user starts to manually edit an archetype.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "other_meta_data": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "other_meta_data",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        }
+    }
+}

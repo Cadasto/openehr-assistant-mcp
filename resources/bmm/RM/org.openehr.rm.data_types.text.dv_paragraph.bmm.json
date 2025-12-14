@@ -1,0 +1,26 @@
+{
+    "name": "DV_PARAGRAPH",
+    "documentation": "DEPRECATED: use markdown formatted `DV_TEXT` instead.\n\nOriginal definition:\n\nA logical composite text value consisting of a series of `DV_TEXTs`, i.e. plain text (optionally coded) potentially with simple formatting, to form a larger tract of prose, which may be interpreted for display purposes as a paragraph. \n\n`DV_PARAGRAPH` is the standard way for constructing longer text items in summaries, reports and so on. ",
+    "ancestors": [
+        "DATA_VALUE"
+    ],
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "Items making up the paragraph, each of which is a text item (which may have its own formatting, and/or have hyperlinks). ",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "DV_TEXT"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Items_valid": "not items.is_empty"
+    }
+}

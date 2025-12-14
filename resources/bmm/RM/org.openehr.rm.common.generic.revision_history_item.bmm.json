@@ -1,0 +1,29 @@
+{
+    "name": "REVISION_HISTORY_ITEM",
+    "documentation": "An entry in a revision history, corresponding to a version from a versioned container. Consists of `AUDIT_DETAILS` instances with revision identifier of the revision to which the `AUDIT_DETAILS` instance belongs. ",
+    "properties": {
+        "version_id": {
+            "name": "version_id",
+            "documentation": "Version identifier for this revision. ",
+            "is_mandatory": true,
+            "type": "OBJECT_VERSION_ID"
+        },
+        "audits": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "audits",
+            "documentation": "The audits for this revision; there will always be at least one commit audit (which may itself be an `ATTESTATION`), there may also be further attestations. ",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "AUDIT_DETAILS"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Audit_valid": "not audits.is_empty"
+    }
+}

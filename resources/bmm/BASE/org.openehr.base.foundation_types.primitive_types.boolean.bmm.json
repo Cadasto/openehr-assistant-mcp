@@ -1,0 +1,120 @@
+{
+    "name": "Boolean",
+    "documentation": "Type representing minimal interface of built-in Boolean type.",
+    "ancestors": [
+        "Any"
+    ],
+    "functions": {
+        "conjunction": {
+            "name": "conjunction",
+            "documentation": "Logical conjunction of this with `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Boolean"
+                }
+            },
+            "post_conditions": {
+                "Post_de_Morgan": "Result = not (not self or not other)",
+                "Post_commutative": "Result = (other and self)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "semistrict_conjunction": {
+            "name": "semistrict_conjunction",
+            "documentation": "Boolean semi-strict conjunction with `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Boolean"
+                }
+            },
+            "post_conditions": {
+                "Post_de_Morgan": "Result = not (not self or else not other)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "disjunction": {
+            "name": "disjunction",
+            "documentation": "Boolean disjunction with `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Boolean"
+                }
+            },
+            "post_conditions": {
+                "Post_de_Morgan": "Result = not (not self and not other)",
+                "Post_commutative": "Result = (other or Current)",
+                "Post_consistent_with_semi_strict": "Result implies (self or else other)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "semistrict_disjunction": {
+            "name": "semistrict_disjunction",
+            "documentation": "Boolean semi-strict disjunction with `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Boolean"
+                }
+            },
+            "post_conditions": {
+                "Post_de_Morgan": "Result = not (not self and then not other)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "exclusive_disjunction": {
+            "name": "exclusive_disjunction",
+            "documentation": "Boolean exclusive or with `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Boolean"
+                }
+            },
+            "post_conditions": {
+                "Post_definition": "Result = ((self or other) and not (self and other))"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "implication": {
+            "name": "implication",
+            "documentation": "Boolean implication of `_other_` (semi-strict)",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Boolean"
+                }
+            },
+            "post_conditions": {
+                "Post_definition": "Result = (not self or else other)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "negation": {
+            "name": "negation",
+            "documentation": "Boolean negation of the current value.",
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Involutive_negation": "is_equal (not (not self))",
+        "Non_contradiction": "not (self and (not self))",
+        "Completeness": "self or else (not self)"
+    }
+}

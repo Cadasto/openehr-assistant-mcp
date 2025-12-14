@@ -1,0 +1,21 @@
+{
+    "name": "Terminology_term",
+    "documentation": "Leaf type representing a standalone term from a terminology, which consists of the term text and the code, i.e. a concept reference.",
+    "ancestors": [
+        "Any"
+    ],
+    "properties": {
+        "concept": {
+            "name": "concept",
+            "documentation": "Reference to the terminology concept formally representing this term.",
+            "is_mandatory": true,
+            "type": "Terminology_code"
+        },
+        "text": {
+            "name": "text",
+            "documentation": "Text of term.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    }
+}

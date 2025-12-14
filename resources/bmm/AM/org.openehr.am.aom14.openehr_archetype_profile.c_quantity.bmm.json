@@ -1,0 +1,28 @@
+{
+    "name": "C_QUANTITY",
+    "documentation": "Constrainer class for Quantity data.",
+    "ancestors": [
+        "C_DOMAIN_TYPE"
+    ],
+    "properties": {
+        "property": {
+            "name": "property",
+            "documentation": "Name of physical property for Quantities being constrained.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "list": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "list",
+            "documentation": "Value set of allowed individual Quantity item constraints in this Quantity constraint.",
+            "type_def": {
+                "container_type": "List",
+                "type": "C_QUANTITY_ITEM"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

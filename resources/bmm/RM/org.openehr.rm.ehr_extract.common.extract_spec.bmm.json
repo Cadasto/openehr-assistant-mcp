@@ -1,0 +1,59 @@
+{
+    "name": "EXTRACT_SPEC",
+    "documentation": "Specification of an Extract's contents. Subtypes can be used to add details specific to the type of Extract. The specification consists of attributes specifying the directory, and two further groups of attributes in their own classes, namely a version specfication (which versions of information items are to be included) and a manifest (which entities are to be included in the extract).\n\nUse: Used in a request to specify an Extract, as well as to describe what is contained in an Extract.",
+    "properties": {
+        "version_spec": {
+            "name": "version_spec",
+            "documentation": "Specification of which versions of information items to include in the Extract. If Void, the default is latest versions only (which is reasonable for non-versioning systems as well).",
+            "type": "EXTRACT_VERSION_SPEC"
+        },
+        "manifest": {
+            "name": "manifest",
+            "documentation": "Specification of entities (e.g. records) to include in the Extract.",
+            "is_mandatory": true,
+            "type": "EXTRACT_MANIFEST"
+        },
+        "extract_type": {
+            "name": "extract_type",
+            "documentation": "Coded term indicating the type of content required, e.g.\n\n* `|openehr-ehr|`\n* `|openehr-demographic|`\n* `|generic-emr|`\n* `|other|`\n\nCoded by openEHR Terminology group `'extract content type'`.",
+            "is_mandatory": true,
+            "type": "DV_CODED_TEXT"
+        },
+        "include_multimedia": {
+            "name": "include_multimedia",
+            "documentation": "Indicates whether in-line instances of `DV_MULTIMEDIA` in the source data are included or not.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "priority": {
+            "name": "priority",
+            "documentation": "Requested priority of this request to be handled by server. Priority schemes are likely to be local, and use values agreed by both ends.\n\nTBD: alternative is standard coded terms",
+            "is_mandatory": true,
+            "type": "Integer"
+        },
+        "link_depth": {
+            "name": "link_depth",
+            "documentation": "Degree of links to follow emanating from content items specified for inclusion. The kind of links to follow is dependent on the type of Extract.\n\nAll items at the target end of followed links at the given depth are also included in the extract; `EXTRACT_CONTENT_ITEM._is_primary_` is used to differentiate.\n\n* 0 = don't follow;\n* 1 = follow first degree links;\n* 2 = follow 2nd degree links;\n* ....\n* n = follow nth degree links\n",
+            "is_mandatory": true,
+            "type": "Integer"
+        },
+        "criteria": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "criteria",
+            "documentation": "Queries specifying the contents of this Extract.",
+            "type_def": {
+                "container_type": "List",
+                "type": "DV_PARSABLE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "other_details": {
+            "name": "other_details",
+            "documentation": "Other specification items. Archetypable.",
+            "type": "ITEM_STRUCTURE"
+        }
+    }
+}

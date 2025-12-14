@@ -1,0 +1,99 @@
+{
+    "name": "DV_DATE_TIME",
+    "documentation": "Represents an absolute point in time, specified to the second. Semantics defined by ISO 8601. \n\nUsed for recording a precise point in real world time, and for approximate time stamps, e.g. the origin of a `HISTORY` in an `OBSERVATION` which is only partially known. \n",
+    "ancestors": [
+        "DV_TEMPORAL",
+        "Iso8601_date_time"
+    ],
+    "properties": {
+        "value": {
+            "name": "value",
+            "documentation": "ISO8601 date/time string.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "functions": {
+        "magnitude": {
+            "name": "magnitude",
+            "documentation": "Numeric value of the date/time as seconds since the calendar origin date/time `0001-01-01T00:00:00Z`. \n",
+            "result": {
+                "type": "Double"
+            }
+        },
+        "add": {
+            "name": "add",
+            "documentation": "Addition of a Duration to this Date/time.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "DV_DURATION"
+                }
+            },
+            "result": {
+                "type": "DV_DATE_TIME"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Subtract a Duration from this Date/time.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "DV_DURATION"
+                }
+            },
+            "result": {
+                "type": "DV_DATE_TIME"
+            }
+        },
+        "diff": {
+            "name": "diff",
+            "documentation": "Difference between this Date/time and `_other_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_DATE_TIME"
+                }
+            },
+            "result": {
+                "type": "DV_DURATION"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "True if `_other_` is less than this Quantified object. Based on comparison of `_magnitude_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_DATE_TIME"
+                }
+            },
+            "pre_conditions": {
+                "Pre_comparable": "is_strictly_comparable()"
+            },
+            "post_conditions": {
+                "Post_result": "Result = magnitude > other.magnitude"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_strictly_comparable_to": {
+            "name": "is_strictly_comparable_to",
+            "documentation": "True, for any two Date/times.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_DATE_TIME"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Value_valid": "valid_iso8601_date_time (value)"
+    }
+}

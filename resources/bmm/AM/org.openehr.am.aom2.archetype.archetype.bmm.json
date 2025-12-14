@@ -1,0 +1,184 @@
+{
+    "name": "ARCHETYPE",
+    "documentation": "Archetype equivalent to ARCHETYPED class in Common reference model. Defines semantics of identfication, lifecycle, versioning, composition and specialisation.",
+    "ancestors": [
+        "AUTHORED_RESOURCE"
+    ],
+    "properties": {
+        "definition": {
+            "name": "definition",
+            "documentation": "Root node of the definition of this archetype.",
+            "is_mandatory": true,
+            "type": "C_COMPLEX_OBJECT"
+        },
+        "ontology": {
+            "name": "ontology",
+            "documentation": "The ontology of the archetype.",
+            "is_mandatory": true,
+            "type": "ARCHETYPE_ONTOLOGY"
+        },
+        "adl_version": {
+            "name": "adl_version",
+            "documentation": "ADL version if archetype was read in from an ADL sharable archetype.",
+            "type": "String"
+        },
+        "archetype_id": {
+            "name": "archetype_id",
+            "documentation": "Multi-axial identifier of this archetype in archetype space.",
+            "is_mandatory": true,
+            "type": "ARCHETYPE_ID"
+        },
+        "uid": {
+            "name": "uid",
+            "documentation": "OID identifier of this archetype.",
+            "type": "HIER_OBJECT_ID"
+        },
+        "concept": {
+            "name": "concept",
+            "documentation": "The normative meaning of the archetype as a whole, expressed as a local archetype code, typically “at0000”.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "parent_archetype_id": {
+            "name": "parent_archetype_id",
+            "documentation": "Identifier of the specialisation parent of this archetype.",
+            "type": "ARCHETYPE_ID"
+        },
+        "invariants": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "invariants",
+            "documentation": "Invariant statements about this object. Statements are expressed in first order predicate logic, and usually refer to at least two attributes.",
+            "type_def": {
+                "container_type": "List",
+                "type": "ASSERTION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "concept_name": {
+            "name": "concept_name",
+            "documentation": "The concept name of the archetype in language a_lang; corresponds to the term definition of the concept attribute in the archetype ontology.",
+            "parameters": {
+                "a_lang": {
+                    "name": "a_lang",
+                    "type": "String"
+                }
+            },
+            "post_conditions": {
+                "post-condition": "Result.is_equal (definition.node_id)"
+            },
+            "result": {
+                "type": "String"
+            }
+        },
+        "physical_paths": {
+            "name": "physical_paths",
+            "documentation": "Set of language-independent paths extracted from archetype. Paths obey Xpath-like syntax and are formed from alternations of C_OBJECT.node_id and C_ATTRIBUTE.rm_attribute_name values. ",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        },
+        "logical_paths": {
+            "name": "logical_paths",
+            "documentation": "Set of language-dependent paths extracted from archetype. Paths obey the same syntax as physical_paths, but with node_ids replaced by their meanings from the ontology. ",
+            "parameters": {
+                "lang": {
+                    "name": "lang",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        },
+        "specialisation_depth": {
+            "name": "specialisation_depth",
+            "documentation": "Specialisation depth of this archetype; larger than 0 if this archetype has a parent. Derived from terminology.specialisation_depth.",
+            "post_conditions": {
+                "post-condition": "Result = terminology.specialisation_depth"
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "is_specialised": {
+            "name": "is_specialised",
+            "documentation": "True if this archetype is a specialisation of another. ",
+            "post_conditions": {
+                "post-condition": "Result implies parent_archetype_id /= Void"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_valid": {
+            "name": "is_valid",
+            "documentation": "True if the archetype is valid overall; various tests should be used, including checks on node_ids, internal references, and constraint references.",
+            "post_conditions": {
+                "Post": "not (node_ids_valid and internal_references_valid and constraint_references_valid) implies not Result"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "node_ids_valid": {
+            "name": "node_ids_valid",
+            "documentation": "True if every node_id found on a C_OBJECT node is found in ontology.term_codes.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "previous_version": {
+            "name": "previous_version",
+            "documentation": "Version of predecessor archetype of this archetype, if any.",
+            "result": {
+                "type": "String"
+            },
+            "is_nullable": true
+        },
+        "internal_references_valid": {
+            "name": "internal_references_valid",
+            "documentation": "True if every ARCHETYPE_INTERNAL_REF. target_path refers to a legitimate node in the archetype definition.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "constraint_references_valid": {
+            "name": "constraint_references_valid",
+            "documentation": "True if every CONSTRAINT_REF.reference found on a C_OBJECT node in the archetype definition is found in ontology.constraint_codes.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "short_concept_name": {
+            "name": "short_concept_name",
+            "documentation": "The short concept name of the archetype extracted from the archetype_id.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "version": {
+            "name": "version",
+            "result": {
+                "type": "String"
+            }
+        }
+    },
+    "invariants": {
+        "Inv_concept_valid": "ontology.has_term_code (concept_code)",
+        "Inv_specialisation_validity": "is_specialised implies specialisation_depth > 0",
+        "Inv_invariants_valid": "invariants /= Void implies not invariants.is_empty",
+        "Inv_uid_validity": "uid /= Void implies not uid.is_empty",
+        "Inv_version_validity": "version /= Void and then version.is_equal(archetype_id.version_id)",
+        "Inv_description_valid": "description /= Void",
+        "Inv_original_language_valid": "original_language /= void and then language /= Void"
+    }
+}

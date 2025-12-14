@@ -1,0 +1,311 @@
+{
+    "name": "VERSIONED_OBJECT",
+    "documentation": "Version control abstraction, defining semantics for versioning one complex object.",
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T"
+        }
+    },
+    "properties": {
+        "uid": {
+            "name": "uid",
+            "documentation": "Unique identifier of this version container in the form of a UID with no extension. This id will be the same in all instances of the same container in a distributed environment, meaning that it can be understood as the uid of the  virtual version tree. ",
+            "is_mandatory": true,
+            "type": "HIER_OBJECT_ID"
+        },
+        "owner_id": {
+            "name": "owner_id",
+            "documentation": "Reference to object to which this version container belongs, e.g. the id of the containing EHR or other relevant owning entity. ",
+            "is_mandatory": true,
+            "type": "OBJECT_REF"
+        },
+        "time_created": {
+            "name": "time_created",
+            "documentation": "Time of initial creation of this versioned object. ",
+            "is_mandatory": true,
+            "type": "DV_DATE_TIME"
+        }
+    },
+    "functions": {
+        "version_count": {
+            "name": "version_count",
+            "documentation": "Return the total number of versions in this object.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "all_version_ids": {
+            "name": "all_version_ids",
+            "documentation": "Return a list of ids of all versions in this object. ",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "OBJECT_VERSION_ID"
+            }
+        },
+        "all_versions": {
+            "name": "all_versions",
+            "documentation": "Return a list of all versions in this object. ",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "VERSION",
+                    "generic_parameters": [
+                        "T"
+                    ]
+                }
+            }
+        },
+        "has_version_at_time": {
+            "name": "has_version_at_time",
+            "documentation": "True if a version for time  `_a_time_` exists. ",
+            "parameters": {
+                "a_time": {
+                    "name": "a_time",
+                    "type": "DV_DATE_TIME"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "has_version_id": {
+            "name": "has_version_id",
+            "documentation": "True if a version with `_a_version_uid_` exists. ",
+            "parameters": {
+                "a_version_uid": {
+                    "name": "a_version_uid",
+                    "type": "OBJECT_VERSION_ID"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "version_with_id": {
+            "name": "version_with_id",
+            "documentation": "Return the version with `_uid_` =  `_a_version_uid_`. \n",
+            "parameters": {
+                "a_version_uid": {
+                    "name": "a_version_uid",
+                    "type": "OBJECT_VERSION_ID"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "has_version_id (a_ver_id)"
+            },
+            "result": {
+                "type": "VERSION"
+            }
+        },
+        "is_original_version": {
+            "name": "is_original_version",
+            "documentation": "True if version with `_a_version_uid_` is an `ORIGINAL_VERSION`. ",
+            "parameters": {
+                "a_version_uid": {
+                    "name": "a_version_uid",
+                    "type": "OBJECT_VERSION_ID"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "has_version_id(a_ver_id)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "version_at_time": {
+            "name": "version_at_time",
+            "documentation": "Return the version for time  `_a_time_`. ",
+            "parameters": {
+                "a_time": {
+                    "name": "a_time",
+                    "type": "DV_DATE_TIME"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "has_version_at_time (a_time)"
+            },
+            "result": {
+                "type": "VERSION"
+            }
+        },
+        "revision_history": {
+            "name": "revision_history",
+            "documentation": "History of all audits and attestations in this versioned repository.",
+            "result": {
+                "type": "REVISION_HISTORY"
+            }
+        },
+        "latest_version": {
+            "name": "latest_version",
+            "documentation": "Return the most recently added version (i.e. on trunk or any branch). ",
+            "result": {
+                "type": "VERSION"
+            }
+        },
+        "latest_trunk_version": {
+            "name": "latest_trunk_version",
+            "documentation": "Return the most recently added trunk version. ",
+            "result": {
+                "type": "VERSION"
+            }
+        },
+        "trunk_lifecycle_state": {
+            "name": "trunk_lifecycle_state",
+            "documentation": "Return the lifecycle state from the latest trunk version. Useful for determining if the version container is logically deleted. ",
+            "post_conditions": {
+                "Post": "Result = latest_trunk_version.lifecycle_state"
+            },
+            "result": {
+                "type": "DV_CODED_TEXT"
+            }
+        },
+        "commit_original_version": {
+            "name": "commit_original_version",
+            "documentation": "Add a new original version. ",
+            "parameters": {
+                "a_contribution": {
+                    "name": "a_contribution",
+                    "type": "OBJECT_REF"
+                },
+                "a_new_version_uid": {
+                    "name": "a_new_version_uid",
+                    "type": "OBJECT_VERSION_ID"
+                },
+                "a_preceding_version_id": {
+                    "name": "a_preceding_version_id",
+                    "type": "OBJECT_VERSION_ID"
+                },
+                "an_audit": {
+                    "name": "an_audit",
+                    "type": "AUDIT_DETAILS"
+                },
+                "a_lifecycle_state": {
+                    "name": "a_lifecycle_state",
+                    "type": "DV_CODED_TEXT"
+                },
+                "a_data": {
+                    "name": "a_data",
+                    "type": "T"
+                },
+                "signing_key": {
+                    "name": "signing_key",
+                    "type": "String"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "all_version_ids.has (a_preceding_version_uid) or else version_count = 0"
+            },
+            "result": {
+                "type": "void"
+            }
+        },
+        "commit_original_merged_version": {
+            "name": "commit_original_merged_version",
+            "documentation": "Add a new original merged version. This commit function adds a parameter containing the ids of other versions merged into the current one. ",
+            "parameters": {
+                "a_contribution": {
+                    "name": "a_contribution",
+                    "type": "OBJECT_REF"
+                },
+                "a_new_version_uid": {
+                    "name": "a_new_version_uid",
+                    "type": "OBJECT_VERSION_ID"
+                },
+                "a_preceding_version_id": {
+                    "name": "a_preceding_version_id",
+                    "type": "OBJECT_VERSION_ID"
+                },
+                "an_audit": {
+                    "name": "an_audit",
+                    "type": "AUDIT_DETAILS"
+                },
+                "a_lifecycle_state": {
+                    "name": "a_lifecycle_state",
+                    "type": "DV_CODED_TEXT"
+                },
+                "a_data": {
+                    "name": "a_data",
+                    "type": "T"
+                },
+                "an_other_input_uids": {
+                    "_type": "P_BMM_CONTAINER_FUNCTION_PARAMETER",
+                    "name": "an_other_input_uids",
+                    "type_def": {
+                        "container_type": "List",
+                        "type": "OBJECT_VERSION_ID"
+                    },
+                    "cardinality": {
+                        "lower": 1,
+                        "upper_unbounded": true
+                    }
+                },
+                "signing_key": {
+                    "name": "signing_key",
+                    "type": "String"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "all_version_ids.has (a_preceding_version_uid) or else version_count = 0"
+            },
+            "result": {
+                "type": "void"
+            }
+        },
+        "commit_imported_version": {
+            "name": "commit_imported_version",
+            "documentation": "Add a new imported version. Details of version id etc come from the `ORIGINAL_VERSION` being committed. ",
+            "parameters": {
+                "a_contribution": {
+                    "name": "a_contribution",
+                    "type": "OBJECT_REF"
+                },
+                "an_audit": {
+                    "name": "an_audit",
+                    "type": "AUDIT_DETAILS"
+                },
+                "a_version": {
+                    "name": "a_version",
+                    "type": "ORIGINAL_VERSION"
+                }
+            },
+            "result": {
+                "type": "void"
+            }
+        },
+        "commit_attestation": {
+            "name": "commit_attestation",
+            "documentation": "Add a new attestation to a specified original version. Attestations can only be added to Original versions. ",
+            "parameters": {
+                "an_attestation": {
+                    "name": "an_attestation",
+                    "type": "ATTESTATION"
+                },
+                "a_ver_id": {
+                    "name": "a_ver_id",
+                    "type": "OBJECT_VERSION_ID"
+                },
+                "signing_key": {
+                    "name": "signing_key",
+                    "type": "String"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "has_version_id(a_ver_id)\nand is_original_version(a_ver_id)"
+            },
+            "result": {
+                "type": "void"
+            }
+        }
+    },
+    "invariants": {
+        "Version_count_valid": "version_count >= 0",
+        "All_version_ids_valid": "all_version_ids.count = version_count",
+        "All_versions_valid": "all_versions.count = version_count",
+        "Latest_version_valid": "version_count > 0 implies latest_version /= Void",
+        "Uid_validity": "extension.is_empty"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "name": "X_CONTRIBUTION",
+    "documentation": "Serialised form of Contribution for an Extract.",
+    "properties": {
+        "uid": {
+            "name": "uid",
+            "documentation": "Uid of Contribution in source system.",
+            "is_mandatory": true,
+            "type": "HIER_OBJECT_ID"
+        },
+        "audit": {
+            "name": "audit",
+            "documentation": "Audit of Contribution in source system.",
+            "is_mandatory": true,
+            "type": "AUDIT_DETAILS"
+        },
+        "versions": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "versions",
+            "documentation": "Serialised Versions from Contribution in source system.",
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "VERSION",
+                    "generic_parameters": [
+                        "X_CONTRIBUTION"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

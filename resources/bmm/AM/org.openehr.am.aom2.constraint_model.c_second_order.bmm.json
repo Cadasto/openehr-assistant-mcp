@@ -1,0 +1,57 @@
+{
+    "name": "C_SECOND_ORDER",
+    "documentation": "Abstract parent of classes defining second order constraints.",
+    "is_abstract": true,
+    "properties": {
+        "members": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "members",
+            "documentation": "Members of this second order constrainer. Normally redefined in descendants.",
+            "type_def": {
+                "container_type": "List",
+                "type": "ARCHETYPE_CONSTRAINT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "c_conforms_to": {
+            "name": "c_conforms_to",
+            "documentation": "True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. Typically used during validation of specialised archetype nodes.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "C_SECOND_ORDER"
+                },
+                "rmcc": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "rmcc",
+                    "type_def": {
+                        "root_type": "FUNCTION"
+                    }
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "c_congruent_to": {
+            "name": "c_congruent_to",
+            "documentation": "True if constraints represented by this node contain no further redefinitions with respect to the node other. Typically used to test if an inherited node locally contains any constraints.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "C_SECOND_ORDER"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

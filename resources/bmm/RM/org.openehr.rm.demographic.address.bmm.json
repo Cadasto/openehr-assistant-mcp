@@ -1,0 +1,27 @@
+{
+    "name": "ADDRESS",
+    "documentation": "Address of contact, which may be electronic or geographic.",
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "properties": {
+        "details": {
+            "name": "details",
+            "documentation": "Archetypable structured address.",
+            "is_mandatory": true,
+            "type": "ITEM_STRUCTURE"
+        }
+    },
+    "functions": {
+        "type": {
+            "name": "type",
+            "documentation": "Type of address, e.g. electronic,  locality. Taken from value of inherited `_name_` attribute.",
+            "result": {
+                "type": "DV_TEXT"
+            }
+        }
+    },
+    "invariants": {
+        "Type_valid": "type = name"
+    }
+}

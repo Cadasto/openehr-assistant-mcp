@@ -1,0 +1,161 @@
+{
+    "name": "ADL_CODE_DEFINITIONS",
+    "documentation": "Definitions relating to the internal code system of archetypes.",
+    "constants": {
+        "Id_code_leader": {
+            "name": "Id_code_leader",
+            "documentation": "String leader of ‘identifier’ codes, i.e. codes used to identify archetype nodes.",
+            "type": "String",
+            "value": "\"id\""
+        },
+        "Value_code_leader": {
+            "name": "Value_code_leader",
+            "documentation": "String leader of ‘value’ codes, i.e. codes used to identify codes values, including value set members.",
+            "type": "String",
+            "value": "\"at\""
+        },
+        "Value_set_code_leader": {
+            "name": "Value_set_code_leader",
+            "documentation": "String leader of ‘value set’ codes, i.e. codes used to identify value sets.",
+            "type": "String",
+            "value": "\"ac\""
+        },
+        "Specialisation_separator": {
+            "name": "Specialisation_separator",
+            "documentation": "Character used to separate numeric parts of codes belonging to different specialisation levels.",
+            "type": "Character",
+            "value": "'.'"
+        },
+        "Code_regex_pattern": {
+            "name": "Code_regex_pattern",
+            "documentation": "Regex used to define the legal numeric part of any archetype code. Corresponds to the simple pattern of dotted numbers, as used in typical multi-level numbering schemes.",
+            "type": "String",
+            "value": "\"(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*))*\""
+        },
+        "Root_code_regex_pattern": {
+            "name": "Root_code_regex_pattern",
+            "documentation": "Regex pattern of the root id code of any archetype. Corresponds to codes of the form `id1`, `id1.1`, `id1.1.1` etc..",
+            "type": "String",
+            "value": "\"^id1(\\.1)*$\""
+        },
+        "Primitive_node_id": {
+            "name": "Primitive_node_id",
+            "documentation": "Code id used for `C_PRIMITIVE_OBJECT` nodes on creation.",
+            "type": "String",
+            "value": "\"id9999\""
+        }
+    },
+    "functions": {
+        "codes_conformant": {
+            "name": "codes_conformant",
+            "documentation": "True if `_a_child_code_` conforms to `_a_parent_code_` in the sense of specialisation, i.e. is `_a_child_code_` the same as or more specialised than `_a_parent_code_`?",
+            "parameters": {
+                "a_child_code": {
+                    "name": "a_child_code",
+                    "type": "String"
+                },
+                "a_parent_code": {
+                    "name": "a_parent_code",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_adl_code": {
+            "name": "is_adl_code",
+            "documentation": "True if `_a_code_` is any kind of ADL archetype local code.",
+            "parameters": {
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = is_id_code (a_code) or else is_value_code (a_code) or else is_value_set_code (a_code)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_id_code": {
+            "name": "is_id_code",
+            "documentation": "True if `_a_code_` is an 'id' code.",
+            "parameters": {
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = a_code.starts_with (Id_code_leader)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_value_code": {
+            "name": "is_value_code",
+            "documentation": "True if `_a_code_` is an 'at' code, i.e. a code representing a single terminology item.",
+            "parameters": {
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = a_code.starts_with (Value_code_leader)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_value_set_code": {
+            "name": "is_value_set_code",
+            "documentation": "True if `_a_code_` is an 'ac' code, i.e. a code referring to a terminology value set.",
+            "parameters": {
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = a_code.starts_with (Value_set_code_leader)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_redefined_code": {
+            "name": "is_redefined_code",
+            "documentation": "A code has been specialised if there is a non-zero code index anywhere above the last index e.g. \n\n* `at0.0.1` -> False\n* `at1.0.1` -> True",
+            "parameters": {
+                "a_code": {
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "code_exists_at_level": {
+            "name": "code_exists_at_level",
+            "documentation": "Is `_a_code_` valid at level `_a_level_` or less, i.e. if we remove its trailing specialised part corresponding to specialisation below `_a_level_`, and then any trailing '.0' pieces, do we end up with a valid code? If so it means that the code corresponds to a real node from `_a_level_` or higher.",
+            "parameters": {
+                "a-code": {
+                    "name": "a-code",
+                    "type": "String"
+                },
+                "a_level": {
+                    "name": "a_level",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

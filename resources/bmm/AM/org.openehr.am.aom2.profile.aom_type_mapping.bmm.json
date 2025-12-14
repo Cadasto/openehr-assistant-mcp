@@ -1,0 +1,30 @@
+{
+    "name": "AOM_TYPE_MAPPING",
+    "documentation": "Data object expressing a mapping between two types.",
+    "properties": {
+        "source_class_name": {
+            "name": "source_class_name",
+            "documentation": "Name of the AOM type being mapped to an RM type.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "target_class_name": {
+            "name": "target_class_name",
+            "documentation": "Name of the RM type in the mapping.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "property_mappings": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "property_mappings",
+            "documentation": "List of mappings of properties of this type to another type.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "AOM_PROPERTY_MAPPING"
+                ]
+            }
+        }
+    }
+}

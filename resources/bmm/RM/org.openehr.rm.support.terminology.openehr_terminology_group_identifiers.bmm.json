@@ -1,0 +1,97 @@
+{
+    "name": "OPENEHR_TERMINOLOGY_GROUP_IDENTIFIERS",
+    "documentation": "List of identifiers for groups in the openEHR terminology. ",
+    "constants": {
+        "Terminology_id_openehr": {
+            "name": "Terminology_id_openehr",
+            "documentation": "Name of openEHR's own terminology.",
+            "type": "String",
+            "value": "\"openehr\""
+        },
+        "Group_id_audit_change_type": {
+            "name": "Group_id_audit_change_type",
+            "type": "String",
+            "value": "\"audit change type\""
+        },
+        "Group_id_attestation_reason": {
+            "name": "Group_id_attestation_reason",
+            "type": "String",
+            "value": "\"attestation reason\""
+        },
+        "Group_id_composition_category": {
+            "name": "Group_id_composition_category",
+            "type": "String",
+            "value": "\"composition category\""
+        },
+        "Group_id_event_math_function": {
+            "name": "Group_id_event_math_function",
+            "type": "String",
+            "value": "\"event math function\""
+        },
+        "Group_id_instruction_states": {
+            "name": "Group_id_instruction_states",
+            "type": "String",
+            "value": "\"instruction states\""
+        },
+        "Group_id_instruction_transitions": {
+            "name": "Group_id_instruction_transitions",
+            "type": "String",
+            "value": "\"instruction transitions\""
+        },
+        "Group_id_null_flavours": {
+            "name": "Group_id_null_flavours",
+            "type": "String",
+            "value": "\"null flavours\""
+        },
+        "Group_id_property": {
+            "name": "Group_id_property",
+            "type": "String",
+            "value": "\"property\""
+        },
+        "Group_id_participation_function": {
+            "name": "Group_id_participation_function",
+            "type": "String",
+            "value": "\"participation function\""
+        },
+        "Group_id_participation_mode": {
+            "name": "Group_id_participation_mode",
+            "type": "String",
+            "value": "\"participation mode\""
+        },
+        "Group_id_setting": {
+            "name": "Group_id_setting",
+            "type": "String",
+            "value": "\"setting\""
+        },
+        "Group_id_term_mapping_purpose": {
+            "name": "Group_id_term_mapping_purpose",
+            "type": "String",
+            "value": "\"term mapping purpose\""
+        },
+        "Group_id_subject_relationship": {
+            "name": "Group_id_subject_relationship",
+            "type": "String",
+            "value": "\"subject relationship\""
+        },
+        "Group_id_version_life_cycle_state": {
+            "name": "Group_id_version_life_cycle_state",
+            "type": "String",
+            "value": "\"version lifecycle state\""
+        }
+    },
+    "functions": {
+        "valid_terminology_group_id": {
+            "name": "valid_terminology_group_id",
+            "documentation": "Validity function to test if an identifier is in the set defined by this class. ",
+            "parameters": {
+                "an_id": {
+                    "name": "an_id",
+                    "type": "Boolean"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

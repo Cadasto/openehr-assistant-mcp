@@ -1,0 +1,15 @@
+{
+    "name": "EXPR_CONSTRAINT",
+    "documentation": "Expression tree leaf item representing a constraint on a primitive type, expressed in the form of a concrete subtype of C_PRIMITIVE_OBJECT.",
+    "ancestors": [
+        "EXPR_LEAF"
+    ],
+    "properties": {
+        "item": {
+            "name": "item",
+            "documentation": "The constraint.",
+            "is_mandatory": true,
+            "type": "C_PRIMITIVE_OBJECT"
+        }
+    }
+}

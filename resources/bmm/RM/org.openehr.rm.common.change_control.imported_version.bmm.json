@@ -1,0 +1,56 @@
+{
+    "name": "IMPORTED_VERSION",
+    "documentation": "Versions whose content is an `ORIGINAL_VERSION` copied from another location; this class inherits `_commit_audit_` and `_contribution_` from `VERSION<T>`, providing imported versions with their own audit trail and Contribution, distinct from those of the imported `ORIGINAL_VERSION`. ",
+    "ancestors": [
+        "VERSION"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T"
+        }
+    },
+    "properties": {
+        "item": {
+            "name": "item",
+            "documentation": "The `ORIGINAL_VERSION` object that was imported. ",
+            "is_mandatory": true,
+            "type": "ORIGINAL_VERSION"
+        }
+    },
+    "functions": {
+        "uid": {
+            "name": "uid",
+            "documentation": "Computed version of inheritance precursor, derived as `_item.uid_`. ",
+            "post_conditions": {
+                "Post": "Result = item.uid"
+            },
+            "result": {
+                "type": "OBJECT_VERSION_ID"
+            }
+        },
+        "preceding_version_uid": {
+            "name": "preceding_version_uid",
+            "documentation": "Computed version of inheritance precursor, derived as `_item.preceding_version_uid_`. ",
+            "post_conditions": {
+                "Post": "Result = item.preceding_version_uid"
+            },
+            "result": {
+                "type": "OBJECT_VERSION_ID"
+            }
+        },
+        "lifecycle_state": {
+            "name": "lifecycle_state",
+            "documentation": "Lifecycle state of the content item in wrapped `ORIGINAL_VERSION`, derived as `_item.lifecycle_state_`; coded by openEHR vocabulary `version lifecycle state`.",
+            "result": {
+                "type": "DV_CODED_TEXT"
+            }
+        },
+        "data": {
+            "name": "data",
+            "documentation": "Original content of this Version. \n",
+            "result": {
+                "type": "T"
+            }
+        }
+    }
+}

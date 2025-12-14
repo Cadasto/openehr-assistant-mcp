@@ -1,0 +1,22 @@
+{
+    "name": "EXTRACT_CHAPTER",
+    "documentation": "One content chapter of an Extract; contains information relating to only one entity.",
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "The information content of this chapter.",
+            "type_def": {
+                "container_type": "List",
+                "type": "EXTRACT_ITEM"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

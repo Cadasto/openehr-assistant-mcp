@@ -1,0 +1,12 @@
+{
+    "name": "ARCHETYPE_ID_CONSTRAINT",
+    "documentation": "Constraint expression representing a regex constraint on an archetype identifier.",
+    "properties": {
+        "constraint": {
+            "name": "constraint",
+            "documentation": "Right hand side of the constraint expression, in the form of a `C_STRING`, i.e. string value constrainer.",
+            "is_mandatory": true,
+            "type": "C_STRING"
+        }
+    }
+}

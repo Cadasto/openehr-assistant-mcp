@@ -1,0 +1,56 @@
+{
+    "name": "OPENEHR_CODE_SET_IDENTIFIERS",
+    "documentation": "List of identifiers for code sets in the openEHR terminology. ",
+    "constants": {
+        "Code_set_id_character_sets": {
+            "name": "Code_set_id_character_sets",
+            "type": "String",
+            "value": "\"character sets\""
+        },
+        "Code_set_id_compression_algorithms": {
+            "name": "Code_set_id_compression_algorithms",
+            "type": "String",
+            "value": "\"compression algorithms\""
+        },
+        "Code_set_id_countries": {
+            "name": "Code_set_id_countries",
+            "type": "String",
+            "value": "\"countries\""
+        },
+        "Code_set_integrity_check_algorithms": {
+            "name": "Code_set_integrity_check_algorithms",
+            "type": "String",
+            "value": "\"integrity check algorithms\""
+        },
+        "Code_set_id_languages": {
+            "name": "Code_set_id_languages",
+            "type": "String",
+            "value": "\"languages\""
+        },
+        "Code_set_id_media_types": {
+            "name": "Code_set_id_media_types",
+            "type": "String",
+            "value": "\"media types\""
+        },
+        "Code_set_id_normal_statuses": {
+            "name": "Code_set_id_normal_statuses",
+            "type": "String",
+            "value": "\"normal statuses\""
+        }
+    },
+    "functions": {
+        "valid_code_set_id": {
+            "name": "valid_code_set_id",
+            "documentation": "Validity function to test if an identifier is in the set defined by this class.",
+            "parameters": {
+                "an_id": {
+                    "name": "an_id",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

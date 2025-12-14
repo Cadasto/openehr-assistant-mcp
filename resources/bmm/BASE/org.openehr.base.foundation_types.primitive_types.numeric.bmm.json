@@ -1,0 +1,88 @@
+{
+    "name": "Numeric",
+    "documentation": "Abstract parent class of numeric types, which are types which have various arithmetic and comparison operators defined.",
+    "is_abstract": true,
+    "ancestors": [
+        "Any"
+    ],
+    "functions": {
+        "add": {
+            "name": "add",
+            "documentation": "Sum with `_other_` (commutative). Actual type of result depends on arithmetic balancing rules.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Numeric"
+                }
+            },
+            "result": {
+                "type": "Numeric"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Result of subtracting `_other_`. Actual type of result depends on arithmetic balancing rules.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Numeric"
+                }
+            },
+            "result": {
+                "type": "Numeric"
+            }
+        },
+        "multiply": {
+            "name": "multiply",
+            "documentation": "Product by `_other_`. Actual type of result depends on arithmetic balancing rules.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Numeric"
+                }
+            },
+            "result": {
+                "type": "Numeric"
+            }
+        },
+        "divide": {
+            "name": "divide",
+            "documentation": "Divide by`_other_`. Actual type of result depends on arithmetic balancing rules.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Numeric"
+                }
+            },
+            "result": {
+                "type": "Numeric"
+            }
+        },
+        "exponent": {
+            "name": "exponent",
+            "documentation": "Expontiation of this by `_other_`.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "Numeric"
+                }
+            },
+            "result": {
+                "type": "Numeric"
+            }
+        },
+        "negative": {
+            "name": "negative",
+            "documentation": "Generate negative of current value.",
+            "is_abstract": true,
+            "result": {
+                "type": "Numeric"
+            }
+        }
+    }
+}

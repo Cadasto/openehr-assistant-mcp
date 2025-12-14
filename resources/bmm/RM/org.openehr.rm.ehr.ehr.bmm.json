@@ -1,0 +1,89 @@
+{
+    "name": "EHR",
+    "documentation": "The EHR object is the root object and access point of an EHR for a subject of care. ",
+    "properties": {
+        "system_id": {
+            "name": "system_id",
+            "documentation": "The identifier of the logical EHR management system in which this EHR was created. \n",
+            "is_mandatory": true,
+            "type": "HIER_OBJECT_ID"
+        },
+        "ehr_id": {
+            "name": "ehr_id",
+            "documentation": "The unique identifier of this EHR.\n\nNOTE: is is strongly recommended that a UUID always be used for this field.",
+            "is_mandatory": true,
+            "type": "HIER_OBJECT_ID"
+        },
+        "contributions": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "contributions",
+            "documentation": "List of contributions causing changes to this EHR. Each contribution contains a list of versions, which may include references to any number of `VERSION` instances, i.e. items of type `VERSIONED_COMPOSITION` and `VERSIONED_FOLDER`. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "OBJECT_REF"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "ehr_status": {
+            "name": "ehr_status",
+            "documentation": "Reference to `EHR_STATUS` object for this EHR.",
+            "is_mandatory": true,
+            "type": "OBJECT_REF"
+        },
+        "ehr_access": {
+            "name": "ehr_access",
+            "documentation": "Reference to `EHR_ACCESS` object for this EHR.",
+            "is_mandatory": true,
+            "type": "OBJECT_REF"
+        },
+        "compositions": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "compositions",
+            "documentation": "Master list of all Versioned Composition references in this EHR.",
+            "type_def": {
+                "container_type": "List",
+                "type": "OBJECT_REF"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "directory": {
+            "name": "directory",
+            "documentation": "Optional directory structure for this EHR. If present, this is a reference to the first member of `_folders_`.",
+            "type": "OBJECT_REF"
+        },
+        "time_created": {
+            "name": "time_created",
+            "documentation": "Time of creation of the EHR.",
+            "is_mandatory": true,
+            "type": "DV_DATE_TIME"
+        },
+        "folders": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "folders",
+            "documentation": "Optional additional Folder structures for this EHR. If set, the `_directory_` attribute refers to the first member.",
+            "type_def": {
+                "container_type": "List",
+                "type": "OBJECT_REF"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Contributions_valid": "for_all c in contributions | c.type.is_equal(\"CONTRIBUTION\")",
+        "Ehr_access_valid": "ehr_access.type.is_equal (\"VERSIONED_EHR_ACCESS\")",
+        "Ehr_status_valid": "ehr_status.type.is_equal(\"VERSIONED_EHR_STATUS\")",
+        "Compositions_valid": "for_all c in compositions | c.type.is_equal (\"VERSIONED_COMPOSITION\")",
+        "Directory_valid": "directory /= Void implies directory.type.is_equal (\"VERSIONED_FOLDER\")",
+        "Folders_valid": "folders /= Void implies for_all f in folders | f.type.is_equal(\"VERSIONED_FOLDER\")",
+        "Directory_in_folders": "folders /= Void implies folders.item(1) = directory"
+    }
+}

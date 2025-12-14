@@ -1,0 +1,12 @@
+{
+    "name": "POINT_EVENT",
+    "documentation": "Defines a single point event in a series.",
+    "ancestors": [
+        "EVENT"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T"
+        }
+    }
+}

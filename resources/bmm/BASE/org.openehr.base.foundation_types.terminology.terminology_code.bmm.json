@@ -1,0 +1,31 @@
+{
+    "name": "Terminology_code",
+    "documentation": "Primitive type representing a standalone reference to a terminology concept, in the form of a terminology identifier, optional version, and a code or code string from the terminology.",
+    "ancestors": [
+        "Any"
+    ],
+    "properties": {
+        "terminology_id": {
+            "name": "terminology_id",
+            "documentation": "The archetype environment namespace identifier used to identify a terminology. Typically a value like `\"snomed_ct\"` that is mapped elsewhere to the full URI identifying the terminology.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "terminology_version": {
+            "name": "terminology_version",
+            "documentation": "Optional string value representing terminology version, typically a date or dotted numeric.",
+            "type": "String"
+        },
+        "code_string": {
+            "name": "code_string",
+            "documentation": "A terminology code or post-coordinated code expression, if supported by the terminology. The code may refer to a single term, a value set consisting of multiple terms, or some other entity representable within the terminology.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "uri": {
+            "name": "uri",
+            "documentation": "The URI reference that may be used as a concrete key into a notional terminology service for queries that can obtain the term text, definition, and other associated elements.",
+            "type": "Uri"
+        }
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "name": "ISM_TRANSITION",
+    "documentation": "Model of a transition in the Instruction State Machine, caused by a careflow step. The attributes document the careflow step as well as the ISM transition. ",
+    "ancestors": [
+        "PATHABLE"
+    ],
+    "properties": {
+        "current_state": {
+            "name": "current_state",
+            "documentation": "The ISM current state. Coded by openEHR terminology group Instruction states.",
+            "is_mandatory": true,
+            "type": "DV_CODED_TEXT"
+        },
+        "transition": {
+            "name": "transition",
+            "documentation": "The ISM transition which occurred to arrive in the current_state. Coded by openEHR terminology group  Instruction transitions.",
+            "type": "DV_CODED_TEXT"
+        },
+        "careflow_step": {
+            "name": "careflow_step",
+            "documentation": "The step in the careflow process which occurred as part of generating this action, e.g.  dispense ,  start_administration. This attribute represents the clinical  label for the activity, as  opposed to current_state which represents  the state machine (ISM)  computable form. Defined in archetype.",
+            "type": "DV_CODED_TEXT"
+        },
+        "reason": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "reason",
+            "documentation": "Optional possibility of adding one or more reasons for this careflow step having been taken. Multiple reasons may occur in medication management for example.",
+            "type_def": {
+                "container_type": "List",
+                "type": "DV_TEXT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Current_state_valid": "terminology (Terminology_id_openehr).has_code_for_group_id (Group_id_instruction_states, current_state.defining_code)",
+        "Transition_valid": "transition /= Void implies terminology (Terminology_id_openehr).\nhas_code_for_group_id (Group_id_instruction_transitions, transition.defining_code)"
+    }
+}

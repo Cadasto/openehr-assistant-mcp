@@ -1,0 +1,121 @@
+{
+    "name": "DV_AMOUNT",
+    "documentation": "Abstract class defining the concept of relative quantified  'amounts'. For relative quantities, the  `+` and  `-` operators are defined (unlike descendants of `DV_ABSOLUTE_QUANTITY`, such as the date/time types). \n",
+    "is_abstract": true,
+    "ancestors": [
+        "DV_QUANTIFIED"
+    ],
+    "properties": {
+        "accuracy_is_percent": {
+            "name": "accuracy_is_percent",
+            "documentation": "If `True`, indicates that when this object was created, `_accuracy_` was recorded as a percent value; if `False`, as an absolute quantity value.",
+            "type": "Boolean"
+        },
+        "accuracy": {
+            "name": "accuracy",
+            "documentation": "Accuracy of measurement, expressed either as a half-range percent value (`_accuracy_is_percent_` = `True`) or a half-range quantity. A value of `0` means that accuracy is 100%, i.e. no error.\n\nA value of `_unknown_accuracy_value_` means that accuracy was not recorded.",
+            "type": "Real"
+        }
+    },
+    "functions": {
+        "valid_percentage": {
+            "name": "valid_percentage",
+            "documentation": "Test whether a number is a valid percentage, i.e. between 0 and 100. ",
+            "parameters": {
+                "number": {
+                    "name": "number",
+                    "type": "Ordered_Numeric"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "add": {
+            "name": "add",
+            "documentation": "Sum of this amount and another. The value of accuracy in the result is either:\n\n* the sum of the accuracies of the operands, if both present, or;\n* both operand accuracies are unknown_accuracy_value.\n\nIf the accuracy value is a percentage in one operand and not in the other, the form in the result is that of the larger operand.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_AMOUNT"
+                }
+            },
+            "pre_conditions": {
+                "Pre_comparable": "is_strictly_comparable_to (other)"
+            },
+            "result": {
+                "type": "DV_AMOUNT"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Difference of this amount and another. The value of `_accuracy_` in the result is either:\n\n* the sum of the accuracies of the operands, if both present, or;\n* unknown, if either or both operand accuracies are unknown.\n\nIf the `_accuracy_` value is a percentage in one operand and not in the other, the form in the result is that of the larger operand.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_AMOUNT"
+                }
+            },
+            "result": {
+                "type": "DV_AMOUNT"
+            }
+        },
+        "is_equal": {
+            "name": "is_equal",
+            "documentation": "Return True if this `DV_AMOUNT` is considered equal to `_other_`.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_AMOUNT"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "multiply": {
+            "name": "multiply",
+            "documentation": "Product of this Amount and `_factor_`.",
+            "parameters": {
+                "factor": {
+                    "name": "factor",
+                    "type": "Real"
+                }
+            },
+            "result": {
+                "type": "DV_AMOUNT"
+            }
+        },
+        "negative": {
+            "name": "negative",
+            "documentation": "Negated version of current object, such as used for representing a difference, e.g. a weight loss.",
+            "result": {
+                "type": "DV_AMOUNT"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "documentation": "True if this object is less than `_other_`. Based on comparison of `_magnitude_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "DV_AMOUNT"
+                }
+            },
+            "pre_conditions": {
+                "Pre_comparable": "is_strictly_comparable()"
+            },
+            "post_conditions": {
+                "Post_result": "Result = magnitude < other.magnitude"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Accuracy_is_percent_validity": "accuracy = 0 implies not accuracy_is_percent",
+        "Accuracy_validity": "accuracy_is_percent implies valid_percentage (accuracy)"
+    }
+}

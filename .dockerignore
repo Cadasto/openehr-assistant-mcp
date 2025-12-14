@@ -1,0 +1,28 @@
+# Git
+.git
+.git*
+
+# Documentation
+*.md
+LICENSE
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# Development
+.env
+.env.local
+.env.*.local
+*.log

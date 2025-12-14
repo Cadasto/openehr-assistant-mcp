@@ -1,0 +1,37 @@
+{
+    "name": "C_COMPLEX_OBJECT",
+    "documentation": "Constraint on complex objects, i.e. any object that consists of other object constraints.",
+    "ancestors": [
+        "C_DEFINED_OBJECT"
+    ],
+    "properties": {
+        "attributes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "attributes",
+            "documentation": "List of constraints on attributes of the reference model type represented by this object.",
+            "type_def": {
+                "container_type": "List",
+                "type": "C_ATTRIBUTE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if any value of the reference model type being constrained is allowed.",
+            "post_conditions": {
+                "Post": "Result = attributes.is_empty"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Attributes_valid": " any_allowed xor (attributes /= Void and not attributes.is_empty)"
+    }
+}

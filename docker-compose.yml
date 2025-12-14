@@ -1,0 +1,25 @@
+services:
+
+  mcp:
+    image: cadasto/openehr-assistant-mcp:latest
+    build:
+      target: production
+    hostname: openehr-assistant-mcp.${DOMAIN:-local}
+    ports:
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN:-local}
+    restart: unless-stopped
+    env_file:
+      - path: ./.env
+        required: false
+    volumes:
+      - app-data:/data/.local/share
+      - app-cache:/data/.cache
+      - app-config:/data/.config
+
+volumes:
+  app-data:
+  app-cache:
+  app-config:

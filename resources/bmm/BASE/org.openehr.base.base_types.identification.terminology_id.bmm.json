@@ -1,0 +1,23 @@
+{
+    "name": "TERMINOLOGY_ID",
+    "documentation": "Identifier for terminologies such as accessed via a terminology query service. In this class, the value attribute identifies the Terminology in the terminology service, e.g.  SNOMED-CT . A terminology is assumed to be in a particular language, which must be explicitly specified.\n\nThe value if the id attribute is the precise terminology id identifier, including actual release (i.e. actual  version), local modifications etc; e.g. ICPC2.\n\nLexical form: `name [  '(' version  ')' ]`.\n",
+    "ancestors": [
+        "OBJECT_ID"
+    ],
+    "functions": {
+        "name": {
+            "name": "name",
+            "documentation": "Return the terminology id (which includes the  version  in some cases). Distinct names correspond to distinct (i.e. non-compatible) terminologies. Thus the names  ICD10AM  and  ICD10  refer to distinct terminologies. ",
+            "result": {
+                "type": "String"
+            }
+        },
+        "version_id": {
+            "name": "version_id",
+            "documentation": "Version of this terminology, if versioning supported, else the empty string. ",
+            "result": {
+                "type": "String"
+            }
+        }
+    }
+}

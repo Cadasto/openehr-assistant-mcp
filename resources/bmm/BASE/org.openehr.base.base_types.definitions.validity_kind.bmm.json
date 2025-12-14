@@ -1,0 +1,18 @@
+{
+    "_type": "P_BMM_ENUMERATION_STRING",
+    "name": "VALIDITY_KIND",
+    "documentation": "An enumeration of three values that may commonly occur in constraint models.\n\nUse as the type of any attribute within this model, which expresses constraint on some attribute in a class in a reference model. For example to indicate validity\nof Date/Time fields.",
+    "ancestors": [
+        "String"
+    ],
+    "item_names": [
+        "mandatory",
+        "optional",
+        "prohibited"
+    ],
+    "item_documentations": [
+        "Constant to indicate mandatory presence of something.",
+        "Constant to indicate optional presence of something.",
+        "Constant to indicate disallowed presence of something."
+    ]
+}

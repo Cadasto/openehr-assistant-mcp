@@ -1,0 +1,7 @@
+{
+    "name": "VERSIONED_PARTY",
+    "documentation": "Static type formed by binding generic parameter of `VERSIONED_OBJECT<T>` to `PARTY`. ",
+    "ancestors": [
+        "VERSIONED_OBJECT"
+    ]
+}

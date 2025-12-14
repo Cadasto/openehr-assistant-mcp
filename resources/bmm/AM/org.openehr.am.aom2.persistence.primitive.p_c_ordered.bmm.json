@@ -1,0 +1,29 @@
+{
+    "name": "P_C_ORDERED",
+    "documentation": "Abstract parent of primitive constrainer classes based on ORDERED base types, i.e. types like Integer, Real, and the Date/Time types. The model constraint is a List of Intervals, which may include point Intervals, and acts as a efficient and formally tractable representation of any number of point values and/or contiguous intervals of an ordered value domain.\n\nIn its simplest form, the constraint accessor returns just a single point Interval<T> object, representing a single value.\n\nThe next simplest form is a single proper Interval <T> (i.e. normal two-sided or half-open interval). The most complex form is a list of any combination of point and proper intervals.",
+    "is_abstract": true,
+    "ancestors": [
+        "P_C_PRIMITIVE_OBJECT"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Ordered"
+        }
+    },
+    "properties": {
+        "constraint": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "constraint",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "Interval"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        }
+    }
+}

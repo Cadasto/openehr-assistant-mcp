@@ -1,0 +1,40 @@
+{
+    "name": "C_COMPLEX_OBJECT_PROXY",
+    "documentation": "A constraint defined by proxy, using a reference to an object constraint defined elsewhere in the same archetype. Note that since this object refers to another node, there are two objects with available occurrences values. The local occurrences value on a `COMPLEX_OBJECT_PROXY` should always be used; when setting this from a serialised form, if no occurrences is mentioned, the target occurrences should be used (not the standard default of `{1..1}`); otherwise the locally specified occurrences should be used as normal. When serialising out, if the occurrences is the same as that of the target, it can be left out. ",
+    "ancestors": [
+        "C_OBJECT"
+    ],
+    "properties": {
+        "target_path": {
+            "name": "target_path",
+            "documentation": "Reference to an object node using archetype path notation.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "functions": {
+        "use_target_occurrences": {
+            "name": "use_target_occurrences",
+            "documentation": "True if target occurrences are to be used as the value of occurrences in this object; by the time of runtime use, the target occurrences value has to be set into this object.",
+            "post_conditions": {
+                "Post": "Result = (occurrences = Void)"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "occurrences_conforms_to": {
+            "name": "occurrences_conforms_to",
+            "documentation": "True if this node occurrences conforms to `_other.occurrences_`; `_other_` is assumed to be in a flat archetype.\n\nIf `_other_` is a `C_COMPLEX_OBJECT`, then always `True`, since if occurrences defined on proxy node, it is an override of  the occurrences on the target, and it doesn't have to conform to anything except the containing attribute's cardinality. However, if `_other_` is also a `C_COMPLEX_OBJECT` then the override is of another use_node, and normal occurrences apply\n",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "C_OBJECT"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

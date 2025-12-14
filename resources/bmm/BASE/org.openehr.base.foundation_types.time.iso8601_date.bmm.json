@@ -1,0 +1,149 @@
+{
+    "name": "Iso8601_date",
+    "documentation": "Represents an ISO 8601 date, including partial and extended forms. Value may be:\n\n* `YYYY-MM-DD` (extended, preferred)\n* `YYYYMMDD` (compact)\n* a partial invariant.\n\nSee `Time_definitions._valid_iso8601_date()_` for validity.",
+    "ancestors": [
+        "Iso8601_type"
+    ],
+    "functions": {
+        "year": {
+            "name": "year",
+            "documentation": "Extract the year part of the date as an Integer.",
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "month": {
+            "name": "month",
+            "documentation": "Extract the month part of the date as an Integer, or return 0 if not present.",
+            "pre_conditions": {
+                "Pre": "not month_unknown"
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "day": {
+            "name": "day",
+            "documentation": "Extract the day part of the date as an Integer, or return 0 if not present.",
+            "pre_conditions": {
+                "Pre": "not day_unknown"
+            },
+            "result": {
+                "type": "Integer"
+            }
+        },
+        "timezone": {
+            "name": "timezone",
+            "documentation": "Timezone; may be Void.",
+            "result": {
+                "type": "Iso8601_timezone"
+            }
+        },
+        "month_unknown": {
+            "name": "month_unknown",
+            "documentation": "Indicates whether month in year is unknown. If so, the date is of the form `\"YYYY\"`.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "day_unknown": {
+            "name": "day_unknown",
+            "documentation": "Indicates whether day in month is unknown. If so, and month is known, the date is of the form `\"YYYY-MM\"` or `\"YYYYMM\"`.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_partial": {
+            "name": "is_partial",
+            "documentation": "True if this date is partial, i.e. if days or more is missing.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_extended": {
+            "name": "is_extended",
+            "documentation": "True if this date uses `'-'` separators.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "as_string": {
+            "name": "as_string",
+            "documentation": "Return string value in extended format.",
+            "result": {
+                "type": "String"
+            }
+        },
+        "add": {
+            "name": "add",
+            "documentation": "Arithmetic addition of a duration to a date.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_date"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "documentation": "Arithmetic subtraction of a duration from a date.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_date"
+            }
+        },
+        "diff": {
+            "name": "diff",
+            "documentation": "Difference of two dates.",
+            "parameters": {
+                "a_date": {
+                    "name": "a_date",
+                    "type": "Iso8601_date"
+                }
+            },
+            "result": {
+                "type": "Iso8601_duration"
+            }
+        },
+        "add_nominal": {
+            "name": "add_nominal",
+            "documentation": "Addition of nominal duration represented by `_a_diff_`. For example, a duration of `'P1Y'` means advance to the same date next year, with the exception of the date 29 February in a leap year, to which the addition of a nominal year will result in 28 February of the following year. Similarly, `'P1M'` is understood here as a nominal month, the addition of which will result in one of:\n\n* the same day in the following month, if it exists, or;\n* one or two days less where the following month is shorter, or;\n* in the case of adding a month to the date 31 Jan, the result will be 28 Feb in a non-leap year (i.e. three less) and 29 Feb in a leap year (i.e. two less).",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_date"
+            }
+        },
+        "subtract_nominal": {
+            "name": "subtract_nominal",
+            "documentation": "Subtraction of nominal duration represented by `_a_diff_`. See `_add_nominal_()` for semantics.",
+            "parameters": {
+                "a_diff": {
+                    "name": "a_diff",
+                    "type": "Iso8601_duration"
+                }
+            },
+            "result": {
+                "type": "Iso8601_date"
+            }
+        }
+    },
+    "invariants": {
+        "Year_valid": "valid_year (year)",
+        "Month_valid": "not month_unknown implies valid_month (month)",
+        "Day_valid": "not day_unknown implies valid_day (year, month, day)",
+        "Partial_validity": "month_unknown implies day_unknown"
+    }
+}

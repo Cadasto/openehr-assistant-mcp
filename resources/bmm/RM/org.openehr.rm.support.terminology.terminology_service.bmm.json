@@ -1,0 +1,113 @@
+{
+    "name": "TERMINOLOGY_SERVICE",
+    "documentation": "Defines an object providing proxy access to a terminology service. ",
+    "ancestors": [
+        "OPENEHR_TERMINOLOGY_GROUP_IDENTIFIERS",
+        "OPENEHR_CODE_SET_IDENTIFIERS"
+    ],
+    "functions": {
+        "terminology": {
+            "name": "terminology",
+            "documentation": "Return an interface to the terminology named name. Allowable names include:-\n\n* openehr, \n* centc251,\n* any name from are taken from the US NLM UMLS meta-data list at http://www.nlm.nih.gov/research/umls/metaa1.html ",
+            "parameters": {
+                "name": {
+                    "name": "name",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "TERMINOLOGY_ACCESS"
+            }
+        },
+        "code_set": {
+            "name": "code_set",
+            "documentation": "Return an interface to the code_set identified by the external identifier name (e.g.  ISO_639-1). ",
+            "parameters": {
+                "name": {
+                    "name": "name",
+                    "type": "String"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "has_code_set (name)"
+            },
+            "result": {
+                "type": "CODE_SET_ACCESS"
+            }
+        },
+        "code_set_for_id": {
+            "name": "code_set_for_id",
+            "documentation": "Return an interface to the code_set identified internally in openEHR by id. \n",
+            "parameters": {
+                "id": {
+                    "name": "id",
+                    "type": "String"
+                }
+            },
+            "pre_conditions": {
+                "Pre": "valid_code_set_id (id)"
+            },
+            "result": {
+                "type": "CODE_SET_ACCESS"
+            }
+        },
+        "has_terminology": {
+            "name": "has_terminology",
+            "documentation": "True if terminology named name known by this service. Allowable names include:-\n\n*  openehr  \n* centc251  \n* any name from are taken from the US NLM UMLS meta-data list at       http://www.nlm.nih.gov/research/umls/metaa1.html",
+            "parameters": {
+                "name": {
+                    "name": "name",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "has_code_set": {
+            "name": "has_code_set",
+            "documentation": "True if code_set linked to internal name (e.g. languages ) is available. ",
+            "parameters": {
+                "name": {
+                    "name": "name",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "terminology_identifiers": {
+            "name": "terminology_identifiers",
+            "documentation": "Set of all terminology identifiers known in the terminology service. Values from the US NLM UMLS meta-data list at:- http://www.nlm.nih.gov/research/umls/metaa1.html ",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            },
+            "is_nullable": true
+        },
+        "openehr_code_sets": {
+            "name": "openehr_code_sets",
+            "documentation": "Set of all code set identifiers known in the terminology service. \n",
+            "result": {
+                "_type": "P_BMM_GENERIC_TYPE",
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "code_set_identifiers": {
+            "name": "code_set_identifiers",
+            "documentation": "Set of all code sets identifiers for which there is an internal openEHR name; returned as a Map of ids keyed by internal name. ",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            },
+            "is_nullable": true
+        }
+    }
+}

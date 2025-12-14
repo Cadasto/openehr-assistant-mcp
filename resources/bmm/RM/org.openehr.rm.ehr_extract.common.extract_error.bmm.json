@@ -1,0 +1,14 @@
+{
+    "name": "EXTRACT_ERROR",
+    "properties": {
+        "request_id": {
+            "name": "request_id",
+            "type": "OBJECT_REF"
+        },
+        "reason": {
+            "name": "reason",
+            "is_mandatory": true,
+            "type": "DV_TEXT"
+        }
+    }
+}

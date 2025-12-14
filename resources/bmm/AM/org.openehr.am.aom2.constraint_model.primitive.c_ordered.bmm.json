@@ -1,0 +1,79 @@
+{
+    "name": "C_ORDERED",
+    "documentation": "Abstract parent of primitive constrainer classes based on `Ordered` base types, i.e. types like `Integer`, `Real`, and the Date/Time types. The model constraint is a List of Intervals, which may include point Intervals, and acts as a efficient and formally tractable representation of any number of point values and/or contiguous intervals of an ordered value domain.\n\nIn its simplest form, the constraint accessor returns just a single point `Interval<T>` object, representing a single value.\n\nThe next simplest form is a single proper `Interval <T>` (i.e. normal two-sided or half-open interval). The most complex form is a list of any combination of point and proper intervals.",
+    "is_abstract": true,
+    "ancestors": [
+        "C_PRIMITIVE_OBJECT"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Ordered"
+        }
+    },
+    "properties": {
+        "constraint": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "constraint",
+            "documentation": "Constraint in the form of a List of Intervals of the parameter type T. Concrete types generated in descendants via template binding.",
+            "type_def": {
+                "container_type": "List",
+                "type": "Interval"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "default_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY_OPEN",
+            "name": "default_value",
+            "documentation": "Default value set in a template, and present in an operational template. Generally limited to leaf and near-leaf nodes.",
+            "type": "T"
+        },
+        "assumed_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY_OPEN",
+            "name": "assumed_value",
+            "documentation": "Value to be assumed if none sent in data.",
+            "type": "T"
+        }
+    },
+    "functions": {
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if any value (i.e. instance) of the reference model type would be allowed. Redefined in descendants.",
+            "post_conditions": {
+                "Post": "Result = constraint.is_empty"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "c_value_conforms_to": {
+            "name": "c_value_conforms_to",
+            "documentation": "True if `_other.any_allowed_` or else for every constraint in the `_constraint_` list there is a constraint in `_other.constraint_` that contains it.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "C_ORDERED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "c_value_congruent_to": {
+            "name": "c_value_congruent_to",
+            "documentation": "True if the items in `_constraint_` are equal in number and identical pair-wise with those in `_other.constraint_`.",
+            "parameters": {
+                "other": {
+                    "name": "other",
+                    "type": "C_ORDERED"
+                }
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    }
+}

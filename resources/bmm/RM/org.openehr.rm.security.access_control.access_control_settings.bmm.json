@@ -1,0 +1,5 @@
+{
+    "name": "ACCESS_CONTROL_SETTINGS",
+    "documentation": "Access Control Settings for the EHR and components. Intended to support multiple access control schemes. Currently implementation dependent.",
+    "is_abstract": true
+}

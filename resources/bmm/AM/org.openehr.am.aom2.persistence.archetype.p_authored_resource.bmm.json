@@ -1,0 +1,62 @@
+{
+    "name": "P_AUTHORED_RESOURCE",
+    "documentation": "Abstract idea of an online resource created by a human author. \n",
+    "is_abstract": true,
+    "properties": {
+        "original_language": {
+            "name": "original_language",
+            "documentation": "Language in which this resource was initially authored. Although there is no language primacy of resources overall, the language of original authoring is required to ensure natural language translations can preserve quality. Language is relevant in both the description and ontology sections. ",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "is_controlled": {
+            "name": "is_controlled",
+            "documentation": "True if this resource is under any kind of change control (even file copying), in which case revision history is created. ",
+            "type": "Boolean"
+        },
+        "translations": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "translations",
+            "documentation": "List of details for each natural translation made of this resource, keyed by language. For each translation listed here, there must be corresponding sections in all language-dependent parts of the resource. The original_language does not appear in this list.",
+            "type_def": {
+                "container_type": "List",
+                "type": "TRANSLATION_DETAILS"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "description": {
+            "name": "description",
+            "documentation": "Description and lifecycle information of the resource.",
+            "type": "RESOURCE_DESCRIPTION"
+        },
+        "uid": {
+            "name": "uid",
+            "documentation": "Unique identifier of the family of archetypes having the same interface identifier (same major version).",
+            "type": "String"
+        },
+        "annotations": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "annotations",
+            "documentation": "Annotations on individual items within the resource, keyed by path. The inner table takes the form of a Hash table of String values keyed by String tags.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameter_defs": [
+                    {
+                        "type": "String"
+                    },
+                    {
+                        "_type": "P_BMM_GENERIC_TYPE",
+                        "root_type": "Hash",
+                        "generic_parameters": [
+                            "String",
+                            "String"
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

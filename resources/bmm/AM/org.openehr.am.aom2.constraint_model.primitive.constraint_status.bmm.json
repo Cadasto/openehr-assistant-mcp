@@ -1,0 +1,26 @@
+{
+    "_type": "P_BMM_ENUMERATION_INTEGER",
+    "name": "CONSTRAINT_STATUS",
+    "documentation": "Status of `_constraint_`, with values allowing for 'soft' constraints, which are effectively different kinds of suggestions.",
+    "ancestors": [
+        "Integer"
+    ],
+    "item_names": [
+        "required",
+        "extensible",
+        "preferred",
+        "example"
+    ],
+    "item_values": [
+        0,
+        1,
+        2,
+        3
+    ],
+    "item_documentations": [
+        "Data item is required to formally satisfy `_constraint_`.\n\nEnumeration value = 0.",
+        "Data item value should satisfy `_constraint_`, i.e. a term in `_constraint_` is to be used if it covers the data item meaning (including more generally); if not, another code may be used, including from another terminology.\n\nEnumeration value = 1.",
+        "Data item value is by preference one of the codes defined by `_constraint_`, but for local reasons may be another code, including from another terminology.\n\nEnumeration value = 2.",
+        "The `_constraint_` code or value-set is considered purely as an example, and the data item may have any value."
+    ]
+}

@@ -1,0 +1,82 @@
+{
+    "name": "TERM_MAPPING",
+    "documentation": "Represents a coded term mapped to a `DV_TEXT`, and the relative match of the target term with respect to the mapped item. Plain or coded text items may appear in the EHR for which one or mappings in alternative terminologies are required. Mappings are only used to enable computer processing, so they can only be instances of `DV_CODED_TEXT`.\n\nUsed for adding classification terms (e.g. adding ICD classifiers to SNOMED descriptive terms), or mapping into equivalents in other terminologies (e.g. across nursing vocabularies). \n",
+    "properties": {
+        "match": {
+            "name": "match",
+            "documentation": "The relative match of the target term with respect to the mapped text item. Result meanings: \n\n* `'>'`: the mapping is to a broader term e.g. orginal text =  arbovirus infection , target =  viral infection  \n* `'='`: the mapping is to a (supposedly) equivalent to the original item \n* `'<'`: the mapping is to a narrower term. e.g. original text =  diabetes , mapping =  diabetes mellitus . \n* `'?'`: the kind of mapping is unknown. \n\nThe first three values are taken from the ISO standards 2788 ( Guide to Establishment and development of monolingual thesauri) and 5964 (Guide to Establishment and development of multilingual thesauri). \n",
+            "is_mandatory": true,
+            "type": "Character"
+        },
+        "purpose": {
+            "name": "purpose",
+            "documentation": "Purpose of the mapping e.g. 'automated data mining', 'billing', 'interoperability'.",
+            "type": "DV_CODED_TEXT"
+        },
+        "target": {
+            "name": "target",
+            "documentation": "The target term of the mapping. ",
+            "is_mandatory": true,
+            "type": "CODE_PHRASE"
+        }
+    },
+    "functions": {
+        "narrower": {
+            "name": "narrower",
+            "documentation": "The mapping is to a narrower term.",
+            "post_conditions": {
+                "Post": "match = ‘<’ implies Result"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "broader": {
+            "name": "broader",
+            "documentation": "The mapping is to a broader term.",
+            "post_conditions": {
+                "Post": "match = ‘>’ implies Result"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "equivalent": {
+            "name": "equivalent",
+            "documentation": "The mapping is to an equivalent term.",
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "unknown": {
+            "name": "unknown",
+            "documentation": "The kind of mapping is unknown.",
+            "post_conditions": {
+                "Post": "match = ‘?’ implies Result"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        },
+        "is_valid_match_code": {
+            "name": "is_valid_match_code",
+            "documentation": "True if match valid.",
+            "parameters": {
+                "c": {
+                    "name": "c",
+                    "type": "Character"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result := c = ‘>’ or c = ‘=’ or c = ‘<’ or c = ‘?’"
+            },
+            "result": {
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Purpose_valid": "purpose /= Void implies terminology (Terminology_id_openehr).has_code_for_group_id (Group_id_term_mapping_purpose, purpose.defining_code)",
+        "Match_valid": "is_valid_match_code (match)"
+    }
+}

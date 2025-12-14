@@ -1,0 +1,45 @@
+name: Feature request
+description: Suggest an idea to improve this project
+labels: [enhancement]
+title: "feat: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an enhancement! Please provide as much detail as you can.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-checks
+      options:
+        - label: I have searched existing issues to ensure this hasn't been requested already.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: I'm frustrated when...
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the solution you'd like.
+      placeholder: Clearly describe what you want to happen.
+      validations:
+        required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe alternatives or workarounds you've considered
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact and scope
+      description: Which parts of the project would be affected? Any breaking changes?
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Any other context or screenshots

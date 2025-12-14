@@ -1,0 +1,66 @@
+{
+    "name": "EXTRACT",
+    "documentation": "Generic model of an Extract of some information from a repository.",
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "properties": {
+        "chapters": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "chapters",
+            "documentation": "The content extracted and serialised from the source repository for this Extract.",
+            "type_def": {
+                "container_type": "List",
+                "type": "EXTRACT_CHAPTER"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "specification": {
+            "name": "specification",
+            "documentation": "The specification that this Extract actually conforms to; might not be identical with the specification of the corresponding request.",
+            "type": "EXTRACT_SPEC"
+        },
+        "request_id": {
+            "name": "request_id",
+            "documentation": "Reference to causing Request, if any.",
+            "type": "HIER_OBJECT_ID"
+        },
+        "time_created": {
+            "name": "time_created",
+            "documentation": "Creation time of this Extract",
+            "is_mandatory": true,
+            "type": "DV_DATE_TIME"
+        },
+        "system_id": {
+            "name": "system_id",
+            "documentation": "Identifier of creating system.",
+            "is_mandatory": true,
+            "type": "HIER_OBJECT_ID"
+        },
+        "sequence_nr": {
+            "name": "sequence_nr",
+            "documentation": "Number of this Extract response in sequence of responses to Extract request identified by `_request_id_`. If this is the sole response, or there was no request, value is 1.",
+            "is_mandatory": true,
+            "type": "Integer"
+        },
+        "participations": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "participations",
+            "documentation": "Participations relevant to the creation of this Extract.",
+            "type_def": {
+                "container_type": "List",
+                "type": "EXTRACT_PARTICIPATION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "invariants": {
+        "Sequence_nr_valid": "sequence_nr >= 1"
+    }
+}
