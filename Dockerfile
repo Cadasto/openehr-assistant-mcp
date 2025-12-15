@@ -3,8 +3,11 @@ ARG PHP_VERSION=8.4
 #
 # Caddy Builder
 #
-FROM caddy:2-builder AS caddy-builder
-RUN xcaddy build --with github.com/baldinof/caddy-supervisor
+FROM caddy:2-builder-alpine AS caddy-builder
+RUN apk update && apk upgrade --no-cache \
+  && xcaddy build \
+      --with github.com/baldinof/caddy-supervisor \
+      --replace github.com/smallstep/certificates=github.com/smallstep/certificates@v0.29.0
 
 #
 # Application base
@@ -12,6 +15,7 @@ RUN xcaddy build --with github.com/baldinof/caddy-supervisor
 FROM php:${PHP_VERSION}-fpm-alpine AS base
 # Install extensions and tools
 RUN set -eux \
+    && apk update && apk upgrade --no-cache \
     && apk add --no-cache \
       curl libcurl \
       nss-tools \
