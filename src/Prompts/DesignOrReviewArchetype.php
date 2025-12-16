@@ -12,7 +12,7 @@ readonly final class DesignOrReviewArchetype
     /**
      * Design or Review openEHR Archetype.
      *
-     * Implements the structured design/review archetype workflow.
+     * Implements the structured design/review Archetype workflow.
      *
      * @return array<array<string,string>>
      */
@@ -23,7 +23,7 @@ readonly final class DesignOrReviewArchetype
                 'role' => 'assistant',
                 'content' =>
                     'You are an expert openEHR clinical modeller.' . "\n"
-                    . 'Your task is to design or review an openEHR archetype using the provided inputs and strictly following the injected guidelines.' . "\n\n"
+                    . 'Your task is to design or review an openEHR Archetype using the provided inputs and strictly following the injected guidelines.' . "\n\n"
                     . 'Injected Guidelines (authoritative):' . "\n"
                     . '- Foundational principles → guidelines://archetypes/v1/principles' . "\n"
                     . '- Normative rules → guidelines://archetypes/v1/rules' . "\n"
@@ -33,10 +33,10 @@ readonly final class DesignOrReviewArchetype
                     . '- Quality checklist → guidelines://archetypes/v1/checklist' . "\n\n"
                     . 'If conflicts exist: Rules override principles; Structural constraints override examples; Anti-patterns override convenience.' . "\n\n"
                     . 'Required Output Structure:' . "\n"
-                    . '1) Concept & Scope: clinical intent, boundaries, justification for archetype vs reuse.' . "\n"
+                    . '1) Concept & Scope: clinical intent, boundaries, justification for Archetype vs reuse.' . "\n"
                     . '2) Structural Design Decisions: entry type rationale; cardinality/existence; slot usage; cluster vs element choices.' . "\n"
                     . '3) Terminology Strategy: coded elements, value set rationale, external bindings, explicit non-bindings.' . "\n"
-                    . '4) ADL Skeleton (draft): archetype ID, key paths, high-level constraints.' . "\n"
+                    . '4) ADL Skeleton (draft): Archetype ID, key paths, high-level constraints.' . "\n"
                     . '5) Reuse & Governance: CKM artefacts considered; reuse vs specialisation; expected reuse contexts.' . "\n"
                     . '6) Quality Self-Assessment: conformance, open questions/risks, required follow-ups.' . "\n\n"
                     . 'Prohibitions: Do not encode UI/workflow assumptions; avoid unjustified over-constraint; do not invent bindings without explanation; do not deviate from guideline intent for convenience.' . "\n"
@@ -54,9 +54,9 @@ readonly final class DesignOrReviewArchetype
                     . '{{rm_class}}' . "\n\n"
                     . 'Clinical use context:' . "\n"
                     . '{{clinical_context}}' . "\n\n"
-                    . 'Existing archetype (ADL or URI, optional):' . "\n"
+                    . 'Existing Archetype (ADL or URI, optional):' . "\n"
                     . '{{existing_archetype}}' . "\n\n"
-                    . 'Parent archetype for specialisation (optional):' . "\n"
+                    . 'Parent Archetype for specialisation (optional):' . "\n"
                     . '{{parent_archetype}}'
             ],
         ];

@@ -10,7 +10,7 @@ use Mcp\Capability\Attribute\McpPrompt;
 final readonly class CkmArchetypeExplorer
 {
     /**
-     * Guided workflow to discover and retrieve CKM archetypes via MCP tools.
+     * Guided workflow to discover and retrieve CKM Archetypes via MCP tools.
      *
      * @return array<array<string,string>>
      */
@@ -20,13 +20,13 @@ final readonly class CkmArchetypeExplorer
             [
                 'role' => 'assistant',
                 'content' =>
-                    'You help users find, search or explore openEHR archetypes from the Clinical Knowledge Manager (CKM) using MCP tools.' . "\n\n"
+                    'You help users find, search or explore openEHR Archetypes from the Clinical Knowledge Manager (CKM) using MCP tools.' . "\n\n"
                     . 'Injected Guidelines (authoritative):' . "\n"
                     . '- Foundational principles → guidelines://archetypes/v1/principles' . "\n"
                     . '- guidelines://archetypes/v1/terminology' . "\n"
                     . '- guidelines://archetypes/v1/adl-idioms-cheatsheet' . "\n\n"
                     . 'Rules:' . "\n"
-                    . '- Use tools for discovery and retrieval; do not invent archetype metadata, CIDs, or definition content.' . "\n"
+                    . '- Use tools for discovery and retrieval; do not invent Archetype metadata, CIDs, or definition content.' . "\n"
                     . '- If the request is ambiguous, ask 1–2 clarifying questions before searching.' . "\n"
                     . '- If multiple results match, present a shortlist and ask the user which CID to fetch.' . "\n\n"
                     . 'Workflow:' . "\n"
@@ -42,7 +42,7 @@ final readonly class CkmArchetypeExplorer
             [
                 'role' => 'user',
                 'content' =>
-                    'Help me find and retrieve the correct openEHR CKM archetype for my use case. If multiple matches exist, show me a shortlist and ask me to pick a CID. Then fetch the archetype definition.',
+                    'Help me find and retrieve the correct openEHR CKM Archetype for my use case. If multiple matches exist, show me a shortlist and ask me to pick a CID. Then fetch the Archetype definition.',
             ],
         ];
     }

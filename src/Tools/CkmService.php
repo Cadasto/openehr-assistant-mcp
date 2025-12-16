@@ -22,7 +22,7 @@ final readonly class CkmService
     }
 
     /**
-     * Search openEHR archetypes in the Clinical Knowledge Manager (CKM).
+     * Search openEHR Archetypes in the Clinical Knowledge Manager (CKM).
      *
      * Use this tool when you need to *discover* candidate archetypes before fetching full definitions.
      * It is typically the first step in an LLM workflow:
@@ -42,17 +42,18 @@ final readonly class CkmService
      *   Examples: "blood pressure", "observation", "medication", "diabetes", "body weight".
      *
      * @param int $limit
-     *   The maximum number of archetypes returned in the call, 10 as default.
+     *   The maximum number of archetypes returned in the call. Defaults to 10.
      *
      * @param int $offset
-     *   The offset into the result set, for paging, default 0.
+     *   The offset into the result set, for paging. Defaults to 0.
      *
      * @param bool $requireAllSearchWords
-     *   If multiple search words, should ALL words be required (`true`, as default), or is ANY sufficient (`false`).
+     *   If multiple search words are supplied, should ALL words be required (`true`), or is ANY sufficient (`false`).
+     *   Defaults to `true`.
      *
      * @return array<array<string,mixed>>
-     *   A list of CKM archetype metadata entries as returned by CKM.
-     *   Entries usually include a CID identifier, resourceMainId, resourceMainDisplayName, and other descriptive fields.
+     *   A list of CKM Archetype metadata entries as returned by CKM.
+     *   Entries usually include a CID identifier, resourceMainId (representing the archetype-id), resourceMainDisplayName, and other descriptive fields.
      *
      * @throws \RuntimeException
      *   If the CKM API request fails (network error, upstream outage, invalid response).
@@ -85,7 +86,7 @@ final readonly class CkmService
     }
 
     /**
-     * Retrieve a CKM archetype definition by CID, in a specific representation format.
+     * Retrieve the definition of an identified CKM Archetype, serialized in a specific format.
      *
      * Use this tool after you have identified a candidate archetype (usually from the `ckm_archetype_search` tool).
      * Identification is based on the CKM Archetype identifier (CID), or

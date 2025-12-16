@@ -32,7 +32,7 @@ openEHR Type specification
 ### Prompts
 
 Optional prompts that guide AI assistants through common openEHR and CKM workflows using the tools above.
-- `ckm_archetype_explorer` - Explore CKM archetypes by listing and fetching definitions (ADL/XML/Mindmap) by CID.
+- `ckm_archetype_explorer` - Explore CKM Archetypes by listing and fetching definitions (ADL/XML/Mindmap) by CID.
 - `type_specification_explorer` - Discover and fetch openEHR Type specifications (as BMM JSON) using type_specification_search and type_specification_get.
 - `explain_archetype_semantics` - Explain an archetype’s semantics (audiences, elements, constraints) with links to local guidelines.
 - `translate_archetype_language` - Translate an archetype’s terminology section between languages with safety checks.

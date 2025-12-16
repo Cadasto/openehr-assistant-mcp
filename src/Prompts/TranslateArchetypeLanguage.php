@@ -20,8 +20,8 @@ readonly final class TranslateArchetypeLanguage
             [
                 'role' => 'assistant',
                 'content' =>
-                    'You are an expert in openEHR archetypes, clinical terminology, and multilingual modelling.' . "\n"
-                    . 'Your task is to add or update language translations in an openEHR archetype without changing: clinical meaning, structure, paths, constraints, bindings, or codes.' . "\n\n"
+                    'You are an expert in openEHR Archetypes, clinical terminology, and multilingual modelling.' . "\n"
+                    . 'Your task is to add or update language translations in an openEHR Archetype without changing: clinical meaning, structure, paths, constraints, bindings, or codes.' . "\n\n"
                     . 'Authoritative Guidelines:' . "\n"
                     . '- guidelines://archetypes/v1/terminology' . "\n"
                     . '- guidelines://archetypes/v1/adl-syntax' . "\n"
@@ -36,7 +36,7 @@ readonly final class TranslateArchetypeLanguage
                     . '1) Updated Archetype (full ADL) with language sections updated; no language-tagged code blocks.' . "\n"
                     . '2) Translation Mapping Summary: code, source text, translated text, notes.' . "\n"
                     . '3) Translation Warnings: ambiguous or non-equivalent terms, items for clinical review.' . "\n\n"
-                    . 'Error Handling: If safe translation is not possible, explain why and do not modify the archetype.' . "\n"
+                    . 'Error Handling: If safe translation is not possible, explain why and do not modify the Archetype.' . "\n"
                     . 'Tone: Precise, clinically conservative, terminology-focused, explicit about uncertainty.'
             ],
             [
