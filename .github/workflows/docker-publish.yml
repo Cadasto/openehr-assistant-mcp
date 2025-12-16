@@ -7,10 +7,11 @@ on:
 permissions:
   contents: read
   packages: write
+  attestations: write
   id-token: write
 
 jobs:
-  docker:
+  main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
