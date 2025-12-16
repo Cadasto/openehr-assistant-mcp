@@ -9,8 +9,8 @@ use Mcp\Capability\Registry\Container;
 use Mcp\Schema\Enum\ProtocolVersion;
 use Mcp\Server;
 use Mcp\Server\Session\FileSessionStore;
-use Mcp\Server\Transport\StreamableHttpTransport;
 use Mcp\Server\Transport\StdioTransport;
+use Mcp\Server\Transport\StreamableHttpTransport;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level as LogLevel;
 use Monolog\Logger;
@@ -44,27 +44,28 @@ try {
     // Initialize logger
     $logger = new Logger(APP_NAME);
     $logger->pushHandler(new StreamHandler('php://stderr', LogLevel::fromName(LOG_LEVEL)));
-//    $logger->pushHandler(new \Monolog\Handler\NullHandler(LogLevel::fromName(LOG_LEVEL)));
-    $container->set(LoggerInterface::class, $logger);// Build the MCP server with automatic discovery
     $logger->info('Starting ...', [
         'version' => APP_VERSION,
         'env' => APP_ENV,
         'log' => LOG_LEVEL,
-        'session' => APP_DATA_DIR . '/sessions',
     ]);
+    $container->set(LoggerInterface::class, $logger);
 
     // Initialize API clients
     $container->set(CkmClient::class, new CkmClient($logger));
 
     // Build the server
-    $server = Server::builder()
+    $builder = Server::builder()
         ->setServerInfo(APP_TITLE, APP_VERSION, APP_DESCRIPTION)
-        ->setDiscovery(APP_DIR, ['src/Prompts', 'src/Tools'])
+        ->setDiscovery(APP_DIR, ['src/Prompts', 'src/Tools', 'src/Resources'])
         ->setSession(new FileSessionStore(APP_DATA_DIR . '/sessions'), ttl: 10 * 60)
         ->setProtocolVersion(ProtocolVersion::V2025_03_26)
         ->setContainer($container)
-        ->setLogger($logger)
-        ->build();
+        ->setLogger($logger);
+    // add resources
+    Guidelines::addResources($builder);
+
+    $server = $builder->build();
 
     // Determine transport: default to streamable-http; allow CLI override to stdio
     if (strtolower($transportOption) === 'stdio') {
@@ -104,10 +105,12 @@ try {
             header(sprintf('%s: %s', $name, $value), false);
         }
     }
-    echo $response->getBody()->getContents();
+    $content = $response->getBody()->getContents();
+    $logger->debug('Server Responded', ['code' => $response->getStatusCode(), 'payload' => $content]);
+    echo $content;
 
     // finalize
-    $logger->info('Server listener stopped gracefully (HTTP).', ['response' => $response]);
+    $logger->info('Server listener stopped gracefully (HTTP).');
     exit(0);
 
 } catch (\Throwable $e) {
