@@ -49,7 +49,7 @@ readonly final class TypeSpecificationService
      * This tool is designed for LLM workflows that need to:
      * - discover the canonical definition of an openEHR type (class),
      * - locate the exact BMM JSON file that defines a type,
-     * - and then fetch the full definition via {@see get()}.
+     * - and then fetch the full definition via `type_specification_get`.
      *
      * Matching behaviour (important for predictable client usage):
      * - `namePattern` supports a simple `*` wildcard (glob-like).
@@ -59,7 +59,7 @@ readonly final class TypeSpecificationService
      * - `type`: the openEHR type name (from the JSON `name` field)
      * - `description`: documentation/description (from JSON `documentation` when present)
      * - `component`: the openEHR component name (e.g. `AM`, `RM`, etc.)
-     * - `file`: relative path under the BMM directory (pass this into {@see get()} for exact retrieval)
+     * - `file`: relative path under the BMM directory (pass this into `type_specification_get` for exact retrieval)
      *
      * If nothing matches, this tool returns a single-element array describing the error condition.
      * Treat that as “no results” rather than an exception.
@@ -72,7 +72,7 @@ readonly final class TypeSpecificationService
      *
      * @param string $keyword
      *   Optional raw substring filter applied to the JSON content (not normalized; case-sensitive).
-     *   Use this when you want to narrow results to types mentioning a concept or attribute name.
+     *   Use this when you want to narrow results to types containing a concept or attribute name.
      *
      * @return array<int, array<string, string>>
      *   A list of metadata records (see fields above), or a single record with `error: not found`.
@@ -125,7 +125,7 @@ readonly final class TypeSpecificationService
      * - or generate client code / mappings based on the canonical model definition.
      *
      * Output:
-     * - Returns text with `application/json` content-type containing the raw BMM JSON file contents.
+     * - Returns text with the raw BMM JSON file contents.
      *
      * Error handling:
      * - If nothing matches, returns a JSON object with `{ "error": "not found", "identifier": "..." }` as text content.
@@ -133,10 +133,10 @@ readonly final class TypeSpecificationService
      *
      *
      * @param string $typeOrFile
-     *   Either a relative BMM JSON file path under the bundled resources, or a type name / wildcard pattern.
+     *   Either a relative BMM JSON file path under the bundled resources, or a type name or wildcard pattern.
      *
      * @return TextContent
-     *   The resolved BMM JSON as `application/json` text content (or an error JSON payload if not found).
+     *   The resolved BMM JSON as `json` text content (or an error JSON payload if not found).
      *
      * @throws \InvalidArgumentException
      *   If the identifier is empty after normalization.
@@ -155,16 +155,16 @@ readonly final class TypeSpecificationService
         if (is_file($candidate) && is_readable($candidate)) {
             $this->logger->info('Found bmm', ['filename' => $candidate]);
             $json = (string)file_get_contents($candidate);
-            return TextContent::code($json, 'application/json');
+            return TextContent::code($json, 'json');
         }
         // Then, search by type name
         foreach ($this->getCandidateFiles($typeOrFile) as $fileInfo) {
             $this->logger->info('Found bmm', ['pattern' => $fileInfo->getFilename()]);
             $json = (string)file_get_contents($fileInfo->getPathname());
-            return TextContent::code($json, 'application/json');
+            return TextContent::code($json, 'json');
         }
         $this->logger->info('Bmm not found', ['identifier' => $typeOrFile]);
         $json = (string)json_encode(['error' => 'not found', 'identifier' => $typeOrFile], JSON_PRETTY_PRINT);
-        return TextContent::code($json, 'application/json');
+        return TextContent::code($json, 'json');
     }
 }

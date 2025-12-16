@@ -114,7 +114,7 @@ final readonly class CkmService
      *   Defaults to "adl".
      *
      * @return TextContent
-     *   The archetype definition as MCP text content. The content-type is set according to the chosen format.
+     *   The archetype definition code block as MCP text content in the chosen format.
      *
      * @throws \RuntimeException
      *   If the CKM API request fails (invalid CID, unsupported format mapping, upstream error).
@@ -148,7 +148,7 @@ final readonly class CkmService
             $data = $response->getBody()->getContents();
             $this->logger->info('CKM Archetype retrieved successfully', ['cid' => $cid, 'format' => $archetypeFormat, 'status' => $response->getStatusCode()]);
             $this->logger->debug(__METHOD__, [$contentType => $data]);
-            return TextContent::code($data, $contentType);
+            return TextContent::code($data);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to retrieve the CKM Archetype', ['error' => $e->getMessage(), 'identifier' => $identifier, 'cid' => $cid, 'format' => $format]);
             throw new \RuntimeException('Failed to retrieve the CKM Archetype: ' . $e->getMessage(), 0, $e);
