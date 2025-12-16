@@ -2,6 +2,7 @@
 **URI:** guidelines://archetypes/v1/rules  
 **Version:** 1.0.0  
 **Scope:** Concrete guidance and rules for modelling openEHR archetypes
+**Related:** see also guidelines://archetypes/v1/structural-constraints and guidelines://archetypes/v1/terminology
 
 ---
 
@@ -30,7 +31,7 @@
 
 ## D. Terminology and Bindings
 
-- **Rule D1:** Bind coded elements to internationally recognised code systems (SNOMED CT, LOINC) whenever possible.
+- **Rule D1:** Bind coded elements to internationally recognised code systems (SNOMED CT, LOINC) whenever possible. Bindings must match exact intent.
 - **Rule D2:** All bindings should reference *actual codes* and not approximate text strings.
 
 ---

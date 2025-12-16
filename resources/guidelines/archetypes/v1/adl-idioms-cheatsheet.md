@@ -2,11 +2,12 @@
 **URI:** guidelines://archetypes/v1/adl-idioms-cheatsheet  
 **Version:** 1.0.0  
 **Purpose:** Fast grounding for writing/reviewing ADL constraint trees without changing semantics
+**Related:** Derived from guidelines://archetypes/v1/adl-syntax; ties go to adl-syntax.
 
 ---
 
 ## 0) Mental model
-- Archetype = constraints on **RM objects/attributes**
+- Archetype = constraints on **RM objects** and their **attributes**
 - Tree = **C_OBJECT** (objects) + **C_ATTRIBUTE** (attributes)
 - Leaf value types are **DV_\*** and usually need at least light constraints
 
@@ -20,7 +21,6 @@
 
 ## 2) Constrain attributes by “matches { … }”
 **Idiom:** every constrained attribute is expressed as:
-
 `<rm_attribute> matches { <constraint> }`
 
 Avoid inventing attribute names. Use the RM attribute name exactly.
@@ -48,7 +48,7 @@ Avoid inventing attribute names. Use the RM attribute name exactly.
 ## 5) DV_TEXT / DV_CODED_TEXT / DV_QUANTITY: canonical leaf patterns
 
 ### 5.1 Free text leaf
-Use DV_TEXT (or DV_TEXT-compatible) for narrative.
+Use DV_TEXT for narrative.
 **Idiom:** keep it lightly constrained unless universal limits exist.
 
 ### 5.2 Coded leaf
@@ -65,8 +65,6 @@ Use DV_QUANTITY when you have magnitude + units.
 **Idiom:**
 - Define a value set as an `acNNNN` group
 - Reference that set from coded nodes
-
-Avoid mixing code systems in one set unless you document why.
 
 ---
 

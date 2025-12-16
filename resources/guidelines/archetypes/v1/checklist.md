@@ -12,7 +12,6 @@
 - **Purpose:** Support consistent, high-quality archetype creation
 - **Audience:** Clinical modelers, archetype reviewers, implementers
 - **Original Language:** en
-- **Last Updated:** 2025-12
 
 ---
 

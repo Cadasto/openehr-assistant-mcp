@@ -20,7 +20,7 @@ ADL is **not** a programming language and **not** a data serialization format.
 ## 2. Archetype Model Fundamentals
 
 An archetype constrains:
-- RM classes (e.g. OBSERVATION, CLUSTER, ELEMENT)
+- RM classes (e.g. COMPOSITION, OBSERVATION, CLUSTER, ELEMENT, ITEM_TREE)
 - Attributes of those classes
 - Occurrences and cardinalities
 - Data value types (DV_*)
@@ -51,7 +51,7 @@ The `definition` section contains the **formal constraint tree**.
 
 - Root node must correspond to the declared RM type
 - All constraints must follow RM attribute semantics
-- Use `C_OBJECT`, `C_ATTRIBUTE`, `C_COMPLEX_OBJECT` correctly
+- Use `C_OBJECT`, `C_ATTRIBUTE`, `C_SINGLE_ATTRIBUTE`, `C_MULTIPLE_ATTRIBUTE`, `C_COMPLEX_OBJECT`, `ARCHETYPE_SLOT` correctly
 
 ---
 
@@ -91,7 +91,7 @@ value matches {
 ### 4.2 Occurrences vs Cardinality
 
 - occurrences applies to objects
-- cardinality applies to attributes
+- cardinality applies to (multi-valued) attributes (containers)
 
 **Rule:**
 > Never confuse occurrences with cardinality.
@@ -119,7 +119,7 @@ Avoid unconstrained leaf nodes unless justified.
 
 ## 6. Slot Syntax and Semantics
 
-- Slots (allow_archetype, include, exclude) must:
+Slots (allow_archetype, include, exclude) must:
 - Clearly state intent
 - Be constrained whenever possible
 - Reference valid archetype identifiers

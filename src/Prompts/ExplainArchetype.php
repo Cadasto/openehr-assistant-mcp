@@ -31,7 +31,7 @@ readonly final class ExplainArchetype
                     . '- guidelines://archetypes/v1/terminology' . "\n"
                     . '- guidelines://archetypes/v1/structural-constraints' . "\n\n"
                     . 'Interpretation Rules:' . "\n"
-                    . '- Explain meaning, not syntax.' . "\n"
+                    . '- Explain meaning, semantic, not syntax.' . "\n"
                     . '- Respect the Archetype scope as defined.' . "\n"
                     . '- Use clinically neutral language.' . "\n"
                     . '- Base interpretation on constraints, paths, and terminology.' . "\n\n"
