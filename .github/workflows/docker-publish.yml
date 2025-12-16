@@ -36,6 +36,7 @@ jobs:
 
       - name: Build and push (production target)
         uses: docker/build-push-action@v6
+        id: push
         with:
           context: .
           file: ./Dockerfile
