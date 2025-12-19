@@ -1,0 +1,47 @@
+{
+    "name": "EL_FUNCTION_CALL",
+    "documentation": "A call made on a closed function agent, returning a result. Equivalent to an 'application' of a function in Lambda calculus.",
+    "ancestors": [
+        "EL_FEATURE_REF",
+        "EL_AGENT_CALL"
+    ],
+    "properties": {
+        "agent": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "agent",
+            "documentation": "The function agent being called.",
+            "is_mandatory": true,
+            "type": "EL_FUNCTION_AGENT"
+        },
+        "is_writable": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_writable",
+            "documentation": "Defined to return False.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "eval_type": {
+            "name": "eval_type",
+            "documentation": "Return `_agent.definition.type_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_TYPE"
+            }
+        },
+        "reference": {
+            "name": "reference",
+            "documentation": "Generated full reference name, consisting of any scoping elements, function name and routine parameters enclosed in parentheses.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "invariants": {
+        "Inv_valid_agent": "agent.is_callable()"
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

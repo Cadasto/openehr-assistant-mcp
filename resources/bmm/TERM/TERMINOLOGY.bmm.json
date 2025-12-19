@@ -1,0 +1,60 @@
+{
+    "name": "TERMINOLOGY",
+    "documentation": "Container for code sets and/or vocabularies that belong to a given logical terminology.",
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of this terminology.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "language": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "language",
+            "documentation": "Language of this terminology, as an ISO:639 2-letter code.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "code_sets": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "code_sets",
+            "documentation": "Code sets in this Terminology.",
+            "type_def": {
+                "container_type": "List",
+                "type": "CODE_SET"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "vocabularies": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "vocabularies",
+            "documentation": "Vocabularies of coded terms in this terminology.",
+            "type_def": {
+                "container_type": "List",
+                "type": "TERMINOLOGY_GROUP"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "version": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "version",
+            "documentation": "Version of this instance of the terminology.",
+            "type": "String"
+        },
+        "date": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "date",
+            "documentation": "Date of issue of this version of the terminology.",
+            "type": "Iso8601_date"
+        }
+    },
+    "package": "org.openehr.term.terminology",
+    "specUrl": "https://specifications.openehr.org/releases/TERM/development/terminology.html#_terminology_package"
+}

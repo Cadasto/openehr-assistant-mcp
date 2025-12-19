@@ -1,0 +1,29 @@
+{
+    "name": "EL_EXPRESSION",
+    "documentation": "Abstract parent of all typed expression meta-types.",
+    "is_abstract": true,
+    "functions": {
+        "eval_type": {
+            "name": "eval_type",
+            "documentation": "Meta-type of expression entity used in type-checking and evaluation. \n\nEffected in descendants.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_TYPE"
+            }
+        },
+        "is_boolean": {
+            "name": "is_boolean",
+            "documentation": "True if `_eval_type_` is notionally Boolean (i.e. a `BMM_SIMPLE_TYPE` with `_type_name()_` = `Boolean`).",
+            "post_conditions": {
+                "Post_result": "Result = eval_type().equal( {BMM_MODEL}.boolean_type_definition())"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

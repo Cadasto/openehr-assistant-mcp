@@ -1,0 +1,114 @@
+{
+    "name": "P_BMM_SCHEMA",
+    "documentation": "Persisted form of `BMM_SCHEMA`.",
+    "ancestors": [
+        "P_BMM_PACKAGE_CONTAINER",
+        "BMM_SCHEMA"
+    ],
+    "properties": {
+        "primitive_types": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "primitive_types",
+            "documentation": "Primitive type definitions. Persisted attribute.",
+            "type_def": {
+                "container_type": "List",
+                "type": "P_BMM_CLASS"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "class_definitions": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "class_definitions",
+            "documentation": "Class definitions. Persisted attribute.",
+            "type_def": {
+                "container_type": "List",
+                "type": "P_BMM_CLASS"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "validate_created": {
+            "name": "validate_created",
+            "documentation": "Implementation of `_validate_created()_`",
+            "pre_conditions": {
+                "Pre_state": "state = State_created"
+            },
+            "post_conditions": {
+                "Post_state": "passed implies state = State_validated_created"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "load_finalise": {
+            "name": "load_finalise",
+            "documentation": "Implementation of `_load_finalise()_`",
+            "pre_conditions": {
+                "Pre_state": "state = State_validated_created"
+            },
+            "post_conditions": {
+                "Post_state": "state = State_includes_processed or state = State_includes_pending"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "merge": {
+            "name": "merge",
+            "documentation": "Implementation of `_merge()_`",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "P_BMM_SCHEMA"
+                }
+            },
+            "pre_conditions": {
+                "Pre_state": "state = State_includes_pending",
+                "Pre_other_valid": "includes_to_process.has (included_schema.schema_id)"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "validate": {
+            "name": "validate",
+            "documentation": "Implementation of `_validate()_`",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "create_bmm_model": {
+            "name": "create_bmm_model",
+            "documentation": "Implementation of `_create_bmm_model()_`",
+            "pre_conditions": {
+                "Pre_state": "state = P_BMM_PACKAGE_STATE.State_includes_processed"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "canonical_packages": {
+            "name": "canonical_packages",
+            "documentation": "Package structure in which all top-level qualified package names like `xx.yy.zz` have been expanded out to a hierarchy of `BMM_PACKAGE` objects.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "P_BMM_PACKAGE"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

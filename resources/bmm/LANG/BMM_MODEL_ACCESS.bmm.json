@@ -1,0 +1,156 @@
+{
+    "name": "BMM_MODEL_ACCESS",
+    "documentation": "Access to BMM models that have been loaded and validated from one or more schema sets.",
+    "properties": {
+        "schema_directories": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "schema_directories",
+            "documentation": "List of directories where all the schemas loaded here are found.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "all_schemas": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "all_schemas",
+            "documentation": "All schemas found and loaded from `_schema_directory_`. Keyed by `_schema_id_`.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "bmm_models": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "bmm_models",
+            "documentation": "Top-level (root) models in use, keyed by `_model_id_`.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "BMM_MODEL"
+                ]
+            }
+        },
+        "matching_bmm_models": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "matching_bmm_models",
+            "documentation": "Validated models, keyed by `_model_id()_` and any shorter forms of id, with some or no versioning information. For example, the keys `\"openEHR_EHR_1.0.4\"`, `\"openEHR_EHR_1.0\"`, `\"openEHR_EHR_1\"`, and `\"openEHR_EHR\"` will all match the `\"openEHR_EHR_1.0.4\"` model, assuming it is the most recent version available.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "initialise_with_load_list": {
+            "name": "initialise_with_load_list",
+            "documentation": "Initialise with a specific schema load list, usually a sub-set of schemas that will be found in a specified directories `_a_schema_dirs_`.",
+            "parameters": {
+                "a_schema_dirs": {
+                    "_type": "P_BMM_CONTAINER_FUNCTION_PARAMETER",
+                    "name": "a_schema_dirs",
+                    "type_def": {
+                        "container_type": "List",
+                        "type": "String"
+                    },
+                    "cardinality": {
+                        "lower": 1,
+                        "upper_unbounded": true
+                    }
+                },
+                "a_schema_load_list": {
+                    "_type": "P_BMM_CONTAINER_FUNCTION_PARAMETER",
+                    "name": "a_schema_load_list",
+                    "is_nullable": true,
+                    "type_def": {
+                        "container_type": "List",
+                        "type": "String"
+                    },
+                    "cardinality": {
+                        "lower": 0,
+                        "upper_unbounded": true
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "initialise_all": {
+            "name": "initialise_all",
+            "documentation": "Load all schemas found in a specified directories `_a_schema_dirs_`.",
+            "parameters": {
+                "a_schema_dirs": {
+                    "_type": "P_BMM_CONTAINER_FUNCTION_PARAMETER",
+                    "name": "a_schema_dirs",
+                    "type_def": {
+                        "container_type": "List",
+                        "type": "String"
+                    },
+                    "cardinality": {
+                        "lower": 1,
+                        "upper_unbounded": true
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "reload_schemas": {
+            "name": "reload_schemas",
+            "documentation": "Reload BMM schemas.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "bmm_model": {
+            "name": "bmm_model",
+            "documentation": "Return model containing the model key which is a `_model_id_` or any shorter form e.g. model id minus the version. If a shorter key is used, the `BMM_MODEL` with the most recent version will be selected. Uses `_matching_bmm_models_` table to find matches if partial version information is supplied in key.",
+            "parameters": {
+                "a_model_key": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_model_key",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_MODEL"
+            }
+        },
+        "has_bmm_model": {
+            "name": "has_bmm_model",
+            "documentation": "True if a model for a `_model_key_` is available. A model key is a `_model_id_` or any shorter form e.g. model id minus the version. If a shorter key is used, the Result s True if a `BMM_MODEL` with any version exists.",
+            "parameters": {
+                "a_model_key": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_model_key",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.model_access",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_model_access_package"
+}

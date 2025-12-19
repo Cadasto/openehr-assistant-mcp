@@ -1,0 +1,6 @@
+{
+    "name": "P_C_TIME",
+    "documentation": "ISO 8601-compatible constraint on instances of Time in the form either of a set of validity values, or else date ranges based on the C_ORDERED list constraint. There is no validity flag for ‘hour’, since it must always be by definition mandatory in order to have a sensible time at all. Syntax expressions of instances of this class include “HH:??:xx” (time with optional minutes and seconds not allowed).",
+    "package": "org.openehr.am.aom2.persistence.primitive",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_primitive_package"
+}

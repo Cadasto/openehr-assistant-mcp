@@ -1,0 +1,9 @@
+{
+    "name": "AGENT",
+    "documentation": "Generic concept of any kind of agent, including devices, software systems, but not humans or organisations.",
+    "ancestors": [
+        "ACTOR"
+    ],
+    "package": "org.openehr.rm.demographic",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/demographic.html#_demographic_package"
+}

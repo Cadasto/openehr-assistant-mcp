@@ -1,0 +1,44 @@
+{
+    "name": "EL_CASE_TABLE",
+    "documentation": "Compound expression consisting of a list of value-range / expression pairs, and an  `_else_` member that as a whole, represents a case statement flavour of decision table.\n\nEvaluated by iterating through `_items_` and for each one, comparing `_input_` to the item `_value_range_`. If the `_input_` is in the range, the evaluation result of the table is that item's `_result_` evaluation result. \n\nIf no member of `_items_` has a True-returning `_condition_`, the evaluation result is the result of evaluating the `_else_` expression.",
+    "ancestors": [
+        "EL_DECISION_TABLE"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "EL_TERMINAL"
+        }
+    },
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "Members of the chain, equivalent to branches in an if/then/else chain and cases in a case statement.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "EL_CASE",
+                    "generic_parameters": [
+                        "T"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "test_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "test_value",
+            "documentation": "Expressing generating the input value for the case table.",
+            "is_mandatory": true,
+            "type": "EL_VALUE_GENERATOR"
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

@@ -1,0 +1,9 @@
+{
+    "name": "BMM_INDEXED_CONTAINER_VALUE",
+    "documentation": "Meta-type for literals whose concrete type is an indexed container, i.e. Hash table, Map etc.",
+    "ancestors": [
+        "BMM_LITERAL_VALUE"
+    ],
+    "package": "org.openehr.lang.bmm.core.literal_value",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_literal_value_package"
+}

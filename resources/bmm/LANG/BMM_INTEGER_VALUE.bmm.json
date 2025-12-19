@@ -1,0 +1,18 @@
+{
+    "name": "BMM_INTEGER_VALUE",
+    "documentation": "Meta-type for a literal Integer value, for which `_type_` is fixed to the `BMM_TYPE` representing `Integer` and `_value_` is of type `Integer`.",
+    "ancestors": [
+        "BMM_PRIMITIVE_VALUE"
+    ],
+    "properties": {
+        "value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "value",
+            "documentation": "Native Integer value.",
+            "is_mandatory": true,
+            "type": "Integer"
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.literal_value",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_literal_value_package"
+}

@@ -1,0 +1,19 @@
+{
+    "name": "BMM_VARIABLE",
+    "documentation": "A routine-scoped formal element.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_FORMAL_ELEMENT"
+    ],
+    "properties": {
+        "scope": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "scope",
+            "documentation": "Routine within which variable is defined.",
+            "is_mandatory": true,
+            "type": "BMM_ROUTINE"
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

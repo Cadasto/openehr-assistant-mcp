@@ -1,0 +1,22 @@
+{
+    "name": "BMM_MODEL_METADATA",
+    "documentation": "Core properties of `BMM_MODEL`, may be used in a serial representation as well, such as `P_BMM_SCHEMA`.",
+    "properties": {
+        "rm_publisher": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "rm_publisher",
+            "documentation": "Publisher of model expressed in the schema.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "rm_release": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "rm_release",
+            "documentation": "Release of model expressed in the schema as a 3-part numeric, e.g. \"3.1.0\" . ",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.model",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_model_package"
+}

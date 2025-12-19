@@ -1,0 +1,7 @@
+{
+    "name": "BMM_ROUTINE_DEFINITION",
+    "documentation": "Abstract ancestor of routine body meta-types.",
+    "is_abstract": true,
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

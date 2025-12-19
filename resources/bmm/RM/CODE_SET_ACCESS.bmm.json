@@ -1,0 +1,57 @@
+{
+    "_type": "P_BMM_INTERFACE",
+    "name": "CODE_SET_ACCESS",
+    "documentation": "Defines an object providing proxy access to a code_set.",
+    "functions": {
+        "id": {
+            "name": "id",
+            "documentation": "External identifier of this code set.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "all_codes": {
+            "name": "all_codes",
+            "documentation": "Return all codes known in this code set.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "CODE_PHRASE"
+            },
+            "is_nullable": true
+        },
+        "has_lang": {
+            "name": "has_lang",
+            "documentation": "True if code set knows about 'a_lang' .",
+            "parameters": {
+                "a_lang": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_lang",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "has_code": {
+            "name": "has_code",
+            "documentation": "True if code set knows about  'a_code'.",
+            "parameters": {
+                "a_code": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.rm.support.terminology",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/support.html#_terminology_package"
+}

@@ -1,0 +1,18 @@
+{
+    "name": "EXPR_LEAF",
+    "documentation": "Meta-type representing one of:\n\n* a manifest constant of any primitive type;\n* a path referring to a value in the archetype;\n* a constraint;\n* a variable reference.\n",
+    "is_abstract": true,
+    "ancestors": [
+        "EXPRESSION"
+    ],
+    "properties": {
+        "item": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "item",
+            "documentation": "The reference item from which the value of this node can be computed.",
+            "type": "Any"
+        }
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

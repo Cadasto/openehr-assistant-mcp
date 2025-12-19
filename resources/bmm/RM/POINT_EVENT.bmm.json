@@ -1,0 +1,14 @@
+{
+    "name": "POINT_EVENT",
+    "documentation": "Defines a single point event in a series.",
+    "ancestors": [
+        "EVENT"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T"
+        }
+    },
+    "package": "org.openehr.rm.data_structures.history",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/data_structures.html#_history_package"
+}

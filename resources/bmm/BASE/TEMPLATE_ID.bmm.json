@@ -1,0 +1,9 @@
+{
+    "name": "TEMPLATE_ID",
+    "documentation": "Identifier for templates. Lexical form to be determined.",
+    "ancestors": [
+        "OBJECT_ID"
+    ],
+    "package": "org.openehr.base.base_types.identification",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/base_types.html#_identification_package"
+}

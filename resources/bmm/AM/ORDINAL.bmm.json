@@ -1,0 +1,22 @@
+{
+    "name": "ORDINAL",
+    "documentation": "Constrainer object representing a single Ordinal value.",
+    "properties": {
+        "symbol": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "symbol",
+            "documentation": "Terminology code providing the Ordinal's symbol.",
+            "is_mandatory": true,
+            "type": "CODE_PHRASE"
+        },
+        "value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "value",
+            "documentation": "Ordinal value.",
+            "is_mandatory": true,
+            "type": "Integer"
+        }
+    },
+    "package": "org.openehr.am.aom14.openehr_archetype_profile",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM1.4.html#_openehr_archetype_profile_package"
+}

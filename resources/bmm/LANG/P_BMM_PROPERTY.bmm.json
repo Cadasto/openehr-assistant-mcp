@@ -1,0 +1,77 @@
+{
+    "name": "P_BMM_PROPERTY",
+    "documentation": "Persistent form of `BMM_PROPERTY`.",
+    "is_abstract": true,
+    "ancestors": [
+        "P_BMM_MODEL_ELEMENT"
+    ],
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of this property within its class. Persisted attribute.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "is_mandatory": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_mandatory",
+            "documentation": "True if this property is mandatory in its class. Persisted attribute.",
+            "type": "Boolean"
+        },
+        "is_computed": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_computed",
+            "documentation": "True if this property is computed rather than stored in objects of this class. Persisted Attribute.",
+            "type": "Boolean"
+        },
+        "is_im_infrastructure": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_im_infrastructure",
+            "documentation": "True if this property is info model 'infrastructure' rather than 'data'. Persisted attribute.",
+            "type": "Boolean"
+        },
+        "is_im_runtime": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_im_runtime",
+            "documentation": "True if this property is info model 'runtime' settable property. Persisted attribute.",
+            "type": "Boolean"
+        },
+        "type_def": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type_def",
+            "documentation": "Type definition of this property, if not a simple String type reference. Persisted attribute.",
+            "type": "P_BMM_TYPE"
+        },
+        "bmm_property": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_property",
+            "documentation": "BMM_PROPERTY created by create_bmm_property_definition.",
+            "type": "BMM_PROPERTY"
+        }
+    },
+    "functions": {
+        "create_bmm_property": {
+            "name": "create_bmm_property",
+            "documentation": "Create `_bmm_property_definition_` from `P_BMM_XX` parts.",
+            "parameters": {
+                "a_bmm_schema": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_bmm_schema",
+                    "type": "BMM_MODEL"
+                },
+                "a_class_def": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_class_def",
+                    "type": "BMM_CLASS"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

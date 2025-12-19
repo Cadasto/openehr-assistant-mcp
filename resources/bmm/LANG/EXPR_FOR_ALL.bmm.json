@@ -1,0 +1,25 @@
+{
+    "name": "EXPR_FOR_ALL",
+    "documentation": "Universal quantification operator, usually known as `for_all`, whose operand is a collection of items referenced by an `EXPR_VALUE_REF`. The `_condition_` attribute represents an assertion that is applied to every member of the collection at runtime to determine the result.",
+    "ancestors": [
+        "EXPR_OPERATOR"
+    ],
+    "properties": {
+        "condition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "condition",
+            "documentation": "Boolean condition that returns True or False when applied to a member of the operand of a `for_all` operator.",
+            "is_mandatory": true,
+            "type": "ASSERTION"
+        },
+        "operand": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "operand",
+            "documentation": "Reference to collection / container object to which the `for_all` operator is to be applied.",
+            "is_mandatory": true,
+            "type": "EXPR_VALUE_REF"
+        }
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

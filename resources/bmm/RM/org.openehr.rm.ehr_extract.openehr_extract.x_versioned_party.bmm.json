@@ -1,7 +1,0 @@
-{
-    "name": "X_VERSIONED_PARTY",
-    "documentation": "Form of `X_VERSIONED_OBJECT` for `PARTY` demographic object.",
-    "ancestors": [
-        "X_VERSIONED_OBJECT"
-    ]
-}

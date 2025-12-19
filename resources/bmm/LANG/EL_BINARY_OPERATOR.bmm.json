@@ -1,0 +1,25 @@
+{
+    "name": "EL_BINARY_OPERATOR",
+    "documentation": "Binary operator expression node.",
+    "ancestors": [
+        "EL_OPERATOR"
+    ],
+    "properties": {
+        "left_operand": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "left_operand",
+            "documentation": "Left operand node.",
+            "is_mandatory": true,
+            "type": "EL_EXPRESSION"
+        },
+        "right_operand": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "right_operand",
+            "documentation": "Right operand node.",
+            "is_mandatory": true,
+            "type": "EL_EXPRESSION"
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

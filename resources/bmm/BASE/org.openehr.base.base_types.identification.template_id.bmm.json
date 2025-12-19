@@ -1,7 +1,0 @@
-{
-    "name": "TEMPLATE_ID",
-    "documentation": "Identifier for templates. Lexical form to be determined.",
-    "ancestors": [
-        "OBJECT_ID"
-    ]
-}

@@ -1,0 +1,36 @@
+{
+    "name": "EL_LITERAL",
+    "documentation": "Literal value of any type known in the model, including primitive types. Defined via a `BMM_LITERAL_VALUE`.",
+    "ancestors": [
+        "EL_SIMPLE"
+    ],
+    "properties": {
+        "value": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "value",
+            "documentation": "The reference item from which the value of this node can be computed.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "BMM_LITERAL_VALUE",
+                "generic_parameters": [
+                    "BMM_TYPE"
+                ]
+            }
+        }
+    },
+    "functions": {
+        "eval_type": {
+            "name": "eval_type",
+            "documentation": "Return `_value.type_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_TYPE"
+            }
+        }
+    },
+    "invariants": {
+        "Post_manifest_effective_type": "Result = definition.type"
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

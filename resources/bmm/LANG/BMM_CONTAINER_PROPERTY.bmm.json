@@ -1,0 +1,34 @@
+{
+    "name": "BMM_CONTAINER_PROPERTY",
+    "documentation": "Meta-type of for properties of linear container type, such as List<T> etc.",
+    "ancestors": [
+        "BMM_PROPERTY"
+    ],
+    "properties": {
+        "cardinality": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "cardinality",
+            "documentation": "Cardinality of this container.",
+            "type": "Multiplicity_interval"
+        },
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "Declared or inferred static type of the entity.",
+            "is_mandatory": true,
+            "type": "BMM_CONTAINER_TYPE"
+        }
+    },
+    "functions": {
+        "display_name": {
+            "name": "display_name",
+            "documentation": "Name of this property in form `name: ContainerTypeName<>`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

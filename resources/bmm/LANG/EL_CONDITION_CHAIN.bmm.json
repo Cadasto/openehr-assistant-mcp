@@ -1,0 +1,37 @@
+{
+    "name": "EL_CONDITION_CHAIN",
+    "documentation": "Compound expression consisting of a chain of condition-gated expressions, and an ungated `_else_` member that as a whole, represents an if/then/elseif/else chains.\n\nEvaluated by iterating through `_items_` and for each one, evaluating its `_condition_`, which if True, causes the evaluation result of the chain to be that item's `_result_` evaluation result.\n\nIf no member of `_items_` has a True-returning `_condition_`, the evaluation result is the result of evaluating the `_else_` expression.",
+    "ancestors": [
+        "EL_DECISION_TABLE"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "EL_TERMINAL"
+        }
+    },
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "Members of the chain, equivalent to branches in an if/then/else chain and cases in a case statement.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "EL_CONDITIONAL_EXPRESSION",
+                    "generic_parameters": [
+                        "T"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

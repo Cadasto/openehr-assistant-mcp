@@ -1,0 +1,28 @@
+{
+    "name": "BMM_ASSIGNMENT",
+    "documentation": "Statement type representing an assignment from a value-generating source to a writable entity, i.e. a variable reference or property.\n\nAt the meta-model level, may be understood as an initialisation of an existing meta-model instance.",
+    "ancestors": [
+        "BMM_SIMPLE_STATEMENT"
+    ],
+    "properties": {
+        "target": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "target",
+            "documentation": "The target variable on the notional left-hand side of this assignment.",
+            "is_mandatory": true,
+            "type": "EL_VALUE_GENERATOR"
+        },
+        "source": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "source",
+            "documentation": "Source right hand side) of the assignment.",
+            "is_mandatory": true,
+            "type": "EL_EXPRESSION"
+        }
+    },
+    "invariants": {
+        "Inv_target_writable": "target.is_writable"
+    },
+    "package": "org.openehr.lang.bmm.statement",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_statement_package"
+}

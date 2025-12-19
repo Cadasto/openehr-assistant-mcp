@@ -1,0 +1,15 @@
+{
+    "name": "PROCEDURE",
+    "documentation": "Type representing a procedure with 0 or more arguments represented as a TUPLE.",
+    "ancestors": [
+        "ROUTINE"
+    ],
+    "generic_parameter_defs": {
+        "ARGS": {
+            "name": "ARGS",
+            "conforms_to_type": "TUPLE"
+        }
+    },
+    "package": "org.openehr.base.foundation_types.functional",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_functional_package"
+}

@@ -1,0 +1,30 @@
+{
+    "name": "ASSERTION",
+    "documentation": "Meta-type for a first order predicate logic expression with a Boolean result. ",
+    "ancestors": [
+        "STATEMENT"
+    ],
+    "properties": {
+        "tag": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "tag",
+            "documentation": "Expression tag, used for differentiating multiple assertions.",
+            "type": "String"
+        },
+        "string_expression": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "string_expression",
+            "documentation": "String form of expression, in case an expression evaluator taking String expressions is used for evaluation. ",
+            "type": "String"
+        },
+        "expression": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "expression",
+            "documentation": "Root of expression tree.",
+            "is_mandatory": true,
+            "type": "EXPRESSION"
+        }
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

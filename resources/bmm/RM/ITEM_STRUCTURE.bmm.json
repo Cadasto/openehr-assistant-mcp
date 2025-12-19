@@ -1,0 +1,10 @@
+{
+    "name": "ITEM_STRUCTURE",
+    "documentation": "Abstract parent class of all spatial data types. ",
+    "is_abstract": true,
+    "ancestors": [
+        "DATA_STRUCTURE"
+    ],
+    "package": "org.openehr.rm.data_structures.item_structure",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/data_structures.html#_item_structure_package"
+}

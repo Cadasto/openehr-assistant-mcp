@@ -1,0 +1,41 @@
+{
+    "name": "TERMINOLOGY_GROUP",
+    "documentation": "A single vocabulary, in a particular language, within a Terminology.",
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of this vocabulary.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "concepts": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "concepts",
+            "documentation": "List of concepts (i.e. coded terms) in this vocabulary.",
+            "type_def": {
+                "container_type": "List",
+                "type": "TERMINOLOGY_CONCEPT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "openehr_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "openehr_id",
+            "documentation": "Identifier used for terminology group in the openEHR Reference Model. The value is inferred from the `_name_` attribute.\n\nValid values take the form of an xs:NCName value, i.e. cannot contain:\n\n* symbol characters `:, @, $, %, &, /, +, ,, ;`;\n* whitespace characters or different parentheses. \n\nAn NCName cannot begin with a number, dot or minus character although these can appear later in the value.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "status": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "status",
+            "documentation": "Status of this vocabulary.",
+            "type": "TERMINOLOGY_STATUS"
+        }
+    },
+    "package": "org.openehr.term.terminology",
+    "specUrl": "https://specifications.openehr.org/releases/TERM/development/terminology.html#_terminology_package"
+}

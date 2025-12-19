@@ -1,0 +1,10 @@
+{
+    "name": "BMM_WRITABLE_VARIABLE",
+    "documentation": "Meta-type for writable variables, including the special variable `Result`.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_VARIABLE"
+    ],
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

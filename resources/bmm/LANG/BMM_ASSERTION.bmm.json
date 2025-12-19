@@ -1,0 +1,24 @@
+{
+    "name": "BMM_ASSERTION",
+    "documentation": "A statement that asserts the truth of its expression. If the expression evaluates to False the execution generates an exception (depending on run-time settings).\n\nMay be rendered in syntax as `assert condition` or similar.",
+    "ancestors": [
+        "BMM_SIMPLE_STATEMENT"
+    ],
+    "properties": {
+        "expression": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "expression",
+            "documentation": "Boolean-valued expression of the assertion.",
+            "is_mandatory": true,
+            "type": "EL_BOOLEAN_EXPRESSION"
+        },
+        "tag": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "tag",
+            "documentation": "Optional tag, typically used to designate design intention of the assertion, e.g. `\"Inv_all_members_valid\"`.",
+            "type": "String"
+        }
+    },
+    "package": "org.openehr.lang.bmm.statement",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_statement_package"
+}

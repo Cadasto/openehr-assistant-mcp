@@ -1,0 +1,46 @@
+{
+    "name": "P_BMM_CONTAINER_TYPE",
+    "documentation": "Persistent form of `BMM_CONTAINER_TYPE`.",
+    "ancestors": [
+        "P_BMM_TYPE"
+    ],
+    "properties": {
+        "container_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "container_type",
+            "documentation": "The type of the container. This converts to the `_root_type_` in `BMM_GENERIC_TYPE`. Persisted attribute.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "type_def": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type_def",
+            "documentation": "Type definition of `_type_`, if not a simple String type reference. Persisted attribute.",
+            "type": "P_BMM_BASE_TYPE"
+        },
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "The target type; this converts to the first parameter in `_generic_parameters_` in `BMM_GENERIC_TYPE`. Persisted attribute.",
+            "type": "String"
+        },
+        "bmm_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_type",
+            "documentation": "Result of `_create_bmm_type()_` call.",
+            "type": "BMM_CONTAINER_TYPE"
+        }
+    },
+    "functions": {
+        "type_ref": {
+            "name": "type_ref",
+            "documentation": "The target type; this converts to the first parameter in `_generic_parameters_` in `BMM_GENERIC_TYPE`. Persisted attribute.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "P_BMM_BASE_TYPE"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

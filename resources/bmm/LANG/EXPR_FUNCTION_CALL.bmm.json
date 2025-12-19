@@ -1,0 +1,24 @@
+{
+    "name": "EXPR_FUNCTION_CALL",
+    "documentation": "Node representing a function call with 0 or more arguments.",
+    "ancestors": [
+        "EXPR_LEAF"
+    ],
+    "properties": {
+        "arguments": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "arguments",
+            "documentation": "Arguments of this function, which can be from 0 to any number. Functions with no arguments are typically used to represent real world varying values like 'current time' and so on.",
+            "type_def": {
+                "container_type": "List",
+                "type": "EXPRESSION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

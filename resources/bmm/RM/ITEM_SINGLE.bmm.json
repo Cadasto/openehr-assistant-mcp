@@ -1,0 +1,27 @@
+{
+    "name": "ITEM_SINGLE",
+    "documentation": "Logical single value data structure. Used to represent any data which is logically a single value, such as a person's height or weight.",
+    "ancestors": [
+        "ITEM_STRUCTURE"
+    ],
+    "properties": {
+        "item": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "item",
+            "is_mandatory": true,
+            "type": "ELEMENT"
+        }
+    },
+    "functions": {
+        "as_hierarchy": {
+            "name": "as_hierarchy",
+            "documentation": "Generate a CEN EN13606-compatible hierarchy consisting of a single `ELEMENT`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "ELEMENT"
+            }
+        }
+    },
+    "package": "org.openehr.rm.data_structures.item_structure",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/data_structures.html#_item_structure_package"
+}

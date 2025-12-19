@@ -1,0 +1,9 @@
+{
+    "name": "Uri",
+    "documentation": "A kind of String constrained to obey the syntax of RFC 3986.",
+    "ancestors": [
+        "String"
+    ],
+    "package": "org.openehr.base.foundation_types.primitive_types",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_primitive_types_package"
+}

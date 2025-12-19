@@ -1,0 +1,20 @@
+{
+    "name": "EL_TUPLE_ITEM",
+    "documentation": "A single tuple item, with an optional name.",
+    "properties": {
+        "item": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "item",
+            "documentation": "Reference to value entity. If Void, this indicates that the item in this position is Void, e.g. within a routine call parameter list.",
+            "type": "EL_EXPRESSION"
+        },
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Optional name of tuple item.",
+            "type": "String"
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

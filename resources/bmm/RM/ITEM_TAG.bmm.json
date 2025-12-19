@@ -1,0 +1,45 @@
+{
+    "name": "ITEM_TAG",
+    "documentation": "A tag with optional value that is associated with a target information entity identified by a UID.",
+    "properties": {
+        "key": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "key",
+            "documentation": "The tag key. May not be empty or contain leading or trailing whitespace.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "value",
+            "documentation": "The value. If set, may not be empty.",
+            "type": "String"
+        },
+        "target": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "target",
+            "documentation": "Identifier of target, which may be a `VERSIONED_OBJECT<T>` or a `VERSION<T>`.",
+            "is_mandatory": true,
+            "type": "UID_BASED_ID"
+        },
+        "target_path": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "target_path",
+            "documentation": "Optional archetype (i.e. AQL) or RM path within `_target_`, used to tag a fine-grained element.",
+            "type": "String"
+        },
+        "owner_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "owner_id",
+            "documentation": "Identifier of owner object, such as EHR.",
+            "is_mandatory": true,
+            "type": "OBJECT_REF"
+        }
+    },
+    "invariants": {
+        "Inv_key_valid": "not key.is_empty and key.is_justified",
+        "Inv_value_valid": "value /= Void implies not value.is_empty"
+    },
+    "package": "org.openehr.rm.common.tags",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/common.html#_tags_package"
+}

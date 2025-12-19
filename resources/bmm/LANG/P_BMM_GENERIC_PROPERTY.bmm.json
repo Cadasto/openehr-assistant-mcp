@@ -1,0 +1,23 @@
+{
+    "name": "P_BMM_GENERIC_PROPERTY",
+    "documentation": "Persistent form of `BMM_GENERIC_PROPERTY`.",
+    "ancestors": [
+        "P_BMM_PROPERTY"
+    ],
+    "properties": {
+        "type_def": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type_def",
+            "documentation": "Type definition of this property, if not a simple String type reference. Persistent attribute.",
+            "type": "P_BMM_GENERIC_TYPE"
+        },
+        "bmm_property": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_property",
+            "documentation": "`BMM_PROPERTY` created by `_create_bmm_property_definition_`.",
+            "type": "BMM_UNITARY_PROPERTY"
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

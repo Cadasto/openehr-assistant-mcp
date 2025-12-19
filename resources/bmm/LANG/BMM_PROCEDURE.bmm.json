@@ -1,0 +1,31 @@
+{
+    "name": "BMM_PROCEDURE",
+    "documentation": "A formal element with signature of the form: `name ({arg:TArg}*):TStatus`, where `TStatus` is the built-in type `BMM_STATUS_TYPE`.. A procedure is a computed (rather than data) element, generally assumed to be state-changing, and is usually called in the form `name ({arg:TArg}*)`.",
+    "ancestors": [
+        "BMM_ROUTINE"
+    ],
+    "properties": {
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "Declared or inferred static type of the entity.",
+            "is_mandatory": true,
+            "type": "BMM_STATUS_TYPE"
+        }
+    },
+    "functions": {
+        "signature": {
+            "name": "signature",
+            "documentation": "Formal signature of this element, in the form:\n\n`name [arg1_name: T_arg1, ...][:T_value]`\n\nSpecific implementations in descendants.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_PROCEDURE_TYPE"
+            }
+        }
+    },
+    "invariants": {
+        "Inv_signature_no_result": "signature().result = Void"
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

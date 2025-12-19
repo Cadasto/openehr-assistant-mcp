@@ -1,0 +1,12 @@
+{
+    "name": "ROUTINE",
+    "documentation": "Type representing a function with a return type and 0 or more arguments represented as a TUPLE.",
+    "generic_parameter_defs": {
+        "ARGS": {
+            "name": "ARGS",
+            "conforms_to_type": "TUPLE"
+        }
+    },
+    "package": "org.openehr.base.foundation_types.functional",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_functional_package"
+}

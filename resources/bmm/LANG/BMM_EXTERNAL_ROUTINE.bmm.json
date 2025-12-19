@@ -1,0 +1,36 @@
+{
+    "name": "BMM_EXTERNAL_ROUTINE",
+    "documentation": "External routine meta-type, containing sufficient meta-data to enable a routine in an external library to be called.",
+    "ancestors": [
+        "BMM_ROUTINE_DEFINITION"
+    ],
+    "properties": {
+        "meta_data": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "meta_data",
+            "documentation": "External call general meta-data, including target routine name, type mapping etc.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "argument_mapping": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "argument_mapping",
+            "documentation": "Optional argument-mapping meta-data.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

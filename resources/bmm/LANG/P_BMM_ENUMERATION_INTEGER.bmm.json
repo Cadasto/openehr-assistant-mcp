@@ -1,0 +1,17 @@
+{
+    "name": "P_BMM_ENUMERATION_INTEGER",
+    "documentation": "Persistent form of an instance of `BMM_ENUMERATION_INTEGER`.",
+    "ancestors": [
+        "P_BMM_ENUMERATION"
+    ],
+    "properties": {
+        "bmm_class": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_class",
+            "documentation": "`BMM_CLASS` object build by `_create_bmm_class_definition_` and `_populate_bmm_class_definition_`.",
+            "type": "BMM_ENUMERATION_INTEGER"
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

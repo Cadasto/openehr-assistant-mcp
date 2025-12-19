@@ -1,0 +1,18 @@
+{
+    "_type": "P_BMM_ENUMERATION_STRING",
+    "name": "VISIBILITY_TYPE",
+    "documentation": "Enumeration of visibility settings for model elements.",
+    "ancestors": [
+        "String"
+    ],
+    "item_names": [
+        "hide",
+        "show"
+    ],
+    "item_documentations": [
+        "Indicates to a tool to hide the model element to which this marker is attached.",
+        "Indicates to a tool to show the model element to which this marker is attached."
+    ],
+    "package": "org.openehr.am.aom2.rm_overlay",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_the_rm_overlay_package"
+}

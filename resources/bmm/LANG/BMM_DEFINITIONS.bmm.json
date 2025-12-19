@@ -1,0 +1,185 @@
+{
+    "name": "BMM_DEFINITIONS",
+    "documentation": "Definitions used by all BMM packages.",
+    "ancestors": [
+        "BASIC_DEFINITIONS"
+    ],
+    "constants": {
+        "Bmm_internal_version": {
+            "name": "Bmm_internal_version",
+            "documentation": "Current internal version of BMM meta-model, used to determine if a given schema can be processed by a given implementation of the model.",
+            "type": "String"
+        },
+        "Schema_name_delimiter": {
+            "name": "Schema_name_delimiter",
+            "documentation": "Delimiter used to separate schema id from package path in a fully qualified path.",
+            "type": "String",
+            "value": "\"::\""
+        },
+        "Package_name_delimiter": {
+            "name": "Package_name_delimiter",
+            "documentation": "Delimiter used to separate package names in a package path.",
+            "type": "String",
+            "value": "\".\""
+        },
+        "Bmm_schema_file_extension": {
+            "name": "Bmm_schema_file_extension",
+            "documentation": "Extension used for BMM files.",
+            "type": "String",
+            "value": "\".bmm\""
+        },
+        "Type_delimiter": {
+            "name": "Type_delimiter",
+            "documentation": "Appears between a name and a type in a declaration or type signature.",
+            "type": "Character",
+            "value": "':'"
+        },
+        "Generic_left_delimiter": {
+            "name": "Generic_left_delimiter",
+            "documentation": "Left delimiter for generic class and generic type names, as used in `List<T>`.",
+            "type": "Character",
+            "value": "'<'"
+        },
+        "Generic_right_delimiter": {
+            "name": "Generic_right_delimiter",
+            "documentation": "Right delimiter for generic class and generic type names, as used in `List<T>`.",
+            "type": "Character",
+            "value": "'>'"
+        },
+        "Generic_separator": {
+            "name": "Generic_separator",
+            "documentation": "Separator used in Generic types.",
+            "type": "Character",
+            "value": "','"
+        },
+        "Generic_constraint_delimiter": {
+            "name": "Generic_constraint_delimiter",
+            "documentation": "Delimiter between formal type parameter and constraint type, as used in `Sortable<T: Ordered>`.",
+            "type": "Character",
+            "value": "':'"
+        },
+        "Tuple_left_delim": {
+            "name": "Tuple_left_delim",
+            "documentation": "Left delimiter of a Tuple type and also instance. Example:\n\n* `[Integer, String]` - a tuple type;\n* `[3, \"Quixote\"]` - a tuple.",
+            "type": "Character",
+            "value": "'['"
+        },
+        "Tuple_right_delim": {
+            "name": "Tuple_right_delim",
+            "documentation": "Right delimiter of a Tuple type and also instance.",
+            "type": "Character",
+            "value": "']'"
+        },
+        "Tuple_separator": {
+            "name": "Tuple_separator",
+            "documentation": "Separator used in Tuple types and instances.",
+            "type": "Character",
+            "value": "','"
+        },
+        "Constraint_left_delim": {
+            "name": "Constraint_left_delim",
+            "documentation": "Left delimiter used in serial form of instance constrained enumeration.",
+            "type": "Character",
+            "value": "'«'"
+        },
+        "Constraint_right_delim": {
+            "name": "Constraint_right_delim",
+            "documentation": "Right delimiter used in serial form of instance constrained enumeration.",
+            "type": "Character",
+            "value": "'»'"
+        },
+        "Metadata_bmm_version": {
+            "name": "Metadata_bmm_version",
+            "documentation": "Attribute name of logical attribute 'bmm_version' in .bmm schema file.",
+            "type": "String",
+            "value": "\"bmm_version\""
+        },
+        "Metadata_schema_name": {
+            "name": "Metadata_schema_name",
+            "documentation": "Attribute name of logical attribute 'schema_name' in .bmm schema file.",
+            "type": "String",
+            "value": "\"schema_name\""
+        },
+        "Metadata_rm_publisher": {
+            "name": "Metadata_rm_publisher",
+            "documentation": "Attribute name of logical attribute 'rm_publisher' in .bmm schema file.",
+            "type": "String",
+            "value": "\"rm_publisher\""
+        },
+        "Metadata_rm_release": {
+            "name": "Metadata_rm_release",
+            "documentation": "Attribute name of logical attribute 'rm_release' in .bmm schema file.",
+            "type": "String",
+            "value": "\"rm_release\""
+        },
+        "Metadata_schema_revision": {
+            "name": "Metadata_schema_revision",
+            "documentation": "Attribute name of logical attribute 'schema_revision' in .bmm schema file.",
+            "type": "String",
+            "value": "\"schema_revision\""
+        },
+        "Metadata_schema_lifecycle_state": {
+            "name": "Metadata_schema_lifecycle_state",
+            "documentation": "Attribute name of logical attribute 'schema_lifecycle_state' in .bmm schema file.",
+            "type": "String",
+            "value": "\"schema_lifecycle_state\""
+        },
+        "Metadata_schema_description": {
+            "name": "Metadata_schema_description",
+            "documentation": "Attribute name of logical attribute 'schema_description' in .bmm schema file.",
+            "type": "String",
+            "value": "\"schema_description\""
+        },
+        "Metadata_schema_path": {
+            "name": "Metadata_schema_path",
+            "documentation": "Path of schema file.",
+            "type": "String",
+            "value": "\"schema_path\""
+        }
+    },
+    "functions": {
+        "Any_class": {
+            "name": "Any_class",
+            "documentation": "built-in class definition corresponding to the top `Any' class.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_SIMPLE_CLASS"
+            }
+        },
+        "Any_type": {
+            "name": "Any_type",
+            "documentation": "Built-in type definition corresponding to the top `Any' type.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_SIMPLE_TYPE"
+            }
+        },
+        "create_schema_id": {
+            "name": "create_schema_id",
+            "documentation": "Create schema id, formed from:\n\n`a_model_publisher '-' a_schema_name '-' a_model_release`\n\ne.g. `openehr_rm_1.0.3`, `openehr_test_1.0.1`, `iso_13606_1_2008_2.1.2`.",
+            "parameters": {
+                "a_model_publisher": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_model_publisher",
+                    "type": "Any"
+                },
+                "a_schema_name": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_schema_name",
+                    "type": "Any"
+                },
+                "a_model_release": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_model_release",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_bmm_package"
+}

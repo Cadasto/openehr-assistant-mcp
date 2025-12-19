@@ -1,0 +1,10 @@
+{
+    "name": "EL_VARIABLE",
+    "documentation": "Abstract meta-type of any kind of symbolic variable.",
+    "is_abstract": true,
+    "ancestors": [
+        "EL_VALUE_GENERATOR"
+    ],
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

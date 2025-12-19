@@ -1,0 +1,63 @@
+{
+    "name": "P_BMM_GENERIC_TYPE",
+    "documentation": "Persistent form of `BMM_GENERIC_TYPE`.",
+    "ancestors": [
+        "P_BMM_BASE_TYPE"
+    ],
+    "properties": {
+        "root_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "root_type",
+            "documentation": "Root type of this generic type, e.g. `Interval` in `Interval<Integer>`.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "generic_parameter_defs": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "generic_parameter_defs",
+            "documentation": "Generic parameters of the root_type in this type specifier if non-simple types. The order must match the order of the owning class's formal generic parameter declarations. Persistent attribute.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "P_BMM_TYPE"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "generic_parameters": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "generic_parameters",
+            "documentation": "Generic parameters of the `_root_type_` in this type specifier, if simple types. The order must match the order of the owning class's formal generic parameter declarations. Persistent attribute.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "bmm_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_type",
+            "documentation": "Result of `_create_bmm_type()_` call.",
+            "type": "BMM_GENERIC_TYPE"
+        }
+    },
+    "functions": {
+        "generic_parameter_refs": {
+            "name": "generic_parameter_refs",
+            "documentation": "Generic parameters of the root_type in this type specifier. The order must match the order of the owning class's formal generic parameter declarations",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "P_BMM_TYPE"
+            },
+            "is_nullable": true
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

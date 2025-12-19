@@ -1,0 +1,23 @@
+{
+    "name": "P_C_DEFINED_OBJECT",
+    "documentation": "Abstract parent type of C_OBJECT subtypes that are defined by value, i.e. whose definitions are actually in the archetype rather than being by reference. ",
+    "is_abstract": true,
+    "ancestors": [
+        "P_C_OBJECT"
+    ],
+    "properties": {
+        "is_frozen": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_frozen",
+            "type": "Boolean"
+        },
+        "default_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "default_value",
+            "is_mandatory": true,
+            "type": "Any"
+        }
+    },
+    "package": "org.openehr.am.aom2.persistence.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_constraint_model_package"
+}

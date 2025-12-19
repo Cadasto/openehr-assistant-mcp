@@ -1,0 +1,6 @@
+{
+    "name": "Comparable",
+    "is_abstract": true,
+    "package": "org.openehr.base.foundation_types.primitive_types",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_primitive_types_package"
+}

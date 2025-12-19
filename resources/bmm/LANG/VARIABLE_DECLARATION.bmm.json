@@ -1,0 +1,25 @@
+{
+    "name": "VARIABLE_DECLARATION",
+    "documentation": "Meta-type for the declaration of a named variable that can be used in an expression.",
+    "ancestors": [
+        "STATEMENT"
+    ],
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of the variable.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "Primitive type of the variable, enabling its use to be type-checked in expressions.",
+            "is_mandatory": true,
+            "type": "EXPR_TYPE_DEF"
+        }
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

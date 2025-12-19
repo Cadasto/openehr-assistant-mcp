@@ -1,0 +1,9 @@
+{
+    "name": "PERSON",
+    "documentation": "Generic description of persons. Provides a dedicated type to which Person archetypes can be targeted.",
+    "ancestors": [
+        "ACTOR"
+    ],
+    "package": "org.openehr.rm.demographic",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/demographic.html#_demographic_package"
+}

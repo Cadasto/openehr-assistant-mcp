@@ -1,0 +1,22 @@
+{
+    "name": "AOM_PROPERTY_MAPPING",
+    "documentation": "Data object expressing a mapping between two class properties.",
+    "properties": {
+        "source_property_name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "source_property_name",
+            "documentation": "Name of property in source class.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "target_property_name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "target_property_name",
+            "documentation": "Name of property in target class.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "package": "org.openehr.am.aom2.profile",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_profile_package"
+}

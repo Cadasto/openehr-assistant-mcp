@@ -1,0 +1,136 @@
+{
+    "name": "P_BMM_CLASS",
+    "documentation": "Definition of persistent form of `BMM_CLASS` for serialisation to ODIN, JSON, XML etc.",
+    "ancestors": [
+        "P_BMM_MODEL_ELEMENT"
+    ],
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of the class. Persisted attribute.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "ancestors": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "ancestors",
+            "documentation": "List of immediate inheritance parents. If there are generic ancestors, use `_ancestor_defs_` instead. Persisted attribute.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "properties": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "properties",
+            "documentation": "List of attributes defined in this class. Persistent attribute.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "P_BMM_PROPERTY"
+                ]
+            }
+        },
+        "is_abstract": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_abstract",
+            "documentation": "True if this is an abstract type. Persisted attribute.",
+            "type": "Boolean"
+        },
+        "is_override": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_override",
+            "documentation": "True if this class definition overrides one found in an included schema.",
+            "type": "Boolean"
+        },
+        "generic_parameter_defs": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "generic_parameter_defs",
+            "documentation": "List of generic parameter definitions. Persisted attribute.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "P_BMM_GENERIC_PARAMETER"
+                ]
+            }
+        },
+        "source_schema_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "source_schema_id",
+            "documentation": "Reference to original source schema defining this class. Set during `BMM_SCHEMA` materialise. Useful for GUI tools to enable user to edit the schema file containing a given class (i.e. taking into account that a class may be in any of the schemas in a schema inclusion hierarchy).",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "bmm_class": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_class",
+            "documentation": "`BMM_CLASS` object built by `_create_bmm_class_definition_` and `_populate_bmm_class_definition_`.",
+            "type": "BMM_CLASS"
+        },
+        "uid": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "uid",
+            "documentation": "Unique id generated for later comparison during merging, in order to detect if two classes are the same. Assigned in post-load processing.",
+            "is_mandatory": true,
+            "type": "Integer"
+        },
+        "ancestor_defs": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "ancestor_defs",
+            "documentation": "List of structured inheritance ancestors, used only in the case of generic inheritance. Persisted attribute.",
+            "type_def": {
+                "container_type": "List",
+                "type": "P_BMM_GENERIC_TYPE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "is_generic": {
+            "name": "is_generic",
+            "documentation": "True if this class is a generic class.",
+            "post_conditions": {
+                "Post": "Result := generic_parameter_defs /= Void"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "create_bmm_class": {
+            "name": "create_bmm_class",
+            "documentation": "Create `_bmm_class_definition_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "populate_bmm_class": {
+            "name": "populate_bmm_class",
+            "documentation": "Add remaining model elements from Current to `_bmm_class_definition_`.",
+            "parameters": {
+                "a_bmm_schema": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_bmm_schema",
+                    "type": "BMM_MODEL"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

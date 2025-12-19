@@ -1,0 +1,31 @@
+{
+    "name": "CODE_PHRASE",
+    "documentation": "A fully coordinated (i.e. all coordination has been performed) term from a terminology service (as distinct from a particular terminology).\n\nRetain for LEGACY only, while ADL1.4 requires CODE_PHRASE.",
+    "properties": {
+        "terminology_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "terminology_id",
+            "documentation": "Identifier of the distinct terminology from which the code_string (or its elements) was extracted.",
+            "is_mandatory": true,
+            "type": "TERMINOLOGY_ID"
+        },
+        "code_string": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "code_string",
+            "documentation": "The key used by the terminology service to identify a concept or coordination of concepts. This string is most likely parsable inside the terminology service, but nothing can be assumed about its syntax outside that context. ",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "preferred_term": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "preferred_term",
+            "documentation": "Optional attribute to carry preferred term corresponding to the code or expression in `_code_string_`. Typical use in integration situations which create mappings, and representing data for which both a (non-preferred) actual term and a preferred term are both required.",
+            "type": "String"
+        }
+    },
+    "invariants": {
+        "Code_string_valid": "not code_string.is_empty"
+    },
+    "package": "org.openehr.base.foundation_types.terminology",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_terminology_package"
+}

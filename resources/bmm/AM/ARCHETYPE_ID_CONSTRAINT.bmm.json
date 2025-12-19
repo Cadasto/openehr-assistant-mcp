@@ -1,0 +1,15 @@
+{
+    "name": "ARCHETYPE_ID_CONSTRAINT",
+    "documentation": "Constraint expression representing a regex constraint on an archetype identifier.",
+    "properties": {
+        "constraint": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "constraint",
+            "documentation": "Right hand side of the constraint expression, in the form of a `C_STRING`, i.e. string value constrainer.",
+            "is_mandatory": true,
+            "type": "C_STRING"
+        }
+    },
+    "package": "org.openehr.am.aom2.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_constraint_model_package"
+}

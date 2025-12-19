@@ -1,0 +1,22 @@
+{
+    "name": "P_BMM_INDEXED_CONTAINER_TYPE",
+    "ancestors": [
+        "P_BMM_CONTAINER_TYPE"
+    ],
+    "properties": {
+        "index_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "index_type",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "bmm_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_type",
+            "documentation": "Result of `_create_bmm_type()_` call.",
+            "type": "BMM_INDEXED_CONTAINER_TYPE"
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

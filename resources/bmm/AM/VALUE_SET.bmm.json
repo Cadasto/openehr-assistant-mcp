@@ -1,0 +1,9 @@
+{
+    "name": "VALUE_SET",
+    "documentation": "Representation of a flat value set within the archetype terminology.",
+    "ancestors": [
+        "TERMINOLOGY_RELATION"
+    ],
+    "package": "org.openehr.am.aom2.terminology",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_terminology_package"
+}

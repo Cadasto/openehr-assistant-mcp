@@ -1,0 +1,19 @@
+{
+    "name": "EL_AGENT_CALL",
+    "documentation": "A call made to a 'closed' agent, i.e. one with no remaining open arguments.",
+    "is_abstract": true,
+    "properties": {
+        "agent": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "agent",
+            "documentation": "The agent being called.",
+            "is_mandatory": true,
+            "type": "EL_AGENT"
+        }
+    },
+    "invariants": {
+        "Inv_valid_call": "agent.is_callable()"
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

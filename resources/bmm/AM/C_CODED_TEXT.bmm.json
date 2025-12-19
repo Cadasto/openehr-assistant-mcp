@@ -1,0 +1,34 @@
+{
+    "name": "C_CODED_TEXT",
+    "documentation": "Constrainer class for Coded text data.",
+    "ancestors": [
+        "C_DOMAIN_TYPE"
+    ],
+    "properties": {
+        "terminology": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "terminology",
+            "documentation": "Terminology identifier.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "code_list": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "code_list",
+            "documentation": "Optional list of codes from the terminology. No list means any code from the terminology is allowed.",
+            "type_def": {
+                "root_type": "List",
+                "generic_parameters": [
+                    "String"
+                ]
+            }
+        },
+        "reference": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "reference",
+            "type": "String"
+        }
+    },
+    "package": "org.openehr.am.aom14.openehr_archetype_profile",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM1.4.html#_openehr_archetype_profile_package"
+}

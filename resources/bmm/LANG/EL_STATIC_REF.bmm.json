@@ -1,0 +1,25 @@
+{
+    "name": "EL_STATIC_REF",
+    "documentation": "Reference to a writable property, either a constant or computed.",
+    "ancestors": [
+        "EL_FEATURE_REF"
+    ],
+    "properties": {
+        "definition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "definition",
+            "documentation": "Constant definition (within class).",
+            "is_mandatory": true,
+            "type": "BMM_STATIC"
+        },
+        "is_writable": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_writable",
+            "documentation": "Defined to return False.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

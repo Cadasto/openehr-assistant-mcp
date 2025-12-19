@@ -1,0 +1,54 @@
+{
+    "name": "CODE_SET",
+    "documentation": "A code set.",
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of this code set.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "openehr_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "openehr_id",
+            "documentation": "Identifier used for code set in the openEHR Reference Model. The value is inferred from the `_name_` attribute.\n\nValid values take the form of an xs:NCName value, i.e. cannot contain:\n\n* symbol characters `:, @, $, %, &, /, +, ,, ;`;\n* whitespace characters or different parentheses. \n\nAn NCName cannot begin with a number, dot or minus character although these can appear later in the value.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "issuer": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "issuer",
+            "documentation": "Name of the issuing organisation.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "codes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "codes",
+            "documentation": "Codes in this code set.",
+            "type_def": {
+                "container_type": "List",
+                "type": "CODE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "external_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "external_id",
+            "documentation": "An optional identifier assumed by openEHR to be the identifier of this code set, based on its published name, with spaces replaced by underscores.\n\nValid values take the form of an xs:NCName value, i.e. cannot contain:\n\n* symbol characters `:, @, $, %, &, /, +, ,, ;`;\n* whitespace characters or different parentheses. \n\nAn NCName cannot begin with a number, dot or minus character although these can appear later in the value.",
+            "type": "String"
+        },
+        "status": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "status",
+            "documentation": "Status of this code set.",
+            "type": "TERMINOLOGY_STATUS"
+        }
+    },
+    "package": "org.openehr.term.terminology",
+    "specUrl": "https://specifications.openehr.org/releases/TERM/development/terminology.html#_terminology_package"
+}

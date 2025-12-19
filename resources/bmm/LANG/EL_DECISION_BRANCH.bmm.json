@@ -1,0 +1,22 @@
+{
+    "name": "EL_DECISION_BRANCH",
+    "documentation": "Abstract parent of meta-types representing a branch of some kind of decision structure. Defines `result` as being of the generic type `T`.",
+    "is_abstract": true,
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "EL_TERMINAL"
+        }
+    },
+    "properties": {
+        "result": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "result",
+            "documentation": "Result expression of conditional, if its `_condition_` evaluates to True.",
+            "is_mandatory": true,
+            "type": "T"
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

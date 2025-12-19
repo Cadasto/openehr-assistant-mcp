@@ -1,0 +1,36 @@
+{
+    "name": "BMM_OPERATOR",
+    "documentation": "Definition of a symbolic operator associated with a function.",
+    "properties": {
+        "position": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "position",
+            "documentation": "Position of operator in syntactic representation.",
+            "is_mandatory": true,
+            "type": "BMM_OPERATOR_POSITION"
+        },
+        "symbols": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "symbols",
+            "documentation": "Set of `String` symbols that may be used to represent this operator in a textual representation of a BMM model.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Formal name of the operator, e.g. 'minus' etc.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

@@ -1,0 +1,35 @@
+{
+    "name": "EL_PROPERTY_REF",
+    "documentation": "Reference to a writable property.",
+    "ancestors": [
+        "EL_FEATURE_REF"
+    ],
+    "properties": {
+        "definition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "definition",
+            "documentation": "Property definition (within class).",
+            "is_mandatory": true,
+            "type": "BMM_PROPERTY"
+        },
+        "is_writable": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_writable",
+            "documentation": "Defined to return True.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "eval_type": {
+            "name": "eval_type",
+            "documentation": "Type definition (i.e. BMM meta-type definition object) of the constant, property or variable, inferred by inspection of the current scoping instance. Return `_definition.type_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_TYPE"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

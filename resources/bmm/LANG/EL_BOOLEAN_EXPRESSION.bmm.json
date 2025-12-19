@@ -1,0 +1,12 @@
+{
+    "name": "EL_BOOLEAN_EXPRESSION",
+    "documentation": "Boolean-returning expression.",
+    "ancestors": [
+        "EL_CONSTRAINED"
+    ],
+    "invariants": {
+        "Inv_boolean_expression": "base_expression.is_boolean()"
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

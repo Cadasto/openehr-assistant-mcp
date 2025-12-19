@@ -1,0 +1,28 @@
+{
+    "name": "TERMINOLOGY_CONCEPT",
+    "documentation": "A single terminology concept in a vocabulary.",
+    "properties": {
+        "id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "id",
+            "documentation": "The code of this concept.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "rubric": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "rubric",
+            "documentation": "The rubric, i.e. linguistic expression, of this concept, in the language of this terminology instance.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "status": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "status",
+            "documentation": "Status of this concept within the vocabulary.",
+            "type": "TERMINOLOGY_STATUS"
+        }
+    },
+    "package": "org.openehr.term.terminology",
+    "specUrl": "https://specifications.openehr.org/releases/TERM/development/terminology.html#_terminology_package"
+}

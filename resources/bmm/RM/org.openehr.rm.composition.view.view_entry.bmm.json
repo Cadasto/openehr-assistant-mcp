@@ -1,7 +1,0 @@
-{
-    "name": "VIEW_ENTRY",
-    "is_abstract": true,
-    "ancestors": [
-        "VIEW_ITEM"
-    ]
-}

@@ -1,8 +1,0 @@
-{
-    "name": "EXTRACT_ITEM",
-    "documentation": "Abstract parent of Extract Folder and Content types.",
-    "is_abstract": true,
-    "ancestors": [
-        "LOCATABLE"
-    ]
-}

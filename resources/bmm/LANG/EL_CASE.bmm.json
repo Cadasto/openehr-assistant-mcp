@@ -1,0 +1,24 @@
+{
+    "name": "EL_CASE",
+    "documentation": "One branch of a Case table, consisting of a value constraint (the match criterion) and a result, of the generic parameter type T.",
+    "ancestors": [
+        "EL_DECISION_BRANCH"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "EL_TERMINAL"
+        }
+    },
+    "properties": {
+        "value_constraint": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "value_constraint",
+            "documentation": "Constraint on ",
+            "is_mandatory": true,
+            "type": "C_OBJECT"
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

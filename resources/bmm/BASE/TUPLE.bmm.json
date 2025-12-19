@@ -1,0 +1,6 @@
+{
+    "name": "TUPLE",
+    "documentation": "Parent type of all TUPLE types.",
+    "package": "org.openehr.base.foundation_types.functional",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_functional_package"
+}

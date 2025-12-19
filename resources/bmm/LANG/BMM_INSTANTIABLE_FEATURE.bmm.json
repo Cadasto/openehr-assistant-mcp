@@ -1,0 +1,10 @@
+{
+    "name": "BMM_INSTANTIABLE_FEATURE",
+    "documentation": "Meta-type representing instantiable features, i.e. features that are created as value objects.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_FEATURE"
+    ],
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

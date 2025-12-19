@@ -1,0 +1,55 @@
+{
+    "name": "Cardinality",
+    "documentation": "Express constraints on the cardinality of container objects which are the values of multiply-valued attributes, including uniqueness and ordering, providing the means to state that a container acts like a logical list, set or bag.",
+    "properties": {
+        "interval": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "interval",
+            "documentation": "The interval of this cardinality. ",
+            "is_mandatory": true,
+            "type": "Multiplicity_interval"
+        },
+        "is_ordered": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_ordered",
+            "documentation": "True if the members of the container attribute to which this cardinality refers are ordered. ",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "is_unique": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_unique",
+            "documentation": "True if the members of the container attribute to which this cardinality refers are unique.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "is_bag": {
+            "name": "is_bag",
+            "documentation": "True if the semantics of this cardinality represent a bag, i.e. unordered, non-unique membership.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_list": {
+            "name": "is_list",
+            "documentation": "True if the semantics of this cardinality represent a list, i.e. ordered, non-unique membership.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_set": {
+            "name": "is_set",
+            "documentation": "True if the semantics of this cardinality represent a set, i.e. unordered, unique membership.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.base.foundation_types.interval",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_interval_package"
+}

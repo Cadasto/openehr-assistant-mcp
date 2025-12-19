@@ -1,0 +1,25 @@
+{
+    "name": "ASSIGNMENT",
+    "documentation": "Meta-type representing the assignment statement, which associates a named variable with an expression, and produces no value.",
+    "ancestors": [
+        "STATEMENT"
+    ],
+    "properties": {
+        "target": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "target",
+            "documentation": "The target variable on the notional left-hand side of this assignment.",
+            "is_mandatory": true,
+            "type": "VARIABLE_DECLARATION"
+        },
+        "source": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "source",
+            "documentation": "Source right hand side) of the assignment.",
+            "is_mandatory": true,
+            "type": "EXPR_VALUE"
+        }
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

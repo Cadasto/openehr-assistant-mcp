@@ -1,0 +1,19 @@
+{
+    "name": "EL_CONSTRAINED",
+    "documentation": "Abstract parent for second-order constrained forms of first-order expression meta-types.",
+    "is_abstract": true,
+    "ancestors": [
+        "EL_EXPRESSION"
+    ],
+    "properties": {
+        "base_expression": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "base_expression",
+            "documentation": "The base expression of this constrained form.",
+            "is_mandatory": true,
+            "type": "EL_EXPRESSION"
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

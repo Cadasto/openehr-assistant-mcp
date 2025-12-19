@@ -1,0 +1,11 @@
+{
+    "name": "EXTERNAL_ENVIRONMENT_ACCESS",
+    "documentation": "A mixin class providing access to services in the external environment.",
+    "is_abstract": true,
+    "ancestors": [
+        "TERMINOLOGY_SERVICE",
+        "MEASUREMENT_SERVICE"
+    ],
+    "package": "org.openehr.rm.support",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/support.html#_support_package"
+}

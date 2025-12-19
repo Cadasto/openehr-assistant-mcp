@@ -1,0 +1,51 @@
+{
+    "name": "BMM_PROPERTY",
+    "documentation": "Meta-type of a writable property definition within a class definition of an object model. The `_is_composition_` attribute indicates whether the property has sub-part or an association semantics with respect to the owning class.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_INSTANTIABLE_FEATURE"
+    ],
+    "properties": {
+        "is_im_runtime": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_im_runtime",
+            "documentation": "True if this property is marked with info model `_im_runtime_` property.",
+            "type": "Boolean"
+        },
+        "is_im_infrastructure": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_im_infrastructure",
+            "documentation": "True if this property was marked with info model `_im_infrastructure_` flag.",
+            "type": "Boolean"
+        },
+        "is_composition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_composition",
+            "documentation": "True if this property instance is a compositional sub-part of the owning class instance. Equivalent to 'composition' in UML associations (but missing from UML properties without associations) and also 'cascade-delete' semantics in ER schemas.",
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "existence": {
+            "name": "existence",
+            "documentation": "Interval form of `0..1`, `1..1` etc, derived from `_is_nullable_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Multiplicity_interval"
+            }
+        },
+        "display_name": {
+            "name": "display_name",
+            "documentation": "Name of this property to display in UI.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "invariants": {
+        "Inv_signature_no_args": "signature().arguments = Void"
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

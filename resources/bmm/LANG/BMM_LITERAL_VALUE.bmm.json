@@ -1,0 +1,41 @@
+{
+    "name": "BMM_LITERAL_VALUE",
+    "documentation": "Meta-type for literal instance values declared in a model. Instance values may be inline values of primitive types in the usual fashion or complex objects in syntax form, e.g. JSON.",
+    "is_abstract": true,
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "BMM_TYPE"
+        }
+    },
+    "properties": {
+        "value_literal": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "value_literal",
+            "documentation": "A serial representation of the value.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "value",
+            "documentation": "A native representation of the value, possibly derived by deserialising `_value_literal_`.",
+            "type": "Any"
+        },
+        "syntax": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "syntax",
+            "documentation": "Optional specification of formalism of the `_value_literal_` attribute for complex values. Value may be any of `json | json5 | yawl | xml | odin | rdf` or another value agreed by the user community. If not set, `json` is assumed.",
+            "type": "String"
+        },
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY_OPEN",
+            "name": "type",
+            "documentation": "Concrete type of this literal.",
+            "is_mandatory": true,
+            "type": "T"
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.literal_value",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_literal_value_package"
+}

@@ -1,0 +1,25 @@
+{
+    "name": "EL_READONLY_VARIABLE",
+    "documentation": "Meta-type of read-only variables, including routine parameter and the special variable 'Self'.",
+    "ancestors": [
+        "EL_VARIABLE"
+    ],
+    "properties": {
+        "definition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "definition",
+            "documentation": "Variable definition to which this reference refers.",
+            "is_mandatory": true,
+            "type": "BMM_READONLY_VARIABLE"
+        },
+        "is_writable": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_writable",
+            "documentation": "Defined to return False in all cases.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

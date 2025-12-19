@@ -1,0 +1,45 @@
+{
+    "name": "BMM_FEATURE",
+    "documentation": "A module-scoped formal element.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_FORMAL_ELEMENT"
+    ],
+    "properties": {
+        "is_synthesised_generic": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_synthesised_generic",
+            "documentation": "True if this feature was synthesised due to generic substitution in an inherited type, or further constraining of a formal generic parameter.",
+            "type": "Boolean"
+        },
+        "feature_extensions": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "feature_extensions",
+            "documentation": "Extensions to feature-level meta-types.",
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_FEATURE_EXTENSION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "group": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "group",
+            "documentation": "Group containing this feature.",
+            "is_mandatory": true,
+            "type": "BMM_FEATURE_GROUP"
+        },
+        "scope": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "scope",
+            "documentation": "Model element within which an element is declared.",
+            "is_mandatory": true,
+            "type": "BMM_CLASS"
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

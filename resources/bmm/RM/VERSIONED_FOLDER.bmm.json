@@ -1,0 +1,9 @@
+{
+    "name": "VERSIONED_FOLDER",
+    "documentation": "A version-controlled hierarchy of `FOLDERs` giving the effect of a directory. ",
+    "ancestors": [
+        "VERSIONED_OBJECT"
+    ],
+    "package": "org.openehr.rm.common.directory",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/common.html#_directory_package"
+}

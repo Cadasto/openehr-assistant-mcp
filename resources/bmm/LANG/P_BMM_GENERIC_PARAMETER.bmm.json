@@ -1,0 +1,50 @@
+{
+    "name": "P_BMM_GENERIC_PARAMETER",
+    "documentation": "Persistent form of `BMM_GENERIC_PARAMETER`.",
+    "ancestors": [
+        "P_BMM_MODEL_ELEMENT"
+    ],
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of the parameter, e.g. 'T' etc. Persisted attribute. Name is limited to 1 character, upper case.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "conforms_to_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "conforms_to_type",
+            "documentation": "Optional conformance constraint - the name of a type to which a concrete substitution of this generic parameter must conform. Persisted attribute.",
+            "type": "String"
+        },
+        "bmm_generic_parameter": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_generic_parameter",
+            "documentation": "`BMM_GENERIC_PARAMETER` created by `_create_bmm_generic_parameter_`.",
+            "type": "BMM_PARAMETER_TYPE"
+        }
+    },
+    "functions": {
+        "create_bmm_generic_parameter": {
+            "name": "create_bmm_generic_parameter",
+            "documentation": "Create `_bmm_generic_parameter_`.",
+            "parameters": {
+                "a_bmm_schema": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_bmm_schema",
+                    "type": "BMM_MODEL"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        }
+    },
+    "invariants": {
+        "Post_name": "name.count = 1 and name.is_upper"
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

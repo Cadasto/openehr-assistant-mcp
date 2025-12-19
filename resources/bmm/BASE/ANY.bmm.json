@@ -1,0 +1,93 @@
+{
+    "name": "Any",
+    "documentation": "Abstract ancestor class for all other classes. Usually maps to a type like `Any` or `Object` in an object-oriented technology. Defined here to provide value and reference equality semantics.",
+    "is_abstract": true,
+    "functions": {
+        "is_equal": {
+            "name": "is_equal",
+            "documentation": "Value equality: return True if `this` and `_other_` are attached to objects considered to be equal in value.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Any"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "equal": {
+            "name": "equal",
+            "aliases": [
+                "=",
+                "=="
+            ],
+            "documentation": "Reference equality for reference types, value equality for value types.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Any"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "instance_of": {
+            "name": "instance_of",
+            "documentation": "Create new instance of a type.",
+            "parameters": {
+                "a_type": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_type",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Any"
+            }
+        },
+        "type_of": {
+            "name": "type_of",
+            "documentation": "Type name of an object as a string. May include generic parameters, as in `\"Interval<Time>\"`.",
+            "parameters": {
+                "an_object": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "an_object",
+                    "type": "Any"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "not_equal": {
+            "name": "not_equal",
+            "aliases": [
+                "!=",
+                "≠"
+            ],
+            "documentation": "True if current object not equal to `_other_`. Returns not `_equal_()`.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Ordered"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.base.foundation_types",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_foundation_types_package"
+}

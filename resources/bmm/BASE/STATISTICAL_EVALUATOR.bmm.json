@@ -1,0 +1,189 @@
+{
+    "_type": "P_BMM_INTERFACE",
+    "name": "Statistical_evaluator",
+    "documentation": "A basic statistical evaluator class providing common functions on collections of numbers.",
+    "functions": {
+        "sum": {
+            "name": "sum",
+            "documentation": "Sum of a container of values.",
+            "parameters": {
+                "vals": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "vals",
+                    "type_def": {
+                        "root_type": "Container",
+                        "generic_parameters": [
+                            "Numeric"
+                        ]
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Double"
+            }
+        },
+        "avg": {
+            "name": "avg",
+            "documentation": "Synonym for `_mean()_`.",
+            "parameters": {
+                "vals": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "vals",
+                    "type_def": {
+                        "root_type": "Container",
+                        "generic_parameters": [
+                            "Numeric"
+                        ]
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Double"
+            }
+        },
+        "mean": {
+            "name": "mean",
+            "documentation": "Mean (arithmetic average) of a container of values.",
+            "parameters": {
+                "vals": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "vals",
+                    "type_def": {
+                        "root_type": "Container",
+                        "generic_parameters": [
+                            "Numeric"
+                        ]
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Double"
+            }
+        },
+        "median": {
+            "name": "median",
+            "documentation": "Return numerically centre value in ordered form of container contents.",
+            "parameters": {
+                "vals": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "vals",
+                    "type_def": {
+                        "root_type": "Container",
+                        "generic_parameters": [
+                            "Numeric"
+                        ]
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Numeric"
+            }
+        },
+        "mode": {
+            "name": "mode",
+            "documentation": "Mode (most frequent) of a container of values.",
+            "parameters": {
+                "vals": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "vals",
+                    "type_def": {
+                        "root_type": "Container",
+                        "generic_parameters": [
+                            "Numeric"
+                        ]
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Numeric"
+            }
+        },
+        "max": {
+            "name": "max",
+            "documentation": "Maximum of a container of values.",
+            "parameters": {
+                "vals": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "vals",
+                    "type_def": {
+                        "root_type": "Container",
+                        "generic_parameters": [
+                            "Numeric"
+                        ]
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Numeric"
+            }
+        },
+        "min": {
+            "name": "min",
+            "documentation": "Minimum of a container of values.",
+            "parameters": {
+                "vals": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "vals",
+                    "type_def": {
+                        "root_type": "Container",
+                        "generic_parameters": [
+                            "Numeric"
+                        ]
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Numeric"
+            }
+        },
+        "count": {
+            "name": "count",
+            "documentation": "Return the number of items in `_vals_`, i.e. `_vals.count_`.",
+            "parameters": {
+                "vals": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "vals",
+                    "type_def": {
+                        "root_type": "Container",
+                        "generic_parameters": [
+                            "Numeric"
+                        ]
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Numeric"
+            }
+        },
+        "std_dev": {
+            "name": "std_dev",
+            "documentation": "Compute standard deviation of a container of values.",
+            "parameters": {
+                "vals": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "vals",
+                    "type_def": {
+                        "root_type": "Container",
+                        "generic_parameters": [
+                            "Numeric"
+                        ]
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Double"
+            }
+        }
+    },
+    "package": "org.openehr.base.base_types.builtins",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/base_types.html#_builtins_package"
+}

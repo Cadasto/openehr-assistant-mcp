@@ -1,0 +1,37 @@
+{
+    "name": "EL_TYPE_REF",
+    "documentation": "Meta-type for reference to a non-abstract type as an object. Assumed to be accessible at run-time. Typically represented syntactically as `TypeName` or `{TypeName}`.\n\nMay be used as a value, or as the qualifier for a function or constant access.",
+    "ancestors": [
+        "EL_VALUE_GENERATOR"
+    ],
+    "properties": {
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "Type, directly from the name of the reference, e.g. `{SOME_TYPE}`.",
+            "is_mandatory": true,
+            "type": "BMM_TYPE"
+        },
+        "is_mutable": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_mutable",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "eval_type": {
+            "name": "eval_type",
+            "documentation": "Return `_type_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_TYPE"
+            }
+        }
+    },
+    "invariants": {
+        "Inv_no_context": "context = Void"
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

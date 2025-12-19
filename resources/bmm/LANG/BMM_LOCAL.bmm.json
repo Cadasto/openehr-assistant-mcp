@@ -1,0 +1,9 @@
+{
+    "name": "BMM_LOCAL",
+    "documentation": "A routine local variable (writable).",
+    "ancestors": [
+        "BMM_WRITABLE_VARIABLE"
+    ],
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

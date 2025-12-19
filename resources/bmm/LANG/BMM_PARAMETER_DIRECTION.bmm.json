@@ -1,0 +1,20 @@
+{
+    "_type": "P_BMM_ENUMERATION_STRING",
+    "name": "BMM_PARAMETER_DIRECTION",
+    "documentation": "Enumeration of parameter read/write direction values.",
+    "ancestors": [
+        "String"
+    ],
+    "item_names": [
+        "in",
+        "out",
+        "in_out"
+    ],
+    "item_documentations": [
+        "Parameter is an input parameter, and treated as readonly by the receiving routine.",
+        "Parameter is an output parameter, and treated as a reference to an entity writeable by the receiving routine.",
+        "Parameter is an input and output parameter, and treated as a reference to an entity readable and writeable by the receiving routine."
+    ],
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

@@ -1,0 +1,40 @@
+{
+    "name": "EXTRACT_CONTENT_ITEM",
+    "documentation": "Abstract model of a wrapper for one content item in an Extract, containing various meta-data. Indicates whether it was part of the primary set and what its original path was. Intended to be subtyped for wrappers of specific types of content.",
+    "is_abstract": true,
+    "ancestors": [
+        "EXTRACT_ITEM"
+    ],
+    "properties": {
+        "is_primary": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_primary",
+            "documentation": "True if the content item carried in this container was part of the primary set for the Extract, i.e. not added due to link-following.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "is_changed": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_changed",
+            "documentation": "True if the content item carried in this container is any kind of change since last send, in repeat sending situations.",
+            "type": "Boolean"
+        },
+        "is_masked": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_masked",
+            "documentation": "True if the content of this item has not been included due to insufficient access rights of requestor.",
+            "type": "Boolean"
+        },
+        "item": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "item",
+            "documentation": "Content object.",
+            "type": "Any"
+        }
+    },
+    "invariants": {
+        "Item_validity": "is_masked xor item /= Void"
+    },
+    "package": "org.openehr.rm.ehr_extract.common",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/ehr_extract.html#_common_package"
+}

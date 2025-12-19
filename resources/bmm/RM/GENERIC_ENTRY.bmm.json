@@ -1,0 +1,18 @@
+{
+    "name": "GENERIC_ENTRY",
+    "documentation": "This class is used to create intermediate representations of data from sources not otherwise conforming to openEHR classes, such as HL7 messages, relational databases and so on.",
+    "ancestors": [
+        "CONTENT_ITEM"
+    ],
+    "properties": {
+        "data": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "data",
+            "documentation": "The data from the source message or record. May be recorded in any structural openEHR representation.",
+            "is_mandatory": true,
+            "type": "ITEM"
+        }
+    },
+    "package": "org.openehr.rm.integration",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/integration.html#_integration_package"
+}

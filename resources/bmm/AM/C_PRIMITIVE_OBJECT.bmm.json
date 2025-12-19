@@ -1,0 +1,34 @@
+{
+    "name": "C_PRIMITIVE_OBJECT",
+    "documentation": "Constraint on a primitive type.",
+    "ancestors": [
+        "C_DEFINED_OBJECT"
+    ],
+    "properties": {
+        "item": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "item",
+            "documentation": "Object actually defining the constraint.",
+            "is_mandatory": true,
+            "type": "C_PRIMITIVE"
+        }
+    },
+    "functions": {
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if any value of the type being constrained in item is allowed.",
+            "post_conditions": {
+                "Post": "Result = item = Void"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Item_valid": "any_allowed xor item /= Void"
+    },
+    "package": "org.openehr.am.aom14.archetype.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM1.4.html#_constraint_model_package"
+}

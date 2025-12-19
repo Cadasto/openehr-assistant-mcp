@@ -1,0 +1,39 @@
+{
+    "_type": "P_BMM_INTERFACE",
+    "name": "Quantity_converter",
+    "documentation": "Quantity conversion.",
+    "functions": {
+        "convert_value": {
+            "name": "convert_value",
+            "documentation": "Convert `_value_` of physical property type (e.g. 'pressure' etc) from one units to another.",
+            "parameters": {
+                "value": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "value",
+                    "type": "Real"
+                },
+                "from_units": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "from_units",
+                    "type": "String"
+                },
+                "to_units": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "to_units",
+                    "type": "String"
+                },
+                "property": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "property",
+                    "type": "Terminology_code"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Real"
+            }
+        }
+    },
+    "package": "org.openehr.base.base_types.builtins",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/base_types.html#_builtins_package"
+}

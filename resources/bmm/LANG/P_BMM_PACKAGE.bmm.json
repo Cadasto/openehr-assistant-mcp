@@ -1,0 +1,63 @@
+{
+    "name": "P_BMM_PACKAGE",
+    "documentation": "Persisted form of a package as a tree structure whose nodes can contain more packages and/or classes.",
+    "ancestors": [
+        "P_BMM_PACKAGE_CONTAINER",
+        "P_BMM_MODEL_ELEMENT"
+    ],
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of the package from schema; this name may be qualified if it is a top-level package within the schema, or unqualified. Persistent attribute.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "classes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "classes",
+            "documentation": "List of classes in this package. Persistent attribute.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "bmm_package_definition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_package_definition",
+            "documentation": "`BMM_PACKAGE` created by `_create_bmm_package_definition_`.",
+            "type": "BMM_PACKAGE"
+        }
+    },
+    "functions": {
+        "merge": {
+            "name": "merge",
+            "documentation": "Merge packages and classes from other (from an included `P_BMM_SCHEMA`) into this package.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "P_BMM_PACKAGE"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "create_bmm_package_definition": {
+            "name": "create_bmm_package_definition",
+            "documentation": "Generate a `BMM_PACKAGE_DEFINITION` object and write it to `_bmm_package_definition_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

@@ -1,0 +1,18 @@
+{
+    "name": "SYNC_EXTRACT_REQUEST",
+    "documentation": "Type of request designed for synchronisation of Contributions between openEHR servers.",
+    "ancestors": [
+        "MESSAGE_CONTENT"
+    ],
+    "properties": {
+        "specification": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "specification",
+            "documentation": "Details of specification of synchronisation request.",
+            "is_mandatory": true,
+            "type": "SYNC_EXTRACT_SPEC"
+        }
+    },
+    "package": "org.openehr.rm.ehr_extract.sync_extract",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/ehr_extract.html#_sync_extract_package"
+}

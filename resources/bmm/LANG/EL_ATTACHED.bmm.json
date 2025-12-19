@@ -1,0 +1,9 @@
+{
+    "name": "EL_ATTACHED",
+    "documentation": "A predicate on any object reference (including function call) that returns True if the reference is attached, i.e. non-Void.",
+    "ancestors": [
+        "EL_PREDICATE"
+    ],
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

@@ -1,0 +1,10 @@
+{
+    "name": "EXTRACT_ITEM",
+    "documentation": "Abstract parent of Extract Folder and Content types.",
+    "is_abstract": true,
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "package": "org.openehr.rm.ehr_extract.common",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/ehr_extract.html#_common_package"
+}

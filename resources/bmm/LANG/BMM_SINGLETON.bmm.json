@@ -1,0 +1,18 @@
+{
+    "name": "BMM_SINGLETON",
+    "documentation": "Meta-type for static value properties computed once by a function invocation.",
+    "ancestors": [
+        "BMM_STATIC"
+    ],
+    "properties": {
+        "generator": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "generator",
+            "documentation": "Generator of the value of this static property.",
+            "is_mandatory": true,
+            "type": "BMM_ROUTINE_DEFINITION"
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

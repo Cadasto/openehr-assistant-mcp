@@ -1,0 +1,10 @@
+{
+    "name": "EL_SIMPLE",
+    "documentation": "Simple terminal i.e. logically atomic expression element.",
+    "is_abstract": true,
+    "ancestors": [
+        "EL_TERMINAL"
+    ],
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

@@ -1,0 +1,35 @@
+{
+    "name": "Array",
+    "documentation": "Container whose storage is assumed to be contiguous.",
+    "ancestors": [
+        "Container"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Any"
+        }
+    },
+    "functions": {
+        "item": {
+            "name": "item",
+            "aliases": [
+                "[]"
+            ],
+            "documentation": "Return item for key  `_a_key_`.",
+            "parameters": {
+                "a_key": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_key",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "T"
+            }
+        }
+    },
+    "package": "org.openehr.base.foundation_types.structure",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_structure_package"
+}

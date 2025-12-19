@@ -1,0 +1,15 @@
+{
+    "name": "Set",
+    "documentation": "Unordered container that may not contain duplicates.",
+    "ancestors": [
+        "Container"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Any"
+        }
+    },
+    "package": "org.openehr.base.foundation_types.structure",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_structure_package"
+}

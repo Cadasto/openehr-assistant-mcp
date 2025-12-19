@@ -1,0 +1,29 @@
+{
+    "_type": "P_BMM_ENUMERATION_STRING",
+    "name": "BMM_SCHEMA_METADATA_KEY",
+    "ancestors": [
+        "String"
+    ],
+    "item_names": [
+        "bmm_version",
+        "model_publisher",
+        "schema_name",
+        "model_release",
+        "schema_revision",
+        "schema_lifecycle_state",
+        "schema_description",
+        "schema_path"
+    ],
+    "item_documentations": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+    "package": "org.openehr.lang.bmm.model_access",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_model_access_package"
+}

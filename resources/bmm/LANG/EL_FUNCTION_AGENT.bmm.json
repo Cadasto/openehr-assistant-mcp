@@ -1,0 +1,30 @@
+{
+    "name": "EL_FUNCTION_AGENT",
+    "documentation": "An agent whose signature is of a function, i.e. has a result type.",
+    "ancestors": [
+        "EL_AGENT"
+    ],
+    "properties": {
+        "definition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "definition",
+            "documentation": "Reference to definition of a routine for which this is a direct call instance, if one exists. ",
+            "type": "BMM_FUNCTION"
+        }
+    },
+    "functions": {
+        "eval_type": {
+            "name": "eval_type",
+            "documentation": "Eval type is the signature corresponding to the (remaining) open arguments and return type, if any.",
+            "post_conditions": {
+                "Post_result": "Result = definition.signature"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_FUNCTION_TYPE"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

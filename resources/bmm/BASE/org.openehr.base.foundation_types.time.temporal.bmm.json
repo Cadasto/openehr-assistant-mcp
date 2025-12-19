@@ -1,8 +1,0 @@
-{
-    "name": "Temporal",
-    "documentation": "Abstract ancestor of time-related classes.",
-    "is_abstract": true,
-    "ancestors": [
-        "Ordered"
-    ]
-}

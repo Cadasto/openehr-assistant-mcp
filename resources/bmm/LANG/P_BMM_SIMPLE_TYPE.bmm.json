@@ -1,0 +1,24 @@
+{
+    "name": "P_BMM_SIMPLE_TYPE",
+    "documentation": "Persistent form of `BMM_SIMPLE_TYPE`.",
+    "ancestors": [
+        "P_BMM_BASE_TYPE"
+    ],
+    "properties": {
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "Name of type - must be a simple class name.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "bmm_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_type",
+            "documentation": "Result of `_create_bmm_type()_` call.",
+            "type": "BMM_SIMPLE_TYPE"
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

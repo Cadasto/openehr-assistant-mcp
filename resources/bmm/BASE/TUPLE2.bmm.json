@@ -1,0 +1,19 @@
+{
+    "name": "TUPLE2",
+    "documentation": "A Tuple type used, among other things, for representing two typed arguments within a Routine signature.",
+    "ancestors": [
+        "TUPLE"
+    ],
+    "generic_parameter_defs": {
+        "A": {
+            "name": "A",
+            "conforms_to_type": "Any"
+        },
+        "B": {
+            "name": "B",
+            "conforms_to_type": "Any"
+        }
+    },
+    "package": "org.openehr.base.foundation_types.functional",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_functional_package"
+}

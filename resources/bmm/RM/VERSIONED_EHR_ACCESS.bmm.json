@@ -1,0 +1,9 @@
+{
+    "name": "VERSIONED_EHR_ACCESS",
+    "documentation": "Version container for `EHR_ACCESS` instance.",
+    "ancestors": [
+        "VERSIONED_OBJECT"
+    ],
+    "package": "org.openehr.rm.ehr",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/ehr.html#_ehr_package"
+}

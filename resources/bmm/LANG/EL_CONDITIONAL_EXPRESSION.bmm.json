@@ -1,0 +1,27 @@
+{
+    "name": "EL_CONDITIONAL_EXPRESSION",
+    "documentation": "Conditional structure used in condition chain expressions. Evaluated by evaluating its `_condition_`, which is a Boolean-returning expression, and if this returns True, the result is the evaluation result of `_expression_`.",
+    "ancestors": [
+        "EL_DECISION_BRANCH"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "EL_TERMINAL"
+        }
+    },
+    "properties": {
+        "condition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "condition",
+            "documentation": "Boolean expression defining the condition of this decision branch.",
+            "is_mandatory": true,
+            "type": "EL_EXPRESSION"
+        }
+    },
+    "invariants": {
+        "Inv_condition_boolean": "condition.is_boolean()"
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

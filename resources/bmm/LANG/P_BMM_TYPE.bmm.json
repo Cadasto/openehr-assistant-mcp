@@ -1,0 +1,47 @@
+{
+    "name": "P_BMM_TYPE",
+    "documentation": "Persistent form of `BMM_TYPE`.",
+    "is_abstract": true,
+    "properties": {
+        "bmm_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_type",
+            "documentation": "Result of `_create_bmm_type()_` call.",
+            "type": "BMM_TYPE"
+        }
+    },
+    "functions": {
+        "create_bmm_type": {
+            "name": "create_bmm_type",
+            "documentation": "Create appropriate `BMM_XXX` object; effected in descendants.",
+            "is_abstract": true,
+            "parameters": {
+                "a_schema": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_schema",
+                    "type": "BMM_MODEL"
+                },
+                "a_class_def": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_class_def",
+                    "type": "BMM_CLASS"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "as_type_string": {
+            "name": "as_type_string",
+            "documentation": "Formal name of the type for display.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

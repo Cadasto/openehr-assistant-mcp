@@ -1,0 +1,24 @@
+{
+    "name": "BMM_STATEMENT_BLOCK",
+    "documentation": "A statement 'block' corresponding to the programming language concept of the same name. May be used to establish scope in specific languages.",
+    "ancestors": [
+        "BMM_STATEMENT_ITEM"
+    ],
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "Child blocks of the current block.",
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_STATEMENT_ITEM"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.statement",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_statement_package"
+}

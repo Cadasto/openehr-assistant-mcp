@@ -1,0 +1,21 @@
+{
+    "name": "P_BMM_PACKAGE_CONTAINER",
+    "documentation": "Persisted form of a model component that contains packages.",
+    "properties": {
+        "packages": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "packages",
+            "documentation": "Package structure as a hierarchy of packages each potentially containing names of classes in that package in the original model.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "P_BMM_PACKAGE"
+                ]
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

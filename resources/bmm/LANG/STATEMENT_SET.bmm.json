@@ -1,0 +1,37 @@
+{
+    "name": "STATEMENT_SET",
+    "documentation": "A container for a specific set of statements intended to be used together.",
+    "properties": {
+        "statement": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "statement",
+            "documentation": "The member statements of this statement set.",
+            "type_def": {
+                "container_type": "List",
+                "type": "STATEMENT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Optional name of this rule set.",
+            "type": "String"
+        }
+    },
+    "functions": {
+        "execution_result": {
+            "name": "execution_result",
+            "documentation": "Execution result of the whole rule set. Determined by the and-ing of result values of Assertions in the rule set.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

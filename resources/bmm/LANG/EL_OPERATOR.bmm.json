@@ -1,0 +1,52 @@
+{
+    "name": "EL_OPERATOR",
+    "documentation": "Abstract parent of operator types.",
+    "is_abstract": true,
+    "ancestors": [
+        "EL_EXPRESSION"
+    ],
+    "properties": {
+        "precedence_overridden": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "precedence_overridden",
+            "documentation": "True if the natural precedence of operators is overridden in the expression represented by this node of the expression tree. If True, parentheses should be introduced around the totality of the syntax expression corresponding to this operator node and its operands.",
+            "type": "Boolean"
+        },
+        "symbol": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "symbol",
+            "documentation": "The symbol actually used in the expression, or intended to be used for serialisation. Must be a member of `OPERATOR_DEF._symbols_`.",
+            "type": "String"
+        },
+        "call": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "call",
+            "documentation": "Function call equivalent to this operator expression, inferred by matching operator against functions defined in interface of principal operand.",
+            "is_mandatory": true,
+            "type": "EL_FUNCTION_CALL"
+        }
+    },
+    "functions": {
+        "operator_definition": {
+            "name": "operator_definition",
+            "documentation": "Operator definition derived from `_definition.operator_definition()_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_OPERATOR"
+            }
+        },
+        "equivalent_call": {
+            "name": "equivalent_call",
+            "documentation": "Function call equivalent to this operator.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "EL_FUNCTION_CALL"
+            }
+        }
+    },
+    "invariants": {
+        "Symbol_validity": "symbol /= Void implies operator_def.symbols.has (symbol)"
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

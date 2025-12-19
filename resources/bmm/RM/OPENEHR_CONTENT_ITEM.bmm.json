@@ -1,0 +1,17 @@
+{
+    "name": "OPENEHR_CONTENT_ITEM",
+    "documentation": "Form of `EHR EXTRACT_ITEM` containing openEHR serialised `VERSIONED_OBJECTs`.",
+    "ancestors": [
+        "EXTRACT_CONTENT_ITEM"
+    ],
+    "properties": {
+        "item": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "item",
+            "documentation": "Content object.",
+            "type": "X_VERSIONED_OBJECT"
+        }
+    },
+    "package": "org.openehr.rm.ehr_extract.openehr_extract",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/ehr_extract.html#_openehr_extract_package"
+}

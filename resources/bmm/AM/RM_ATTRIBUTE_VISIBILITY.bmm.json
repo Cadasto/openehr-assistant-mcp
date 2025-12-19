@@ -1,0 +1,23 @@
+{
+    "name": "RM_ATTRIBUTE_VISIBILITY",
+    "documentation": "Definition of visibility of an RM attribute within a larger archetype structure.",
+    "properties": {
+        "visibility": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "visibility",
+            "documentation": "Visibility setting of a non-archetyped RM attribute (RM attributes that are constrained or within the archetyped structure are visible by default).",
+            "type": "VISIBILITY_TYPE"
+        },
+        "alias": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "alias",
+            "documentation": "Optional alias for the attribute referenced by the path.",
+            "type": "Terminology_code"
+        }
+    },
+    "invariants": {
+        "Inv_alias_validity": "alias /= Void implies visibility /= Void"
+    },
+    "package": "org.openehr.am.aom2.rm_overlay",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_the_rm_overlay_package"
+}

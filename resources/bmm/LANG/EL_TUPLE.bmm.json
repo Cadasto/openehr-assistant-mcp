@@ -1,0 +1,41 @@
+{
+    "name": "EL_TUPLE",
+    "documentation": "Defines an array of optionally named items each of any type.",
+    "ancestors": [
+        "EL_EXPRESSION"
+    ],
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "Items in the tuple, potentially with names. Typical use is to represent an argument list to routine call.",
+            "type_def": {
+                "container_type": "List",
+                "type": "EL_TUPLE_ITEM"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "Static type inferred from literal value.",
+            "is_mandatory": true,
+            "type": "BMM_TUPLE_TYPE"
+        }
+    },
+    "functions": {
+        "eval_type": {
+            "name": "eval_type",
+            "documentation": "Return `_type_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_TYPE"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

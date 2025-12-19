@@ -1,0 +1,41 @@
+{
+    "name": "P_ARCHETYPE_SLOT",
+    "documentation": "Constraint describing a  slot' where another archetype can occur. ",
+    "ancestors": [
+        "P_C_OBJECT"
+    ],
+    "properties": {
+        "includes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "includes",
+            "documentation": "List of constraints defining other archetypes that could be included at this point. ",
+            "type_def": {
+                "container_type": "List"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "excludes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "excludes",
+            "documentation": "List of constraints defining other archetypes that cannot be included at this point. ",
+            "type_def": {
+                "container_type": "List"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "is_closed": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_closed",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "package": "org.openehr.am.aom2.persistence.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_constraint_model_package"
+}

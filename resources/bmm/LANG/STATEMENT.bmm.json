@@ -1,0 +1,7 @@
+{
+    "name": "STATEMENT",
+    "documentation": "Meta-type for the notion of statement, which is a non-value-returning entity.",
+    "is_abstract": true,
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

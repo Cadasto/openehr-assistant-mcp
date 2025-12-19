@@ -1,0 +1,18 @@
+{
+    "name": "EXPR_LITERAL",
+    "documentation": "Literal value expression tree leaf item. This can represent a literal value of any primitive type included in the `PRIMITIVE_TYPE` enumeration.",
+    "ancestors": [
+        "EXPR_LEAF"
+    ],
+    "properties": {
+        "item": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "item",
+            "documentation": "A statically set constant value of a primitive type.",
+            "is_mandatory": true,
+            "type": "Any"
+        }
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

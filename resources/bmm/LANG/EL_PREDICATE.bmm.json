@@ -1,0 +1,29 @@
+{
+    "name": "EL_PREDICATE",
+    "documentation": "Parent type of predicate of any object reference.",
+    "is_abstract": true,
+    "ancestors": [
+        "EL_SIMPLE"
+    ],
+    "properties": {
+        "operand": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "operand",
+            "documentation": "The target instance of this predicate.",
+            "is_mandatory": true,
+            "type": "EL_VALUE_GENERATOR"
+        }
+    },
+    "functions": {
+        "eval_type": {
+            "name": "eval_type",
+            "documentation": "Return `{BMM_MODEL}._boolean_type_definition_()`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_SIMPLE_TYPE"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

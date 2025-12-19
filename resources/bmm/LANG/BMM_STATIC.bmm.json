@@ -1,0 +1,10 @@
+{
+    "name": "BMM_STATIC",
+    "documentation": "Meta-type for static (i.e. read-only) properties.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_INSTANTIABLE_FEATURE"
+    ],
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

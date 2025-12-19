@@ -1,0 +1,45 @@
+{
+    "name": "EL_DECISION_TABLE",
+    "documentation": "Meta-type for decision tables. Generic on the meta-type of the `_result_` attribute of the branches, to allow specialised forms of if/else and case structures to be created.",
+    "is_abstract": true,
+    "ancestors": [
+        "EL_TERMINAL"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "EL_TERMINAL"
+        }
+    },
+    "properties": {
+        "items": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "items",
+            "documentation": "Members of the chain, equivalent to branches in an if/then/else chain and cases in a case statement.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "EL_DECISION_BRANCH",
+                    "generic_parameters": [
+                        "T"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "else": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "else",
+            "documentation": "Result expression of conditional, if its `_condition_` evaluates to True.",
+            "is_mandatory": true,
+            "type": "T"
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

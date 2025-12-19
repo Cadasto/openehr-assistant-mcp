@@ -1,0 +1,9 @@
+{
+    "name": "Character",
+    "documentation": "Type representing minimal interface of built-in Character type.",
+    "ancestors": [
+        "Ordered"
+    ],
+    "package": "org.openehr.base.foundation_types.primitive_types",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_primitive_types_package"
+}

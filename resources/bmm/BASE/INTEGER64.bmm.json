@@ -1,0 +1,183 @@
+{
+    "name": "Integer64",
+    "documentation": "Type representing minimal interface of built-in Integer64 type.",
+    "ancestors": [
+        "Ordered_Numeric"
+    ],
+    "functions": {
+        "add": {
+            "name": "add",
+            "aliases": [
+                "+"
+            ],
+            "documentation": "Large integer addition.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Integer64"
+            }
+        },
+        "subtract": {
+            "name": "subtract",
+            "aliases": [
+                "-"
+            ],
+            "documentation": "Large integer subtraction.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Integer64"
+            }
+        },
+        "multiply": {
+            "name": "multiply",
+            "aliases": [
+                "&#42;"
+            ],
+            "documentation": "Large integer multiplication.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Integer64"
+            }
+        },
+        "divide": {
+            "name": "divide",
+            "aliases": [
+                "/"
+            ],
+            "documentation": "Large integer division.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Double"
+            }
+        },
+        "exponent": {
+            "name": "exponent",
+            "aliases": [
+                "^"
+            ],
+            "documentation": "Large integer exponentiation.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Double"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Double"
+            }
+        },
+        "modulo": {
+            "name": "modulo",
+            "aliases": [
+                "mod",
+                "\\\\"
+            ],
+            "documentation": "Large integer modulus.",
+            "parameters": {
+                "mod": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "mod",
+                    "type": "Integer"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Integer64"
+            }
+        },
+        "less_than": {
+            "name": "less_than",
+            "aliases": [
+                "<"
+            ],
+            "documentation": "Returns True if current Integer is less than `_other_`.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Integer64"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "negative": {
+            "name": "negative",
+            "aliases": [
+                "-"
+            ],
+            "documentation": "Generate negative of current Integer value.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Integer64"
+            }
+        },
+        "is_equal": {
+            "name": "is_equal",
+            "documentation": "Value equality: return True if `this` and `_other_` are attached to objects considered to be equal in value.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Integer64"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "equal": {
+            "name": "equal",
+            "aliases": [
+                "=",
+                "=="
+            ],
+            "documentation": "Reference equality for reference types, value equality for value types.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Integer64"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.base.foundation_types.primitive_types",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_primitive_types_package"
+}

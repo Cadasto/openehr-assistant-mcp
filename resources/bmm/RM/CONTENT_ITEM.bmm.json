@@ -1,0 +1,10 @@
+{
+    "name": "CONTENT_ITEM",
+    "documentation": "Abstract ancestor of all concrete content types.",
+    "is_abstract": true,
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "package": "org.openehr.rm.composition.content",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/composition.html#_content_package"
+}

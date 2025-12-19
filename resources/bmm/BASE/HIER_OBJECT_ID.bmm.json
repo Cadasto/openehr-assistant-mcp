@@ -1,0 +1,9 @@
+{
+    "name": "HIER_OBJECT_ID",
+    "documentation": "Concrete type corresponding to hierarchical identifiers of the form defined by `UID_BASED_ID`. ",
+    "ancestors": [
+        "UID_BASED_ID"
+    ],
+    "package": "org.openehr.base.base_types.identification",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/base_types.html#_identification_package"
+}

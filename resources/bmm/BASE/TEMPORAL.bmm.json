@@ -1,0 +1,10 @@
+{
+    "name": "Temporal",
+    "documentation": "Abstract ancestor of time-related classes.",
+    "is_abstract": true,
+    "ancestors": [
+        "Ordered"
+    ],
+    "package": "org.openehr.base.foundation_types.time",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_time_package"
+}

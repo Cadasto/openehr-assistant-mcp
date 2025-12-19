@@ -1,0 +1,17 @@
+{
+    "name": "BMM_PARAMETER",
+    "documentation": "A routine parameter variable (read-only).",
+    "ancestors": [
+        "BMM_READONLY_VARIABLE"
+    ],
+    "properties": {
+        "direction": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "direction",
+            "documentation": "Optional read/write direction of the parameter. If none-supplied, the parameter is treated as `in`, i.e. readable.",
+            "type": "BMM_PARAMETER_DIRECTION"
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

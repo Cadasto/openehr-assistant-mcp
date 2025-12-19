@@ -1,0 +1,21 @@
+{
+    "name": "BMM_CONSTANT",
+    "documentation": "An immutable, static value-returning element scoped to a class. The `_value_` is the result of the evaluation of the `_generator_`, which may be as simple as a literal value, or may be any expression, including a function call.",
+    "ancestors": [
+        "BMM_STATIC"
+    ],
+    "properties": {
+        "generator": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "generator",
+            "documentation": "Literal value of the constant.",
+            "is_mandatory": true,
+            "type": "BMM_LITERAL_VALUE"
+        }
+    },
+    "invariants": {
+        "Inv_not_nullable": "is_nullable = False"
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

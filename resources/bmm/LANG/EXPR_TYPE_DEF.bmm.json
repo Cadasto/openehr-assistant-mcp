@@ -1,0 +1,23 @@
+{
+    "name": "EXPR_TYPE_DEF",
+    "documentation": "Ancestor class for type definitions known in the openEHR Expression formalism.",
+    "is_abstract": true,
+    "properties": {
+        "type_name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type_name",
+            "documentation": "Natural language type name of this type as used in abstract rules syntax variable declarations.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "type_anchor": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type_anchor",
+            "documentation": "Attribute of the openEHR primitive type (or Any) corresponding to this type definition meta-type.",
+            "is_mandatory": true,
+            "type": "Any"
+        }
+    },
+    "package": "org.openehr.lang.beom.types",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_types_package"
+}

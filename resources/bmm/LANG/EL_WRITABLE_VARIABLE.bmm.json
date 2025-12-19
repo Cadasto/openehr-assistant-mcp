@@ -1,0 +1,25 @@
+{
+    "name": "EL_WRITABLE_VARIABLE",
+    "documentation": "Meta-type of writable variables, including routine locals and the special variable 'Result'.",
+    "ancestors": [
+        "EL_VARIABLE"
+    ],
+    "properties": {
+        "definition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "definition",
+            "documentation": "Variable definition to which this reference refers.",
+            "is_mandatory": true,
+            "type": "BMM_WRITABLE_VARIABLE"
+        },
+        "is_writable": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_writable",
+            "documentation": "Defined to return True in all cases.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

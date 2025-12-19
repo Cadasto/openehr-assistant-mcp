@@ -1,0 +1,6 @@
+{
+    "name": "BMM_ACTION_DECISION_TABLE",
+    "documentation": "Specialised form of Decision Table that allows only procedure call agents (lambdas) as the result of branches.",
+    "package": "org.openehr.lang.bmm.statement",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_statement_package"
+}

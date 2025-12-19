@@ -1,0 +1,10 @@
+{
+    "name": "DATA_VALUE",
+    "documentation": "Abstract parent of all `DV_` data value types.",
+    "is_abstract": true,
+    "ancestors": [
+        "OPENEHR_DEFINITIONS"
+    ],
+    "package": "org.openehr.rm.data_types.basic",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/data_types.html#_basic_package"
+}

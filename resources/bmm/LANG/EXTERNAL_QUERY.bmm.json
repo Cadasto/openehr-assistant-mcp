@@ -1,0 +1,38 @@
+{
+    "name": "EXTERNAL_QUERY",
+    "documentation": "Definition of a variable whose value is derived from a query run on a data context in the operational environment. Typical uses of this kind of variable are to obtain values like the patient date of birth, sex, weight, and so on. It could also be used to obtain items from a knowledge context, such as a drug database.",
+    "ancestors": [
+        "EXPR_VALUE"
+    ],
+    "properties": {
+        "context": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "context",
+            "documentation": "Optional name of context. This allows a basic separation of query types to be done in more sophisticated environments. Possible values might be “patient”, “medications” and so on.\nNot yet standardised.\n",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "query_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "query_id",
+            "documentation": "Identifier of query in the external context, e.g. “date_of_birth”.\nNot yet standardised.\n",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "query_args": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "query_args",
+            "documentation": "Optional arguments to query.\nNot yet standardised.\n",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

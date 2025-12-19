@@ -1,0 +1,5 @@
+{
+    "name": "P_C_DURATION",
+    "package": "org.openehr.am.aom2.persistence.primitive",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_primitive_package"
+}

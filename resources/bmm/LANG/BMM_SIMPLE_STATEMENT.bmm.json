@@ -1,0 +1,10 @@
+{
+    "name": "BMM_SIMPLE_STATEMENT",
+    "documentation": "Simple statement, i.e. statement with one logical element - a single expression, procedure call etc.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_STATEMENT"
+    ],
+    "package": "org.openehr.lang.bmm.statement",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_statement_package"
+}

@@ -1,0 +1,23 @@
+{
+    "name": "TYPE_DEF_DATE_TIME",
+    "documentation": "Rules meta-type representing the primitive type Date_time.",
+    "ancestors": [
+        "EXPR_TYPE_DEF"
+    ],
+    "properties": {
+        "type_name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type_name",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "type_anchor": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type_anchor",
+            "is_mandatory": true,
+            "type": "Iso8601_date_time"
+        }
+    },
+    "package": "org.openehr.lang.beom.types",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_types_package"
+}

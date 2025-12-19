@@ -1,0 +1,22 @@
+{
+    "_type": "P_BMM_ENUMERATION_STRING",
+    "name": "BMM_SCHEMA_STATE",
+    "documentation": "Enumeration of processing states of a `BMM_SCHEMA` used by creation and validation routines in `BMM_SCHEMA`.",
+    "ancestors": [
+        "String"
+    ],
+    "item_names": [
+        "State_created",
+        "State_validated_created",
+        "State_includes_pending",
+        "State_includes_processed"
+    ],
+    "item_documentations": [
+        "Initial state directly after instantiation of schema.",
+        "Initial validation pass after instantiation.",
+        "State of schema processing if there are still included schemas to process.",
+        "State when all included schemas have been processed."
+    ],
+    "package": "org.openehr.lang.bmm.model_access",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_model_access_package"
+}

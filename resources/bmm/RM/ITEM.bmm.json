@@ -1,0 +1,10 @@
+{
+    "name": "ITEM",
+    "documentation": "The abstract parent of `CLUSTER` and `ELEMENT` representation classes. ",
+    "is_abstract": true,
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "package": "org.openehr.rm.data_structures.representation",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/data_structures.html#_representation_package"
+}

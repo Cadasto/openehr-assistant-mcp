@@ -1,0 +1,19 @@
+{
+    "name": "BMM_PROCEDURE_CALL",
+    "documentation": "A call made on a closed procedure agent. The method in BMM via which external actions are achieved from within a program.",
+    "ancestors": [
+        "EL_AGENT_CALL",
+        "BMM_SIMPLE_STATEMENT"
+    ],
+    "properties": {
+        "agent": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "agent",
+            "documentation": "The procedure agent being called.",
+            "is_mandatory": true,
+            "type": "EL_PROCEDURE_AGENT"
+        }
+    },
+    "package": "org.openehr.lang.bmm.statement",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_statement_package"
+}

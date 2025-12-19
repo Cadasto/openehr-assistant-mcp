@@ -1,0 +1,46 @@
+{
+    "name": "P_C_OBJECT",
+    "documentation": "Abstract model of constraint on any kind of object node. ",
+    "is_abstract": true,
+    "ancestors": [
+        "P_ARCHETYPE_CONSTRAINT"
+    ],
+    "properties": {
+        "rm_type_name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "rm_type_name",
+            "documentation": "Reference model type that this node corresponds to. ",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "occurrences": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "occurrences",
+            "documentation": "Occurrences of this object node in the data, under the owning attribute. Upper limit can only be greater than 1 if owning attribute has a cardinality of more than 1.",
+            "type": "String"
+        },
+        "node_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "node_id",
+            "documentation": "Semantic id of this node, used to differentiate sibling nodes of the same type. Each node_id must be defined in the archetype ontology as a term code. \n",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "is_deprecated": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_deprecated",
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "specialisation_depth": {
+            "name": "specialisation_depth",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Integer"
+            }
+        }
+    },
+    "package": "org.openehr.am.aom2.persistence.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_constraint_model_package"
+}

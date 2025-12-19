@@ -1,0 +1,30 @@
+{
+    "name": "BMM_DECLARATION",
+    "documentation": "Declaration of a writable variable, associating a name with a type.",
+    "ancestors": [
+        "BMM_SIMPLE_STATEMENT"
+    ],
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "result": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "result",
+            "is_mandatory": true,
+            "type": "EL_WRITABLE_VARIABLE"
+        },
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "The declared type of the variable.",
+            "is_mandatory": true,
+            "type": "BMM_TYPE"
+        }
+    },
+    "package": "org.openehr.lang.bmm.statement",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_statement_package"
+}

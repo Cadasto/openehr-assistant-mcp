@@ -1,0 +1,25 @@
+{
+    "name": "Terminology_term",
+    "documentation": "Leaf type representing a standalone term from a terminology, which consists of the term text and the code, i.e. a concept reference.",
+    "ancestors": [
+        "Any"
+    ],
+    "properties": {
+        "concept": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "concept",
+            "documentation": "Reference to the terminology concept formally representing this term.",
+            "is_mandatory": true,
+            "type": "Terminology_code"
+        },
+        "text": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "text",
+            "documentation": "Text of term.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "package": "org.openehr.base.foundation_types.terminology",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_terminology_package"
+}

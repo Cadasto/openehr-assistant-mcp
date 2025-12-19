@@ -1,0 +1,21 @@
+{
+    "name": "EXPRESSION",
+    "documentation": "Abstract parent of all expression meta-types.",
+    "is_abstract": true,
+    "ancestors": [
+        "EXPR_VALUE"
+    ],
+    "functions": {
+        "type": {
+            "name": "type",
+            "documentation": "The primitive type of this node, which must be determined by redefinitions in concrete classes.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "EXPR_TYPE_DEF"
+            }
+        }
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

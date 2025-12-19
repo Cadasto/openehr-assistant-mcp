@@ -1,0 +1,133 @@
+{
+    "name": "Interval",
+    "documentation": "Interval abstraction, featuring upper and lower limits that may be open or closed, included or not included.",
+    "is_abstract": true,
+    "ancestors": [
+        "Any"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Ordered"
+        }
+    },
+    "properties": {
+        "lower": {
+            "_type": "P_BMM_SINGLE_PROPERTY_OPEN",
+            "name": "lower",
+            "documentation": "Lower bound.",
+            "type": "T"
+        },
+        "upper": {
+            "_type": "P_BMM_SINGLE_PROPERTY_OPEN",
+            "name": "upper",
+            "documentation": "Upper bound.",
+            "type": "T"
+        },
+        "lower_unbounded": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "lower_unbounded",
+            "documentation": "True if `_lower_` boundary open (i.e. = `-infinity`).",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "upper_unbounded": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "upper_unbounded",
+            "documentation": "True if `_upper_` boundary open (i.e. = `+infinity`).",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "lower_included": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "lower_included",
+            "documentation": "True if `_lower_` boundary value included in range, if `not _lower_unbounded_`.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "upper_included": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "upper_included",
+            "documentation": "True if `_upper_` boundary value included in range if `not _upper_unbounded_`.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "has": {
+            "name": "has",
+            "documentation": "True if the value `e` is properly contained in this Interval.",
+            "is_abstract": true,
+            "parameters": {
+                "e": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER_OPEN",
+                    "name": "e",
+                    "type": "T"
+                }
+            },
+            "post_conditions": {
+                "Post_result": "Result = (lower_unbounded or lower_included and v >= lower) or v > lower and (upper_unbounded or upper_included and v <= upper or v < upper)"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "intersects": {
+            "name": "intersects",
+            "documentation": "True if there is any overlap between intervals represented by Current and `_other_`. True if at least one limit of `_other_` is strictly inside the limits of this interval.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Interval"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "contains": {
+            "name": "contains",
+            "documentation": "True if current interval properly contains `_other_`? True if all points of `_other_` are inside the current interval.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Interval"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_equal": {
+            "name": "is_equal",
+            "documentation": "True if current object's interval is semantically same as `_other_`.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "Any"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Lower_included_valid": "lower_unbounded implies not lower_included",
+        "Upper_included_valid": "upper_unbounded implies not upper_included",
+        "Limits_consistent": "(not upper_unbounded and not lower_unbounded) implies lower <= upper",
+        "Limits_comparable": "(not upper_unbounded and not lower_unbounded) implies lower.strictly_comparable_to (upper)"
+    },
+    "package": "org.openehr.base.foundation_types.interval",
+    "specUrl": "https://specifications.openehr.org/releases/BASE/development/foundation_types.html#_interval_package"
+}

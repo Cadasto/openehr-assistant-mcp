@@ -1,0 +1,38 @@
+{
+    "name": "ACTION",
+    "documentation": "Used to record a clinical action that has been performed, which may have been ad hoc, or due to the execution of an Activity in an Instruction workflow. Every Action corresponds to a careflow step of some kind or another. ",
+    "ancestors": [
+        "CARE_ENTRY"
+    ],
+    "properties": {
+        "time": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "time",
+            "documentation": "Point in time at which this action completed. To indicate an unknown time, use a `DV_DATE_TIME` instance with `_value_` set to the time of creation (or some other known time before which the Action is known to have occurred, e.g. data accession timestamp from integration engine), and `_magnitude_status_` set to `<`.",
+            "is_mandatory": true,
+            "type": "DV_DATE_TIME"
+        },
+        "ism_transition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "ism_transition",
+            "documentation": "Details of transition in the Instruction state machine caused by this Action.",
+            "is_mandatory": true,
+            "type": "ISM_TRANSITION"
+        },
+        "instruction_details": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "instruction_details",
+            "documentation": "Details of the Instruction that caused this Action to be performed, if there was one.",
+            "type": "INSTRUCTION_DETAILS"
+        },
+        "description": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "description",
+            "documentation": "Description of the action that has been performed, in the form of an archetyped structure.",
+            "is_mandatory": true,
+            "type": "ITEM_STRUCTURE"
+        }
+    },
+    "package": "org.openehr.rm.composition.content.entry",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/composition.html#_entry_package"
+}

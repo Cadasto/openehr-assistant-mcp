@@ -1,0 +1,35 @@
+{
+    "name": "EL_VALUE_GENERATOR",
+    "documentation": "Meta-type representing a value-generating simple expression.",
+    "is_abstract": true,
+    "ancestors": [
+        "EL_SIMPLE"
+    ],
+    "properties": {
+        "is_writable": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_writable",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name used to represent the reference or other entity.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "functions": {
+        "reference": {
+            "name": "reference",
+            "documentation": "Generated full reference name, based on constituent parts of the entity. Default version outputs `_name_` field.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

@@ -1,0 +1,18 @@
+{
+    "name": "EXPR_VALUE",
+    "documentation": "Any kind of statement element that can be evaluated. The type will either be supplied in descendant types or else will be inferred by an assignment statement linked to a typed variable.",
+    "is_abstract": true,
+    "functions": {
+        "value": {
+            "name": "value",
+            "documentation": "The computed value of this node as a result of the nodes below it, for operator nodes, or else statically set or otherwise derived values.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Any"
+            }
+        }
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

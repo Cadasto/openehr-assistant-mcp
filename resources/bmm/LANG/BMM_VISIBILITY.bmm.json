@@ -1,0 +1,7 @@
+{
+    "name": "BMM_VISIBILITY",
+    "documentation": "Abstract parent of visibility representation.\n\nTODO: define schemes; probably need to support C++/Java scheme as well as better type-based schemes.",
+    "is_abstract": true,
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

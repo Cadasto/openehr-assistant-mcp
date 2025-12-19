@@ -1,0 +1,18 @@
+{
+    "_type": "P_BMM_ENUMERATION_STRING",
+    "name": "BMM_OPERATOR_POSITION",
+    "documentation": "Enumeration of possible position of operator in a syntactic representation for operators associated with 1- and 2- degree functions.",
+    "ancestors": [
+        "String"
+    ],
+    "item_names": [
+        "prefix",
+        "infix"
+    ],
+    "item_documentations": [
+        "Prefix operator position: operator comes before operand.",
+        "Infix operator position: operator comes between left and right operands."
+    ],
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

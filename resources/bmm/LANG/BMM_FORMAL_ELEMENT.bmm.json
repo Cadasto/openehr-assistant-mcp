@@ -1,0 +1,47 @@
+{
+    "name": "BMM_FORMAL_ELEMENT",
+    "documentation": "A formal element having a name, type and a type-based signature.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_MODEL_ELEMENT"
+    ],
+    "properties": {
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "Declared or inferred static type of the entity.",
+            "is_mandatory": true,
+            "type": "BMM_TYPE"
+        },
+        "is_nullable": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_nullable",
+            "documentation": "True if this element can be null (Void) at execution time. May be interpreted as optionality in subtypes..",
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "signature": {
+            "name": "signature",
+            "documentation": "Formal signature of this element, in the form:\n\n`name [arg1_name: T_arg1, ...][:T_value]`\n\nSpecific implementations in descendants.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_SIGNATURE"
+            }
+        },
+        "is_boolean": {
+            "name": "is_boolean",
+            "documentation": "True if `_type_` is notionally Boolean (i.e. a `BMM_SIMPLE_TYPE` with `_type_name()_` = `'Boolean'`).",
+            "post_conditions": {
+                "Post_result": "Result = type().equal( {BMM_MODEL}.boolean_type_definition())"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_core_package"
+}

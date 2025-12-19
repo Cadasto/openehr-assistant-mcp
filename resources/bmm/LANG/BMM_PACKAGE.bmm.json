@@ -1,0 +1,44 @@
+{
+    "name": "BMM_PACKAGE",
+    "documentation": "Abstraction of a package as a tree structure whose nodes can contain other packages and classes.\n\nThe `_name_` may be qualified if it is a top-level package.",
+    "ancestors": [
+        "BMM_PACKAGE_CONTAINER"
+    ],
+    "properties": {
+        "members": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "members",
+            "documentation": "Member modules in this package.",
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_MODULE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "root_classes": {
+            "name": "root_classes",
+            "documentation": "Obtain the set of top-level classes in this package, either from this package itself or by recursing into the structure until classes are obtained from child packages. Recurse into each child only far enough to find the first level of classes.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "BMM_CLASS"
+            },
+            "is_nullable": true
+        },
+        "path": {
+            "name": "path",
+            "documentation": "Full path of this package back to root package.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.model",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_model_package"
+}

@@ -1,0 +1,25 @@
+{
+    "name": "P_C_TEMPORAL",
+    "documentation": "Purpose Abstract parent of C_ORDERED types whose base type is an ISO date/time type.",
+    "is_abstract": true,
+    "ancestors": [
+        "P_C_ORDERED"
+    ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "Temporal"
+        }
+    },
+    "properties": {
+        "pattern_constraint": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "pattern_constraint",
+            "documentation": "Optional alternative constraint in the form of a pattern based on ISO8601. See descendants for details.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "package": "org.openehr.am.aom2.persistence.primitive",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_primitive_package"
+}

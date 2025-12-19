@@ -1,0 +1,31 @@
+{
+    "name": "PARTY_IDENTITY",
+    "documentation": "An identity  owned  by a Party, such as a person name or company name, and which is used by the Party to identify itself. Actual structure is archetyped.",
+    "ancestors": [
+        "LOCATABLE"
+    ],
+    "properties": {
+        "details": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "details",
+            "documentation": "The value of the identity. This will often taken the form of a parseable string or a small structure of strings.",
+            "is_mandatory": true,
+            "type": "ITEM_STRUCTURE"
+        }
+    },
+    "functions": {
+        "purpose": {
+            "name": "purpose",
+            "documentation": "Purpose of identity, e.g. legal ,  stagename,  nickname,  tribal name,  trading name. Taken from value of inherited `_name_` attribute.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "DV_TEXT"
+            }
+        }
+    },
+    "invariants": {
+        "Purpose_valid": "purpose = name"
+    },
+    "package": "org.openehr.rm.demographic",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/demographic.html#_demographic_package"
+}

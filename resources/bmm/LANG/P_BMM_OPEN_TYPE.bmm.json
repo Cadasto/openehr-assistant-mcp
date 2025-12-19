@@ -1,0 +1,24 @@
+{
+    "name": "P_BMM_OPEN_TYPE",
+    "documentation": "Persistent form of `BMM_PARAMETER_TYPE`.",
+    "ancestors": [
+        "P_BMM_BASE_TYPE"
+    ],
+    "properties": {
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "Simple type parameter as a single letter like 'T', 'G' etc.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "bmm_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_type",
+            "documentation": "Result of `_create_bmm_type()_` call.",
+            "type": "Any"
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

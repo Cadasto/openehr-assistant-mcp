@@ -1,0 +1,34 @@
+{
+    "name": "EXPR_OPERATOR",
+    "documentation": "Abstract parent of operator types.",
+    "is_abstract": true,
+    "ancestors": [
+        "EXPRESSION"
+    ],
+    "properties": {
+        "precedence_overridden": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "precedence_overridden",
+            "documentation": "True if the natural precedence of operators is overridden in the expression represented by this node of the expression tree. If True, parentheses should be introduced around the totality of the syntax expression corresponding to this operator node and its operands.",
+            "type": "Boolean"
+        },
+        "operator": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "operator",
+            "documentation": "Operator definition.",
+            "is_mandatory": true,
+            "type": "OPERATOR_KIND"
+        },
+        "symbol": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "symbol",
+            "documentation": "The symbol actually used in the rule, or intended to be used for serialisation. Must be a member of `operator_def.symbols`.",
+            "type": "String"
+        }
+    },
+    "invariants": {
+        "Symbol_validity": "symbol /= Void implies operator_def.symbols.has (symbol)"
+    },
+    "package": "org.openehr.lang.beom.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/beom.html#_core_package"
+}

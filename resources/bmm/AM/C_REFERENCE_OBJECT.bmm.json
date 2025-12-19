@@ -1,0 +1,10 @@
+{
+    "name": "C_REFERENCE_OBJECT",
+    "documentation": "Abstract parent type of C_OBJECT subtypes that are defined by reference.",
+    "is_abstract": true,
+    "ancestors": [
+        "C_OBJECT"
+    ],
+    "package": "org.openehr.am.aom14.archetype.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM1.4.html#_constraint_model_package"
+}

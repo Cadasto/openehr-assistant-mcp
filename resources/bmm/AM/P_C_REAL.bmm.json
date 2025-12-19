@@ -1,0 +1,6 @@
+{
+    "name": "P_C_REAL",
+    "documentation": "Constraint on instances of Real.",
+    "package": "org.openehr.am.aom2.persistence.primitive",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_primitive_package"
+}

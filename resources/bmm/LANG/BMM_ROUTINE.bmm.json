@@ -1,0 +1,67 @@
+{
+    "name": "BMM_ROUTINE",
+    "documentation": "A feature defining a routine, scoped to a class.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_FEATURE"
+    ],
+    "properties": {
+        "parameters": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "parameters",
+            "documentation": "Formal parameters of the routine.",
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_PARAMETER"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "pre_conditions": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "pre_conditions",
+            "documentation": "Boolean conditions that must evaluate to True for the routine to execute correctly, May be used to generate exceptions if included in run-time build.\n\nA False pre-condition implies an error in the passed parameters.",
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_ASSERTION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "post_conditions": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "post_conditions",
+            "documentation": "Boolean conditions that will evaluate to True if the routine executed correctly, May be used to generate exceptions if included in run-time build.\n\nA False post-condition implies an error (i.e. bug) in routine code.",
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_ASSERTION"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "definition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "definition",
+            "documentation": "Body of a routine, i.e. executable program.",
+            "type": "BMM_ROUTINE_DEFINITION"
+        }
+    },
+    "functions": {
+        "arity": {
+            "name": "arity",
+            "documentation": "Return number of arguments of this routine.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Integer"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

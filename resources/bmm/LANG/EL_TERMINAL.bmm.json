@@ -1,0 +1,10 @@
+{
+    "name": "EL_TERMINAL",
+    "documentation": "Expression entities that are terminals (i.e. leaves) within operator expressions or tuples.",
+    "is_abstract": true,
+    "ancestors": [
+        "EL_EXPRESSION"
+    ],
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

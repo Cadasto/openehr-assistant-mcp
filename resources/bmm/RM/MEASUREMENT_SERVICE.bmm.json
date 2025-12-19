@@ -1,0 +1,43 @@
+{
+    "name": "MEASUREMENT_SERVICE",
+    "documentation": "Defines an object providing proxy access to a measurement information service.",
+    "functions": {
+        "is_valid_units_string": {
+            "name": "is_valid_units_string",
+            "documentation": "True if the units string  units' is a valid string according to the HL7 UCUM specification.",
+            "parameters": {
+                "units": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "units",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "units_equivalent": {
+            "name": "units_equivalent",
+            "documentation": "True if two units strings correspond to the same measured property.",
+            "parameters": {
+                "units1": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "units1",
+                    "type": "String"
+                },
+                "units2": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "units2",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.rm.support.measurement",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/support.html#_measurement_package"
+}

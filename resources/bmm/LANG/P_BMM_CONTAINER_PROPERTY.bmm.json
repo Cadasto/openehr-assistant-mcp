@@ -1,0 +1,56 @@
+{
+    "name": "P_BMM_CONTAINER_PROPERTY",
+    "documentation": "Persistent form of `BMM_CONTAINER_PROPERTY`.",
+    "ancestors": [
+        "P_BMM_PROPERTY"
+    ],
+    "properties": {
+        "cardinality": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "cardinality",
+            "documentation": "Cardinality of this property in its class. Persistent attribute.",
+            "type_def": {
+                "root_type": "Interval",
+                "generic_parameters": [
+                    "Integer"
+                ]
+            }
+        },
+        "type_def": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type_def",
+            "documentation": "Type definition of this property, if not a simple String type reference. Persistent attribute.",
+            "type": "P_BMM_CONTAINER_TYPE"
+        },
+        "bmm_property": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_property",
+            "documentation": "`BMM_PROPERTY` created by `_create_bmm_property_`.",
+            "type": "BMM_CONTAINER_PROPERTY"
+        }
+    },
+    "functions": {
+        "create_bmm_property": {
+            "name": "create_bmm_property",
+            "documentation": "Create `_bmm_property_definition_`.",
+            "parameters": {
+                "a_bmm_schema": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_bmm_schema",
+                    "type": "BMM_MODEL"
+                },
+                "a_class_def": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_class_def",
+                    "type": "BMM_CLASS"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

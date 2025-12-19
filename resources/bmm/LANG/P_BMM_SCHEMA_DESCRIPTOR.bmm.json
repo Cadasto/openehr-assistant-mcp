@@ -1,0 +1,17 @@
+{
+    "name": "P_BMM_SCHEMA_DESCRIPTOR",
+    "documentation": "Concrete descendant of `BMM_SCHEMA_DESCRIPTOR` that provides a way to read an ODIN or other similarly encoded P_BMM schema file.",
+    "ancestors": [
+        "BMM_SCHEMA_DESCRIPTOR"
+    ],
+    "properties": {
+        "bmm_schema": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_schema",
+            "documentation": "Persistent form of model.",
+            "type": "P_BMM_SCHEMA"
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

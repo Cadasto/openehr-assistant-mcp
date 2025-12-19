@@ -1,0 +1,28 @@
+{
+    "name": "BMM_INDEXED_CONTAINER_PROPERTY",
+    "documentation": "Meta-type of for properties of linear container type, such as `Hash<Index_type, T>` etc.",
+    "ancestors": [
+        "BMM_CONTAINER_PROPERTY"
+    ],
+    "properties": {
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "Declared or inferred static type of the entity.",
+            "is_mandatory": true,
+            "type": "BMM_INDEXED_CONTAINER_TYPE"
+        }
+    },
+    "functions": {
+        "display_name": {
+            "name": "display_name",
+            "documentation": "Name of this property in form `name: ContainerTypeName<IndexTypeName, ...>`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

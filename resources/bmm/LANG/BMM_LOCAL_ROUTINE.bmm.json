@@ -1,0 +1,31 @@
+{
+    "name": "BMM_LOCAL_ROUTINE",
+    "documentation": "Meta-type for locally declared routine body.",
+    "ancestors": [
+        "BMM_ROUTINE_DEFINITION"
+    ],
+    "properties": {
+        "locals": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "locals",
+            "documentation": "Local variables of the routine, if there is a body defined.",
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_LOCAL"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "body": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "body",
+            "documentation": "Body of routine declaration.",
+            "is_mandatory": true,
+            "type": "BMM_STATEMENT_BLOCK"
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.feature",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+}

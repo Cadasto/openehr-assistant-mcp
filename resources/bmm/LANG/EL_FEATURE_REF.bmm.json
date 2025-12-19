@@ -1,0 +1,28 @@
+{
+    "name": "EL_FEATURE_REF",
+    "documentation": "A reference that is scoped by a containing entity and requires a context qualifier if it is not the currently scoping entity.",
+    "is_abstract": true,
+    "ancestors": [
+        "EL_VALUE_GENERATOR"
+    ],
+    "properties": {
+        "scoper": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "scoper",
+            "documentation": "Scoping expression, which must be a `EL_VALUE_GENERATOR`.",
+            "type": "EL_VALUE_GENERATOR"
+        }
+    },
+    "functions": {
+        "reference": {
+            "name": "reference",
+            "documentation": "Generated full reference name, consisting of scoping elements and `_name_` concatenated using dot notation.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.expression",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_expression_package"
+}

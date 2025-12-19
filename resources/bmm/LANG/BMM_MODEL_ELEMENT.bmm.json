@@ -1,0 +1,60 @@
+{
+    "name": "BMM_MODEL_ELEMENT",
+    "documentation": "Abstract meta-type of BMM declared model elements. A _declaration_ is a an element of a model within a context, which defines the _scope_ of the element. Thus, a class definition and its property and routine definitions are model elements, but Types are not, since they are derived from model elements.",
+    "is_abstract": true,
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of this model element.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "documentation": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "documentation",
+            "documentation": "Optional documentation of this element, as a keyed list.\n\nIt is strongly recommended to use the following key /type combinations for the relevant purposes:\n\n* `\"purpose\": String`\n* `\"keywords\": List<String>`\n* `\"use\": String`\n* `\"misuse\": String`\n* `\"references\": String`\n\nOther keys and value types may be freely added.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "Any"
+                ]
+            }
+        },
+        "scope": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "scope",
+            "documentation": "Model element within which an element is declared.",
+            "is_mandatory": true,
+            "type": "BMM_MODEL_ELEMENT"
+        },
+        "extensions": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "extensions",
+            "documentation": "Optional meta-data of this element, as a keyed list. May be used to extend the meta-model.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "Any"
+                ]
+            }
+        }
+    },
+    "functions": {
+        "is_root_scope": {
+            "name": "is_root_scope",
+            "documentation": "True if this model element is the root of a model structure hierarchy.",
+            "post_conditions": {
+                "Post_result": "Result = (scope = self)"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_core_package"
+}

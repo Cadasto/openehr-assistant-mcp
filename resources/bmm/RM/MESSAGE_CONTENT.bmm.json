@@ -1,0 +1,7 @@
+{
+    "name": "MESSAGE_CONTENT",
+    "documentation": "Abstract parent of message payload types.",
+    "is_abstract": true,
+    "package": "org.openehr.rm.ehr_extract.message",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/ehr_extract.html#_message_package"
+}

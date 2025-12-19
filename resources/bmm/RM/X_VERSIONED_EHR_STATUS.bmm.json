@@ -1,0 +1,9 @@
+{
+    "name": "X_VERSIONED_EHR_STATUS",
+    "documentation": "Form of `X_VERSIONED_OBJECT` for `EHR_STATUS` EHR object.",
+    "ancestors": [
+        "X_VERSIONED_OBJECT"
+    ],
+    "package": "org.openehr.rm.ehr_extract.openehr_extract",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/ehr_extract.html#_openehr_extract_package"
+}

@@ -1,0 +1,9 @@
+{
+    "name": "PARTY_SELF",
+    "documentation": "Party proxy representing the subject of the record. Used to indicate that the party is the owner of the record. May or may not have `_external_ref_` set. ",
+    "ancestors": [
+        "PARTY_PROXY"
+    ],
+    "package": "org.openehr.rm.common.generic",
+    "specUrl": "https://specifications.openehr.org/releases/RM/development/common.html#_generic_package"
+}

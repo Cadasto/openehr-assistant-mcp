@@ -1,0 +1,21 @@
+{
+    "name": "C_DOMAIN_TYPE",
+    "documentation": "Abstract parent type of domain-specific constrainer types, to be defined in external packages.",
+    "is_abstract": true,
+    "ancestors": [
+        "C_DEFINED_OBJECT"
+    ],
+    "functions": {
+        "standard_equivalent": {
+            "name": "standard_equivalent",
+            "documentation": "Standard (i.e. C_OBJECT) form of constraint.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "C_COMPLEX_OBJECT"
+            }
+        }
+    },
+    "package": "org.openehr.am.aom14.archetype.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM1.4.html#_constraint_model_package"
+}

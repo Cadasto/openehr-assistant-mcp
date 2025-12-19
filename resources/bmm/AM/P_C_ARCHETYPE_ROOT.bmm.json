@@ -1,0 +1,16 @@
+{
+    "name": "P_C_ARCHETYPE_ROOT",
+    "ancestors": [
+        "P_C_COMPLEX_OBJECT"
+    ],
+    "properties": {
+        "archetype_ref": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "archetype_ref",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "package": "org.openehr.am.aom2.persistence.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_constraint_model_package"
+}
