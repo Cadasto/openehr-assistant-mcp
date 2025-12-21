@@ -15,7 +15,7 @@ A PHP 8.4 [Model Context Protocol (MCP) Server](https://modelcontextprotocol.io/
 - Transports: streamable HTTP and stdio (for development)
 - Structured logging with Monolog
 - Simple, environment-driven configuration
-- Built-in developer guidelines exposed as MCP Resources via `guidelines://{category}/{version}/{name}` URIs
+- Built-in developer guidelines exposed as MCP Resources via `openehr://guidelines/{category}/{version}/{name}` URIs
 
 ## Available MCP Elements
 
@@ -41,14 +41,14 @@ Optional prompts that guide AI assistants through common openEHR and CKM workflo
 
 ### Resources
 
-Guidelines (Markdown) are exposed as MCP Resources and can be fetched by MCP clients using `guidelines://` URIs.
+Guidelines (Markdown) are exposed as MCP Resources and can be fetched by MCP clients using `openehr://guidelines/` URIs.
 
-- URI template: `guidelines://{category}/{version}/{name}`
+- URI template: `openehr://guidelines/{category}/{version}/{name}`
 - On-disk mapping: `resources/guidelines/{category}/{version}/{name}.md`
 
 Examples
-- `guidelines://archetypes/v1/checklist`
-- `guidelines://archetypes/v1/adl-syntax`
+- `openehr://guidelines/archetypes/v1/checklist`
+- `openehr://guidelines/archetypes/v1/adl-syntax`
 
 ## Transports
 

@@ -20,12 +20,12 @@ readonly final class TranslateArchetypeLanguage
             [
                 'role' => 'assistant',
                 'content' =>
-                    'You are an expert in openEHR Archetypes, clinical terminology, and multilingual modelling.' . "\n"
+                    'You are an expert in openEHR Archetypes, clinical terminology & ontology, and multilingual modelling.' . "\n"
                     . 'Your task is to add or update language translations in an openEHR Archetype without changing: clinical meaning, structure, paths, constraints, bindings, or codes.' . "\n\n"
                     . 'Authoritative Guidelines:' . "\n"
-                    . '- guidelines://archetypes/v1/terminology' . "\n"
-                    . '- guidelines://archetypes/v1/adl-syntax' . "\n"
-                    . '- guidelines://archetypes/v1/adl-idioms-cheatsheet' . "\n\n"
+                    . '- openehr://guidelines/archetypes/v1/terminology' . "\n"
+                    . '- openehr://guidelines/archetypes/v1/adl-syntax' . "\n"
+                    . '- openehr://guidelines/archetypes/v1/adl-idioms-cheatsheet' . "\n\n"
                     . 'Rules (Mandatory):' . "\n"
                     . '- Translate term text and definitions only; preserve exact meaning.' . "\n"
                     . '- Keep all at-codes and ac-codes unchanged; one-to-one with source terms.' . "\n"

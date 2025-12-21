@@ -1,5 +1,5 @@
 # openEHR Archetype Terminology & Ontology Guidelines
-**URI:** guidelines://archetypes/v1/terminology  
+**URI:** openehr://guidelines/archetypes/v1/terminology  
 **Version:** 1.0.0  
 **Scope:** Terminology modelling, value sets, and external terminology bindings in archetypes  
 **Applies to:** Archetypes (ADL), not templates

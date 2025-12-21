@@ -1,8 +1,8 @@
 # openEHR Archetype Design Rules
-**URI:** guidelines://archetypes/v1/rules  
+**URI:** openehr://guidelines/archetypes/v1/rules  
 **Version:** 1.0.0  
 **Scope:** Concrete guidance and rules for modelling openEHR archetypes
-**Related:** see also guidelines://archetypes/v1/structural-constraints and guidelines://archetypes/v1/terminology
+**Related:** see also openehr://guidelines/archetypes/v1/structural-constraints and openehr://guidelines/archetypes/v1/terminology
 
 ---
 

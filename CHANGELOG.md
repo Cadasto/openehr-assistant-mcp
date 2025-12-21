@@ -9,6 +9,8 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+- MCP Resources: changed `guidelines://{category}/{version}/{name}` to `openehr://guidelines/{category}/{version}/{name}/{language}`
+
 ## [0.2.0] - 2025-12-16
 
 ### Added

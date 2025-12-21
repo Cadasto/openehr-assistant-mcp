@@ -1,5 +1,5 @@
 # openEHR Archetype ADL & Syntax Guidelines
-**URI:** guidelines://archetypes/v1/adl-syntax
+**URI:** openehr://guidelines/archetypes/v1/adl-syntax
 **Version:** 1.0.0
 **Scope:** Correct and idiomatic use of ADL and the Archetype Model (AM)
 **Applies to:** ADL 1.4 / ADL 2 archetypes

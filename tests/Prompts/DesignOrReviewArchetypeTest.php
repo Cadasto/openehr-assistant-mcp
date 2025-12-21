@@ -34,16 +34,16 @@ final class DesignOrReviewArchetypeTest extends TestCase
         }
 
         // Guideline references (templated) and placeholders
-        $this->assertStringContainsString('guidelines://archetypes/v1/principles', $combined);
-        $this->assertStringContainsString('guidelines://archetypes/v1/rules', $combined);
-        $this->assertStringContainsString('guidelines://archetypes/v1/terminology', $combined);
-        $this->assertStringContainsString('guidelines://archetypes/v1/structural-constraints', $combined);
-        $this->assertStringContainsString('guidelines://archetypes/v1/anti-patterns', $combined);
-        $this->assertStringContainsString('guidelines://archetypes/v1/checklist', $combined);
+        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/principles', $combined);
+        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/rules', $combined);
+        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/terminology', $combined);
+        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/structural-constraints', $combined);
+        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/anti-patterns', $combined);
+        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/checklist', $combined);
 
         $this->assertStringContainsString('{{task_type}}', $combined);
         $this->assertStringContainsString('{{concept}}', $combined);
-        $this->assertStringContainsString('{{rm_class}}', $combined);
+        $this->assertStringContainsString('{{rm_type}}', $combined);
         $this->assertStringContainsString('{{clinical_context}}', $combined);
         $this->assertStringContainsString('{{existing_archetype}}', $combined);
         $this->assertStringContainsString('{{parent_archetype}}', $combined);

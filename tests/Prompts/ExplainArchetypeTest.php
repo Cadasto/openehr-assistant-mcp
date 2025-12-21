@@ -34,9 +34,9 @@ final class ExplainArchetypeTest extends TestCase
         }
 
         // Key guideline references and placeholders
-        $this->assertStringContainsString('guidelines://archetypes/v1/principles', $combined);
-        $this->assertStringContainsString('guidelines://archetypes/v1/terminology', $combined);
-        $this->assertStringContainsString('guidelines://archetypes/v1/structural-constraints', $combined);
+        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/principles', $combined);
+        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/terminology', $combined);
+        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/structural-constraints', $combined);
         $this->assertStringContainsString('{{adl_text}}', $combined);
         $this->assertStringContainsString('{{audience}}', $combined);
 

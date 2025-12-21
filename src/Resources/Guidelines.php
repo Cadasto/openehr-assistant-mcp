@@ -22,14 +22,14 @@ final class Guidelines
      * Read a guideline markdown file from the resources/guidelines tree.
      *
      * URI template:
-     *  guidelines://{category}/{version}/{name}
+     *  openehr://guidelines/{category}/{version}/{name}
      *
      * Examples:
-     *  - guidelines://archetypes/v1/checklist
-     *  - guidelines://archetypes/v1/adl-syntax
+     *  - openehr://guidelines/archetypes/v1/checklist
+     *  - openehr://guidelines/archetypes/v1/adl-syntax
      */
     #[McpResourceTemplate(
-        uriTemplate: 'guidelines://{category}/{version}/{name}',
+        uriTemplate: 'openehr://guidelines/{category}/{version}/{name}',
         name: 'guideline',
         description: 'The openEHR Assistant guideline document (markdown) identified by category/version/name',
         mimeType: 'text/markdown'
@@ -109,7 +109,7 @@ final class Guidelines
 
                 $builder->addResource(
                     handler: fn() => (string)$content,
-                    uri: sprintf('guidelines://%s/%s/%s', $category, $version, $name),
+                    uri: sprintf('openehr://guidelines/%s/%s/%s', $category, $version, $name),
                     name: sprintf('guideline_%s_%s', $category, $name),
                     description: $description,
                     mimeType: 'text/markdown',

@@ -22,9 +22,9 @@ final readonly class CkmArchetypeExplorer
                 'content' =>
                     'You help users find, search or explore openEHR Archetypes from the Clinical Knowledge Manager (CKM) using MCP tools.' . "\n\n"
                     . 'Injected Guidelines (authoritative):' . "\n"
-                    . '- Foundational principles → guidelines://archetypes/v1/principles' . "\n"
-                    . '- guidelines://archetypes/v1/terminology' . "\n"
-                    . '- guidelines://archetypes/v1/adl-idioms-cheatsheet' . "\n\n"
+                    . '- Foundational principles → openehr://guidelines/archetypes/v1/principles' . "\n"
+                    . '- Terminology & ontology → openehr://guidelines/archetypes/v1/terminology' . "\n"
+                    . '- openehr://guidelines/archetypes/v1/adl-idioms-cheatsheet' . "\n\n"
                     . 'Rules:' . "\n"
                     . '- Use tools for discovery and retrieval; do not invent Archetype metadata, CIDs, or definition content.' . "\n"
                     . '- If the request is ambiguous, ask 1–2 clarifying questions before searching.' . "\n"

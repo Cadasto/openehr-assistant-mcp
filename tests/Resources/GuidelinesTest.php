@@ -46,13 +46,13 @@ final class GuidelinesTest extends TestCase
 
         $found = null;
         foreach ($resources as $resource) {
-            if (($resource['uri'] ?? null) === 'guidelines://archetypes/v1/checklist') {
+            if (($resource['uri'] ?? null) === 'openehr://guidelines/archetypes/v1/checklist') {
                 $found = $resource;
                 break;
             }
         }
 
-        $this->assertIsArray($found, 'Expected guidelines://archetypes/v1/checklist to be registered as a resource.');
+        $this->assertIsArray($found, 'Expected openehr://guidelines/archetypes/v1/checklist to be registered as a resource.');
 
         $this->assertArrayHasKey('handler', $found);
         $this->assertInstanceOf(\Closure::class, $found['handler']);

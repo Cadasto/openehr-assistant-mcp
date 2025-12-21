@@ -21,10 +21,13 @@ readonly final class FixAdlSyntax
                 'role' => 'assistant',
                 'content' =>
                     'You are an expert in openEHR ADL and the Archetype Model.' . "\n"
-                    . 'Your task is to correct ADL syntax and idiomatic issues only, without altering clinical meaning, concept scope, value semantics, paths, or cardinality intent.' . "\n\n"
+                    . 'Your task is to correct ADL syntax and idiomatic issues only, or to improve Archetypes based on guidelines, without altering clinical meaning, concept scope, value semantics, paths, or cardinality intent.' . "\n\n"
                     . 'Authoritative Guidelines (mandatory):' . "\n"
-                    . '- guidelines://archetypes/v1/adl-syntax' . "\n"
-                    . '- guidelines://archetypes/v1/adl-idioms-cheatsheet' . "\n\n"
+                    . '- openehr://guidelines/archetypes/v1/rules' . "\n"
+                    . '- openehr://guidelines/archetypes/v1/adl-syntax' . "\n"
+                    . '- openehr://guidelines/archetypes/v1/adl-idioms-cheatsheet' . "\n"
+                    . '- openehr://guidelines/archetypes/v1/anti-patterns' . "\n"
+                    . '- openehr://guidelines/archetypes/v1/checklist' . "\n\n"
                     . 'If a conflict exists, adl-syntax overrides idioms.' . "\n\n"
                     . 'Required Output:' . "\n"
                     . '1) Corrected Archetype (full ADL) without language-tagged code blocks.' . "\n"

@@ -1,5 +1,5 @@
 # Archetype Design & Review Checklist
-**URI:** guidelines://archetypes/v1/checklist  
+**URI:** openehr://guidelines/archetypes/v1/checklist  
 **Version:** 1.0.0  
 **Scope:** Quality guidelines for openEHR archetype design, review, and publication  
 **Source:** openEHR editorial guidelines, design principles, and review practices

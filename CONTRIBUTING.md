@@ -119,7 +119,7 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp vendor\b
   - `ckm_archetype_explorer`, `type_specification_explorer`
   - `explain_archetype_semantics`, `translate_archetype_language`, `fix_adl_syntax`, `design_or_review_archetype`
 - Resources: developer guidelines are exposed as MCP Resources via `Guidelines` under `src\Resources`.
-  - URI template: `guidelines://{category}/{version}/{name}` (e.g., `guidelines://archetypes/v1/checklist`).
+  - URI template: `openehr://guidelines/{category}/{version}/{name}` (e.g., `openehr://guidelines/archetypes/v1/checklist`).
   - Files map to `resources/guidelines/{category}/{version}/{name}.md`.
 - Constants and versioning live in `src\constants.php` (see `APP_VERSION`).
 
@@ -147,7 +147,7 @@ PR checklist:
 
 Testing notes
 - Prompt tests live under `tests/Prompts` and validate the `__invoke()` message shape and `#[McpPrompt]` attributes.
-- Guidelines resource tests live under `tests/Resources` and validate that `Guidelines::addResources()` registers `guidelines://...` resources and that `Guidelines::read()` loads known documents.
+- Guidelines resource tests live under `tests/Resources` and validate that `Guidelines::addResources()` registers `openehr://guidelines/...` resources and that `Guidelines::read()` loads known documents.
 
 
 ## Branching, issues, and release notes

@@ -1,5 +1,5 @@
 # openEHR Archetype Anti-Patterns
-**URI:** guidelines://archetypes/v1/anti-patterns  
+**URI:** openehr://guidelines/archetypes/v1/anti-patterns  
 **Version:** 1.0.0  
 **Purpose:** Common modelling pitfalls to avoid in archetype creation
 

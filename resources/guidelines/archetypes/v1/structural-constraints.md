@@ -1,5 +1,5 @@
 # openEHR Archetype Structural Constraint Guidelines
-**URI:** guidelines://archetypes/v1/structural-constraints  
+**URI:** openehr://guidelines/archetypes/v1/structural-constraints  
 **Version:** 1.0.0  
 **Scope:** Cardinality, existence, occurrences, slots, and structural constraints
 
