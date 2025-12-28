@@ -23,6 +23,13 @@ final class TypeSpecifications
      *  - openehr://spec/type/RM/COMPOSITION
      *  - openehr://spec/type/AM/ARCHETYPE
      *  - openehr://spec/type/BASE/AUTHORED_RESOURCE
+     *
+     * @param string $component
+     *   The openEHR component name (e.g. `RM`, `AM`, `BASE`, etc.)
+     * @param string $name
+     *   The openEHR Type name (e.g. `DV_QUANTITY`)
+     * @return array<string, mixed>
+     *   The openEHR Type as BMM JSON.
      */
     #[McpResourceTemplate(
         uriTemplate: 'openehr://spec/type/{component}/{name}',
