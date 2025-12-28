@@ -16,6 +16,9 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - MCP Prompt (Terminology Explorer): `terminology_explorer` to guide users through discovering openEHR terminologies.
 - Added tests for Terminologies resource, explorer prompt and terminology service tool.
 
+### Changed
+- Using mcp/php-sdk to v0.2.2.
+
 ## [0.3.0] - 2025-12-22
 
 ### Added
