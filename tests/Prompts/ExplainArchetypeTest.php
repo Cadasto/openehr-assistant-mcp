@@ -21,7 +21,7 @@ final class ExplainArchetypeTest extends TestCase
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
 
-        $allowedRoles = ['system','user','assistant'];
+        $allowedRoles = ['user', 'assistant'];
         $combined = '';
         foreach ($messages as $msg) {
             $this->assertIsArray($msg);

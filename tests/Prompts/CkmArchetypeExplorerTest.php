@@ -19,7 +19,7 @@ final class CkmArchetypeExplorerTest extends TestCase
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
 
-        $allowedRoles = ['system','user','assistant'];
+        $allowedRoles = ['user', 'assistant'];
         $combinedContent = '';
         foreach ($messages as $msg) {
             $this->assertIsArray($msg);

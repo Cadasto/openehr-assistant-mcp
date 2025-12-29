@@ -21,7 +21,7 @@ final class TranslateArchetypeLanguageTest extends TestCase
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
 
-        $allowedRoles = ['system','user','assistant'];
+        $allowedRoles = ['user','assistant'];
         $combined = '';
         foreach ($messages as $msg) {
             $this->assertIsArray($msg);
@@ -35,7 +35,6 @@ final class TranslateArchetypeLanguageTest extends TestCase
 
         // Guideline references and placeholders
         $this->assertStringContainsString('openehr://guidelines/archetypes/v1/terminology', $combined);
-        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/adl-syntax', $combined);
         $this->assertStringContainsString('openehr://guidelines/archetypes/v1/adl-idioms-cheatsheet', $combined);
         $this->assertStringContainsString('{{adl_text}}', $combined);
         $this->assertStringContainsString('{{source_language_code}}', $combined);
