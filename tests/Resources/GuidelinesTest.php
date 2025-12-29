@@ -22,6 +22,16 @@ final class GuidelinesTest extends TestCase
         $this->assertStringContainsStringIgnoringCase('archetype', $content);
     }
 
+    public function test_can_read_template_guideline(): void
+    {
+        $reader = new Guidelines();
+        $content = $reader->read('templates', 'v1', 'checklist');
+
+        $this->assertIsString($content);
+        $this->assertNotSame('', $content);
+        $this->assertStringContainsStringIgnoringCase('template', $content);
+    }
+
 
     public function test_cant_read_unknown_guideline(): void
     {

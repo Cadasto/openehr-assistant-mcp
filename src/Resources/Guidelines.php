@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Resources;
 
-use Cadasto\OpenEHR\MCP\Assistant\CompletionProviders\ArchetypeGuidelines;
+use Cadasto\OpenEHR\MCP\Assistant\CompletionProviders\Guidelines as GuidelinesCompletionProvider;
 use FilesystemIterator;
 use Mcp\Capability\Attribute\CompletionProvider;
 use Mcp\Capability\Attribute\McpResourceTemplate;
@@ -27,6 +27,7 @@ final class Guidelines
      * Examples:
      *  - openehr://guidelines/archetypes/v1/checklist
      *  - openehr://guidelines/archetypes/v1/adl-syntax
+     *  - openehr://guidelines/templates/v1/explain-template
      */
     #[McpResourceTemplate(
         uriTemplate: 'openehr://guidelines/{category}/{version}/{name}',
@@ -35,17 +36,17 @@ final class Guidelines
         mimeType: 'text/markdown'
     )]
     public function read(
-        #[CompletionProvider(values: ['archetypes'])]
+        #[CompletionProvider(values: ['archetypes', 'templates'])]
         string $category,
         #[CompletionProvider(values: ['v1'])]
         string $version,
-        #[CompletionProvider(provider: ArchetypeGuidelines::class)]
+        #[CompletionProvider(provider: GuidelinesCompletionProvider::class)]
         string $name
     ): string
     {
         foreach ([$category, $version, $name] as $segment) {
             if ($segment === '' || !\preg_match('/^[\w-]+$/', $segment)) {
-                throw new \InvalidArgumentException(\sprintf('Invalid guideline resource identifier: %s', $segment));
+                throw new ResourceReadException(\sprintf('Invalid guideline resource identifier: %s', $segment));
             }
         }
 

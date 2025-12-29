@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\CompletionProviders;
 
-use Cadasto\OpenEHR\MCP\Assistant\CompletionProviders\ArchetypeGuidelines;
+use Cadasto\OpenEHR\MCP\Assistant\CompletionProviders\Guidelines;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ArchetypeGuidelines::class)]
-final class ArchetypeGuidelinesTest extends TestCase
+#[CoversClass(Guidelines::class)]
+final class GuidelinesTest extends TestCase
 {
     public function testListsMarkdownGuidelinesWithoutExtensions(): void
     {
-        $provider = new ArchetypeGuidelines();
+        $provider = new Guidelines();
 
         $items = $provider->getCompletions('');
 
@@ -33,7 +33,7 @@ final class ArchetypeGuidelinesTest extends TestCase
 
     public function testPrefixFilteringIsApplied(): void
     {
-        $provider = new ArchetypeGuidelines();
+        $provider = new Guidelines();
 
         $items = $provider->getCompletions('adl');
 
