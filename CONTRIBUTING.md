@@ -116,7 +116,7 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp vendor\b
 ## MCP conventions (Tools, Prompts, Resources, Completion Providers)
 - Tools live in `src\Tools`; annotate public methods with `#[McpTool(name: '...')]` for discovery by `modelcontextprotocol/php-sdk` in `public/index.php`.
 - Prompts live in `src\Prompts`; annotate prompt classes with `#[McpPrompt(name: '...')]`. Current prompt names include:
-  - `ckm_archetype_explorer`, `type_specification_explorer`
+  - `ckm_archetype_explorer`, `ckm_template_explorer`, `type_specification_explorer`, `terminology_explorer`
   - `explain_archetype_semantics`, `translate_archetype_language`, `fix_adl_syntax`, `design_or_review_archetype`
 - Resources & Resource Templates (attribute `#[McpResourceTemplate]`):
   - Guidelines (markdown) via `Guidelines::read()` in `src\Resources\Guidelines.php`
@@ -126,6 +126,10 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp vendor\b
   - Type Specifications (BMM JSON) via `TypeSpecifications::read()` in `src\Resources\TypeSpecifications.php`
     - URI template: `openehr://spec/type/{component}/{name}` (e.g., `openehr://spec/type/RM/COMPOSITION`).
     - Files map to `resources/bmm/{COMPONENT}/{NAME}.bmm.json`.
+  - Terminologies (JSON) via `Terminologies::read()` in `src\Resources\Terminologies.php`
+    - URI template: `openehr://terminology/{type}/{id}` (e.g., `openehr://terminology/group/composition_category`).
+    - Files map to `resources/terminology/openehr_terminology.xml`.
+    - Discoverability: `Terminologies::addResources()` registers all terminology groups and codesets as MCP resources at startup.
 - Completion Providers (attribute `#[CompletionProvider]`) live in `src\CompletionProviders` and provide parameter suggestions to tools/resources:
   - `ArchetypeGuidelines`: suggests guideline names from `resources/guidelines/archetypes/v1` for the `{name}` segment of guideline URIs.
   - `SpecificationComponents`: suggests available `{component}` values from `resources/bmm` for type specification URIs.
@@ -156,6 +160,7 @@ PR checklist:
 Testing notes
 - Prompt tests live under `tests/Prompts` and validate the `__invoke()` message shape and `#[McpPrompt]` attributes.
 - Guidelines resource tests live under `tests/Resources` and validate that `Guidelines::addResources()` registers `openehr://guidelines/...` resources and that `Guidelines::read()` loads known documents.
+- Terminology resource tests live under `tests/Resources` and validate that `Terminologies::addResources()` registers `openehr://terminology/...` resources and that `Terminologies::read()` loads known terminologies.
 - Completion provider tests live under `tests/CompletionProviders` and validate that providers return expected suggestions given repository contents.
 
 

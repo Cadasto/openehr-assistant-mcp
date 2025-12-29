@@ -9,14 +9,19 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+## [0.4.0] - 2025-12-29
+
 ### Added
 
 - MCP Resources (Terminologies): `openehr://terminology/{type}/{id}` for openEHR terminology groups and codesets.
-- MCP Tool (Terminology Service): `terminology_resolve` to resolve openEHR concept IDs and rubrics.
+- MCP Tool (Terminology Service): `terminology_resolve` to resolve openEHR concept IDs and rubrics across groups.
 - MCP Prompt (Terminology Explorer): `terminology_explorer` to guide users through discovering openEHR terminologies.
 - Added tests for Terminologies resource, explorer prompt and terminology service tool.
+- Added CKM template tools: `ckm_template_search` and `ckm_template_get` for OET and OPT formats.
+- Added MCP Prompt (CKM Template Explorer): `ckm_template_explorer` to guide users through discovering CKM templates.
 
 ### Changed
+
 - Using mcp/php-sdk to v0.2.2.
 
 ## [0.3.0] - 2025-12-22

@@ -25,9 +25,11 @@ A PHP 8.4 [Model Context Protocol (MCP) Server](https://modelcontextprotocol.io/
 CKM (Clinical Knowledge Manager)
 - `ckm_archetype_search` - List Archetypes from the CKM server matching search criteria
 - `ckm_archetype_get` - Get a CKM Archetype by its identifier
+- `ckm_template_search` - List Templates (OET/OPT) from the CKM server matching search criteria
+- `ckm_template_get` - Get a CKM Template (OET/OPT) by its identifier
 
 openEHR Terminology
-- `terminology_resolve` - Resolve an openEHR terminology concept ID to its rubric, or find the ID for a given rubric.
+- `terminology_resolve` - Resolve an openEHR terminology concept ID to its rubric, or find the ID for a given rubric across groups.
 
 openEHR Type specification
 - `type_specification_search` - List bundled openEHR Type specifications matching search criteria.
@@ -37,6 +39,7 @@ openEHR Type specification
 
 Optional prompts that guide AI assistants through common openEHR and CKM workflows using the tools above.
 - `ckm_archetype_explorer` - Explore CKM Archetypes by discovering and fetching definitions (ADL/XML/Mindmap), using `ckm_archetype_search` and `ckm_archetype_get` tools.
+- `ckm_template_explorer` - Explore CKM Templates by discovering and fetching definitions (OET/OPT), using `ckm_template_search` and `ckm_template_get` tools.
 - `type_specification_explorer` - Discover and fetch openEHR Type specifications (as BMM JSON) using `type_specification_search` and `type_specification_get` tools.
 - `terminology_explorer` - Discover and retrieve openEHR terminology definitions (groups and codesets) using terminology resources.
 - `explain_archetype_semantics` - Explain an archetype’s semantics (audiences, elements, constraints) with links to local guidelines.
@@ -74,6 +77,7 @@ Terminologies (JSON)
 - Examples:
   - `openehr://terminology/group/attestation_reason`
   - `openehr://terminology/codeset/compression_algorithms`
+- Provides access to both terminology groups (concepts/rubrics) and codesets.
 
 ## Transports
 
