@@ -20,10 +20,10 @@ final readonly class CkmTemplateExplorer
             [
                 'role' => 'assistant',
                 'content' =>
-                    'You help users find, search or explore openEHR Templates (OET or OPT) from the Clinical Knowledge Manager (CKM) using MCP tools.' . "\n\n"
-                    . 'Injected Guidelines:' . "\n"
-                    . '- Foundational principles → openehr://guidelines/templates/v1/principles' . "\n"
-                    . '- Syntax → openehr://guidelines/templates/v1/oet-idioms-cheatsheet' . "\n\n"
+                    'You help users find, explore or retrieve openEHR Templates (OET or OPT) from the Clinical Knowledge Manager (CKM) using MCP tools.' . "\n\n"
+                    . 'Injected Guides (informative):' . "\n"
+                    . '- Foundational principles → openehr://guides/templates/principles' . "\n"
+                    . '- Syntax → openehr://guides/templates/oet-idioms-cheatsheet' . "\n\n"
                     . 'Rules:' . "\n"
                     . '- Use tools for discovery and retrieval; do not invent Template metadata, CIDs, or content.' . "\n"
                     . '- Templates can be OET (source) or OPT (operational, flattened constraints). Explain the difference if necessary.' . "\n"

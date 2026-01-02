@@ -33,9 +33,9 @@ final class FixAdlSyntaxTest extends TestCase
             $combined .= "\n" . $msg['content'];
         }
 
-        // Guideline references and placeholders
-        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/adl-syntax', $combined);
-        $this->assertStringContainsString('openehr://guidelines/archetypes/v1/adl-idioms-cheatsheet', $combined);
+        // Guides references and placeholders
+        $this->assertStringContainsString('openehr://guides/archetypes/adl-syntax', $combined);
+        $this->assertStringContainsString('openehr://guides/archetypes/adl-idioms-cheatsheet', $combined);
         $this->assertStringContainsString('{{adl_text}}', $combined);
         $this->assertStringContainsString('{{adl_version}}', $combined);
 

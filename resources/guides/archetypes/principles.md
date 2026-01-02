@@ -1,5 +1,5 @@
 # openEHR Archetype Design Principles
-**URI:** openehr://guidelines/archetypes/v1/principles  
+**URI:** openehr://guides/archetypes/principles  
 **Version:** 1.0.0  
 **Scope:** Foundational principles guiding high-quality openEHR archetype modelling  
 **Source:** openEHR Archetype Definitions and Principles, community modelling practices

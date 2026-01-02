@@ -1,8 +1,8 @@
 # Minimal ADL Idiom Cheat Sheet
-**URI:** openehr://guidelines/archetypes/v1/adl-idioms-cheatsheet  
+**URI:** openehr://guides/archetypes/adl-idioms-cheatsheet  
 **Version:** 1.0.0  
 **Purpose:** Fast grounding for writing/reviewing ADL constraint trees without changing semantics
-**Related:** Derived from openehr://guidelines/archetypes/v1/adl-syntax; ties go to adl-syntax.
+**Related:** Derived from openehr://guides/archetypes/adl-syntax; ties go to adl-syntax.
 
 ---
 

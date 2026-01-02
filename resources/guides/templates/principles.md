@@ -1,5 +1,5 @@
 # openEHR Template Design Principles
-**URI:** openehr://guidelines/templates/v1/principles  
+**URI:** openehr://guides/templates/principles  
 **Version:** 1.0.0  
 **Scope:** Foundational principles for designing high-quality openEHR templates (OET/OPT)  
 **Source:** openEHR Template Specifications, CKM modelling practices

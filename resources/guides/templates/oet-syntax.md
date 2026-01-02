@@ -1,5 +1,5 @@
-# openEHR OET Syntax Guideline
-**URI:** openehr://guidelines/templates/v1/oet-syntax  
+# openEHR OET Syntax Guide
+**URI:** openehr://guides/templates/oet-syntax  
 **Version:** 1.0.0  
 **Scope:** Technical specification of the OET (Ocean Template) XML format  
 **Source:** Ocean Template Designer Documentation, CKM analysis

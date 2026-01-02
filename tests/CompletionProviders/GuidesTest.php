@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\CompletionProviders;
 
-use Cadasto\OpenEHR\MCP\Assistant\CompletionProviders\Guidelines;
+use Cadasto\OpenEHR\MCP\Assistant\CompletionProviders\Guides;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(Guidelines::class)]
-final class GuidelinesTest extends TestCase
+#[CoversClass(Guides::class)]
+final class GuidesTest extends TestCase
 {
-    public function testListsMarkdownGuidelinesWithoutExtensions(): void
+    public function testListsMarkdownGuidesWithoutExtensions(): void
     {
-        $provider = new Guidelines();
+        $provider = new Guides();
 
         $items = $provider->getCompletions('');
 
         $this->assertIsArray($items);
-        $this->assertNotEmpty($items, 'Expected at least one guideline filename');
+        $this->assertNotEmpty($items, 'Expected at least one guide filename');
 
         // Ensure common known files are present (without .md extension)
         $this->assertContains('checklist', $items);
@@ -33,7 +33,7 @@ final class GuidelinesTest extends TestCase
 
     public function testPrefixFilteringIsApplied(): void
     {
-        $provider = new Guidelines();
+        $provider = new Guides();
 
         $items = $provider->getCompletions('adl');
 

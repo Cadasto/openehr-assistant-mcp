@@ -4,7 +4,7 @@ namespace Cadasto\OpenEHR\MCP\Assistant\CompletionProviders;
 
 use Mcp\Capability\Completion\ProviderInterface;
 
-class Guidelines implements ProviderInterface
+class Guides implements ProviderInterface
 {
 
     /**
@@ -28,8 +28,8 @@ class Guidelines implements ProviderInterface
     public function getCompletions(string $currentValue): array
     {
         $files = $this->getFiles([
-            APP_RESOURCES_DIR . '/guidelines/archetypes/v1',
-            APP_RESOURCES_DIR . '/guidelines/template/v1',
+            APP_RESOURCES_DIR . '/guides/archetypes',
+            APP_RESOURCES_DIR . '/guides/template',
         ]);
         $completions = [];
 

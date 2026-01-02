@@ -1,8 +1,8 @@
 # openEHR Template Design Rules
-**URI:** openehr://guidelines/templates/v1/rules  
+**URI:** openehr://guides/templates/rules  
 **Version:** 1.0.0  
 **Scope:** Concrete modelling rules and best practices for openEHR templates
-**Related:** openehr://guidelines/templates/v1/principles, openehr://guidelines/templates/v1/oet-syntax
+**Related:** openehr://guides/templates/principles, openehr://guides/templates/oet-syntax
 
 ---
 

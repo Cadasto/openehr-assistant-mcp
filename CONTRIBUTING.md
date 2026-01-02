@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing! This document explains how to set up your environment, propose changes, and follow our conventions so that we can review and merge your work efficiently.
 
-This guide is self‑contained; you do not need to read `guidelines.md`. The most relevant development and testing instructions have been incorporated here per GitHub best practices for CONTRIBUTING files.
+The most relevant development and testing instructions have been incorporated here per GitHub best practices for CONTRIBUTING files.
 
 
 ## Table of contents
@@ -38,10 +38,10 @@ Prerequisites:
 Recommended developer workflow (inside Docker):
 1. `git clone <your-fork-url>`
 2. `cd openehr-assistant-mcp`
-3. Option A — Docker Compose directly:
+3. Option A - Docker Compose directly:
    - `docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d mcp --build --force-recreate`
    
-   Option B — Makefile shortcuts:
+   Option B - Makefile shortcuts:
    - `make up-dev` (uses both docker-compose files)
 4. `cp .env.example .env`
 5. Install dependencies inside the dev container:
@@ -79,7 +79,7 @@ The entrypoint script is `public/index.php`. Available transports:
 - Run a subset: `docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp vendor\bin\phpunit --filter SomeTest`
 - Coverage HTML report: `docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp composer test:coverage`
 
-Testing guidelines
+Testing policy:
 - Tests live under `tests/` with namespace `Cadasto\\OpenEHR\\MCP\\Assistant\\Tests` (see `tests/phpunit.xml`).
 - Name files `*Test.php`.
 
@@ -119,10 +119,10 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp vendor\b
   - `ckm_archetype_explorer`, `ckm_template_explorer`, `type_specification_explorer`, `terminology_explorer`
   - `explain_archetype_semantics`, `translate_archetype_language`, `fix_adl_syntax`, `design_or_review_archetype`
 - Resources & Resource Templates (attribute `#[McpResourceTemplate]`):
-  - Guidelines (markdown) via `Guidelines::read()` in `src\Resources\Guidelines.php`
-    - URI template: `openehr://guidelines/{category}/{version}/{name}` (e.g., `openehr://guidelines/archetypes/v1/checklist`).
-    - Files map to `resources/guidelines/{category}/{version}/{name}.md`.
-    - Discoverability: `Guidelines::addResources()` registers all guidelines as MCP resources at startup.
+  - Guides (markdown) via `Guides::read()` in `src\Resources\Guides.php`
+    - URI template: `openehr://guides/{category}/{name}` (e.g., `openehr://guides/archetypes/checklist`).
+    - Files map to `resources/guides/{category}/{name}.md`.
+    - Discoverability: `Guides::addResources()` registers all guides as MCP resources at startup.
   - Type Specifications (BMM JSON) via `TypeSpecifications::read()` in `src\Resources\TypeSpecifications.php`
     - URI template: `openehr://spec/type/{component}/{name}` (e.g., `openehr://spec/type/RM/COMPOSITION`).
     - Files map to `resources/bmm/{COMPONENT}/{NAME}.bmm.json`.
@@ -131,8 +131,8 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp vendor\b
     - Files map to `resources/terminology/openehr_terminology.xml`.
     - Discoverability: `Terminologies::addResources()` registers all terminology groups and codesets as MCP resources at startup.
 - Completion Providers (attribute `#[CompletionProvider]`) live in `src\CompletionProviders` and provide parameter suggestions to tools/resources:
-  - `ArchetypeGuidelines`: suggests guideline names from `resources/guidelines/archetypes/v1` for the `{name}` segment of guideline URIs.
-  - `SpecificationComponents`: suggests available `{component}` values from `resources/bmm` for type specification URIs.
+  - `Guides`: suggests guide names from `resources/guides/archetypes` for the `{name}` segment of guide resource URIs.
+  - `SpecificationComponents`: suggests available `{component}` values from `resources/bmm` for type specification resource URIs.
 - Constants and versioning live in `src\constants.php` (see `APP_VERSION`).
 
 
@@ -159,7 +159,7 @@ PR checklist:
 
 Testing notes
 - Prompt tests live under `tests/Prompts` and validate the `__invoke()` message shape and `#[McpPrompt]` attributes.
-- Guidelines resource tests live under `tests/Resources` and validate that `Guidelines::addResources()` registers `openehr://guidelines/...` resources and that `Guidelines::read()` loads known documents.
+- Guides resource tests live under `tests/Resources` and validate that `Guides::addResources()` registers `openehr://guides/...` resources and that `Guides::read()` loads known documents.
 - Terminology resource tests live under `tests/Resources` and validate that `Terminologies::addResources()` registers `openehr://terminology/...` resources and that `Terminologies::read()` loads known terminologies.
 - Completion provider tests live under `tests/CompletionProviders` and validate that providers return expected suggestions given repository contents.
 

@@ -15,7 +15,7 @@ A PHP 8.4 [Model Context Protocol (MCP) Server](https://modelcontextprotocol.io/
 - Transports: streamable HTTP and stdio (for development)
 - Structured logging with Monolog
 - Simple, environment-driven configuration
-- Built-in developer guidelines exposed as MCP Resources via `openehr://guidelines/{category}/{version}/{name}` URIs
+- Built-in developer guidelines exposed as MCP Resources via `openehr://guides/{category}/{name}` URIs
 - MCP Resource templates and Completion Providers for better UX in MCP clients
 
 ## Available MCP Elements
@@ -42,7 +42,7 @@ Optional prompts that guide AI assistants through common openEHR and CKM workflo
 - `ckm_template_explorer` - Explore CKM Templates by discovering and fetching definitions (OET/OPT), using `ckm_template_search` and `ckm_template_get` tools.
 - `type_specification_explorer` - Discover and fetch openEHR Type specifications (as BMM JSON) using `type_specification_search` and `type_specification_get` tools.
 - `terminology_explorer` - Discover and retrieve openEHR terminology definitions (groups and codesets) using terminology resources.
-- `explain_archetype_semantics` - Explain an archetype’s semantics (audiences, elements, constraints) with links to local guidelines.
+- `explain_archetype_semantics` - Explain an archetype’s semantics (audiences, elements, constraints).
 - `translate_archetype_language` - Translate an archetype’s terminology section between languages with safety checks.
 - `fix_adl_syntax` - Correct or improve Archetype syntax without changing semantics; provides before/after and notes.
 - `design_or_review_archetype` - Guide a design or review task for a specific concept/RM class with structured outputs.
@@ -50,19 +50,19 @@ Optional prompts that guide AI assistants through common openEHR and CKM workflo
 ### Completion Providers
 
 Completion providers supply parameter suggestions in MCP clients when invoking tools or resources.
-- `ArchetypeGuidelines` — suggests guideline `{name}` values from `resources/guidelines/archetypes/v1`
-- `SpecificationComponents` — suggests `{component}` values based on directories in `resources/bmm`
+- `Guides` - suggests guide `{name}` values from `resources/guides/archetypes` resource URI
+- `SpecificationComponents` - suggests `{component}` values based on directories in `resources/bmm`  resource URI
 
 ### Resources
 
 Resources are exposed via `#[McpResourceTemplate]` annotated methods and can be fetched by MCP clients using `openehr://...` URIs.
 
-Guidelines (Markdown)
-- URI template: `openehr://guidelines/{category}/{version}/{name}`
-- On-disk mapping: `resources/guidelines/{category}/{version}/{name}.md`
+Guides (Markdown)
+- URI template: `openehr://guides/{category}/{name}`
+- On-disk mapping: `resources/guides/{category}/{name}.md`
 - Examples:
-  - `openehr://guidelines/archetypes/v1/checklist`
-  - `openehr://guidelines/archetypes/v1/adl-syntax`
+  - `openehr://guides/archetypes/checklist`
+  - `openehr://guides/archetypes/adl-syntax`
 
 Type Specifications (BMM JSON)
 - URI template: `openehr://spec/type/{component}/{name}`

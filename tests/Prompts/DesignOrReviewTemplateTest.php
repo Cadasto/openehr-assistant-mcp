@@ -33,12 +33,12 @@ final class DesignOrReviewTemplateTest extends TestCase
             $combined .= "\n" . $msg['content'];
         }
 
-        // Guideline references (templated) and placeholders
-        $this->assertStringContainsString('openehr://guidelines/templates/v1/principles', $combined);
-        $this->assertStringContainsString('openehr://guidelines/templates/v1/rules', $combined);
-        $this->assertStringContainsString('openehr://guidelines/templates/v1/oet-syntax', $combined);
-        $this->assertStringContainsString('openehr://guidelines/templates/v1/oet-idioms-cheatsheet', $combined);
-        $this->assertStringContainsString('openehr://guidelines/templates/v1/checklist', $combined);
+        // Guides references (templated) and placeholders
+        $this->assertStringContainsString('openehr://guides/templates/principles', $combined);
+        $this->assertStringContainsString('openehr://guides/templates/rules', $combined);
+        $this->assertStringContainsString('openehr://guides/templates/oet-syntax', $combined);
+        $this->assertStringContainsString('openehr://guides/templates/oet-idioms-cheatsheet', $combined);
+        $this->assertStringContainsString('openehr://guides/templates/checklist', $combined);
 
         $this->assertStringContainsString('{{task_type}}', $combined);
         $this->assertStringContainsString('{{concept}}', $combined);

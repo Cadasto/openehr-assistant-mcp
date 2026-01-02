@@ -33,6 +33,6 @@ final class CkmTemplateExplorerTest extends TestCase
 
         $this->assertStringContainsString('ckm_template_search', $combinedContent);
         $this->assertStringContainsString('ckm_template_get', $combinedContent);
-        $this->assertStringContainsString('openehr://guidelines/templates/v1/principles', $combinedContent);
+        $this->assertStringContainsString('openehr://guides/templates/principles', $combinedContent);
     }
 }

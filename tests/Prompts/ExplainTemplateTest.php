@@ -33,10 +33,10 @@ final class ExplainTemplateTest extends TestCase
             $combined .= "\n" . $msg['content'];
         }
 
-        // Key guideline references and placeholders
-        $this->assertStringContainsString('openehr://guidelines/templates/v1/principles', $combined);
-        $this->assertStringContainsString('openehr://guidelines/templates/v1/rules', $combined);
-        $this->assertStringContainsString('openehr://guidelines/templates/v1/oet-syntax', $combined);
+        // Guides references and placeholders
+        $this->assertStringContainsString('openehr://guides/templates/principles', $combined);
+        $this->assertStringContainsString('openehr://guides/templates/rules', $combined);
+        $this->assertStringContainsString('openehr://guides/templates/oet-syntax', $combined);
         $this->assertStringContainsString('{{template_text}}', $combined);
         $this->assertStringContainsString('{{audience}}', $combined);
 

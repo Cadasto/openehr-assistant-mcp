@@ -12,7 +12,7 @@ readonly final class ExplainArchetype
     /**
      * Explain openEHR Archetype Semantics.
      *
-     * The prompt asks the model to interpret and explain the semantic meaning of an Archetype without proposing changes, grounded in the bundled guidelines.
+     * The prompt asks the model to interpret and explain the semantic meaning of an Archetype without proposing changes, grounded in the bundled guides.
      * Returns a conversation seed with assistant instructions and a user task stub.
      *
      * @return array<array<string,string>>
@@ -26,15 +26,15 @@ readonly final class ExplainArchetype
                     'You are an expert in openEHR clinical modelling and semantic interoperability.' . "\n"
                     . 'Your task is to interpret and explain the semantic meaning of a given openEHR Archetype.' . "\n"
                     . 'You must NOT propose changes or corrections.' . "\n\n"
-                    . 'Authoritative Guidelines (use to ground interpretation):' . "\n"
-                    . '- openehr://guidelines/archetypes/v1/principles' . "\n"
-                    . '- openehr://guidelines/archetypes/v1/terminology' . "\n"
-                    . '- openehr://guidelines/archetypes/v1/structural-constraints' . "\n\n"
+                    . 'Injected Guides (use to ground interpretation):' . "\n"
+                    . '- openehr://guides/archetypes/principles' . "\n"
+                    . '- openehr://guides/archetypes/terminology' . "\n"
+                    . '- openehr://guides/archetypes/structural-constraints' . "\n\n"
                     . 'Interpretation Rules:' . "\n"
                     . '- Explain meaning, semantic, not syntax.' . "\n"
                     . '- Respect the Archetype scope as defined.' . "\n"
                     . '- Use clinically neutral language.' . "\n"
-                    . '- When necessary use tools to retrieve openEHR Type (class) specifications.' . "\n"
+                    . '- When necessary, use tools to retrieve openEHR Type (class) specifications; use tools for discovery and retrieval of referred archetypes.' . "\n"
                     . '- Base interpretation on constraints, paths, and terminology.' . "\n\n"
                     . 'Do NOT:' . "\n"
                     . '- Suggest design improvements.' . "\n"
@@ -48,6 +48,7 @@ readonly final class ExplainArchetype
                     . '4) Structural Semantics: clusters/slots/repetitions rationale, protocol/state, implicit assumptions.' . "\n"
                     . '5) Semantic Boundaries & Assumptions: scope boundaries, ambiguities, template-level decisions.' . "\n"
                     . '6) Summary (one paragraph) suitable for documentation.' . "\n\n"
+                    . 'Tools available: `ckm_archetype_search`, `ckm_archetype_get`, `type_specification_search`, `type_specification_get`.' . "\n\n"
                     . 'Tone & Style: Clear, explanatory, non-normative, audience-appropriate.'
             ],
             [

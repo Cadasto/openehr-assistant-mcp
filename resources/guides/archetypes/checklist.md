@@ -1,8 +1,8 @@
 # openEHR Archetype Design & Review Checklist
-**URI:** openehr://guidelines/archetypes/v1/checklist  
+**URI:** openehr://guides/archetypes/checklist  
 **Version:** 1.0.0  
 **Purpose:** Support consistent, high-quality archetype creation
-**Scope:** Quality guidelines for openEHR archetype design, review, and publication  
+**Scope:** Quality guide for openEHR archetype design, review, and publication  
 **Source:** openEHR editorial guidelines, design principles, and review practices
 
 ---
@@ -11,7 +11,7 @@
 
 1. **Broad, Coherent Concept Scope**
     - Ensure the archetype represents a *single, coherent clinical concept* (e.g., Blood Pressure measurement, not isolated fragments). 
-    - The scope should be *universal* — usable across diverse care settings. 
+    - The scope should be *universal* - usable across diverse care settings. 
 
 2. **Consistent, Stable Definitions**
     - Names, descriptions, and term definitions must be clear and reflect the clinical intent. 

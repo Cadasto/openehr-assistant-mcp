@@ -9,6 +9,11 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+### Changed
+
+- Renamed Guidelines as Guides, remove the version segment from resource URI: `openehr://guides/{category}/{name}`.
+
+
 ## [0.4.0] - 2025-12-29
 
 ### Added

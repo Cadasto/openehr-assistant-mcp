@@ -1,5 +1,5 @@
-# openEHR Archetype ADL & Syntax Guidelines
-**URI:** openehr://guidelines/archetypes/v1/adl-syntax
+# openEHR Archetype ADL & Syntax Guide
+**URI:** openehr://guides/archetypes/adl-syntax
 **Version:** 1.0.0
 **Scope:** Correct and idiomatic use of ADL and the Archetype Model (AM)
 **Applies to:** ADL 1.4 / ADL 2 archetypes
@@ -39,7 +39,7 @@ Includes:
 - original language
 - description and metadata
 
-**Guidelines:**
+**Rules:**
 - Archetype ID must follow naming conventions
 - Version suffix must reflect semantic compatibility
 
@@ -134,7 +134,7 @@ Although ADL is machine-readable, it should also be:
 - Consistently indented
 - Structured to reflect semantics
 
-Guidelines:
+Instructions:
 - Group related constraints
 - Avoid deeply nested structures without semantic justification
 

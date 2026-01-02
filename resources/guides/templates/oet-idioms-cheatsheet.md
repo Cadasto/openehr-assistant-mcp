@@ -1,8 +1,8 @@
 # OET Idioms Cheat Sheet
-**URI:** openehr://guidelines/templates/v1/oet-idioms-cheatsheet  
+**URI:** openehr://guides/templates/oet-idioms-cheatsheet  
 **Version:** 1.0.0  
 **Purpose:** Fast grounding for writing and reviewing openEHR templates (OET)
-**Related:** openehr://guidelines/templates/v1/oet-syntax, openehr://guidelines/templates/v1/rules
+**Related:** openehr://guides/templates/oet-syntax, openehr://guides/templates/rules
 
 ---
 

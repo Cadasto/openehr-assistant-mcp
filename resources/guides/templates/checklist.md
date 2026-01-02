@@ -1,8 +1,8 @@
 # openEHR Template Review Checklist
-**URI:** openehr://guidelines/templates/v1/checklist  
+**URI:** openehr://guides/templates/checklist  
 **Version:** 1.0.0  
 **Scope:** A practical checklist for reviewing and validating openEHR templates
-**Related:** openehr://guidelines/templates/v1/principles, openehr://guidelines/templates/v1/rules
+**Related:** openehr://guides/templates/principles, openehr://guides/templates/rules
 
 ---
 
