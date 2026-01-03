@@ -9,9 +9,18 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-01-03
+
 ### Changed
 
 - Renamed Guidelines as Guides, remove the version segment from resource URI: `openehr://guides/{category}/{name}`.
+- Refined docstrings for some of the tools and prompts to improve clarity and consistency.
+- Streamlined wording across guided workflows for a better user experience.
+- Updated `README.md` with expanded usage instructions, feature lists, and development setup details.
+
+### Fixed
+
+- Removed redundant format parameters from internal `TextContent::code` calls in CKM archetype and template retrieval.
 
 
 ## [0.4.0] - 2025-12-29
