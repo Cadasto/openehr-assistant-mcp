@@ -145,7 +145,7 @@ final readonly class CkmService
             ]);
             $data = trim($response->getBody()->getContents());
             $this->logger->info('CKM Archetype retrieved successfully', ['cid' => $cid, 'format' => $archetypeFormat, 'status' => $response->getStatusCode()]);
-            return TextContent::code($data, $format);
+            return TextContent::code($data);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to retrieve the CKM Archetype', ['error' => $e->getMessage(), 'identifier' => $identifier, 'cid' => $cid, 'format' => $format]);
             throw new \RuntimeException('Failed to retrieve the CKM Archetype: ' . $e->getMessage(), 0, $e);
@@ -254,7 +254,7 @@ final readonly class CkmService
             ]);
             $data = trim($response->getBody()->getContents());
             $this->logger->info('CKM Template retrieved successfully', ['cid' => $cid, 'format' => $templateFormat, 'status' => $response->getStatusCode()]);
-            return TextContent::code($data, $format);
+            return TextContent::code($data);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to retrieve the CKM Template', ['error' => $e->getMessage(), 'identifier' => $identifier, 'format' => $format]);
             throw new \RuntimeException('Failed to retrieve the CKM Template: ' . $e->getMessage(), 0, $e);
