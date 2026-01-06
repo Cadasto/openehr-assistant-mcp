@@ -4,22 +4,29 @@ services:
     image: cadasto/openehr-assistant-mcp:latest
     build:
       target: production
+    restart: unless-stopped
+    env_file:
+      - path: ./.env
+        required: false
+
+  caddy:
+    image: caddy:2-alpine
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./public:/app/public:ro
     hostname: openehr-assistant-mcp.${DOMAIN:-local}
     ports:
+      - "80:80"
       - "443:443"
       - "443:443/udp"
     environment:
       DOMAIN: ${DOMAIN:-local}
     restart: unless-stopped
-    env_file:
-      - path: ./.env
-        required: false
-    volumes:
-      - app-data:/data/.local/share
-      - app-cache:/data/.cache
-      - app-config:/data/.config
+    depends_on:
+      - mcp
 
 volumes:
-  app-data:
-  app-cache:
-  app-config:
+  caddy-data:
+  caddy-config:

@@ -1,15 +1,6 @@
 ARG PHP_VERSION=8.4
 
 #
-# Caddy Builder
-#
-FROM caddy:2-builder-alpine AS caddy-builder
-RUN apk update && apk upgrade --no-cache \
-  && xcaddy build \
-      --with github.com/baldinof/caddy-supervisor \
-      --replace github.com/smallstep/certificates=github.com/smallstep/certificates@v0.29.0
-
-#
 # Application base
 #
 FROM php:${PHP_VERSION}-fpm-alpine AS base
@@ -17,10 +8,7 @@ FROM php:${PHP_VERSION}-fpm-alpine AS base
 RUN set -eux \
     && apk update && apk upgrade --no-cache \
     && apk add --no-cache \
-      curl libcurl \
-      nss-tools \
-      zstd \
-      gzip \
+      curl \
     && curl --etag-compare etag.txt --etag-save etag.txt --remote-name https://curl.se/ca/cacert.pem \
     && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 # Add production PHP INI overlays (keep extension configs clean in docker/php)
@@ -28,30 +16,18 @@ COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/
 COPY docker/php/zz-overwrites.ini /usr/local/etc/php/conf.d/
 COPY docker/php-fpm.d/docker.conf /usr/local/etc/php-fpm.d/
 ENV APP_ENV=production
-# Defining XDG Base Directories
-ENV XDG_DATA_HOME=/data/.local/share
-ENV XDG_STATE_HOME=/data/.local/state
-ENV XDG_CONFIG_HOME=/data/.config
-ENV XDG_CACHE_HOME=/data/.cache
-ENV APP_CACHE_DIR=$XDG_CACHE_HOME/app
-RUN mkdir -m 0775 -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$APP_CACHE_DIR" \
-    && chown -R www-data:www-data  "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$APP_CACHE_DIR"
 # Source code location
 WORKDIR /app
-# Add caddy http server
-COPY docker/Caddyfile /etc/caddy/
-COPY --from=caddy-builder /usr/bin/caddy /usr/bin/caddy
-CMD ["caddy", "--config", "/etc/caddy/Caddyfile", "run"]
-EXPOSE 8343 443 443/udp
-
-HEALTHCHECK --interval=60s --timeout=5s --retries=5 --start-period=60s --start-interval=3s \
-    CMD curl --user-agent "HealthCheck: Docker/1.0" --fail http://localhost/health/caddy || exit 1
+EXPOSE 9000
 
 
 FROM base AS development
 # Development-specific settings and tools only
 ENV APP_ENV=development
 COPY docker/php/zz-development.ini /usr/local/etc/php/conf.d/
+# Defining XDG Base Directories for composer
+ENV XDG_CONFIG_HOME=/data/.config
+ENV XDG_CACHE_HOME=/data/.cache
 # Install PHP extensions and minimal OS tools in a single layer
 COPY --chmod=0755 --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN set -eux \
@@ -69,14 +45,13 @@ USER www-data
 #
 # PHP Dependencies builder (production deps only)
 #
-FROM development AS vendor-builder
-USER root
+FROM base AS vendor-builder
 COPY composer.json ./composer.json
+COPY composer.lock ./composer.lock
 COPY public ./public
 COPY src ./src
-RUN --mount=type=cache,target=$XDG_CONFIG_HOME \
-    --mount=type=cache,target=$XDG_CACHE_HOME \
-    composer install --no-interaction --no-progress --no-ansi --no-scripts --no-dev --classmap-authoritative --optimize-autoloader
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer install --no-interaction --no-progress --no-ansi --no-scripts --no-dev --classmap-authoritative --optimize-autoloader
 
 
 #
@@ -87,3 +62,4 @@ COPY --from=vendor-builder /app/public ./public
 COPY --from=vendor-builder /app/src ./src
 COPY --from=vendor-builder /app/vendor ./vendor
 COPY resources ./resources
+USER www-data
