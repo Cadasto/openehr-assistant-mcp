@@ -9,6 +9,7 @@ use Cadasto\OpenEHR\MCP\Assistant\Helpers\Map;
 use GuzzleHttp\RequestOptions;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Schema\Content\TextContent;
+use Mcp\Schema\ToolAnnotations;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Log\LoggerInterface;
 
@@ -22,33 +23,25 @@ final readonly class CkmService
     }
 
     /**
-     * Search for openEHR Archetypes in the Clinical Knowledge Manager (CKM).
+     * Search for and discover candidate openEHR Archetypes in the Clinical Knowledge Manager (CKM) matching a given criteria.
      *
      * Use this tool when you need to *discover* candidate archetypes before fetching full definitions.
      * It is typically the first step in an LLM workflow:
-     *
      * 1) Search by a domain keyword (e.g. "blood pressure", "medication", "problem list")
      * 2) Inspect the returned metadata for plausible matches
      * 3) Take the returned CKM identifier (CID) and call `ckm_archetype_get` tool to retrieve the full archetype definition.
      *
-     * Important notes for MCP/LLM clients:
-     * - This tool performs a keyword search on CKM "main data" (server-side filtering).
-     * - If you need deterministic fields for downstream reasoning,
-     *      treat this as a discovery step and rely on the `ckm_archetype_get` tool for authoritative content.
-     *
      * @param string $keyword
-     *   A human-oriented search string, one or multiple words, wildcards `*` supported. Prefer meaningful clinical terms over internal codes.
-     *   Examples: "blood pressure", "observation", "medication", "diabetes", "body weight".
+     *   A human-oriented search string, one or multiple words, wildcards `*` supported; prefer meaningful clinical terms over internal codes, e.g. "blood pressure", "observation", "medication", "diabetes", "body weight".
      *
      * @param int $limit
-     *   The maximum number of archetypes returned in the call. Defaults to 10.
+     *   The maximum number of Archetypes returned in the call; defaults to 10.
      *
      * @param int $offset
-     *   The offset into the result set, for paging. Defaults to 0.
+     *   The offset into the result set, for paging; defaults to 0.
      *
      * @param bool $requireAllSearchWords
-     *   If multiple search words are supplied, should ALL words be required (`true`), or is ANY sufficient (`false`).
-     *   Defaults to `true`.
+     *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
      *
      * @return array<array<string,mixed>>
      *   A list of CKM Archetype metadata entries as returned by CKM.
@@ -57,7 +50,10 @@ final readonly class CkmService
      * @throws \RuntimeException
      *   If the CKM API request fails (network error, upstream outage, invalid response).
      */
-    #[McpTool(name: 'ckm_archetype_search')]
+    #[McpTool(
+        name: 'ckm_archetype_search',
+        annotations: new ToolAnnotations(readOnlyHint: true)
+    )]
     public function archetypeSearch(string $keyword, int $limit = 10, int $offset = 0, bool $requireAllSearchWords = true): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
@@ -84,27 +80,20 @@ final readonly class CkmService
     }
 
     /**
-     * Retrieve the definition of an identified CKM Archetype, serialized in a specific format.
+     * Retrieve the full definition of an Archetype from CKM by its identifier, serialized in a specified format.
      *
      * Use this tool after you have identified a candidate archetype (usually from the `ckm_archetype_search` tool).
-     * Identification is based on the CKM Archetype identifier (CID), or
-     * based on human-readable archetype-id (also known as `resourceMainId` from the search response).
-     *
      * It fetches the *full archetype definition* from CKM so an LLM can:
      * - understand the structure and semantic or meaning of nodes/attributes,
      * - extract constraints, translations, and terminology bindings,
      * - generate templates or implementation guidance,
      * - or cite the definition content in downstream reasoning.
      *
-     * Implementation detail (relevant to clients):
-     * - For best results, pass the CID exactly as returned by `ckm_archetype_search` tool.
-     *
      * @param string $identifier
-     *   CID identifier (e.g. "1013.1.7850") or archetype-id (e.g. "openEHR-EHR-OBSERVATION.blood_pressure.v1").
+     *   Archetype CID identifier (e.g. "1013.1.7850") or archetype-id (e.g. "openEHR-EHR-OBSERVATION.blood_pressure.v1").
      *
      * @param string $format
-     *   Desired representation: "adl", "xml" or "mindmap" (this server accepts case-insensitive).
-     *   Defaults to "adl".
+     *   Desired representation: "adl", "xml" or "mindmap" (this server accepts case-insensitive); defaults to "adl".
      *
      * @return TextContent
      *   The Archetype definition code block as MCP text content in the chosen format.
@@ -116,7 +105,10 @@ final readonly class CkmService
      * @throws \RuntimeException
      *   If the CKM API request fails (invalid CID, unsupported format mapping, upstream error).
      */
-    #[McpTool(name: 'ckm_archetype_get')]
+    #[McpTool(
+        name: 'ckm_archetype_get',
+        annotations: new ToolAnnotations(readOnlyHint: true)
+    )]
     public function archetypeGet(string $identifier, string $format = 'adl'): TextContent
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
@@ -152,7 +144,7 @@ final readonly class CkmService
     }
 
     /**
-     * Search for openEHR Templates in the Clinical Knowledge Manager (CKM).
+     * Search for and discover candidate openEHR Templates in the Clinical Knowledge Manager (CKM) matching a given criteria.
      *
      * Use this tool when you need to *discover* candidate openEHR Templates (OET or OPT) before fetching their full definitions.
      * It is typically the first step in an LLM workflow:
@@ -160,22 +152,17 @@ final readonly class CkmService
      * 2) Inspect the returned metadata for plausible matches
      * 3) Take the returned CKM identifier (CID) and call `ckm_template_get` tool to retrieve the content.
      *
-     * Important notes for MCP/LLM clients:
-     * - If you need deterministic fields for downstream reasoning,
-     *      treat this as a discovery step and rely on the `ckm_template_get` tool for authoritative content.
-     *
      * @param string $keyword
      *   A human-oriented search string, one or multiple words, wildcards `*` supported.
      *
      * @param int $limit
-     *   The maximum number of templates returned. Defaults to 10.
+     *   The maximum number of Templates returned; defaults to 10.
      *
      * @param int $offset
-     *   The offset into the result set, for paging. Defaults to 0.
+     *   The offset into the result set, for paging; defaults to 0.
      *
      * @param bool $requireAllSearchWords
-     *   If multiple search words are supplied, should ALL words be required (`true`), or is ANY sufficient (`false`).
-     *   Defaults to `true`.
+     *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
      *
      * @return array<array<string,mixed>>
      *   A list of CKM Template metadata entries.
@@ -184,7 +171,10 @@ final readonly class CkmService
      * @throws \RuntimeException
      *   If the CKM API request fails (network error, upstream outage, invalid response).
      */
-    #[McpTool(name: 'ckm_template_search')]
+    #[McpTool(
+        name: 'ckm_template_search',
+        annotations: new ToolAnnotations(readOnlyHint: true)
+    )]
     public function templateSearch(string $keyword, int $limit = 10, int $offset = 0, bool $requireAllSearchWords = true): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
@@ -212,7 +202,7 @@ final readonly class CkmService
     }
 
     /**
-     * Retrieve from CKM the definition of an identified openEHR Template, serialized in a specific format.
+     * Retrieve the full definition of an openEHR Template (OET or OPT) from CKM by its identifier, serialized in a specified format.
      *
      * Use this tool to *retrieve* an openEHR Template from CKM after you have identified a candidate template (usually from the `ckm_template_search` tool).
      * Returned content and formats:
@@ -220,11 +210,10 @@ final readonly class CkmService
      * - "opt": Operational Template (XML) - the flattened version of the Template, containing all archetype constraints.
      *
      * @param string $identifier
-     *   CID identifier (e.g. "1013.26.244").
+     *   Template CID identifier (e.g. "1013.26.244").
      *
      * @param string $format
-     *   Desired representation: "oet", "opt".
-     *   Defaults to "oet".
+     *   Desired representation: "oet" (design-time template source), "opt" (flattened operational template, containing all archetype constraints); defaults to "oet".
      *
      * @return TextContent
      *   The Template definition code block as MCP text content in the chosen format.
@@ -232,7 +221,10 @@ final readonly class CkmService
      * @throws \RuntimeException
      *   If the CKM API request fails.
      */
-    #[McpTool(name: 'ckm_template_get')]
+    #[McpTool(
+        name: 'ckm_template_get',
+        annotations: new ToolAnnotations(readOnlyHint: true)
+    )]
     public function templateGet(string $identifier, string $format = 'opt'): TextContent
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());

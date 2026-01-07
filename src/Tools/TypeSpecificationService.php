@@ -7,6 +7,7 @@ namespace Cadasto\OpenEHR\MCP\Assistant\Tools;
 use Generator;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Exception\ToolCallException;
+use Mcp\Schema\ToolAnnotations;
 use Psr\Log\LoggerInterface;
 use SplFileInfo;
 
@@ -65,7 +66,7 @@ readonly final class TypeSpecificationService
     }
 
     /**
-     * Search openEHR Type specifications by a type name-pattern, optionally filtered by a keyword.
+     * Search for and discover openEHR Type specifications by name pattern with an optional keyword filter to locate canonical definitions and resource URIs.
      *
      * This tool is designed for LLM workflows that need to:
      * - discover the canonical definition of an openEHR Type (class),
@@ -81,19 +82,18 @@ readonly final class TypeSpecificationService
      * - `specUrl`: link to the corresponding openEHR specification page and fragment with more narrative details
      *
      * @param string $namePattern
-     *   A type-name pattern. Matching behaviour: minimal 3 chars, supports a simple `*` wildcard (glob-like). Examples:
-     *   - `ARCHETYPE_SLOT` (exact)
-     *   - `ARCHETYPE_SL*` (wildcard prefix)
-     *   - `DV_*` (family search)
+     *   A type-name pattern. Matching behaviour: minimal 3 chars, supports a simple `*` wildcard (glob-like). Examples:`ARCHETYPE_SLOT` (exact), `ARCHETYPE_SL*` (wildcard prefix), `DV_*` (family search).
      *
      * @param string $keyword
-     *   Optional raw substring filter applied to the JSON content (not normalized; case-insensitive).
-     *   Use this when you want to narrow results to Types containing a concept or attribute name.
+     *   Optional raw substring filter applied to the JSON content (not normalized; case-insensitive); use this when you want to narrow results to Types containing a concept or attribute name.
      *
      * @return array<int, array<string, string|null>>
      *   A list of metadata records (see fields above), or an empty array if nothing matches.
      */
-    #[McpTool(name: 'type_specification_search')]
+    #[McpTool(
+        name: 'type_specification_search',
+        annotations: new ToolAnnotations(readOnlyHint: true)
+    )]
     public function search(string $namePattern, string $keyword = ''): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
@@ -135,7 +135,7 @@ readonly final class TypeSpecificationService
     }
 
     /**
-     * Retrieve the full specification of an openEHR Type (as BMM JSON).
+     * Retrieve the full specification of a specific openEHR Type (class) as BMM JSON, including attributes, semantic constraints and documentation.
      *
      * Use this tool when you need to retrieve the full, machine-readable BMM definition for a type so an LLM can:
      * - inspect properties/attributes and their declared types,
@@ -147,8 +147,7 @@ readonly final class TypeSpecificationService
      *   The openEHR Type name (e.g. `DV_QUANTITY`, `COMPOSITION`, etc.)
      *
      * @param string $component
-     *   Optional, the openEHR Component name (e.g. `RM`, `AM`, `BASE`, etc.), for better matching or filtering.
-     *   If omitted, the first matching openEHR Type specification is returned.
+     *   Optional, the openEHR Component name (e.g. `RM`, `AM`, `BASE`, etc.), for better matching or filtering; if omitted, the first matching openEHR Type specification is returned.
      *
      * @return array<string, mixed>
      *   The openEHR Type as BMM JSON.
@@ -156,7 +155,10 @@ readonly final class TypeSpecificationService
      * @throws ToolCallException
      *   If the name is empty after normalization, or if no matching specification is found.
      */
-    #[McpTool(name: 'type_specification_get')]
+    #[McpTool(
+        name: 'type_specification_get',
+        annotations: new ToolAnnotations(readOnlyHint: true)
+    )]
     public function get(string $name, string $component = ''): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());

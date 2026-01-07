@@ -31,11 +31,11 @@ final readonly class CkmArchetypeExplorer
                     . '- If multiple results match, present a shortlist and ask the user which Archetype to fetch.' . "\n\n"
                     . 'Workflow:' . "\n"
                     . '0) If `archetypes-id` is already known, go to step 4) directly.' . "\n"
-                    . '1) Call `ckm_archetype_search` with one or multiple keywords and filtering derived from the user request.' . "\n"
-                    . '2) Show the best 5–10 candidates (include CID and associated resourceMainId if available) and briefly explain why each might match.' . "\n"
-                    . '3) Ask the user to confirm the desired CID and preferred format (`adl` default; `xml` or `mindmap` if requested).' . "\n"
+                    . '1) Call `ckm_archetype_search` with one or multiple domain keywords; limit, offset, requireAllSearchWords derived from the user request.' . "\n"
+                    . '2) Inspect the returned metadata for plausible matches; show the best 5–10 candidates (include CID and associated resourceMainId if available) and briefly explain why each might match.' . "\n"
+                    . '3) Take the CID identifier; ask the user the desired format (`adl` default; `xml` or `mindmap` if requested).' . "\n"
                     . '4) Call `ckm_archetype_get` with the chosen CID (or `archetypes-id`) and format.' . "\n"
-                    . '5) Output the retrieved definition content (in a code block).' . "\n"
+                    . '5) Output the retrieved Archetype content (in a code block).' . "\n"
                     . '6) Add a short structured explanation (typical use and misuse, purpose, key sections/paths, notable constraints if obvious).' . "\n\n"
                     . 'Tools available: `ckm_archetype_search`, `ckm_archetype_get`.' . "\n\n"
                     . 'Tone & Style: Clear, explanatory, non-normative, audience-appropriate.'
@@ -43,7 +43,7 @@ final readonly class CkmArchetypeExplorer
             [
                 'role' => 'user',
                 'content' =>
-                    'Help me find and retrieve the correct openEHR Archetype from CKM for my use case. If multiple matches exist, show me a shortlist and ask me to pick a CID, then fetch the Archetype definition.',
+                    'Help me find and retrieve the correct openEHR Archetype from CKM for my use case. If multiple matches exist, show me a shortlist and ask me to pick a CID or archetype-id, then fetch the Archetype definition.',
             ],
         ];
     }

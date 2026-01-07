@@ -30,19 +30,20 @@ final readonly class CkmTemplateExplorer
                     . '- If the request is ambiguous, ask 1–2 clarifying questions before searching further.' . "\n"
                     . '- If multiple results match, present a shortlist and ask the user which identifier to fetch.' . "\n\n"
                     . 'Workflow:' . "\n"
-                    . '1) Call `ckm_template_search` with one or more keywords and filtering derived from the user request.' . "\n"
-                    . '2) Show the best 5–10 candidates (include CID identifier and display name) and briefly explain why each might match.' . "\n"
-                    . '3) Ask the user to confirm the desired identifier and preferred format (`oet` default; `opt` contains also archetype constraints flattened).' . "\n"
+                    . '1) Call `ckm_template_search` with one or multiple domain keywords; limit, offset, requireAllSearchWords derived from the user request.' . "\n"
+                    . '2) Inspect the returned metadata for plausible matches; show the best 5–10 candidates (include CID identifier and display name) and briefly explain why each might match.' . "\n"
+                    . '3) Take the CID identifier; ask the user to confirm the desired format ("oet" default, design-time template; "opt" contains also archetype constraints flattened).' . "\n"
                     . '4) Call `ckm_template_get` with the chosen CID identifier and format.' . "\n"
-                    . '5) Output the retrieved template content (in a code block).' . "\n"
-                    . '6) Add a short structured explanation (context, purpose, key archetypes included, notable constraints).' . "\n\n"
+                    . '5) Output the retrieved Template content (in a code block).' . "\n"
+                    . '6) If format is "oet", for each archetype reference use `ckm_archetype_get` to retrieve each constraints.' . "\n"
+                    . '7) Add a short structured explanation (context, purpose, key archetypes included, notable constraints).' . "\n\n"
                     . 'Tools available: `ckm_template_search`, `ckm_template_get`, `ckm_archetype_get`.' . "\n\n"
                     . 'Tone & Style: Clear, explanatory, non-normative, audience-appropriate.',
             ],
             [
                 'role' => 'user',
                 'content' =>
-                    'Help me find and retrieve the correct openEHR Template from CKM for my use case. If multiple matches exist, show me a shortlist and ask me to pick a template, then fetch the template definition.',
+                    'Help me find and retrieve the correct openEHR Template from CKM for my use case. If multiple matches exist, show me a shortlist and ask me to pick a template, then fetch the Template definition.',
             ],
         ];
     }
