@@ -17,7 +17,8 @@
             "name": "is_writable",
             "documentation": "Defined to return True in all cases.",
             "is_mandatory": true,
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": true
         }
     },
     "package": "org.openehr.lang.bmm.expression",

@@ -1,0 +1,42 @@
+{
+    "name": "C_REAL",
+    "documentation": "Constraint on instances of Real.",
+    "ancestors": [
+        "C_ORDERED"
+    ],
+    "properties": {
+        "constraint": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "constraint",
+            "documentation": "Formal constraint on `Real`, in the form of one or more `Interval<Real>`.\n\nTo represent no constraint, use an empty list.",
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "Interval",
+                    "generic_parameters": [
+                        "Real"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "default_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "default_value",
+            "documentation": "Default value set in a template, and present in an operational template. Generally limited to leaf and near-leaf nodes.",
+            "type": "Real"
+        },
+        "assumed_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "assumed_value",
+            "documentation": "Value to be assumed if none sent in data.",
+            "type": "Real"
+        }
+    },
+    "package": "org.openehr.am.aom2.constraint_model.primitive",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_primitive_package"
+}

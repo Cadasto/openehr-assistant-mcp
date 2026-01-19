@@ -11,6 +11,13 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ### Added
 - MCP Resource (Terminology): `openehr://terminology/all` to expose the entire openEHR terminology in JSON format.
+- BMM Specifications: Added AM2 (Archetype Model 2.0) components to bundled resources.
+- CI/CD: Added PR validation workflow and enhanced Docker release process.
+
+### Changed
+- Terminology: Improved `terminology_resolve` tool and `terminology_explorer` prompt for better clarity and coverage.
+- Specification: Updated and reorganized BMM files, moving AM to AM2 for better alignment with latest openEHR specifications.
+- README: Updated acknowledgments and documentation examples.
 
 ## [0.7.0] - 2026-01-07
 

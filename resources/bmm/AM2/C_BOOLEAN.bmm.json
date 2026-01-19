@@ -1,0 +1,87 @@
+{
+    "name": "C_BOOLEAN",
+    "documentation": "Constraint on instances of `Boolean`. Both attributes cannot be set to False, since this would mean that the Boolean value being constrained cannot be `True` or `False`.",
+    "ancestors": [
+        "C_PRIMITIVE_OBJECT"
+    ],
+    "properties": {
+        "constraint": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "constraint",
+            "documentation": "Boolean constraint - a list of Boolean values.",
+            "type_def": {
+                "container_type": "List",
+                "type": "Boolean"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "assumed_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "assumed_value",
+            "documentation": "Assumed Boolean value.",
+            "type": "Boolean"
+        },
+        "default_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "default_value",
+            "documentation": "Default Boolean value.",
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "prototype_value": {
+            "name": "prototype_value",
+            "documentation": "Prototype Boolean value.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if any value (i.e. instance) of the reference model type would be allowed. Redefined in descendants.",
+            "post_conditions": {
+                "Post": "Result = constraint.is_empty"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_value_conforms_to": {
+            "name": "c_value_conforms_to",
+            "documentation": "True if `_other.any_allowed_` or else every constraint in the `_constraint_` list exists in the `_other.constraint_`.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_BOOLEAN"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_value_congruent_to": {
+            "name": "c_value_congruent_to",
+            "documentation": "True if the items in `_constraint_` are equal in number and identical pair-wise with those in `_other.constraint_`.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_BOOLEAN"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.am.aom2.constraint_model.primitive",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_primitive_package"
+}

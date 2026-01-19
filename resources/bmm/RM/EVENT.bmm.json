@@ -47,7 +47,6 @@
         }
     },
     "invariants": {
-        "Offset_validity": "",
         "Offset_validity1": "offset /= Void and then offset = time.diff (parent.origin)"
     },
     "package": "org.openehr.rm.data_structures.history",

@@ -23,12 +23,12 @@
             "documentation": "Directory of term definitions as a two-level  table. The outer hash keys are term codes,  e.g. \"at4\", and the inner hash key are term  attribute names, e.g. \"text\", \"description\" etc.",
             "type_def": {
                 "root_type": "Hash",
-                "generic_parameter_defs": [
-                    {
+                "generic_parameter_defs": {
+                    "K": {
                         "_type": "P_BMM_SIMPLE_TYPE",
                         "type": "String"
                     },
-                    {
+                    "V": {
                         "_type": "P_BMM_GENERIC_TYPE",
                         "root_type": "Hash",
                         "generic_parameters": [
@@ -36,7 +36,7 @@
                             "ARCHETYPE_TERM"
                         ]
                     }
-                ]
+                }
             }
         }
     },

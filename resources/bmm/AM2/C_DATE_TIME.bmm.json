@@ -1,0 +1,133 @@
+{
+    "name": "C_DATE_TIME",
+    "documentation": "Constraint on instances representing date/times, i.e. instants in time.\n\nThere is no validity flag for `_year_`, since it must always be by definition mandatory in order to have a sensible date/time at all. Syntax expressions of instances of this class include `\"YYYY-MM-DDT??:??:??\"` (date/time with optional time) and `\"YYYY-MMDDTHH:MM:xx\"` (date/time, seconds not allowed).",
+    "ancestors": [
+        "C_TEMPORAL"
+    ],
+    "properties": {
+        "constraint": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "constraint",
+            "documentation": "Formal constraint on the assumed primitive `Iso8601_date_time` type, in the form of one or more `Interval<Iso8601_date_time>`.\n\nFor a pattern constraint or no constraint, use an empty list.",
+            "type_def": {
+                "container_type": "List",
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "Interval",
+                    "generic_parameters": [
+                        "Iso8601_date_time"
+                    ]
+                }
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "default_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "default_value",
+            "documentation": "Default value set in a template, and present in an operational template. Generally limited to leaf and near-leaf nodes.",
+            "type": "Iso8601_date_time"
+        },
+        "assumed_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "assumed_value",
+            "documentation": "Value to be assumed if none sent in data.",
+            "type": "Iso8601_date_time"
+        }
+    },
+    "functions": {
+        "valid_pattern_constraint": {
+            "name": "valid_pattern_constraint",
+            "documentation": "Return `valid_iso8601_date_time_constraint_pattern (a_pattern)` ",
+            "parameters": {
+                "a_pattern": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_pattern",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "valid_pattern_constraint_replacement": {
+            "name": "valid_pattern_constraint_replacement",
+            "documentation": "Return `valid_date_time_constraint_replacements.has(an_other_pattern.as_upper) and then \nvalid_date_time_constraint_replacements.item (an_other_pattern.as_upper).has (a_pattern.as_upper)`.",
+            "parameters": {
+                "a_pattern": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_pattern",
+                    "type": "String"
+                },
+                "an_other_pattern": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "an_other_pattern",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "month_validity": {
+            "name": "month_validity",
+            "documentation": "Validity of month in constrained date.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "VALIDITY_KIND"
+            }
+        },
+        "day_validity": {
+            "name": "day_validity",
+            "documentation": "Validity of day in constrained date.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "VALIDITY_KIND"
+            }
+        },
+        "minute_validity": {
+            "name": "minute_validity",
+            "documentation": "Validity of minute in constrained time.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "VALIDITY_KIND"
+            }
+        },
+        "second_validity": {
+            "name": "second_validity",
+            "documentation": "Validity of second in constrained time.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "VALIDITY_KIND"
+            }
+        },
+        "millisecond_validity": {
+            "name": "millisecond_validity",
+            "documentation": "Validity of millisecond in constrained time.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "VALIDITY_KIND"
+            }
+        },
+        "timezone_validity": {
+            "name": "timezone_validity",
+            "documentation": "Validity of timezone in constrained date/time.",
+            "post_conditions": {
+                "": ""
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "VALIDITY_KIND"
+            }
+        }
+    },
+    "invariants": {
+        "Pattern_validity": "pattern /= Void implies valid_iso8601_date_time_constraint_pattern(pattern)"
+    },
+    "package": "org.openehr.am.aom2.constraint_model.primitive",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_primitive_package"
+}

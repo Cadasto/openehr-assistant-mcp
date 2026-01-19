@@ -150,6 +150,7 @@
                 "other": {
                     "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
                     "name": "other",
+                    "documentation": "Other object for comparison.",
                     "type": "Integer64"
                 }
             },
@@ -169,6 +170,7 @@
                 "other": {
                     "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
                     "name": "other",
+                    "documentation": "Other object for comparison.",
                     "type": "Integer64"
                 }
             },

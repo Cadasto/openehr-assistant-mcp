@@ -10,19 +10,22 @@
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "is_im_runtime",
             "documentation": "True if this property is marked with info model `_im_runtime_` property.",
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": false
         },
         "is_im_infrastructure": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "is_im_infrastructure",
             "documentation": "True if this property was marked with info model `_im_infrastructure_` flag.",
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": false
         },
         "is_composition": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "is_composition",
             "documentation": "True if this property instance is a compositional sub-part of the owning class instance. Equivalent to 'composition' in UML associations (but missing from UML properties without associations) and also 'cascade-delete' semantics in ER schemas.",
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": false
         }
     },
     "functions": {

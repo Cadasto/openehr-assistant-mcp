@@ -1,0 +1,145 @@
+{
+    "name": "C_OBJECT",
+    "documentation": "Abstract model of constraint on any kind of object node. ",
+    "is_abstract": true,
+    "ancestors": [
+        "ARCHETYPE_CONSTRAINT"
+    ],
+    "properties": {
+        "rm_type_name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "rm_type_name",
+            "documentation": "Reference model type that this node corresponds to. ",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "occurrences": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "occurrences",
+            "documentation": "Occurrences of this object node in the data, under the owning attribute. Upper limit can only be greater than 1 if owning attribute has a cardinality of more than 1.\nOnly set if it overrides the parent archetype in the case of specialised archetypes, or else the occurrences inferred from the underlying reference model existence and/or cardinality of the containing attribute.",
+            "type": "Multiplicity_interval"
+        },
+        "node_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "node_id",
+            "documentation": "Semantic identifier of this node, used to dis-tinguish sibling nodes. All nodes must have a `_node_id_`; for nodes under a container `C_ATTRIBUTE`, the id must be an id-code must be defined in the archetype terminology. For valid structures, all node ids are id-codes.\n\nFor `C_PRIMITIVE_OBJECTs` represented in ADL inline form, this attribute will have the special value `Primitive_node_id`; otherwise it will have the node id read during parsing.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "is_deprecated": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_deprecated",
+            "documentation": "True if this node and by implication all sub-nodes are deprecated for use.",
+            "type": "Boolean"
+        },
+        "sibling_order": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "sibling_order",
+            "documentation": "Optional indicator of order of this node with respect to another sibling. Only meaningful in a specialised archetype for a `C_OBJECT` within a `C_ATTRIBUTE` with `_is_multiple_ = True`.",
+            "type": "SIBLING_ORDER"
+        }
+    },
+    "functions": {
+        "specialisation_depth": {
+            "name": "specialisation_depth",
+            "documentation": "Level of specialisation of this archetype node, based on its `_node_id_`. The value 0 corresponds to non-specialised, 1 to first-level specialisation and so on. The level is the same as the number of ‘.’ characters in the node_id code. If `_node_id_` is not set, the return value is -1, signifying that the specialisation level should be determined from the nearest parent `C_OBJECT` node having a node_id.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Integer"
+            }
+        },
+        "effective_occurrences": {
+            "name": "effective_occurrences",
+            "documentation": "Compute effective occurrences, where no local occurrences constraint set. If the owning `C_ATTRIBUTE._cardinality_` is set, use its upper value, else use RM multiplicity of the owning attribute.\n\nIf local `occurrences` not set, always assume 0 as the lower bound.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Multiplicity_interval"
+            }
+        },
+        "c_conforms_to": {
+            "name": "c_conforms_to",
+            "documentation": "True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. \nTypically used during validation of specialised archetype nodes.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_OBJECT"
+                },
+                "rmcc": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "rmcc",
+                    "documentation": "Reference Model conformance checker agent (lambda).",
+                    "type_def": {
+                        "root_type": "FUNCTION"
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_congruent_to": {
+            "name": "c_congruent_to",
+            "documentation": "True if constraints represented by this node contain no further redefinitions with respect to the node `_other_`, with the exception of `_node_id_` redefinition in `C_OBJECT` nodes. \n\nTypically used to test if an inherited node locally contains any constraints.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "ARCHETYPE_CONSTRAINT"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "occurrences_conforms_to": {
+            "name": "occurrences_conforms_to",
+            "documentation": "True if this node `_occurrences_` conforms to `_other.occurrences_`; `other` is assumed to be in a flat archetype.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "documentation": "`C_OBJECT` from a flat parent archetype.",
+                    "type": "C_OBJECT"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "node_id_conforms_to": {
+            "name": "node_id_conforms_to",
+            "documentation": "True if this node id conforms to `_other.node_id_`, which includes the ids being identical; `_other_` is assumed to be in a flat archetype.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_OBJECT"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = codes_conformant (node_id, other.node_id)"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_prohibited": {
+            "name": "is_prohibited",
+            "documentation": "True if this `C_OBJECT` node is prohibited, i.e. if its `_occurrences_` is `0..0`.",
+            "post_conditions": {
+                "Post": "Result = occurrences /= Void and then occurrences.is_prohibited"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.am.aom2.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_constraint_model_package"
+}

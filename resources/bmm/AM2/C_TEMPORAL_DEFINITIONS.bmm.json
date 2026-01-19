@@ -23,19 +23,19 @@
             "is_mandatory": true,
             "type_def": {
                 "root_type": "Hash",
-                "generic_parameter_defs": [
-                    {
+                "generic_parameter_defs": {
+                    "K": {
                         "_type": "P_BMM_SIMPLE_TYPE",
                         "type": "String"
                     },
-                    {
+                    "V": {
                         "_type": "P_BMM_GENERIC_TYPE",
                         "root_type": "List",
                         "generic_parameters": [
                             "String"
                         ]
                     }
-                ]
+                }
             }
         },
         "valid_time_constraint_patterns": {
@@ -59,19 +59,19 @@
             "is_mandatory": true,
             "type_def": {
                 "root_type": "Hash",
-                "generic_parameter_defs": [
-                    {
+                "generic_parameter_defs": {
+                    "K": {
                         "_type": "P_BMM_SIMPLE_TYPE",
                         "type": "String"
                     },
-                    {
+                    "V": {
                         "_type": "P_BMM_GENERIC_TYPE",
                         "root_type": "List",
                         "generic_parameters": [
                             "String"
                         ]
                     }
-                ]
+                }
             }
         },
         "valid_date_time_constraint_patterns": {
@@ -95,19 +95,19 @@
             "is_mandatory": true,
             "type_def": {
                 "root_type": "Hash",
-                "generic_parameter_defs": [
-                    {
+                "generic_parameter_defs": {
+                    "K": {
                         "_type": "P_BMM_SIMPLE_TYPE",
                         "type": "String"
                     },
-                    {
+                    "V": {
                         "_type": "P_BMM_GENERIC_TYPE",
                         "root_type": "List",
                         "generic_parameters": [
                             "String"
                         ]
                     }
-                ]
+                }
             }
         }
     },

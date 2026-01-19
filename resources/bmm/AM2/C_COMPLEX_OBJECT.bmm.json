@@ -1,0 +1,88 @@
+{
+    "name": "C_COMPLEX_OBJECT",
+    "documentation": "Constraint on complex objects, i.e. any object that consists of other object constraints.",
+    "ancestors": [
+        "C_DEFINED_OBJECT"
+    ],
+    "properties": {
+        "attributes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "attributes",
+            "documentation": "List of constraints on attributes of the reference model type represented by this object.",
+            "type_def": {
+                "container_type": "List",
+                "type": "C_ATTRIBUTE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "attribute_tuples": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "attribute_tuples",
+            "documentation": "List of attribute tuple constraints under this object constraint, if any.",
+            "type_def": {
+                "container_type": "List",
+                "type": "C_ATTRIBUTE_TUPLE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if any value (i.e. instance) of the reference model type would be allowed. Redefined in descendants.",
+            "post_conditions": {
+                "Post": "Result = attributes.is_empty and not is_prohibited"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_conforms_to": {
+            "name": "c_conforms_to",
+            "documentation": "True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. \nTypically used during validation of specialised archetype nodes.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_COMPLEX_OBJECT"
+                },
+                "rmcc": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "rmcc",
+                    "documentation": "Reference Model conformance checker agent (lambda).",
+                    "type_def": {
+                        "root_type": "FUNCTION"
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_congruent_to": {
+            "name": "c_congruent_to",
+            "documentation": "True if constraints represented by this node contain no further redefinitions with respect to the node `_other_`, with the exception of `_node_id_` redefinition in `C_OBJECT` nodes. \n\nTypically used to test if an inherited node locally contains any constraints.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_COMPLEX_OBJECT"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.am.aom2.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_constraint_model_package"
+}

@@ -9,7 +9,8 @@
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "type_name",
             "is_mandatory": true,
-            "type": "String"
+            "type": "String",
+            "default": "\"Real\""
         },
         "type_anchor": {
             "_type": "P_BMM_SINGLE_PROPERTY",

@@ -24,7 +24,6 @@
         }
     },
     "invariants": {
-        "rm_version_valid": "not rm_version.is_empty",
         "Rm_version_valid": "not rm_version.is_empty"
     },
     "package": "org.openehr.rm.common.archetyped",

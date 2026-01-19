@@ -58,7 +58,8 @@
             "name": "parent_resource",
             "documentation": "Reference to owning resource. ",
             "is_mandatory": true,
-            "type": "AUTHORED_RESOURCE"
+            "type": "AUTHORED_RESOURCE",
+            "default": "0..1"
         },
         "details": {
             "_type": "P_BMM_GENERIC_PROPERTY",

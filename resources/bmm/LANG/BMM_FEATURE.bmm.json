@@ -10,7 +10,8 @@
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "is_synthesised_generic",
             "documentation": "True if this feature was synthesised due to generic substitution in an inherited type, or further constraining of a formal generic parameter.",
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": false
         },
         "feature_extensions": {
             "_type": "P_BMM_CONTAINER_PROPERTY",

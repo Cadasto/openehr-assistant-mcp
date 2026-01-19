@@ -1,0 +1,125 @@
+{
+    "name": "ARCHETYPE",
+    "documentation": "The `ARCHETYPE` class defines the core formal model of the root object of any archetype or template. It includes only basic identification information, and otherwise provides the structural connections from the Archetype to its constituent parts, i.e. definition (a `C_COMPLEX_OBJECT`), terminology (`ARCHEYTPE_TERMINOLOGY`) and so on. \nIt is the parent class of all concrete types of archetype.",
+    "is_abstract": true,
+    "properties": {
+        "parent_archetype_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "parent_archetype_id",
+            "documentation": "Archetype reference of the specialisation parent of this archetype, if applicable. May take the form of an archetype interface identifier, i.e. the identifier up to the major version only, or may be a full archetype identifier.",
+            "type": "String"
+        },
+        "archetype_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "archetype_id",
+            "documentation": "Identifier of this archetype.",
+            "is_mandatory": true,
+            "type": "ARCHETYPE_HRID"
+        },
+        "is_differential": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_differential",
+            "documentation": "Flag indicating whether this archetype is differential or flat in its contents. Top-level source archetypes have this flag set to True.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        },
+        "definition": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "definition",
+            "documentation": "Root node of the definition of this archetype.",
+            "is_mandatory": true,
+            "type": "C_COMPLEX_OBJECT"
+        },
+        "terminology": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "terminology",
+            "documentation": "The terminology of the archetype.",
+            "is_mandatory": true,
+            "type": "ARCHETYPE_TERMINOLOGY"
+        },
+        "rules": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "rules",
+            "documentation": "Rules relating to this archetype. Statements are expressed in first order predicate logic, and usually refer to at least two attributes.",
+            "type_def": {
+                "container_type": "List",
+                "type": "STATEMENT_SET"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "rm_overlay": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "rm_overlay",
+            "type": "RM_OVERLAY"
+        }
+    },
+    "functions": {
+        "concept_code": {
+            "name": "concept_code",
+            "documentation": "The concept code of the root object of the archetype, also standing for the concept of the archetype as a whole.",
+            "post_conditions": {
+                "post-condition": "Result.is_equal (definition.node_id)"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "physical_paths": {
+            "name": "physical_paths",
+            "documentation": "Set of language-independent paths extracted from archetype. Paths obey Xpath-like syntax and are formed from alternations of `C_OBJECT._node_id_` and `C_ATTRIBUTE._rm_attribute_name_` values. ",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        },
+        "logical_paths": {
+            "name": "logical_paths",
+            "documentation": "Set of language-dependent paths extracted from archetype. Paths obey the same syntax as physical_paths, but with node_ids replaced by their meanings from the terminology. ",
+            "parameters": {
+                "lang": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "lang",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        },
+        "specialisation_depth": {
+            "name": "specialisation_depth",
+            "documentation": "Specialisation depth of this archetype; larger than 0 if this archetype has a parent. Derived from terminology.specialisation_depth.",
+            "post_conditions": {
+                "post-condition": "Result = terminology.specialisation_depth"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Integer"
+            }
+        },
+        "is_specialised": {
+            "name": "is_specialised",
+            "documentation": "True if this archetype is a specialisation of another. ",
+            "post_conditions": {
+                "post-condition": "Result implies parent_archetype_hrid /= Void"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Invariant_concept_valid": "terminology.has_term_code (concept_code)",
+        "Invariant_specialisation_validity": "is_specialised implies specialisation_depth > 0"
+    },
+    "package": "org.openehr.am.aom2.archetype",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_the_archetype_package"
+}

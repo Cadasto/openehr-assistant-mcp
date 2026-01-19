@@ -1,0 +1,127 @@
+{
+    "name": "ARCHETYPE_CONSTRAINT",
+    "documentation": "Abstract parent of all constraint model types. Defines conformance and congruence function signatures. ",
+    "is_abstract": true,
+    "ancestors": [
+        "ADL_CODE_DEFINITIONS"
+    ],
+    "properties": {
+        "parent": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "parent",
+            "documentation": "Parent node, except in the case of the top of a tree, i.e. root `C_COMPLEX_OBJECT` of an archetype definition.",
+            "type": "ARCHETYPE_CONSTRAINT"
+        },
+        "soc_parent": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "soc_parent",
+            "type": "C_SECOND_ORDER"
+        }
+    },
+    "functions": {
+        "is_prohibited": {
+            "name": "is_prohibited",
+            "documentation": "True if this node is prohibited. Implemented in subtypes.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "has_path": {
+            "name": "has_path",
+            "documentation": "True if the relative path `_a_path_` exists at this node.",
+            "parameters": {
+                "a_path": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_path",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "path": {
+            "name": "path",
+            "documentation": "Path of this node relative to root of archetype.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "c_conforms_to": {
+            "name": "c_conforms_to",
+            "documentation": "True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. \nTypically used during validation of specialised archetype nodes.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "ARCHETYPE_CONSTRAINT"
+                },
+                "rmcc": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "rmcc",
+                    "documentation": "RM conformance checker - a lambda (i.e. function object) that can compute conformance of type-names within the  Reference Model on which the current archetype is based. The signature provides two arguments representing respectively, the `_rm_type_name_` of the current node and the `_rm_type_name_` of the node being redefined in a specialisation parent archetype.",
+                    "type_def": {
+                        "root_type": "FUNCTION"
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_congruent_to": {
+            "name": "c_congruent_to",
+            "documentation": "True if constraints represented by this node contain no further redefinitions with respect to the node other, with the exception of `_node_id_` redefinition in `C_OBJECT` nodes. \n\nTypically used to test if an inherited node locally contains any constraints.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "ARCHETYPE_CONSTRAINT"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_second_order_constrained": {
+            "name": "is_second_order_constrained",
+            "documentation": "True if there is a second order constraint such as a tuple constraint on this node.",
+            "post_conditions": {
+                "Post": "soc_parent /= Void or else (parent /= Void and then parent.is_second_order_constrained)"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_root": {
+            "name": "is_root",
+            "documentation": "True if this node is the root of the tree.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_leaf": {
+            "name": "is_leaf",
+            "documentation": "True if this node is a terminal node in the tree structure, i.e. having no child nodes.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Post": "Result = soc_parent /= Void or parent.soc_parent /= Void"
+    },
+    "package": "org.openehr.am.aom2.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_constraint_model_package"
+}

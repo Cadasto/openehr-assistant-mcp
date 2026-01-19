@@ -42,7 +42,8 @@
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "is_writable",
             "is_mandatory": true,
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": false
         }
     },
     "functions": {

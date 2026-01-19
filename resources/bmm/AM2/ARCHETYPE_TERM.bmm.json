@@ -1,0 +1,41 @@
+{
+    "name": "ARCHETYPE_TERM",
+    "documentation": "Representation of any coded entity (term or constraint) in the archetype ontology.",
+    "properties": {
+        "code": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "code",
+            "documentation": "Code of this term. ",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "text": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "text",
+            "documentation": "Short term text, typically for display.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "description": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "description",
+            "documentation": "Full description text.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "other_items": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "other_items",
+            "documentation": "Hash of keys and corresponding values for other items in a term, e.g. provenance.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        }
+    },
+    "package": "org.openehr.am.aom2.terminology",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_terminology_package"
+}

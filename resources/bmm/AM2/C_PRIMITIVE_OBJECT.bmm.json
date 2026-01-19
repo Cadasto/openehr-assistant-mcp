@@ -1,0 +1,122 @@
+{
+    "name": "C_PRIMITIVE_OBJECT",
+    "documentation": "Parent of types representing constraints on primitive types.\n\nInstances of this type represented in ADL inline form, the `_node_id_` attribute will have the special value `Primitive_node_id`; otherwise it will have the node id read during parsing.",
+    "is_abstract": true,
+    "ancestors": [
+        "C_DEFINED_OBJECT"
+    ],
+    "properties": {
+        "assumed_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "assumed_value",
+            "documentation": "Value to be assumed if none sent in data.",
+            "type": "Any"
+        },
+        "is_enumerated_type_constraint": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_enumerated_type_constraint",
+            "documentation": "True if this object represents a constraint on an enumerated type from the reference model, where the latter is assumed to be based on a primitive type, generally Integer or String.",
+            "type": "Boolean"
+        },
+        "constraint": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "constraint",
+            "documentation": "Constraint represented by this object; redefine in descendants.",
+            "is_mandatory": true,
+            "type": "Any"
+        }
+    },
+    "functions": {
+        "has_assumed_value": {
+            "name": "has_assumed_value",
+            "documentation": "True if there is an assumed value.\n",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "constrained_typename": {
+            "name": "constrained_typename",
+            "documentation": "Generate name of native type that is constrained by this `C_XXX` type. For most types, it is the `C_XXX` typename without the `C_`, i.e. `XXX`. E.g. `C_INTEGER` -> `Integer`. For the date/time types the mapping is different.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "c_conforms_to": {
+            "name": "c_conforms_to",
+            "documentation": "True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. \nTypically used during validation of specialised archetype nodes.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_PRIMITIVE_OBJECT"
+                },
+                "rmcc": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "rmcc",
+                    "documentation": "Reference Model conformance checker lambda.",
+                    "type_def": {
+                        "root_type": "FUNCTION"
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_value_conforms_to": {
+            "name": "c_value_conforms_to",
+            "documentation": "True if this node expresses a value constraint that conforms to that of `other`. Effected in descendants.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_PRIMITIVE_OBJECT"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_congruent_to": {
+            "name": "c_congruent_to",
+            "documentation": "True if constraints represented by this node contain no further redefinitions with respect to the node `_other_`, with the exception of `_node_id_` redefinition in `C_OBJECT` nodes. \n\nTypically used to test if an inherited node locally contains any constraints.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_PRIMITIVE_OBJECT"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_value_congruent_to": {
+            "name": "c_value_congruent_to",
+            "documentation": "True if this node expresses the same value constraint as `other`. Effected in descendants.",
+            "is_abstract": true,
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_PRIMITIVE_OBJECT"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Inv_valid_assumed_value": "valid_value (assumed_value)"
+    },
+    "package": "org.openehr.am.aom2.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_constraint_model_package"
+}

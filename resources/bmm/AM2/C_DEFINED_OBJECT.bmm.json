@@ -1,0 +1,65 @@
+{
+    "name": "C_DEFINED_OBJECT",
+    "documentation": "Abstract parent type of `C_OBJECT` subtypes that are defined by value, i.e. whose definitions are actually in the archetype rather than being by reference. ",
+    "is_abstract": true,
+    "ancestors": [
+        "C_OBJECT"
+    ],
+    "properties": {
+        "default_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "default_value",
+            "documentation": "Default value set in a template, and present in an operational template. Generally limited to leaf and near-leaf nodes.",
+            "type": "Any"
+        }
+    },
+    "functions": {
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if any value (i.e. instance) of the reference model type would be allowed. Redefined in descendants.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "valid_value": {
+            "name": "valid_value",
+            "documentation": "True if `_a_value_` is valid with respect to constraint expressed in concrete instance of this type.",
+            "is_abstract": true,
+            "parameters": {
+                "a_value": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_value",
+                    "type": "Any"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "prototype_value": {
+            "name": "prototype_value",
+            "documentation": "Generate a prototype value from this constraint object.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Any"
+            }
+        },
+        "has_default_value": {
+            "name": "has_default_value",
+            "documentation": "True if there is an assumed value.\n",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "invariants": {
+        "Inv_valid_default_value": "valid_value (default_value)"
+    },
+    "package": "org.openehr.am.aom2.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_constraint_model_package"
+}

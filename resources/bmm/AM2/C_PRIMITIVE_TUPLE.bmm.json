@@ -1,33 +1,21 @@
 {
-    "name": "C_ATTRIBUTE_TUPLE",
-    "documentation": "Object representing a constraint on an attribute tuple, i.e. a group of attributes that are constrained together. Typically used for representing co-varying constraints like `{units, range}` constraints.",
+    "name": "C_PRIMITIVE_TUPLE",
+    "documentation": "Class representing a single object tuple instance in a tuple constraint. Each such instance is a vector of object constraints, where each member (each `C_PRIMITIVE_OBJECT`) corresponds to one of the `C_ATTRIBUTEs` referred to by the owning `C_ATTRIBUTE_TUPLE`.",
     "ancestors": [
         "C_SECOND_ORDER"
     ],
     "properties": {
-        "tuples": {
-            "_type": "P_BMM_CONTAINER_PROPERTY",
-            "name": "tuples",
-            "documentation": "Tuple definitions.",
-            "type_def": {
-                "container_type": "List",
-                "type": "C_PRIMITIVE_TUPLE"
-            },
-            "cardinality": {
-                "lower": 0,
-                "upper_unbounded": true
-            }
-        },
         "members": {
             "_type": "P_BMM_CONTAINER_PROPERTY",
             "name": "members",
-            "documentation": "List of `C_ATTRIBUTEs` forming the definition of the tuple.",
+            "documentation": "Object constraint members of this tuple group.",
+            "is_mandatory": true,
             "type_def": {
                 "container_type": "List",
-                "type": "C_ATTRIBUTE"
+                "type": "C_PRIMITIVE_OBJECT"
             },
             "cardinality": {
-                "lower": 0,
+                "lower": 1,
                 "upper_unbounded": true
             }
         }
@@ -40,11 +28,12 @@
                 "other": {
                     "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
                     "name": "other",
-                    "type": "C_ATTRIBUTE_TUPLE"
+                    "type": "C_PRIMITIVE_TUPLE"
                 },
                 "rmcc": {
                     "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
                     "name": "rmcc",
+                    "documentation": "RM conformance checker agent.",
                     "type_def": {
                         "root_type": "FUNCTION"
                     }

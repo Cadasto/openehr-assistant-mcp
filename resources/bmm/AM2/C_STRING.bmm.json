@@ -1,0 +1,101 @@
+{
+    "name": "C_STRING",
+    "documentation": "Constraint on instances of `String`. ",
+    "ancestors": [
+        "C_PRIMITIVE_OBJECT"
+    ],
+    "properties": {
+        "constraint": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "constraint",
+            "documentation": "String constraint - a list of literal strings and / or regular expression strings delimited by the ‘/’ character.\n\nTo represent no constraint, use an empty list, or alternatively, a regex 'any' pattern, i.e. `/.*/`.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "default_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "default_value",
+            "documentation": "Default String value.",
+            "type": "String"
+        },
+        "assumed_value": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "assumed_value",
+            "documentation": "Assumed String value.",
+            "type": "String"
+        }
+    },
+    "functions": {
+        "prototype_value": {
+            "name": "prototype_value",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "valid_value": {
+            "name": "valid_value",
+            "documentation": "True if a_value is valid with respect to constraint expressed in concrete instance of this type. ",
+            "parameters": {
+                "a_value": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_value",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if `_constraint_` is empty or else contains one String for the regex 'any' pattern.",
+            "post_conditions": {
+                "Post": "Result = constraint.is_empty or else constraint.count = 1 and constraint.first.is_equal (Regex_any_string)"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_value_conforms_to": {
+            "name": "c_value_conforms_to",
+            "documentation": "True if `_other.any_allowed_` or else every constraint in the `_constraint_` list exists in the `_other.constraint_`.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_STRING"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_value_congruent_to": {
+            "name": "c_value_congruent_to",
+            "documentation": "True if the items in `_constraint_` are equal in number and identical pair-wise with those in `_other.constraint_`.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "C_STRING"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.am.aom2.constraint_model.primitive",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_primitive_package"
+}

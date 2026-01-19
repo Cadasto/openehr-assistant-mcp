@@ -16,28 +16,32 @@
             "name": "lower_unbounded",
             "documentation": "Lower boundary open (i.e. = -infinity).",
             "is_mandatory": true,
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": false
         },
         "upper_unbounded": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "upper_unbounded",
             "documentation": "Upper boundary open (i.e. = +infinity).",
             "is_mandatory": true,
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": false
         },
         "lower_included": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "lower_included",
             "documentation": "Lower boundary value included in range if not `_lower_unbounded_`.",
             "is_mandatory": true,
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": true
         },
         "upper_included": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "upper_included",
             "documentation": "Upper boundary value included in range if not `_upper_unbounded_`.",
             "is_mandatory": true,
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": true
         }
     },
     "invariants": {

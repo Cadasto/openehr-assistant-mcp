@@ -18,7 +18,13 @@
             "documentation": "Constraint in the form of a List of Intervals of the parameter type T. Concrete types generated in descendants via template binding.",
             "type_def": {
                 "container_type": "List",
-                "type": "Interval"
+                "type_def": {
+                    "_type": "P_BMM_GENERIC_TYPE",
+                    "root_type": "Interval",
+                    "generic_parameters": [
+                        "T"
+                    ]
+                }
             },
             "cardinality": {
                 "lower": 0,

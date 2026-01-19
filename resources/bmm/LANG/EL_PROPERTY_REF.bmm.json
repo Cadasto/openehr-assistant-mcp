@@ -17,7 +17,8 @@
             "name": "is_writable",
             "documentation": "Defined to return True.",
             "is_mandatory": true,
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": true
         }
     },
     "functions": {

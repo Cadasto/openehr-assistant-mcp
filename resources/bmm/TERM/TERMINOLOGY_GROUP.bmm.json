@@ -33,7 +33,8 @@
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "status",
             "documentation": "Status of this vocabulary.",
-            "type": "TERMINOLOGY_STATUS"
+            "type": "TERMINOLOGY_STATUS",
+            "default": ""
         }
     },
     "package": "org.openehr.term.terminology",

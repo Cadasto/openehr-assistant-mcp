@@ -267,6 +267,7 @@
                 "a_type": {
                     "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
                     "name": "a_type",
+                    "documentation": "Name of a type.",
                     "type": "String"
                 }
             },

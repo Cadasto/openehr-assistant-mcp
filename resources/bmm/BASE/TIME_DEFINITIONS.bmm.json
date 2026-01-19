@@ -53,7 +53,8 @@
         "Max_days_in_year": {
             "name": "Max_days_in_year",
             "documentation": "Maximum number of days in a year, i.e. accounting for leap years.",
-            "type": "Integer"
+            "type": "Integer",
+            "value": "Days_in_leap_year"
         },
         "Days_in_week": {
             "name": "Days_in_week",
@@ -291,6 +292,7 @@
                 "s": {
                     "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
                     "name": "s",
+                    "documentation": "String is a valid ISO 8601 duration, i.e. takes the form:\n\n* `P[nnY][nnM][nnW][nnD][T[nnH][nnM][nnS]]`\n\nWhere each `nn` represents a number of years, months, etc. `nnW` represents a number of 7- day weeks.\n\nNOTE: allowing the `W` designator in the same expression as other designators is an exception to the published standard, but necessary in clinical information (typically for representing pregnancy duration).",
                     "type": "String"
                 }
             },

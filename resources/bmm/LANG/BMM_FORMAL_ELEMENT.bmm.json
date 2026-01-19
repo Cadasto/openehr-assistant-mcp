@@ -17,7 +17,8 @@
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "is_nullable",
             "documentation": "True if this element can be null (Void) at execution time. May be interpreted as optionality in subtypes..",
-            "type": "Boolean"
+            "type": "Boolean",
+            "default": false
         }
     },
     "functions": {

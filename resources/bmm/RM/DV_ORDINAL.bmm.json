@@ -55,10 +55,6 @@
             }
         }
     },
-    "invariants": {
-        "Limits_valid": "limits.meaning.is_equal (“limits”)",
-        "Reference_range_valid": "other_reference_ranges.has (limits)"
-    },
     "package": "org.openehr.rm.data_types.quantity",
     "specUrl": "https://specifications.openehr.org/releases/RM/development/data_types.html#_quantity_package"
 }

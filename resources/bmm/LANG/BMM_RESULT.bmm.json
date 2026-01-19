@@ -10,7 +10,8 @@
             "name": "name",
             "documentation": "Name of this model element.",
             "is_mandatory": true,
-            "type": "String"
+            "type": "String",
+            "default": "\"Result\""
         }
     },
     "package": "org.openehr.lang.bmm.core.feature",

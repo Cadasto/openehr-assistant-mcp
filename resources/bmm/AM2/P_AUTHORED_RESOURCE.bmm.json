@@ -47,12 +47,12 @@
             "documentation": "Annotations on individual items within the resource, keyed by path. The inner table takes the form of a Hash table of String values keyed by String tags.",
             "type_def": {
                 "root_type": "Hash",
-                "generic_parameter_defs": [
-                    {
+                "generic_parameter_defs": {
+                    "K": {
                         "_type": "P_BMM_SIMPLE_TYPE",
                         "type": "String"
                     },
-                    {
+                    "V": {
                         "_type": "P_BMM_GENERIC_TYPE",
                         "root_type": "Hash",
                         "generic_parameters": [
@@ -60,7 +60,7 @@
                             "String"
                         ]
                     }
-                ]
+                }
             }
         }
     },

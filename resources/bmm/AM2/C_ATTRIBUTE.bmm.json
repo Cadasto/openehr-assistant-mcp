@@ -1,0 +1,150 @@
+{
+    "name": "C_ATTRIBUTE",
+    "documentation": "Abstract model of constraint on any kind of attribute in a class model.",
+    "ancestors": [
+        "ARCHETYPE_CONSTRAINT"
+    ],
+    "properties": {
+        "rm_attribute_name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "rm_attribute_name",
+            "documentation": "Reference model attribute within the enclosing type represented by a `C_OBJECT`.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "existence": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "existence",
+            "documentation": "Constraint settable on every attribute, regardless of whether it is singular or of a container type, which indicates whether its target object exists or not (i.e. is mandatory or not). Only set if it overrides the underlying reference model or parent archetype in the case of specialised archetypes.",
+            "type": "Multiplicity_interval"
+        },
+        "children": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "children",
+            "documentation": "Child `C_OBJECT` nodes. Each such node represents a constraint on the type of this attribute in its reference model. Multiples occur both for multiple items in the case of container attributes, and alternatives in the case of singular attributes. ",
+            "type_def": {
+                "container_type": "List",
+                "type": "C_OBJECT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "differential_path": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "differential_path",
+            "documentation": "Path to the parent object of this attribute (i.e. doesn’t include the name of this attribute). Used only for attributes in differential form, specialised archetypes. Enables only the re-defined parts of a specialised archetype to be expressed, at the path where they occur.",
+            "type": "String"
+        },
+        "cardinality": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "cardinality",
+            "documentation": "Cardinality constraint of attribute, if a container attribute.",
+            "type": "Cardinality"
+        },
+        "is_multiple": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_multiple",
+            "documentation": "Flag indicating whether this attribute constraint is on a container (i.e. multiply-valued) attribute.",
+            "is_mandatory": true,
+            "type": "Boolean"
+        }
+    },
+    "functions": {
+        "any_allowed": {
+            "name": "any_allowed",
+            "documentation": "True if there is no effective constraint on the children of the RM attribute to which this `C_ATTRIBUTE` refers.",
+            "post_conditions": {
+                "Post": "Result := children.is_empty and not is_prohibited"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_mandatory": {
+            "name": "is_mandatory",
+            "documentation": "True if this `C_ATTRIBUTE` has an existence constraint of 1..1, i.e. mandation.",
+            "post_conditions": {
+                "Post": "Result = existence /= Void and then existence.is_mandatory"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "rm_attribute_path": {
+            "name": "rm_attribute_path",
+            "documentation": "Path of this attribute with respect to owning `C_OBJECT`, including differential path where applicable.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "is_single": {
+            "name": "is_single",
+            "documentation": "True if this node logically represents a single-valued attribute. Evaluated as not `_is_multiple_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_congruent_to": {
+            "name": "c_congruent_to",
+            "documentation": "True if constraints represented by this node contain no further redefinitions with respect to the node other, with the exception of `_node_id_` redefinition in `C_OBJECT` nodes. \n\nTypically used to test if an inherited node locally contains any constraints.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "ARCHETYPE_CONSTRAINT"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = existence = Void and ((is_single and other.is_single) or (is_multiple and other.is_multiple and cardinality = Void))"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "c_conforms_to": {
+            "name": "c_conforms_to",
+            "documentation": "True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. \nTypically used during validation of specialised archetype nodes.",
+            "parameters": {
+                "other": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "other",
+                    "type": "ARCHETYPE_CONSTRAINT"
+                },
+                "rmcc": {
+                    "_type": "P_BMM_GENERIC_FUNCTION_PARAMETER",
+                    "name": "rmcc",
+                    "type_def": {
+                        "root_type": "FUNCTION"
+                    }
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = existence_conforms_to (other) and ((is_single and other.is_single) or else (is_multiple and cardinality_conforms_to (other)))"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_prohibited": {
+            "name": "is_prohibited",
+            "documentation": "True if this `C_ATTRIBUTE` has an existence constraint of `0..0`, i.e. prohibition.",
+            "post_conditions": {
+                "Post": "Result = existence /= Void and then existence.is_prohibited"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.am.aom2.constraint_model",
+    "specUrl": "https://specifications.openehr.org/releases/AM/development/AOM2.html#_constraint_model_package"
+}

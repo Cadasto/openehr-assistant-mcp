@@ -83,6 +83,7 @@ Type Specifications (BMM JSON)
 - Examples:
   - `openehr://spec/type/RM/COMPOSITION`
   - `openehr://spec/type/AM/ARCHETYPE`
+  - `openehr://spec/type/AM2/ARCHETYPE_HRID`
 
 Terminologies (JSON)
 - URI template: `openehr://terminology/{type}/{id}`

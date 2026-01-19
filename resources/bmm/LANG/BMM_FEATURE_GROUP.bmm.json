@@ -7,7 +7,8 @@
             "name": "name",
             "documentation": "Name of this feature group; defaults to 'feature'.",
             "is_mandatory": true,
-            "type": "String"
+            "type": "String",
+            "default": "\"feature\""
         },
         "properties": {
             "_type": "P_BMM_GENERIC_PROPERTY",
