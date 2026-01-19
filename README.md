@@ -303,8 +303,9 @@ Tips
 
 This project is inspired by and is grateful to:
 - The original Python openEHR MCP Server: https://github.com/deak-ai/openehr-mcp-server
-- Seref Arikan, Sidharth Ramesh - for inspiration on MCP integration
+- [Seref Arikan](https://www.linkedin.com/in/seref-arikan/), [Sidharth Ramesh](https://www.linkedin.com/in/sidharthramesh1/) - for inspiration on MCP integration
 - The PHP MCP Server frameworks: https://github.com/php-mcp/server and https://github.com/modelcontextprotocol/php-sdk
+- [Ocean Health Systems](https://oceanhealthsystems.com/) for the Clinical Knowledge Manager (CKM), an essential tool for the openEHR community that enables collaborative development and sharing of archetypes and templates.
 
 ## Contributing
 
