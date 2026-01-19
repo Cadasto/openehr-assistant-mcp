@@ -29,7 +29,7 @@ final class SpecificationComponentsTest extends TestCase
         $result = $provider->getCompletions('A');
 
         $this->assertIsArray($result);
-        $this->assertCount(1, $result, 'Expected two directories to be listed.');
+        $this->assertCount(2, $result, 'Expected two directories to be listed.');
         $this->assertContains('AM', $result);
     }
 

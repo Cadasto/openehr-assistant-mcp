@@ -32,7 +32,7 @@ final readonly class CkmArchetypeExplorer
                     . 'Workflow:' . "\n"
                     . '0) If `archetypes-id` is already known, go to step 4) directly.' . "\n"
                     . '1) Call `ckm_archetype_search` with one or multiple domain keywords; limit, offset, requireAllSearchWords derived from the user request.' . "\n"
-                    . '2) Inspect the returned metadata for plausible matches; show the best 5–10 candidates (include CID and associated resourceMainId if available) and briefly explain why each might match.' . "\n"
+                    . '2) Inspect the returned metadata for plausible matches; show the best 10-15 candidates (include CID and associated archetypeId) and briefly explain why each might match.' . "\n"
                     . '3) Take the CID identifier; ask the user the desired format (`adl` default; `xml` or `mindmap` if requested).' . "\n"
                     . '4) Call `ckm_archetype_get` with the chosen CID (or `archetypes-id`) and format.' . "\n"
                     . '5) Output the retrieved Archetype content (in a code block).' . "\n"

@@ -35,7 +35,7 @@ final readonly class CkmService
      *   A human-oriented search string, one or multiple words, wildcards `*` supported; prefer meaningful clinical terms over internal codes, e.g. "blood pressure", "observation", "medication", "diabetes", "body weight".
      *
      * @param int $limit
-     *   The maximum number of Archetypes returned in the call; defaults to 10.
+     *   The maximum number of Archetypes returned in the call; defaults to 20.
      *
      * @param int $offset
      *   The offset into the result set, for paging; defaults to 0.
@@ -45,7 +45,7 @@ final readonly class CkmService
      *
      * @return array<array<string,mixed>>
      *   A list of CKM Archetype metadata entries as returned by CKM.
-     *   Entries usually include a CID identifier, resourceMainId (representing the archetype-id), resourceMainDisplayName, and other descriptive fields.
+     *   Entries usually include a CID identifier, archetypeId, display name, status, and other descriptive fields.
      *
      * @throws \RuntimeException
      *   If the CKM API request fails (network error, upstream outage, invalid response).
@@ -54,7 +54,7 @@ final readonly class CkmService
         name: 'ckm_archetype_search',
         annotations: new ToolAnnotations(readOnlyHint: true)
     )]
-    public function archetypeSearch(string $keyword, int $limit = 10, int $offset = 0, bool $requireAllSearchWords = true): array
+    public function archetypeSearch(string $keyword, int $limit = 20, int $offset = 0, bool $requireAllSearchWords = true): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         try {
@@ -72,6 +72,51 @@ final readonly class CkmService
             ]);
             $data = json_decode($response->getBody()->getContents(), true);
             $this->logger->info('Found CKM Archetypes', ['keyword' => $keyword, 'count' => is_countable($data) ? count($data) : null]);
+
+            // Map each item to a simpler structure
+            $data = array_map(function ($item) use ($keyword) {
+                $new = [
+                    'cid' => $item['cid'] ?? null,
+                    'archetypeId' => $item['resourceMainId'] ?? null,
+                    'name' => $item['resourceMainDisplayName'] ?? null,
+                    'projectName' => $item['projectName'] ?? null,
+                    'status' => $item['status'] ?? null,
+                    'revision' => $item['revision'] ?? null,
+                    'creationTime' => $item['creationTime'] ?? null,
+                    'modificationTime' => $item['modificationTime'] ?? null,
+                    's' => 0,
+                ];
+                foreach (explode(' ', trim($keyword)) as $k) {
+                    if (isset($new['archetypeId']) && stripos($new['archetypeId'], $k) !== false) {
+                        $new['s'] += 4;
+                    }
+                    if (isset($new['name']) && stripos($new['name'], $k) !== false) {
+                        $new['s'] += 3;
+                    }
+                    if (isset($new['projectName']) && stripos($new['projectName'], $k) !== false) {
+                        $new['s'] += 2;
+                    }
+                }
+                if (isset($new['projectName']) && in_array(strtolower($new['projectName']), ['common resources', 'structural archetypes'])) {
+                    $new['s'] += 1;
+                }
+                if (isset($new['status'])) {
+                    $new['s'] += match(strtoupper($new['status'])) {
+                        'PUBLISHED' => 3,
+                        'TEAMREVIEW' => 2,
+                        'DRAFT' => 1,
+                        default => 0,
+                    };
+                }
+                return $new;
+            }, $data);
+
+            // Calculate score for each item and sort
+            usort($data, function ($a, $b) {
+                // Sort in descending order (highest score first)
+                return $b['s'] <=> $a['s'];
+            });
+
             return $data;
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to search for CKM Archetypes', ['error' => $e->getMessage()]);
@@ -156,7 +201,7 @@ final readonly class CkmService
      *   A human-oriented search string, one or multiple words, wildcards `*` supported.
      *
      * @param int $limit
-     *   The maximum number of Templates returned; defaults to 10.
+     *   The maximum number of Templates returned; defaults to 20.
      *
      * @param int $offset
      *   The offset into the result set, for paging; defaults to 0.
@@ -175,7 +220,7 @@ final readonly class CkmService
         name: 'ckm_template_search',
         annotations: new ToolAnnotations(readOnlyHint: true)
     )]
-    public function templateSearch(string $keyword, int $limit = 10, int $offset = 0, bool $requireAllSearchWords = true): array
+    public function templateSearch(string $keyword, int $limit = 20, int $offset = 0, bool $requireAllSearchWords = true): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         try {

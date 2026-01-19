@@ -28,8 +28,8 @@ final class CkmServiceTest extends TestCase
     public function testArchetypeListSendsQueryAndDecodesJson(): void
     {
         $payload = [
-            ['id' => 'openEHR-EHR-OBSERVATION.blood_pressure.v1'],
-            ['id' => 'openEHR-EHR-OBSERVATION.body_weight.v1'],
+            ['resourceMainId' => 'openEHR-EHR-OBSERVATION.blood_pressure.v1', 'cid' => '123.45a'],
+            ['resourceMainId' => 'openEHR-EHR-OBSERVATION.body_weight.v1', 'cid' => '678.90b'],
         ];
 
         $this->client
@@ -48,7 +48,8 @@ final class CkmServiceTest extends TestCase
 
         $svc = new CkmService($this->client, $this->logger);
         $result = $svc->archetypeSearch('blood');
-        $this->assertSame($payload, $result);
+        $this->assertSame($payload[0]['cid'], $result[0]['cid']);
+        $this->assertSame($payload[0]['resourceMainId'], $result[0]['archetypeId']);
     }
 
     public function testArchetypeGetRespectsFormatAndReturnsTextContent(): void

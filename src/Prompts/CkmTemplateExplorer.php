@@ -31,7 +31,7 @@ final readonly class CkmTemplateExplorer
                     . '- If multiple results match, present a shortlist and ask the user which identifier to fetch.' . "\n\n"
                     . 'Workflow:' . "\n"
                     . '1) Call `ckm_template_search` with one or multiple domain keywords; limit, offset, requireAllSearchWords derived from the user request.' . "\n"
-                    . '2) Inspect the returned metadata for plausible matches; show the best 5–10 candidates (include CID identifier and display name) and briefly explain why each might match.' . "\n"
+                    . '2) Inspect the returned metadata for plausible matches; show the best 10-15 candidates (include CID identifier and display name) and briefly explain why each might match.' . "\n"
                     . '3) Take the CID identifier; ask the user to confirm the desired format ("oet" default, design-time template; "opt" contains also archetype constraints flattened).' . "\n"
                     . '4) Call `ckm_template_get` with the chosen CID identifier and format.' . "\n"
                     . '5) Output the retrieved Template content (in a code block).' . "\n"
