@@ -1,5 +1,11 @@
 # The openEHR Assistant MCP Server
 
+[![PR validation](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/pr-validation.yml/badge.svg)](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/pr-validation.yml)
+[![Release Docker image (GHCR)](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/release.yml/badge.svg)](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/release.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PHP Version](https://img.shields.io/badge/php-8.4-blue.svg)](https://www.php.net/)
+[![MCP](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-orange.svg)](https://modelcontextprotocol.io/)
+
 The MCP Server to assist end-user on various [openEHR](https://openehr.org/) related tasks and APIs.
 
 The [Model Context Protocol (MCP)](https://modelcontextprotocol.io/docs/getting-started/intro) is an open standard that enables AI assistants to connect to external data sources and tools in a secure and standardized way. MCP servers act as bridges between AI clients (like Claude Desktop, Cursor, or LibreChat) and domain-specific APIs, databases, or knowledge bases. 
