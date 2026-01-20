@@ -18,6 +18,7 @@ This server augments these workflows by providing AI assistants with direct acce
 - Works with MCP clients such as Claude Desktop, Cursor, LibreChat or other clients that support MCP
 - Exposes tools for openEHR Archetypes and specifications
 - Optional guided Prompts help orchestrate multi-step workflows
+- Run remotely (endpoint URL: https://openehr-assistant-mcp.apps.cadasto.com/) or locally (transports: streamable HTTP and stdio)
 
 ### Implementation aspects 
 
@@ -87,13 +88,12 @@ Type Specifications (BMM JSON)
 
 Terminologies (JSON)
 - URI template: `openehr://terminology/{type}/{id}`
-- URI: `openehr://terminology/all`
-- On-disk mapping: `resources/terminology/openehr_terminology.xml`
+- URI: `openehr://terminology/all` contains all terminology groups and codesets
 - Examples:
-  - `openehr://terminology/all`
   - `openehr://terminology/group/attestation_reason`
   - `openehr://terminology/codeset/compression_algorithms`
 - Provides access to both terminology groups (concepts/rubrics) and codesets.
+- On-disk mapping: `resources/terminology/openehr_terminology.xml`
 
 ## Transports
 
