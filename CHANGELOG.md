@@ -9,15 +9,21 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-01-20
+
 ### Added
 - MCP Resource (Terminology): `openehr://terminology/all` to expose the entire openEHR terminology in JSON format.
-- BMM Specifications: Added AM2 (Archetype Model 2.0) components to bundled resources.
-- CI/CD: Added PR validation workflow and enhanced Docker release process.
+- BMM Specifications: Added AM2 (Archetype Model 2.0) components to bundled resources and updated existing ones for better compliance.
+- CI/CD: Added GitHub Actions for PR validation and enhanced Docker release process.
 
 ### Changed
+- CKM Service: Refactored `ckm_archetype_search` and `ckm_template_search` tools to simplify result mapping and introduce result scoring for better relevance in AI workflows.
+- MCP Prompts:
+    - Updated `ckm_archetype_explorer` and `ckm_template_explorer` to leverage improved CKM search results.
+    - Enhanced `translate_archetype_language` with detailed clinical terminology guidelines and better structure.
 - Terminology: Improved `terminology_resolve` tool and `terminology_explorer` prompt for better clarity and coverage.
 - Specification: Updated and reorganized BMM files, moving AM to AM2 for better alignment with latest openEHR specifications.
-- README: Updated acknowledgments and documentation examples.
+- Documentation: Updated `README.md` acknowledgments, documentation examples, and guides (checklist, rules, terminology).
 
 ## [0.7.0] - 2026-01-07
 
