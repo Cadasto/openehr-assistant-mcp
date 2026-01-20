@@ -32,7 +32,7 @@ final readonly class CkmService
      * 3) Take the returned CKM identifier (CID) and call `ckm_archetype_get` tool to retrieve the full archetype definition.
      *
      * @param string $keyword
-     *   A human-oriented search string, one or multiple words, wildcards `*` supported; prefer meaningful clinical terms over internal codes, e.g. "blood pressure", "observation", "medication", "diabetes", "body weight".
+     *   A human-oriented search string (one or multiple words); wildcards `*` supported; prefer meaningful clinical terms over internal codes, e.g. "blood pressure", "medication", "diabetes", "body weight".
      *
      * @param int $limit
      *   The maximum number of Archetypes returned in the call; defaults to 20.
@@ -43,8 +43,8 @@ final readonly class CkmService
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
      *
-     * @return array<array<string,mixed>>
-     *   A list of CKM Archetype metadata entries as returned by CKM.
+     * @return array<string,mixed>
+     *   A list of CKM Archetype metadata entries.
      *   Entries usually include a CID identifier, archetypeId, display name, status, and other descriptive fields.
      *
      * @throws \RuntimeException
@@ -52,7 +52,31 @@ final readonly class CkmService
      */
     #[McpTool(
         name: 'ckm_archetype_search',
-        annotations: new ToolAnnotations(readOnlyHint: true)
+        annotations: new ToolAnnotations(readOnlyHint: true),
+        outputSchema: [
+            'type' => 'object',
+            'properties' => [
+                'items' => [
+                    'type' => 'array',
+                    'description' => 'List of CKM Archetypes matching the search criteria',
+                    'items' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'cid' => ['type' => 'string', 'description' => 'CKM Archetype identifier'],
+                            'archetypeId' => ['type' => 'string'],
+                            'name' => ['type' => 'string', 'description' => 'Archetype display or concept name'],
+                            'projectName' => ['type' => 'string', 'description' => 'Project name where the Archetype belongs to'],
+                            'status' => ['type' => 'string'],
+                            'revision' => ['type' => 'string'],
+                            'creationTime' => ['type' => 'string'],
+                            'modificationTime' => ['type' => 'string'],
+                            'score' => ['type' => 'integer', 'description' => 'Score of the match, based on the search keywords'],
+                        ],
+                    ],
+                ],
+                'total' => ['type' => 'integer', 'description' => 'Total number of Templates found'],
+            ],
+        ]
     )]
     public function archetypeSearch(string $keyword, int $limit = 20, int $offset = 0, bool $requireAllSearchWords = true): array
     {
@@ -84,24 +108,24 @@ final readonly class CkmService
                     'revision' => $item['revision'] ?? null,
                     'creationTime' => $item['creationTime'] ?? null,
                     'modificationTime' => $item['modificationTime'] ?? null,
-                    's' => 0,
+                    'score' => 0,
                 ];
                 foreach (explode(' ', trim($keyword)) as $k) {
                     if (isset($new['archetypeId']) && stripos($new['archetypeId'], $k) !== false) {
-                        $new['s'] += 4;
+                        $new['score'] += 4;
                     }
                     if (isset($new['name']) && stripos($new['name'], $k) !== false) {
-                        $new['s'] += 3;
+                        $new['score'] += 3;
                     }
                     if (isset($new['projectName']) && stripos($new['projectName'], $k) !== false) {
-                        $new['s'] += 2;
+                        $new['score'] += 2;
                     }
                 }
                 if (isset($new['projectName']) && in_array(strtolower($new['projectName']), ['common resources', 'structural archetypes'])) {
-                    $new['s'] += 1;
+                    $new['score'] += 1;
                 }
                 if (isset($new['status'])) {
-                    $new['s'] += match(strtoupper($new['status'])) {
+                    $new['score'] += match(strtoupper($new['status'])) {
                         'PUBLISHED' => 3,
                         'TEAMREVIEW' => 2,
                         'DRAFT' => 1,
@@ -114,10 +138,13 @@ final readonly class CkmService
             // Calculate score for each item and sort
             usort($data, function ($a, $b) {
                 // Sort in descending order (highest score first)
-                return $b['s'] <=> $a['s'];
+                return $b['score'] <=> $a['score'];
             });
 
-            return $data;
+            return [
+                'items' => $data,
+                'total' => (integer)$response->getHeaderLine('X-Total-Count')
+            ];
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to search for CKM Archetypes', ['error' => $e->getMessage()]);
             throw new \RuntimeException('Failed to search for CKM Archetypes: ' . $e->getMessage(), 0, $e);
@@ -127,25 +154,26 @@ final readonly class CkmService
     /**
      * Retrieve the full definition of an Archetype from CKM by its identifier, serialized in a specified format.
      *
-     * Use this tool after you have identified a candidate archetype (usually from the `ckm_archetype_search` tool).
+     * Use this tool after you have identified a candidate archetype (usually from the `ckm_archetype_search` tool),
+     * or when you already know the archetype CID (e.g. "1013.1.7850") or archetype-id (e.g. "openEHR-EHR-OBSERVATION.blood_pressure.v1").
      * It fetches the *full archetype definition* from CKM so an LLM can:
      * - understand the structure and semantic or meaning of nodes/attributes,
      * - extract constraints, translations, and terminology bindings,
      * - generate templates or implementation guidance,
      * - or cite the definition content in downstream reasoning.
+     * Returned content and formats:
+     * - "adl": ADL source text (best for detailed archetype semantics and constraints)
+     * - "xml": XML representation (similar to "adl", but helpful when consuming via XML tooling)
+     * - "mindmap": mindmap form (useful for quick visual overview)
      *
      * @param string $identifier
      *   Archetype CID identifier (e.g. "1013.1.7850") or archetype-id (e.g. "openEHR-EHR-OBSERVATION.blood_pressure.v1").
      *
      * @param string $format
-     *   Desired representation: "adl", "xml" or "mindmap" (this server accepts case-insensitive); defaults to "adl".
+     *   Desired representation: "adl", "xml" or "mindmap" (case-insensitive); defaults to "adl".
      *
      * @return TextContent
-     *   The Archetype definition code block as MCP text content in the chosen format.
-     *   Returned content and formats:
-     *     - "adl": ADL source text (best for detailed archetype semantics and constraints)
-     *     - "xml": XML representation (similar to "adl", but helpful when consuming via XML tooling)
-     *     - "mindmap": mindmap form (useful for quick visual overview)
+     *   The Archetype definition in the chosen format in a text content code block.
      *
      * @throws \RuntimeException
      *   If the CKM API request fails (invalid CID, unsupported format mapping, upstream error).
@@ -209,16 +237,39 @@ final readonly class CkmService
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
      *
-     * @return array<array<string,mixed>>
+     * @return array<string,mixed>
      *   A list of CKM Template metadata entries.
-     *   Entries usually include a CID identifier.
+     *   Entries usually include a Template CID identifier, display name, status, and other descriptive fields.
      *
      * @throws \RuntimeException
      *   If the CKM API request fails (network error, upstream outage, invalid response).
      */
     #[McpTool(
         name: 'ckm_template_search',
-        annotations: new ToolAnnotations(readOnlyHint: true)
+        annotations: new ToolAnnotations(readOnlyHint: true),
+        outputSchema: [
+            'type' => 'object',
+            'properties' => [
+                'items' => [
+                    'type' => 'array',
+                    'description' => 'List of CKM Templates matching the search criteria',
+                    'items' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'cid' => ['type' => 'string', 'description' => 'CKM Template identifier'],
+                            'name' => ['type' => 'string', 'description' => 'Template display name'],
+                            'projectName' => ['type' => 'string', 'description' => 'Project name where the Template belongs to'],
+                            'status' => ['type' => 'string'],
+                            'version' => ['type' => 'string'],
+                            'creationTime' => ['type' => 'string'],
+                            'modificationTime' => ['type' => 'string'],
+                            'score' => ['type' => 'integer', 'description' => 'Score of the match, based on the search keywords'],
+                        ],
+                    ],
+                ],
+                'total' => ['type' => 'integer', 'description' => 'Total number of Archetypes found'],
+            ],
+        ]
     )]
     public function templateSearch(string $keyword, int $limit = 20, int $offset = 0, bool $requireAllSearchWords = true): array
     {
@@ -239,7 +290,51 @@ final readonly class CkmService
             ]);
             $data = json_decode($response->getBody()->getContents(), true);
             $this->logger->info('Found CKM Templates', ['keyword' => $keyword, 'count' => is_countable($data) ? count($data) : null]);
-            return $data;
+
+            // Map each item to a simpler structure
+            $data = array_map(function ($item) use ($keyword) {
+                $new = [
+                    'cid' => $item['cid'] ?? null,
+                    'name' => $item['resourceMainDisplayName'] ?? null,
+                    'projectName' => $item['projectName'] ?? null,
+                    'status' => $item['status'] ?? null,
+                    'version' => $item['versionAsset'] ?? null,
+                    'creationTime' => $item['creationTime'] ?? null,
+                    'modificationTime' => $item['modificationTime'] ?? null,
+                    'score' => 0,
+                ];
+                foreach (explode(' ', trim($keyword)) as $k) {
+                    if (isset($new['name']) && stripos($new['name'], $k) !== false) {
+                        $new['score'] += 3;
+                    }
+                    if (isset($new['projectName']) && stripos($new['projectName'], $k) !== false) {
+                        $new['score'] += 2;
+                    }
+                }
+                if (isset($new['projectName']) && in_array(strtolower($new['projectName']), ['common resources', 'structural archetypes'])) {
+                    $new['score'] += 1;
+                }
+                if (isset($new['status'])) {
+                    $new['score'] += match(strtoupper($new['status'])) {
+                        'PUBLISHED' => 3,
+                        'TEAMREVIEW' => 2,
+                        'DRAFT' => 1,
+                        default => 0,
+                    };
+                }
+                return $new;
+            }, $data);
+
+            // Calculate score for each item and sort
+            usort($data, function ($a, $b) {
+                // Sort in descending order (highest score first)
+                return $b['score'] <=> $a['score'];
+            });
+
+            return [
+                'items' => $data,
+                'total' => (integer)$response->getHeaderLine('X-Total-Count')
+            ];
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to search for CKM Templates', ['error' => $e->getMessage()]);
             throw new \RuntimeException('Failed to search for CKM Templates: ' . $e->getMessage(), 0, $e);
@@ -249,7 +344,8 @@ final readonly class CkmService
     /**
      * Retrieve the full definition of an openEHR Template (OET or OPT) from CKM by its identifier, serialized in a specified format.
      *
-     * Use this tool to *retrieve* an openEHR Template from CKM after you have identified a candidate template (usually from the `ckm_template_search` tool).
+     * Use this tool to *retrieve* an openEHR Template from CKM after you have identified a candidate template (usually from the `ckm_template_search` tool),
+     * or when you already know the template CID (e.g. "1013.26.244").
      * Returned content and formats:
      * - "oet": Template source (XML) - the unflattened version (design-time template).
      * - "opt": Operational Template (XML) - the flattened version of the Template, containing all archetype constraints.
@@ -261,7 +357,7 @@ final readonly class CkmService
      *   Desired representation: "oet" (design-time template source), "opt" (flattened operational template, containing all archetype constraints); defaults to "oet".
      *
      * @return TextContent
-     *   The Template definition code block as MCP text content in the chosen format.
+     *   The Template definition in the chosen format in a text content code block.
      *
      * @throws \RuntimeException
      *   If the CKM API request fails.

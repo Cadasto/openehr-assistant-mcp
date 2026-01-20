@@ -48,8 +48,14 @@ final class CkmServiceTest extends TestCase
 
         $svc = new CkmService($this->client, $this->logger);
         $result = $svc->archetypeSearch('blood');
-        $this->assertSame($payload[0]['cid'], $result[0]['cid']);
-        $this->assertSame($payload[0]['resourceMainId'], $result[0]['archetypeId']);
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('items', $result);
+        $this->assertIsArray($result['items']);
+        $this->assertCount(2, $result['items']);
+        $this->assertArrayHasKey('cid', $result['items'][0]);
+        $this->assertSame($payload[0]['cid'], $result['items'][0]['cid']);
+        $this->assertArrayHasKey('archetypeId', $result['items'][0]);
+        $this->assertSame($payload[0]['resourceMainId'], $result['items'][0]['archetypeId']);
     }
 
     public function testArchetypeGetRespectsFormatAndReturnsTextContent(): void
@@ -96,7 +102,7 @@ final class CkmServiceTest extends TestCase
     public function testTemplateSearchSendsQueryAndDecodesJson(): void
     {
         $payload = [
-            ['id' => 'vital'],
+            ['cid' => '123.45a'],
         ];
 
         $this->client
@@ -115,7 +121,12 @@ final class CkmServiceTest extends TestCase
 
         $svc = new CkmService($this->client, $this->logger);
         $result = $svc->templateSearch('vital');
-        $this->assertSame($payload, $result);
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('items', $result);
+        $this->assertIsArray($result['items']);
+        $this->assertCount(1, $result['items']);
+        $this->assertArrayHasKey('cid', $result['items'][0]);
+        $this->assertSame($payload[0]['cid'], $result['items'][0]['cid']);
     }
 
     public function testTemplateGetRespectsFormatAndReturnsTextContent(): void
