@@ -1,6 +1,6 @@
 name: Feature request
 description: Suggest an idea to improve this project
-labels: [enhancement]
+labels: ["enhancement", "needs-triage"]
 title: "feat: "
 body:
   - type: markdown
@@ -26,8 +26,20 @@ body:
       label: Proposed solution
       description: Describe the solution you'd like.
       placeholder: Clearly describe what you want to happen.
-      validations:
-        required: true
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part of the project is this request related to?
+      options:
+        - Tools (CKM, Terminology, Specs)
+        - Prompts (Explorers, Designers, etc.)
+        - Resources (Guides, BMM, etc.)
+        - Infrastructure (Docker, PHP, Makefile)
+        - Documentation
+        - Other
   - type: textarea
     id: alternatives
     attributes:

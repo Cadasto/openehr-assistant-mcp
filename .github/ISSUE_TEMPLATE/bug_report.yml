@@ -1,6 +1,6 @@
 name: Bug report
 description: Report a reproducible problem to help us improve
-labels: [bug]
+labels: ["bug", "needs-triage"]
 title: "bug: "
 body:
   - type: markdown
@@ -14,25 +14,36 @@ body:
       options:
         - label: I have searched existing issues to ensure this hasn't been reported already.
           required: true
-        - label: I have read the README, CONTRIBUTING.md, and relevant.
+        - label: I have read the README, CONTRIBUTING.md, and relevant docs.
           required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part of the project is affected?
+      options:
+        - Tools (CKM, Terminology, Specs)
+        - Prompts (Explorers, Designers, etc.)
+        - Resources (Guides, BMM, etc.)
+        - Infrastructure (Docker, PHP, Makefile)
+        - Other
+    validations:
+      required: true
   - type: input
     id: version
     attributes:
       label: Package/version
       description: What version/commit are you using? (e.g., git SHA or tag)
       placeholder: vX.Y.Z or commit SHA
-    validations:
-      required: true
   - type: textarea
     id: environment
     attributes:
       label: Environment
-      description: PHP version, OS, Docker usage, any relevant environment details
+      description: Any relevant environment details
       placeholder: |
-        - PHP: 8.2
-        - OS: Ubuntu 22.04 / Windows 11 / macOS
-        - Docker: yes/no (docker-compose version)
+        - MCP client/host: Claude, Cursor, LibreChat, etc
+        - Environment: Cadasto/local/Docker
+        - Transport: streamable-http/stdio
     validations:
       required: true
   - type: textarea
@@ -51,13 +62,11 @@ body:
         1. Go to ...
         2. Run command ...
         3. See error ...
-    validations:
-      required: true
   - type: textarea
     id: logs
     attributes:
       label: Logs and stack traces
-      description: Paste relevant logs, error output, or stack traces
+      description: Paste relevant logs, error output, or stack traces. Set LOG_LEVEL=debug for more info.
       render: shell
   - type: textarea
     id: additional
