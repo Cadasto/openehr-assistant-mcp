@@ -68,8 +68,10 @@ final class TypeSpecificationServiceTest extends TestCase
         $svc = new TypeSpecificationService($this->logger);
         $results = $svc->search('*archetype*');
         $this->assertIsArray($results);
-        if (count($results) > 0) {
-            $first = $results[0];
+        $this->assertArrayHasKey('items', $results);
+        $this->assertIsArray($results['items']);
+        if (count($results['items']) > 0) {
+            $first = $results['items'][0];
             $this->assertArrayHasKey('name', $first);
             $this->assertArrayHasKey('documentation', $first);
             $this->assertArrayHasKey('resourceUri', $first);
@@ -96,8 +98,10 @@ final class TypeSpecificationServiceTest extends TestCase
         $svc = new TypeSpecificationService($this->logger);
         $results = $svc->search('composition');
         $this->assertIsArray($results);
-        $this->assertCount(1, $results);
-        $first = $results[0];
+        $this->assertArrayHasKey('items', $results);
+        $this->assertIsArray($results['items']);
+        $this->assertCount(1, $results['items']);
+        $first = $results['items'][0];
         $this->assertArrayHasKey('name', $first);
         $this->assertArrayHasKey('documentation', $first);
         $this->assertArrayHasKey('component', $first);

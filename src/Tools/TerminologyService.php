@@ -26,7 +26,6 @@ readonly final class TerminologyService
      *
      * This tool helps in resolving internal openEHR Terminology identifiers to human-readable labels (rubrics) and vice versa.
      * It searches across all groups in the openEHR terminology.
-     *
      * Matching:
      * - If `input` is numeric, it's treated as a concept (ID), and the corresponding rubric is returned.
      * - If `input` is non-numeric, it's treated as a rubric (case-insensitive) and the corresponding ID is returned.
@@ -39,7 +38,16 @@ readonly final class TerminologyService
      */
     #[McpTool(
         name: 'terminology_resolve',
-        annotations: new ToolAnnotations(readOnlyHint: true)
+        annotations: new ToolAnnotations(readOnlyHint: true),
+        outputSchema: [
+            'type' => 'object',
+            'properties' => [
+                'id' => ['type' => 'string'],
+                'rubric' => ['type' => 'string'],
+                'groupId' => ['type' => 'string'],
+                'groupName' => ['type' => 'string'],
+            ],
+        ],
     )]
     public function resolve(string $input, string $groupId = ''): array
     {

@@ -73,26 +73,38 @@ readonly final class TypeSpecificationService
      * - locate the exact type specification server resource uri,
      * - or fetch the full definition via the `type_specification_get` tool.
      *
-     * Returned fields (per result):
-     * - `name`: the openEHR Type name (e.g. `DV_QUANTITY`)
-     * - `documentation`: documentation or description of the type
-     * - `component`: the openEHR component name (e.g. `AM`, `RM`, etc.)
-     * - `resourceUri`: uri of corresponding resource in the `openehr://spec/type` namespace
-     * - `package`: package name (e.g. `org.openehr.rm.datatypes`)
-     * - `specUrl`: link to the corresponding openEHR specification page and fragment with more narrative details
-     *
      * @param string $namePattern
      *   A type-name pattern. Matching behaviour: minimal 3 chars, supports a simple `*` wildcard (glob-like). Examples:`ARCHETYPE_SLOT` (exact), `ARCHETYPE_SL*` (wildcard prefix), `DV_*` (family search).
      *
      * @param string $keyword
      *   Optional raw substring filter applied to the JSON content (not normalized; case-insensitive); use this when you want to narrow results to Types containing a concept or attribute name.
      *
-     * @return array<int, array<string, string|null>>
+     * @return array<string, array<int, array<string, string|null>>>
      *   A list of metadata records (see fields above), or an empty array if nothing matches.
      */
     #[McpTool(
         name: 'type_specification_search',
-        annotations: new ToolAnnotations(readOnlyHint: true)
+        annotations: new ToolAnnotations(readOnlyHint: true),
+        outputSchema: [
+            'type' => 'object',
+            'properties' => [
+                'items' => [
+                    'type' => 'array',
+                    'description' => 'List of matching openEHR Type specifications',
+                    'items' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'name' => ['type' => 'string', 'description' => 'openEHR Type name (e.g. `DV_QUANTITY`)'],
+                            'documentation' => ['type' => 'string', 'description' => 'Documentation or description of the type'],
+                            'resourceUri' => ['type' => 'string', 'description' => 'URI of corresponding resource in the `openehr://spec/type` namespace'],
+                            'component' => ['type' => 'string', 'description' => 'openEHR Component name (e.g. `AM`, `RM`, etc.)'],
+                            'package' => ['type' => 'string', 'description' => 'Package name (e.g. `org.openehr.rm.datatypes`)'],
+                            'specUrl' => ['type' => 'string', 'description' => 'Link to the corresponding openEHR specification page and fragment with more narrative details'],
+                        ],
+                    ],
+                ],
+            ],
+        ],
     )]
     public function search(string $namePattern, string $keyword = ''): array
     {
@@ -131,7 +143,7 @@ readonly final class TypeSpecificationService
             }
         }
         $this->logger->info('BMM list results', ['count' => count($results), 'namePattern' => $namePattern, 'keyword' => $keyword]);
-        return $results ?: [];
+        return ['items' => $results ?: []];
     }
 
     /**
@@ -140,7 +152,6 @@ readonly final class TypeSpecificationService
      * Use this tool when you need to retrieve the full, machine-readable BMM definition for a type so an LLM can:
      * - inspect properties/attributes and their declared types,
      * - understand inheritance (super-types/sub-types),
-     * - reason about constraints and semantics encoded in the BMM model,
      * - or generate client code / mappings based on the canonical model definition.
      *
      * @param string $name
@@ -157,7 +168,24 @@ readonly final class TypeSpecificationService
      */
     #[McpTool(
         name: 'type_specification_get',
-        annotations: new ToolAnnotations(readOnlyHint: true)
+        annotations: new ToolAnnotations(readOnlyHint: true),
+        outputSchema: [
+            'type' => 'object',
+            'additionalProperties' => true,
+            'properties' => [
+                'name' => ['type' => 'string', 'description' => 'openEHR Type name (e.g. `DV_QUANTITY`)'],
+                'documentation' => ['type' => 'string', 'description' => 'Documentation or description of the type'],
+                'is_abstract' => ['type' => 'boolean', 'description' => 'Whether the type is abstract (i.e. cannot be instantiated)'],
+                'ancestors' => ['type' => 'array', 'description' => 'List of ancestor types (super-types)'],
+                'resourceUri' => ['type' => 'string', 'description' => 'URI of corresponding resource in the `openehr://spec/type` namespace'],
+                'constants' => ['type' => 'array', 'description' => 'List of constants/enum values'],
+                'properties' => ['type' => 'array', 'description' => 'List of attributes/properties'],
+                'functions' => ['type' => 'array', 'description' => 'List of functions'],
+                'invariants' => ['type' => 'array', 'description' => 'List of semantic constraints'],
+                'package' => ['type' => 'string', 'description' => 'Package name (e.g. `org.openehr.rm.datatypes`)'],
+                'specUrl' => ['type' => 'string', 'description' => 'Link to the corresponding openEHR specification page and fragment with more narrative details'],
+            ],
+        ],
     )]
     public function get(string $name, string $component = ''): array
     {
