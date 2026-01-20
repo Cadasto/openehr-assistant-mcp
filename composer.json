@@ -15,7 +15,7 @@
         "ext-json": "*",
         "ext-simplexml": "*",
         "guzzlehttp/guzzle": "^7.9",
-        "mcp/sdk": "^0.2.0",
+        "mcp/sdk": "^0.3.0",
         "monolog/monolog": "^3.9",
         "nyholm/psr7": "^1.8",
         "nyholm/psr7-server": "^1.1",
