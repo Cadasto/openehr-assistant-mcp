@@ -14,7 +14,7 @@ use SimpleXMLElement;
 readonly final class TerminologyService
 {
     public const string FILE_PATH = APP_RESOURCES_DIR . '/terminology/openehr_terminology.xml';
-    private ?SimpleXMLElement $terminologyXml = null;
+    private static ?SimpleXMLElement $terminologyXml = null;
 
     public function __construct(
         private LoggerInterface $logger,
@@ -101,8 +101,8 @@ readonly final class TerminologyService
 
     private function loadXml(): SimpleXMLElement
     {
-        if ($this->terminologyXml instanceof SimpleXMLElement) {
-            return $this->terminologyXml;
+        if (self::$terminologyXml instanceof SimpleXMLElement) {
+            return self::$terminologyXml;
         }
 
         if (!file_exists(self::FILE_PATH) || !is_readable(self::FILE_PATH)) {
@@ -128,7 +128,7 @@ readonly final class TerminologyService
             throw new RuntimeException('No terminology groups found.');
         }
 
-        $this->terminologyXml = $xml;
-        return $this->terminologyXml;
+        self::$terminologyXml = $xml;
+        return self::$terminologyXml;
     }
 }
