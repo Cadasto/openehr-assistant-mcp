@@ -13,7 +13,8 @@ These guidelines summarize the high-level architecture, coding conventions, and 
 - `src/Tools`: MCP tools, each method annotated with `#[McpTool(...)]`.
 - `src/Prompts`: MCP prompts, each class annotated with `#[McpPrompt(...)]`.
 - `src/Resources`: MCP resources and resource templates (`#[McpResourceTemplate]`, `#[McpResource]`).
-- `src/CompletionProviders`: completion providers implementing `ProviderInterface`.
+- `src/CompletionProviders`: completion providers implementing `Mcp\Capability\Completion\ProviderInterface`.
+- `src/Apis`: internal API clients for CKM and other services.
 - `resources/`: static assets such as guides, BMM JSON, and terminology files.
 - `tests/`: PHPUnit tests and configuration for tools, prompts, resources, and completion providers.
 
@@ -28,7 +29,7 @@ These guidelines summarize the high-level architecture, coding conventions, and 
   - `LOG_LEVEL`: Monolog logging level (e.g., `debug`).
   - `HTTP_TIMEOUT`, `HTTP_SSL_VERIFY`: Guzzle client settings.
 - **Server Transports**:
-  - `streamable-http`: Default, exposes SSE endpoint on port `:8343`.
+  - `streamable-http`: Default; in development exposes SSE endpoint on port `:8343` (mapped from Caddy).
   - `stdio`: For CLI/Desktop clients. Run via `php public/index.php --transport=stdio`.
 - **Versioning**: App version is defined in `src/constants.php` (`APP_VERSION`).
 
@@ -43,9 +44,12 @@ These guidelines summarize the high-level architecture, coding conventions, and 
   - Tests use `Cadasto\OpenEHR\MCP\Assistant\Tests\` (mapped to `tests/`).
 - **Testing conventions**:
   - Tests live under `tests/` and follow `*Test.php` naming.
+  - Run tests with `composer test` within the dev container or docker compose equivalent (see below at Recommended workflow).
   - Keep tests unit/integration focused; **mock external HTTP calls** to CKM rather than relying on live APIs.
 - **Commit messages**:
   - Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) conventions, e.g. `fix(resources): refreshed BMM definitions in resources`, `feat(tools): added new tool for operational templates`.
+- **Branching**:
+  - Use feature branches and pull requests. Standard PR validation runs on every push.
 - **Documentation**:
   - Use PHPDoc for public methods and classes.
   - Use Markdown for guides and other documentation.
@@ -56,8 +60,8 @@ These guidelines summarize the high-level architecture, coding conventions, and 
 - **Prompts**: in `src/Prompts`, annotate classes with `#[McpPrompt(name: '...')]` to expose MCP prompts.
 - **Resources**:
   - `Guides` provides `openehr://guides/{category}/{name}` resources and registers guide resources at startup.
-  - `TypeSpecifications` provides `openehr://spec/type/{component}/{name}` resources.
-  - `Terminologies` provides `openehr://terminology/{type}/{id}` resources and registers terminology resources at startup.
+  - `TypeSpecifications` provides `openehr://spec/type/{component}/{name}` resource template.
+  - `Terminologies` provides `openehr://terminology/all` resource and `openehr://terminology/{type}/{id}` resource template. Registers individual terminology resources at startup.
 - **Completion providers** live in `src/CompletionProviders` and are annotated with `#[CompletionProvider]` to suggest parameter values.
 
 ## Discovering and running developer tools
