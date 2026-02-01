@@ -20,6 +20,8 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
+use Symfony\Component\Cache\Psr16Cache;
 
 
 try {
@@ -58,10 +60,13 @@ try {
     $container->set(Guides::class, new Guides());
     $container->set(Terminologies::class, new Terminologies());
 
+    // Initialize cache
+    $cache = new Psr16Cache(new PhpFilesAdapter('mcp-server', 0, APP_DATA_DIR . '/cache'));
+
     // Build the server
     $builder = Server::builder()
         ->setServerInfo(APP_TITLE, APP_VERSION, APP_DESCRIPTION)
-        ->setDiscovery(APP_DIR, ['src/Prompts', 'src/Tools', 'src/Resources'])
+        ->setDiscovery(APP_DIR, ['src/Prompts', 'src/Tools', 'src/Resources'], cache: $cache)
         ->setSession(new FileSessionStore(APP_DATA_DIR . '/sessions'), ttl: 10 * 60)
         ->setProtocolVersion(ProtocolVersion::V2025_03_26)
         ->setContainer($container)

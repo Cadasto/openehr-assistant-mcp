@@ -58,6 +58,7 @@ Edit `.env` and set at least:
 - `CKM_API_BASE_URL` (default `https://ckm.openehr.org/ckm/rest`)
 - `LOG_LEVEL` (set to `debug` during development if needed)
 - `HTTP_TIMEOUT` (float seconds), `HTTP_SSL_VERIFY` (bool or CA path)
+- `XDG_DATA_HOME` (directory for application data, including cache and sessions)
 
 
 ## Running the server (stdio and streamable HTTP)
@@ -114,7 +115,7 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp vendor\b
 
 
 ## MCP conventions (Tools, Prompts, Resources, Completion Providers)
-- Tools live in `src\Tools`; annotate public methods with `#[McpTool(name: '...')]` for discovery by `modelcontextprotocol/php-sdk` in `public/index.php`.
+- Tools live in `src\Tools`; annotate public methods with `#[McpTool(name: '...')]` for discovery by `modelcontextprotocol/php-sdk` in `public/index.php`. Discovery results are cached in the file system (default `/tmp/app/cache`) to improve performance.
 - Prompts live in `src\Prompts`; annotate prompt classes with `#[McpPrompt(name: '...')]`. Current prompt names include:
   - `ckm_archetype_explorer`, `ckm_template_explorer`, `type_specification_explorer`, `terminology_explorer`
   - `explain_archetype`, `explain_template`, `translate_archetype_language`, `fix_adl_syntax`, `design_or_review_archetype`, `design_or_review_template`

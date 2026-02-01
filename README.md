@@ -29,8 +29,8 @@ This server augments these workflows by providing AI assistants with direct acce
 ### Implementation aspects 
 
 - Made with PHP 8.4; PSR-compliant codebase
-- Attribute-based MCP tool discovery (via https://github.com/mcp/sdk)
-- Attribute-based MCP prompt discovery (seeded conversations for complex tasks)
+- Attribute-based MCP tool discovery (via https://github.com/mcp/sdk) with file-based cache
+- Attribute-based MCP prompt discovery (seeded conversations for complex tasks) with file-based cache
 - MCP Resource templates and Completion Providers for better UX in MCP clients
 - Transports: streamable HTTP and stdio (for development)
 - Docker images for production and development
@@ -238,6 +238,7 @@ To run the inspector, use `make inspector` and follow the instructions in the te
 - `CKM_API_BASE_URL`: base URL for the openEHR CKM REST API. Default: `https://ckm.openehr.org/ckm/rest`
 - `HTTP_TIMEOUT`: HTTP client timeout in seconds (float). Default: `3.0`
 - `HTTP_SSL_VERIFY`: set to `false` to disable verification or provide a CA bundle path. Default: `true`
+- `XDG_DATA_HOME`: directory for application data, including cache and sessions. Default: `/tmp` (the app uses `XDG_DATA_HOME/app` or `/tmp/app`)
 
 Note: Authorization headers are not required nor configured by default. If you need to add auth to your upstream openEHR/CKM server, extend the HTTP client in `src/Apis` to add the appropriate headers.
 

@@ -9,6 +9,15 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+### Added
+- Docs: Added `AGENTS.md` file.
+
+### Changed
+- MCP Server: implemented file-based cache for discovery using Symfony Cache.
+- MCP Tools: improve JSON handling with exceptions
+- MCP Prompts: convert inline prompt classes to YAML prompt files
+- Infra: update PHP-FPM and Caddy config for improved logging, health checks, and file handling
+
 ## [0.9.0] - 2026-01-20
 
 ### Changed

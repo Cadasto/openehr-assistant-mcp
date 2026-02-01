@@ -9,7 +9,7 @@ These guidelines summarize the high-level architecture, coding conventions, and 
 
 ## Repository layout (high level)
 
-- `public/index.php`: entrypoint; registers MCP capabilities and starts the server.
+- `public/index.php`: entrypoint; registers MCP capabilities (tools, prompts, resources) and starts the server. It uses a file-based cache for MCP discovery to improve startup performance.
 - `src/Tools`: MCP tools, each method annotated with `#[McpTool(...)]`.
 - `src/Prompts`: MCP prompts, each class annotated with `#[McpPrompt(...)]`.
 - `src/Resources`: MCP resources and resource templates (`#[McpResourceTemplate]`, `#[McpResource]`).
@@ -28,6 +28,7 @@ These guidelines summarize the high-level architecture, coding conventions, and 
   - `CKM_API_BASE_URL`: Base URL for the CKM REST API (default: `https://ckm.openehr.org/ckm/rest`).
   - `LOG_LEVEL`: Monolog logging level (e.g., `debug`).
   - `HTTP_TIMEOUT`, `HTTP_SSL_VERIFY`: Guzzle client settings.
+  - `XDG_DATA_HOME`: directory for application data, including cache and sessions (default: `/tmp`).
 - **Server Transports**:
   - `streamable-http`: Default; in development exposes SSE endpoint on port `:8343` (mapped from Caddy).
   - `stdio`: For CLI/Desktop clients. Run via `php public/index.php --transport=stdio`.
