@@ -116,8 +116,7 @@ final readonly class CkmService
                 foreach (explode(' ', trim($keyword)) as $k) {
                     if (isset($new['archetypeId']) && stripos($new['archetypeId'], $k) !== false) {
                         $new['score'] += 4;
-                    }
-                    if (isset($new['name']) && stripos($new['name'], $k) !== false) {
+                    } elseif (isset($new['name']) && stripos($new['name'], $k) !== false) {
                         $new['score'] += 3;
                     }
                     if (isset($new['projectName']) && stripos($new['projectName'], $k) !== false) {
@@ -129,9 +128,10 @@ final readonly class CkmService
                 }
                 if (isset($new['status'])) {
                     $new['score'] += match(strtoupper($new['status'])) {
-                        'PUBLISHED' => 3,
+                        'PUBLISHED' => 4,
                         'TEAMREVIEW' => 2,
-                        'DRAFT' => -2,
+                        'DRAFT', 'REVIEWSUSPENDED' => -1,
+                        'INITIAL' => -2,
                         default => 0,
                     };
                 }
@@ -325,9 +325,10 @@ final readonly class CkmService
                 }
                 if (isset($new['status'])) {
                     $new['score'] += match(strtoupper($new['status'])) {
-                        'PUBLISHED' => 3,
+                        'PUBLISHED' => 4,
                         'TEAMREVIEW' => 2,
-                        'DRAFT' => -2,
+                        'DRAFT', 'REVIEWSUSPENDED' => -1,
+                        'INITIAL' => -2,
                         default => 0,
                     };
                 }
