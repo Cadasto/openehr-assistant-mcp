@@ -6,6 +6,8 @@ namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Prompts;
 
 use Cadasto\OpenEHR\MCP\Assistant\Prompts\ExplainArchetype;
 use Mcp\Capability\Attribute\McpPrompt;
+use Mcp\Schema\Content\PromptMessage;
+use Mcp\Schema\Enum\Role;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -21,16 +23,13 @@ final class ExplainArchetypeTest extends TestCase
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
 
-        $allowedRoles = ['user', 'assistant'];
         $combined = '';
         foreach ($messages as $msg) {
-            $this->assertIsArray($msg);
-            $this->assertArrayHasKey('role', $msg);
-            $this->assertArrayHasKey('content', $msg);
-            $this->assertContains($msg['role'], $allowedRoles);
-            $this->assertIsString($msg['content']);
-            $this->assertNotSame('', trim($msg['content']));
-            $combined .= "\n" . $msg['content'];
+            $this->assertInstanceOf(PromptMessage::class, $msg);
+            $this->assertInstanceOf(Role::class, $msg->role);
+            $this->assertIsString($msg->content->text);
+            $this->assertNotSame('', trim($msg->content->text));
+            $combined .= "\n" . $msg->content->text;
         }
 
         // Guides references and placeholders

@@ -296,7 +296,7 @@ Tips
 - `resources/`: various resources used or exposed by the server
 - `src/`
   - `Tools/`: MCP Tools (Definition, EHR, Composition, Query)
-  - `Prompts/`: MCP Prompts
+  - `Prompts/`: MCP Prompts (including `AbstractPrompt` for loading YAML-based prompts)
   - `Resources/`: MCP Resources and Resource Templates
   - `CompletionProviders/`: MCP Completion Providers
   - `Helpers/`: Internal helpers (e.g., content type and ADL mapping)

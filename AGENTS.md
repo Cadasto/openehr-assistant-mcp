@@ -57,7 +57,7 @@ These guidelines summarize the high-level architecture, coding conventions, and 
 ## MCP conventions (tools, prompts, resources)
 
 - **Tools**: in `src/Tools`, annotate public methods with `#[McpTool(name: '...')]` to expose MCP tools.
-- **Prompts**: in `src/Prompts`, annotate classes with `#[McpPrompt(name: '...')]` to expose MCP prompts.
+- **Prompts**: in `src/Prompts`, annotate classes with `#[McpPrompt(name: '...')]` to expose MCP prompts. Prompt classes should extend `Cadasto\OpenEHR\MCP\Assistant\Prompts\AbstractPrompt` to load their messages from YAML resources via `$this->loadPromptMessages('prompt_name')`.
 - **Resources**:
   - `Guides` provides `openehr://guides/{category}/{name}` resources and registers guide resources at startup.
   - `TypeSpecifications` provides `openehr://spec/type/{component}/{name}` resource template.

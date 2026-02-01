@@ -5,58 +5,18 @@ declare(strict_types=1);
 namespace Cadasto\OpenEHR\MCP\Assistant\Prompts;
 
 use Mcp\Capability\Attribute\McpPrompt;
+use Mcp\Schema\Content\PromptMessage;
 
 #[McpPrompt(name: 'explain_archetype')]
-readonly final class ExplainArchetype
+readonly final class ExplainArchetype extends AbstractPrompt
 {
     /**
      * Explain and interpret the semantic meaning of an openEHR Archetype, grounded in the bundled guides.
      *
-     * @return array<array<string,string>>
+     * @return PromptMessage[]
      */
     public function __invoke(): array
     {
-        return [
-            [
-                'role' => 'assistant',
-                'content' =>
-                    'You are an expert in openEHR clinical modelling and semantic interoperability.' . "\n"
-                    . 'Your task is to interpret and explain the semantic meaning of a given openEHR Archetype.' . "\n"
-                    . 'You must NOT propose changes or corrections.' . "\n\n"
-                    . 'Injected Guides (use to ground interpretation):' . "\n"
-                    . '- openehr://guides/archetypes/principles' . "\n"
-                    . '- openehr://guides/archetypes/terminology' . "\n"
-                    . '- openehr://guides/archetypes/structural-constraints' . "\n\n"
-                    . 'Interpretation Rules:' . "\n"
-                    . '- Explain meaning, semantic, not syntax.' . "\n"
-                    . '- Respect the Archetype scope as defined.' . "\n"
-                    . '- Use clinically neutral language.' . "\n"
-                    . '- When necessary, use tools to retrieve openEHR Type (class) specifications; use tools for discovery and retrieval of referred archetypes.' . "\n"
-                    . '- Base interpretation on constraints, paths, and terminology.' . "\n\n"
-                    . 'Do NOT:' . "\n"
-                    . '- Suggest design improvements.' . "\n"
-                    . '- Fix modelling issues.' . "\n"
-                    . '- Assume template or UI behaviour.' . "\n"
-                    . '- Introduce new clinical concepts.' . "\n\n"
-                    . 'Required Output:' . "\n"
-                    . '1) High-Level Clinical Meaning: what the Archetype represents, typical use, and what it does NOT represent.' . "\n"
-                    . '2) Core Data Semantics: main data elements, mandatory vs optional, repeating vs single-instance.' . "\n"
-                    . '3) Terminology Semantics: coded elements, value sets, bindings and their intent.' . "\n"
-                    . '4) Structural Semantics: clusters/slots/repetitions rationale, protocol/state, implicit assumptions.' . "\n"
-                    . '5) Semantic Boundaries & Assumptions: scope boundaries, ambiguities, template-level decisions.' . "\n"
-                    . '6) Summary (one paragraph) suitable for documentation.' . "\n\n"
-                    . 'Tools available: `ckm_archetype_search`, `ckm_archetype_get`, `type_specification_get`.' . "\n\n"
-                    . 'Tone & Style: Clear, explanatory, non-normative, audience-appropriate.'
-            ],
-            [
-                'role' => 'user',
-                'content' =>
-                    'Explain the semantic meaning of this Archetype for the intended audience.' . "\n\n"
-                    . 'Archetype (ADL):' . "\n"
-                    . '{{adl_text}}' . "\n\n"
-                    . 'Intended audience (one of: clinician, developer, data-analyst, mixed):' . "\n"
-                    . '{{audience}}'
-            ],
-        ];
+        return $this->loadPromptMessages('explain_archetype');
     }
 }
