@@ -94,8 +94,11 @@ final readonly class CkmService
                     'Accept' => 'application/json',
                 ],
             ]);
-            $data = json_decode($response->getBody()->getContents(), true);
-            $this->logger->info('Found CKM Archetypes', ['keyword' => $keyword, 'count' => is_countable($data) ? count($data) : null]);
+            $data = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+            if (!is_array($data)) {
+                throw new \RuntimeException('Unexpected CKM archetype response payload.');
+            }
+            $this->logger->info('Found CKM Archetypes', ['keyword' => $keyword, 'count' => count($data)]);
 
             // Map each item to a simpler structure
             $data = array_map(function ($item) use ($keyword) {
@@ -145,6 +148,9 @@ final readonly class CkmService
                 'items' => $data,
                 'total' => (integer)$response->getHeaderLine('X-Total-Count')
             ];
+        } catch (\JsonException $e) {
+            $this->logger->error('Failed to decode CKM Archetype response', ['error' => $e->getMessage()]);
+            throw new \RuntimeException('Failed to decode CKM Archetype response: ' . $e->getMessage(), 0, $e);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to search for CKM Archetypes', ['error' => $e->getMessage()]);
             throw new \RuntimeException('Failed to search for CKM Archetypes: ' . $e->getMessage(), 0, $e);
@@ -288,8 +294,11 @@ final readonly class CkmService
                     'Accept' => 'application/json',
                 ],
             ]);
-            $data = json_decode($response->getBody()->getContents(), true);
-            $this->logger->info('Found CKM Templates', ['keyword' => $keyword, 'count' => is_countable($data) ? count($data) : null]);
+            $data = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+            if (!is_array($data)) {
+                throw new \RuntimeException('Unexpected CKM template response payload.');
+            }
+            $this->logger->info('Found CKM Templates', ['keyword' => $keyword, 'count' => count($data)]);
 
             // Map each item to a simpler structure
             $data = array_map(function ($item) use ($keyword) {
@@ -335,6 +344,9 @@ final readonly class CkmService
                 'items' => $data,
                 'total' => (integer)$response->getHeaderLine('X-Total-Count')
             ];
+        } catch (\JsonException $e) {
+            $this->logger->error('Failed to decode CKM Template response', ['error' => $e->getMessage()]);
+            throw new \RuntimeException('Failed to decode CKM Template response: ' . $e->getMessage(), 0, $e);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to search for CKM Templates', ['error' => $e->getMessage()]);
             throw new \RuntimeException('Failed to search for CKM Templates: ' . $e->getMessage(), 0, $e);

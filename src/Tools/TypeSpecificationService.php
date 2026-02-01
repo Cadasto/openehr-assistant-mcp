@@ -201,7 +201,12 @@ readonly final class TypeSpecificationService
                 continue;
             }
             $json = (string)file_get_contents($fileInfo->getPathname());
-            return json_decode($json, true);
+            try {
+                return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $this->logger->error('Failed to decode BMM JSON', ['file' => $fileInfo->getPathname(), 'error' => $e->getMessage()]);
+                throw new ToolCallException('Failed to decode BMM JSON for type: ' . $name, previous: $e);
+            }
         }
         $this->logger->info('BMM not found', ['name' => $name, 'component' => $component]);
         throw new ToolCallException("Type '$name' not found (in '$component' component).");
