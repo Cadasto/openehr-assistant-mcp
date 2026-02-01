@@ -131,7 +131,7 @@ final readonly class CkmService
                     $new['score'] += match(strtoupper($new['status'])) {
                         'PUBLISHED' => 3,
                         'TEAMREVIEW' => 2,
-                        'DRAFT' => 1,
+                        'DRAFT' => -2,
                         default => 0,
                     };
                 }
@@ -327,7 +327,7 @@ final readonly class CkmService
                     $new['score'] += match(strtoupper($new['status'])) {
                         'PUBLISHED' => 3,
                         'TEAMREVIEW' => 2,
-                        'DRAFT' => 1,
+                        'DRAFT' => -2,
                         default => 0,
                     };
                 }
