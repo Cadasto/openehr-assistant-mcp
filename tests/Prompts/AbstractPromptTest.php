@@ -18,7 +18,7 @@ final class AbstractPromptTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->tempPromptsDir = APP_DIR . '/tests/temp_prompts';
+        $this->tempPromptsDir = '/tmp/temp_prompts';
         if (!is_dir($this->tempPromptsDir)) {
             mkdir($this->tempPromptsDir, 0777, true);
         }
