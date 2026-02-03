@@ -34,6 +34,8 @@
 - [ ] Cardinality constraints are justified and documented.
 - [ ] Data types and RM types (e.g., *Observation*, *Evaluation*) are appropriate.
 - [ ] Hierarchical structure (C_OBJECT/C_ATTRIBUTE) is logical and follows RM semantics.
+- [ ] Existence, occurrences, and cardinality are used correctly per AOM 1.4 (existence on attributes, occurrences on objects, cardinality on containers).
+- [ ] Internal references (`use_node`) are used where identical structures repeat.
 
 ### 3. Terminology Binding
 
@@ -83,10 +85,31 @@
 
 ---
 
+## Paths, Identifiers & Queryability
+
+- [ ] All nodes have stable identifiers (`at-codes`) defined in `term_definitions`.
+- [ ] All constraint codes (`ac-codes`) are defined in `constraint_definitions`.
+- [ ] No identifiers have been changed from previous compatible versions.
+- [ ] Archetype paths are stable and suitable for long-term AQL use.
+- [ ] Path structure supports intuitive semantic querying and analytics.
+- [ ] ADL 1.4 validity rules pass (VARID, VARCN, VARDF, VARON, VARDT, VATDF, VACDF).
+
+---
+
+## Versioning & Change Management
+
+- [ ] Version increment reflects the **semantic impact** of changes.
+- [ ] Backward compatibility has been assessed.
+- [ ] Deprecated elements are retained and clearly marked, not removed.
+- [ ] Revision history accurately summarises changes and rationale.
+
+---
+
 ## Documentation & Examples
 
 - [ ] Example constraint instances or use-case sketches are provided.
 - [ ] Rationale for structural or semantic choices included (reviewer guidance).
 - [ ] Link to related templates/use cases where this archetype is used.
+- [ ] Known limitations or exclusions are documented.
 
 ---

@@ -58,3 +58,12 @@
 **Fix:** Use appropriate and documented cardinality constraints.
 
 ---
+
+## Path-Breaking Refactors
+
+**Anti-Pattern:** Structural clean-ups or reorganisations that change archetype paths  
+**Example:** Moving nodes for readability in a minor version update.  
+**Consequence:** Query breakage, data migration issues, loss of backward compatibility.
+**Fix:** Treat paths as public API. Path changes require a major version bump.
+
+---

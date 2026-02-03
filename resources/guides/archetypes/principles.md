@@ -47,6 +47,24 @@ Archetypes should maximize reuse of existing models where possible. Specialisati
 
 ---
 
+## Archetypes Model Data, Not Process or Workflow
+
+Archetypes describe what data means, not when or how it is collected. Workflow, UI, and use-case-specific constraints belong in templates or application logic.
+
+---
+
+## Templates Are Not Archetypes
+
+Templates aggregate archetypes for specific use cases. If a model is scenario-specific, it belongs in a template, not an archetype.
+
+---
+
+## Governance, Review, and Clinical Validation
+
+Archetypes require multidisciplinary review, clear documentation, and transparent governance to ensure interoperability.
+
+---
+
 ## Clarity and Model Usability
 
 Archetypes should have clear metadata (purpose, natural language definitions, usage context) and be easily understood by clinicians and implementers alike.

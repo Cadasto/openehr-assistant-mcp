@@ -26,7 +26,21 @@ An archetype constrains:
 - Data value types (DV_*)
 
 **Rule:**
-> Every constraint must be valid with respect to the openEHR Archetype Model and the underlying RM.
+> Every constraint must be valid with respect to the openEHR Archetype Object Model (AOM) and the underlying RM.
+
+### AOM Constraint Types (AOM 1.4)
+
+The Archetype Object Model defines a hierarchy of constraint types:
+
+- **C_OBJECT** — abstract constraint on any object node; has `rm_type_name`, `occurrences`, and `node_id`
+- **C_COMPLEX_OBJECT** — constraint on a complex RM type with attributes
+- **C_PRIMITIVE_OBJECT** — constraint on primitive types (String, Integer, Boolean, Date, etc.)
+- **C_ATTRIBUTE** — constraint on an attribute; has `rm_attribute_name` and `existence`
+  - **C_SINGLE_ATTRIBUTE** — single-valued attribute (exactly one child)
+  - **C_MULTIPLE_ATTRIBUTE** — container attribute with `cardinality`
+- **ARCHETYPE_SLOT** — placeholder for other archetypes via `include`/`exclude` assertions
+- **ARCHETYPE_INTERNAL_REF** — reuse constraint from elsewhere in same archetype via `target_path` (ADL: `use_node`)
+- **CONSTRAINT_REF** — reference to an ac-code for external terminology constraints
 
 ---
 
@@ -58,12 +72,29 @@ The `definition` section contains the **formal constraint tree**.
 ### Ontology / Terminology Section
 
 Defines:
-- archetype terms (`at-codes`)
-- value sets (`ac-codes`)
-- term bindings
+- archetype terms (`at-codes`) in `term_definitions`
+- constraint definitions (`ac-codes`) in `constraint_definitions`
+- term bindings to external terminologies in `term_bindings`
+- constraint bindings (terminology queries) in `constraint_bindings`
 
-**Rule:**
-> Every coded node (`atNNNN`) must have a term definition.
+**Rules:**
+- Every node identifier (`atNNNN`) must have a term definition with text and description.
+- Every constraint code (`acNNNN`) must have a constraint definition explaining its meaning.
+- Term bindings map at-codes to external terminology codes (global or path-based).
+- Constraint bindings map ac-codes to terminology queries (e.g., "any subtype of hepatitis").
+
+### Invariant Section (ADL 1.4)
+
+The optional `invariant` (or `rules`) section contains first-order predicate logic assertions that apply across the entire archetype. Use for constraints that cannot be expressed within the block structure of the definition section, such as:
+- Cross-node relationships
+- Mathematical formulae between values
+- Conditional constraints
+
+Example:
+```adl
+invariant
+    speed_validity: /speed[at0002]/kilometres/magnitude = /speed[at0004]/miles/magnitude * 1.6
+```
 
 ---
 
@@ -88,13 +119,24 @@ value matches {
 }
 ```
 
-### Occurrences vs Cardinality
+### Occurrences vs Cardinality vs Existence (AOM 1.4)
 
-- occurrences applies to objects
-- cardinality applies to (multi-valued) attributes (containers)
+- **existence** — applies to attributes; indicates whether the attribute value is mandatory (`1..1`) or optional (`0..1`); range is always within `0..1`
+- **occurrences** — applies to object nodes (C_OBJECT); indicates how many times the object may appear under its owning attribute
+- **cardinality** — applies to container attributes (C_MULTIPLE_ATTRIBUTE); indicates how many children the container may hold
 
 **Rule:**
-> Never confuse occurrences with cardinality.
+> Never confuse occurrences with cardinality. Use existence for attribute-level optionality.
+
+### Internal References (use_node)
+
+The `use_node` construct (AOM: `ARCHETYPE_INTERNAL_REF`) allows reusing a constraint defined elsewhere in the same archetype by referencing its path:
+
+```adl
+use_node CLUSTER[at0010] /items[at0005]
+```
+
+This avoids duplication and ensures consistency when the same structure appears multiple times.
 
 ### Leaf Node Constraints
 

@@ -19,20 +19,47 @@ Archetypes define **clinical meaning**, not terminologies.
 
 ### Internal Terminology (Archetype Terms)
 
-Each coded node must have:
-- A clear **text**
-- A precise **definition**
+Each coded node (`at-code`) must have in `term_definitions`:
+- A clear **text** (short label)
+- A precise **description** (full meaning)
 - Stable semantic meaning across versions
 
 **Rule:**
 > Internal term definitions are authoritative; external codes are references.
 
+### Specialisation Depth and Code Structure (AOM 1.4)
+
+Term codes follow a structured format based on **specialisation depth**:
+- Archetypes with no parent have specialisation depth 0 (codes like `at0001`)
+- Specialised archetypes use dot-notation to indicate depth and lineage:
+  - `at0.0.1` — new term at depth 2, not specialising any parent term
+  - `at0001.0.1` — specialises `at0001` from top parent (intervening `.0` shows depth 2)
+  - `at0001.1.1` — specialises `at0001.1` from immediate parent, which specialises `at0001`
+
+This systematic coding enables software to infer term relationships across specialisation hierarchies.
+
+**Note:** Constraint codes (ac-codes) do NOT follow these rules and exist in a flat code space.
+
+### Constraint Definitions (ac-codes)
+
+Each constraint code (`ac-code`) must have in `constraint_definitions`:
+- A **text** describing the value set intent
+- A **description** explaining what values are acceptable
+
+Constraint definitions describe the *meaning* of a value set constraint in human-readable form, independent of any specific terminology. The actual terminology query is defined separately in `constraint_bindings`.
+
 ---
 
 ### External Terminology Bindings
 
+#### Term Bindings (`term_bindings`)
+
+Map at-codes to external terminology codes. Two types:
+- **Global bindings:** at-code → external code, applies everywhere the at-code is used
+- **Path-based bindings:** archetype path → external code, for context-specific mappings
+
 Bindings may reference:
-- openEHR
+- openEHR terminology
 - SNOMED CT
 - LOINC
 - ICD
@@ -43,6 +70,12 @@ Bindings may reference:
 - Do not bind to overly generic or loosely related concepts
 - Do not mix code systems within a single value set unless justified
 - openEHR terminology binding should be valid against openEHR terminology (accessible via `openehr://terminology`)
+
+#### Constraint Bindings (`constraint_bindings`)
+
+Map ac-codes to terminology queries or value set URIs. Used to define which external codes satisfy a constraint.
+
+Example: An ac-code for "type of hepatitis" would have constraint bindings specifying the actual terminology query (e.g., "descendants of hepatitis concept in ICD-10").
 
 ---
 

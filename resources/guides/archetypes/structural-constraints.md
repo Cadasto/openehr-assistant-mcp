@@ -18,6 +18,10 @@ Archetypes should:
 
 ## Existence (Mandatory vs Optional)
 
+In AOM 1.4, **existence** is a constraint on `C_ATTRIBUTE` indicating whether the attribute's value must be present. 
+
+**Note:** Existence applies to attributes, not objects. For object-level optionality, use **occurrences**.
+
 ### Mandatory Elements (`existence = 1..1`)
 
 Use only when:
