@@ -9,15 +9,25 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-02-03
+
 ### Added
-- Docs: Added `AGENTS.md` file.
+- Docs: Added `AGENTS.md` file with AI guidelines for project structure, coding conventions, and developer workflows.
+- MCP Tools: Added `guide_search`, `guide_get`, and `guide_adl_idiom_lookup` tools for model-reachable guide content retrieval.
+- MCP Prompts: Added `guide_explorer` prompt to orchestrate guide discovery and retrieval workflows.
 
 ### Changed
-- Removed MCP Resource templates like `openehr://terminology/{type}` and assocated Completion Providers from the codebase; promote `openehr://terminology` instead; refactor TerminologyExplorer Prompt.
-- MCP Server: implemented file-based cache for discovery using Symfony Cache.
-- MCP Tools: improve JSON handling with exceptions; improve search results scores and ordering.
-- MCP Prompts: convert inline prompt classes to YAML prompt files
-- Infra: update PHP-FPM and Caddy config for improved logging, health checks, and file handling
+- MCP Resources: Changed terminology URI from `openehr://terminology/all` to `openehr://terminology`; removed URI templates for terminology resources.
+- MCP Server: Implemented file-based cache for discovery using Symfony Cache.
+- MCP Tools: Improve JSON handling with exceptions; improve search results scores and ordering.
+- MCP Prompts: Convert inline prompt classes to YAML prompt files; add `guide_get` tool references across resources and prompts.
+- CKM Service: Improve documentation for search and retrieval methods; add `guide_search` references.
+- Docs: Updated archetype guides (terminology, anti-patterns, structural constraints, ADL syntax, rules, principles) with AOM 1.4 constraints, specialisation rules, and improved clarity.
+- Docs: Updated `CONTRIBUTING.md` with file-based cache notes and terminology resource changes.
+- Infra: Update PHP-FPM and Caddy config for improved logging, health checks, and file handling.
+
+### Fixed
+- Tests: Update temp prompts directory path to use standard `/tmp` location.
 
 ## [0.9.0] - 2026-01-20
 
