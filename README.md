@@ -135,6 +135,23 @@ To connect this server to an MCP client like Claude Desktop, go to Settings → 
     }
 }
 ```
+### Run locally with npx
+For Claude Desktop users, the remote configuration may cause the application to fail to launch. Use the local npx method instead.
+
+Prerequisite: 
+- Node.js
+
+To connect this server to Claude Desktop, add the following to your mcpServers configuration file:
+```json
+{
+  "mcpServers": {
+    "openehr-assistant": {
+      "command": "npx",
+      "args": ["-y", "@openehr/assistant-mcp"]
+    }
+  }
+}
+```
 
 ### Run locally
 
