@@ -19,11 +19,24 @@ This server augments these workflows by providing AI assistants with direct acce
 > NOTE:
 > This project is currently in a pre-release state. Expect frequent updates and potential breaking changes to the architecture and feature set until version 1.0.
 
+## Table of Contents
+
+- [Features](#features)
+- [Available MCP Elements](#available-mcp-elements)
+- [Transports](#transports)
+- [Quick Start](#quick-start)
+- [Common client configurations](#common-client-configurations)
+- [Development tips](#development-tips)
+- [Contributing](#contributing)
+- [Acknowledgments](#acknowledgments)
+
+----
+
 ## Features
 
-- Works with MCP clients such as Claude Desktop, Cursor, LibreChat or other clients that support MCP
-- Exposes tools for openEHR Archetypes and specifications
-- Optional guided Prompts help orchestrate multi-step workflows
+- Works with MCP clients such as Claude Desktop, Cursor, LibreChat, etc.
+- Exposes tools for openEHR Archetypes and specifications.
+- Guided Prompts help orchestrate multi-step workflows.
 - Run remotely (endpoint URL: https://openehr-assistant-mcp.apps.cadasto.com/) or locally (transports: streamable HTTP and stdio)
 
 ### Implementation aspects 
@@ -35,6 +48,8 @@ This server augments these workflows by providing AI assistants with direct acce
 - Transports: streamable HTTP and stdio (for development)
 - Docker images for production and development
 - Structured logging with Monolog
+
+----
 
 ## Available MCP Elements
 
@@ -105,6 +120,8 @@ Terminologies (JSON)
 - Provides access to both terminology groups (concepts/rubrics) and codesets.
 - On-disk mapping: `resources/terminology/openehr_terminology.xml`
 
+----
+
 ## Transports
 
 MCP Transports are used to communicate with MCP clients. 
@@ -117,125 +134,202 @@ MCP Transports are used to communicate with MCP clients.
 
 ## Quick Start
 
-### Run remotely
+To get started, use one of the following options:
 
-The quickest way to use the assistant without local setup is to connect your MCP client to our hosted instance. 
-This server is optimized for production use and is regularly updated with the latest version.
-- Endpoint URL: https://openehr-assistant-mcp.apps.cadasto.com/
-- Transport Type: streamable-http (SSE)
+1. **No local setup (fastest):** use our hosted endpoint.
+2. **Local via Docker (recommended for contributors):** run the server with `docker compose`.
+3. **Local via stdio:** run as a process for MCP clients that prefer stdio.
 
-To connect this server to an MCP client like Claude Desktop, go to Settings → Connectors → Add custom Connector, or alternatively add the following to your mcpServers configuration file:
+----
+
+### Option 1: Use our hosted server (no install)
+
+If you just want to use this MCP server with minimal setup, start here.
+
+Use this MCP server URL directly in your client:
+
+- **URL:** `https://openehr-assistant-mcp.apps.cadasto.com/`
+- **Transport:** `streamable-http`
+
+Example MCP config:
+
 ```json
 {
-    "mcpServers": {
-        "openehr-assistant-remote": {
-            "type": "streamable-http",
-            "url": "https://openehr-assistant-mcp.apps.cadasto.com/"
-        }
+  "mcpServers": {
+    "openehr-assistant-remote": {
+      "type": "streamable-http",
+      "url": "https://openehr-assistant-mcp.apps.cadasto.com/"
     }
+  }
 }
 ```
 
-### Run locally
+See below for more [specific client configurations](#common-client-configurations).
 
-To run the MCP server locally, the easiest way is to use Docker. Depending on the use case, this can be either a production or development setup.
+----
 
-Prerequisites:
-- Docker and Docker Compose
+### Option 2: Run locally with Docker (recommended for contributors)
+
+Use this when editing tools/prompts/resources and wanting immediate feedback.
+
+#### Prerequisites
+
+- Docker + Docker Compose
 - Git
 
->NOTE: A pre-built Docker image is available on the GitHub Container Registry (GHCR) at `ghcr.io/cadasto/openehr-assistant-mcp:latest`. 
-> You can use this image as a drop-in replacement for cadasto/openehr-assistant-mcp:latest in any of the stdio transport examples below.
-
-1) Clone
+#### 1) Clone the repository
 
 ```bash
 git clone https://github.com/cadasto/openehr-assistant-mcp.git
 cd openehr-assistant-mcp
 ```
 
-2) Run the MCP server (production)
+#### 2) Prepare environment
 
 ```bash
-# optionally create .env file, edit it as needed
 cp .env.example .env
-# build the images locally and start the server
-docker compose up -d --build
-# or,
-make up
 ```
 
-The server listens by default at https://openehr-assistant-mcp.local (on port `443`) using the streamable HTTP transport, served by a separate [Caddy webserver](https://caddyserver.com/) container.
+> Tip: Default values work for most users. You usually only need to edit `.env` if you want to change domain, logging, or CKM endpoint.
 
-The domain suffix is `local` by default, but can be changed in the `.env` file; set the `DOMAIN` variable to the desired domain suffix.
-
-### Development
-
-For local development, changing provided tools, prompts, etc., the easiest way is to use the dev container setup, provided by `docker-compose.dev.yml` (overrides). This will volume mount the codebase inside the PHP container, and Caddy will expose port `8343`.
-
-1) Start dev containers
+#### 3) Start dev containers
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build --force-recreate
-# or,
+# or
 make up-dev
 ```
 
-2) Install dependencies (composer)
+#### 4) Install Composer dependencies
 
-Assuming you are running the dev container, and your local user ID is `1000`,
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.dev.yml exec -u 1000:1000 mcp composer install
-# or,
+# or
 make install
 ```
 
-3) Use the MCP server
-Use the streamable HTTP transport with http://openehr-assistant-mcp.local:8343/ address in your MCP client.
+#### 5) Connect your MCP client
 
-### Run the MCP server with stdio transport
+- Default local endpoint (streamable HTTP): `https://openehr-assistant-mcp.local/`; set also this name in your host file, asscociating it with `127.0.0.1 openehr-assistant-mcp.local`.
+- Dev endpoint (with dev override): `http://localhost:8343/`
 
-If you want to run the MCP server locally for development purposes, sometimes it is easier to use the stdio transport.
+> If `openehr-assistant-mcp.local` does not resolve on your machine, use the dev setup below and connect to `http://localhost:8343/`.
 
-Command to run the MCP server as stdio:
+Alternatively, use stdio by running a similar command to the following when you want your MCP client to launch the server process directly.
+
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp php public/index.php --transport=stdio
 ```
 
-If the MCP client does not have direct access to the docker compose project, first build the image with `make build`, then use `docker run` with the stdio transport:
+---
+
+### Option 3: Run locally via stdio
+
+Use stdio when your MCP client launches the server process directly.
+
+Make sure your MCP client supports stdio transport and runs one of the following commands.
+
+#### 1) From dev containers
+
 ```bash
-docker run --rm -i cadasto/openehr-assistant-mcp:latest php public/index.php --transport=stdio
+docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp php public/index.php --transport=stdio
 ```
 
-or alternatively, use the latest github container registry image directly (no need to build the image):
+#### 2) From a published Docker image
+
 ```bash
 docker run --rm -i ghcr.io/cadasto/openehr-assistant-mcp:latest php public/index.php --transport=stdio
 ```
 
-### MCP inspector
+---
 
-The MCP inspector is a handy tool to inspect the MCP server responses and debug issues.
-It provides a simple web interface to inspect server responses and send requests to the server.
+## Common client configurations
 
->NOTE: This tools works best if the MCP server is up and running as the dev container.
+### Typical configuration
 
-To run the inspector, use `make inspector` and follow the instructions in the terminal. 
+In most cases, add **one** of the following server configurations:
 
->NOTE: The url of the inspector is printed in the terminal as http://0.0.0.0:6274/, but in reality it should be accessed with an exact IP or host name, for example, at http://localhost:6274/.
+```json
+{
+  "mcpServers": {
+    "openehr-assistant-mcp": {
+      "type": "streamable-http",
+      "url": "https://openehr-assistant-mcp.apps.cadasto.com/"
+    },
+    "openehr-assistant-mcp-stdio": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "ghcr.io/cadasto/openehr-assistant-mcp:latest",
+        "php", "public/index.php", "--transport=stdio"
+      ]
+    },
+    "openehr-assistant-mcp-http": {
+      "type": "streamable-http",
+      "url": "http://host.docker.internal:8343/"
+    }
+  }
+}
+```
 
+### Claude Desktop (`mcpServers`)
 
-### Makefile shortcuts:
- 
+Add the remote URL `https://openehr-assistant-mcp.apps.cadasto.com/` in Menu > Settings > Connectors > Add custom connector.
+
+Alternatively, use **Menu** → **Developer** → **Edit Config** to add one of the server configurations – see above.
+
+### LibreChat (streamable HTTP)
+
+```yaml
+mcpServers:
+  openehr-assistant-mcp:
+    type: streamable-http
+    url: http://host.docker.internal:8343/
+```
+
+### Cursor
+
+1. Open **Cursor Settings** → **MCP**.
+2. Add a new MCP server.
+3. Choose one of these connection options:
+   - **Hosted**: `type=streamable-http`, `url=https://openehr-assistant-mcp.apps.cadasto.com/`
+   - **Local dev**: `type=streamable-http`, `url=http://host.docker.internal:8343/`
+   - **Local stdio**: run with Docker – see above.
+
+### IntelliJ Junie
+
+1. Open **Settings/Preferences** → **Tools** → **Junie** → **MCP Servers** (wording may vary by version).
+2. Add a server using either:
+   - **Streamable HTTP** URL (`https://openehr-assistant-mcp.apps.cadasto.com/` or `http://host.docker.internal:8343/`), or
+   - **Stdio command** (Docker command above).
+3. Save configuration and refresh/restart Junie so tools are discovered.
+
+---
+
+## Development tips
+
+### MCP Inspector
+
+Run the MCP Inspector to inspect requests/responses and debug behavior:
+
+```bash
+make inspector
+```
+
+The terminal may show `http://0.0.0.0:6274/`; open it as `http://localhost:6274/` (or your machine IP) in your browser.
+
+### Makefile shortcuts
+
 - Build images: `make build` (prod) or `make build-dev` (dev)
 - Start services: `make up` (prod) or `make up-dev` (dev override with live volume mounts)
-- Prepare `.env` (make a copy from example): `make env`
-- Install deps in dev container: `make install`
+- Prepare `.env`: `make env`
+- Install dependencies in dev container: `make install`
 - Tail logs: `make logs`
-- Open a shell in the dev container: `make sh`
+- Open shell in dev container: `make sh`
 - Run MCP inspector: `make inspector`
-- Make help: `make help`
+- Show help: `make help`
 
-## Environment Variables
+### Environment Variables
 
 - `APP_ENV`: application environment (`development`/`testing`/`production`). Default: `production`
 - `LOG_LEVEL`: Monolog level (`debug`, `info`, `warning`, `error`, etc.). Default: `info`
@@ -246,47 +340,7 @@ To run the inspector, use `make inspector` and follow the instructions in the te
 
 Note: Authorization headers are not required nor configured by default. If you need to add auth to your upstream openEHR/CKM server, extend the HTTP client in `src/Apis` to add the appropriate headers.
 
-## MCP Client Integrations 
-
-### Claude Desktop mcpServers example
-
-Example for local development (use Docker)
-```json
-{
-  "mcpServers": {
-    "openehr-assistant-mcp": {
-      "command": "docker",
-      "args": [
-        "run", "-i", "--rm", 
-        "ghcr.io/cadasto/openehr-assistant-mcp:latest",
-        "php", "public/index.php", "--transport=stdio"
-      ]
-    }, 
-    "openehr-assistant-mcp-8343": {
-      "type": "streamable-http",
-      "url": "http://host.docker.internal:8343/",
-      "note": "Assumes the dev container is running and port 8343 mapped to host"
-    }
-  }
-}
-```
-
-### Streamable HTTP in LibreChat
-
-LibreChat.ai MCP example
-- Run first the MCP server (see above, e.g. `docker compose up -d` or `make up`)
-- The dev server is accessible at http://localhost:8343/
-- Run the LibreChat server (see https://github.com/LibreChat/librechat-server)
-- Configure LibreChat to use the MCP server (see https://github.com/LibreChat/librechat-server/blob/main/docs/mcp.md)
-- The server is compatible with LibreChat’s MCP integration. Example minimal server entry in LibreChat config (YAML):
-```yaml
-mcpServers:
-    openehr-assistant-mcp:
-        type: streamable-http
-        url: http://host.docker.internal:8343/
-```
-
-## Testing and QA
+### Testing and QA
 
 - Unit tests: `docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp composer test` (PHPUnit 12)
 - Test with coverage: `docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp composer test:coverage`
@@ -295,7 +349,7 @@ mcpServers:
 Tips
 - You can also `make sh` and run `composer test` inside the container interactively.
 
-## Project Structure
+### Project Structure
 
 - `public/index.php`: MCP server entry point
 - `resources/`: various resources used or exposed by the server
@@ -313,13 +367,7 @@ Tips
 - `Makefile`: handy shortcuts
 - `tests/`: PHPUnit and PHPStan config and tests
 
-## Acknowledgments
-
-This project is inspired by and is grateful to:
-- The original Python openEHR MCP Server: https://github.com/deak-ai/openehr-mcp-server
-- [Seref Arikan](https://www.linkedin.com/in/seref-arikan/), [Sidharth Ramesh](https://www.linkedin.com/in/sidharthramesh1/) - for inspiration on MCP integration
-- The PHP MCP Server frameworks: https://github.com/php-mcp/server and https://github.com/modelcontextprotocol/php-sdk
-- [Ocean Health Systems](https://oceanhealthsystems.com/) for the Clinical Knowledge Manager (CKM), an essential tool for the openEHR community that enables collaborative development and sharing of archetypes and templates.
+----
 
 ## Contributing
 
@@ -327,6 +375,16 @@ We welcome contributions! Please read CONTRIBUTING.md for guidelines on setting 
 
 See CHANGELOG.md for notable changes and update it with every release.
 
-## License
+### License
 
 MIT License - see `LICENSE`.
+
+----
+
+## Acknowledgments
+
+This project is inspired by and is grateful to:
+- The original Python openEHR MCP Server: https://github.com/deak-ai/openehr-mcp-server
+- [Seref Arikan](https://www.linkedin.com/in/seref-arikan/), [Sidharth Ramesh](https://www.linkedin.com/in/sidharthramesh1/) - for inspiration on MCP integration
+- The PHP MCP Server framework: https://github.com/modelcontextprotocol/php-sdk
+- [Ocean Health Systems](https://oceanhealthsystems.com/) for the Clinical Knowledge Manager (CKM), an essential tool for the openEHR community that enables collaborative development and sharing of archetypes and templates.
