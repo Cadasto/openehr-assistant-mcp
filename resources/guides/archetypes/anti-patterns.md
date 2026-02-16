@@ -1,69 +1,63 @@
 # openEHR Archetype Anti-Patterns
 
-**Purpose:** Common modelling pitfalls to avoid
+**Purpose:** Recognisable modelling failures and how to correct them  
 **Keywords:** archetype, anti-patterns, modelling, pitfalls, avoid, best practice
 
 ---
 
-## Overly Broad Concepts
+## 1. Multi-Concept Archetypes
 
-**Problem:** Combining multiple unrelated clinical domains in one archetype  
-**Example:** Mixing vital signs, assessment, and medication.  
-**Impact:** Poor reuse, inconsistent RM alignment, harder querying.  
-**Fix:** Create separate archetypes; use slots for composition.
-
----
-
-## Undocumented Terminology Bindings
-
-**Problem:** Code bindings without specifying authority or meaning  
-**Example:** Arbitrary codes without SNOMED CT/LOINC reference.  
-**Impact:** Loss of interoperability, ambiguity.  
-**Fix:** Always reference authoritative terminology bindings.
+**Problem:** Mixing unrelated clinical concepts  
+**Impact:** Poor reuse, broken semantics  
+**Correction:** One archetype = one concept. Create separate archetypes; use slots for composition where needed.
 
 ---
 
-## Excessive Specialisation
+## 2. Terminology Without Meaning
 
-**Problem:** Many specialisations for minor local variations  
-**Example:** Specialising "serum glucose" for non-clinical uses.  
-**Impact:** Fragmentation, reduced cross-site sharing.  
-**Fix:** Use templates instead of specialisations.
+**Problem:** Undocumented or arbitrary code bindings  
+**Impact:** Loss of interoperability  
+**Correction:** Bind only authoritative codes with clear semantics.
 
 ---
 
-## Ignoring RM Semantics
+## 3. Over-Specialisation
 
-**Problem:** Modelling that conflicts with RM intent  
+**Problem:** Specialising for local preference  
+**Impact:** Fragmentation  
+**Correction:** Use templates or compositions.
+
+---
+
+## 4. RM Misuse
+
+**Problem:** Ignoring RM intent  
 **Example:** Using OBSERVATION as generic record.  
-**Impact:** Data inconsistencies, runtime errors.  
-**Fix:** Use appropriate RM types and attributes.
+**Impact:** Runtime and semantic errors  
+**Correction:** Use correct ENTRY and data structures.
 
 ---
 
-## Hardcoding Workflow Logic
+## 5. Embedded Workflow
 
-**Problem:** Embedding workflow or UI constraints in archetypes  
-**Example:** Encoding process ordering as structural constraints.  
-**Impact:** Reduced portability; conflicts with template-level specificity.  
-**Fix:** Keep archetypes for data semantics only.
-
----
-
-## Improper Cardinality Constraints
-
-**Problem:** Arbitrary min/max values without clinical justification  
-**Example:** Mandatory multiple occurrences where single suffices.  
-**Impact:** Erroneous data capture expectations.  
-**Fix:** Justify and document all cardinality constraints.
+**Problem:** Encoding UI or process logic  
+**Impact:** Loss of portability  
+**Correction:** Move logic to templates or applications.
 
 ---
 
-## Path-Breaking Refactors
+## 6. Arbitrary Cardinality
 
-**Problem:** Structural changes that alter archetype paths  
-**Example:** Moving nodes for readability in a minor version.  
-**Impact:** Query breakage, data migration issues.  
-**Fix:** Treat paths as public API; path changes require major version.
+**Problem:** Magic numbers (unjustified min/max)  
+**Impact:** Invalid data assumptions  
+**Correction:** Constrain only what is universally true.
+
+---
+
+## 7. Path-Breaking Refactors
+
+**Problem:** Structural clean-ups that change paths  
+**Impact:** Query breakage  
+**Correction:** Treat paths as public API; path changes require major version.
 
 ---

@@ -1,87 +1,85 @@
 # openEHR Archetype Structural Constraint Guide
 
-**Purpose:** Guidance on archetype constraints for clinically meaningful structure
+**URI:** `openehr://guides/archetypes/structural-constraints`  
+**Version:** 1.1.0  
+**Scope:** Normative guidance for existence, cardinality, occurrences, and slots  
 **Keywords:** cardinality, existence, occurrences, slots, constraints
 
 ---
 
-## Design Philosophy
+## 1. Modelling Principle
 
-> Constrain only what is universally true.
+> Constrain only what is universally and clinically true.
 
-Archetypes should be clinically safe, maximally reusable, and free of local workflow assumptions.
+Archetypes optimise for reuse and safety, not local workflows.
 
 ---
 
-## Existence
+## 2. Existence
 
 **Existence** (AOM 1.4) constrains `C_ATTRIBUTE` — whether an attribute value must be present.
 
-- **Mandatory (`1..1`):** Use only when intrinsic to the concept; absence invalidates the record
-- **Optional (`0..1`):** Default for contextual qualifiers and conditional data
+- Mandatory only when intrinsic to the concept
+- Optional by default
 
 **Note:** Existence applies to attributes. For object-level optionality, use **occurrences**.
 
 ---
 
-## Cardinality and Occurrences
+## 3. Cardinality & Occurrences
 
-- **Single:** when the real-world concept is singular
-- **Multiple:** only when repetition is clinically meaningful
-
-**Avoid:** `0..*` as default; arbitrary upper bounds without rationale.
-
-Upper bounds should reflect real-world constraints and be clinically justified.
+- Single vs repeating reflects real-world semantics
+- Avoid `0..*` defaults
+- Upper bounds must be clinically justified
 
 ---
 
-## Slots
+## 4. Slots
 
 Use slots when:
 - Content varies by context
 - Multiple domain-specific implementations exist
 - Reuse across specialisations is expected
 
-**Constraints:**
+Constraints:
 - Constrain by archetype type and purpose
 - Avoid unconstrained slots
 - Document intended usage
 
 ---
 
-## Clusters vs Elements
+## 5. Clusters vs Elements
 
-- **CLUSTER:** logically grouped sub-concepts
-- **ELEMENT:** atomic data values
-- Do not use clusters as generic containers
+- **CLUSTER** = inseparable group
+- **ELEMENT** = atomic value
+- Never use clusters as generic containers
 
 ---
 
-## Avoiding Over-Constraint
+## 6. Avoid Over-Constraint
 
-Do not encode in archetypes:
+Do not encode:
 - UI layout
-- Workflow sequencing
+- Workflow
 - Local business rules
-- Template-level decisions
+- Template logic
 
 These belong in **templates**.
 
 ---
 
-## Anti-Patterns
+## 7. Structural Anti-Patterns
 
-- Making everything mandatory
-- Excessive nesting without semantic value
-- Deep hierarchies compensating for poor scoping
-- Slots bypassing modelling decisions
+- Everything mandatory
+- Deep nesting without semantics
+- Slots as modelling shortcuts
 
 ---
 
-## Review Questions
+## 8. Review Questions
 
-- Could this constraint prevent legitimate reuse?
 - Is this universally true?
+- Does this limit reuse?
 - Should this be a template concern?
 
 ---
