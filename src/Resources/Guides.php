@@ -37,7 +37,7 @@ final class Guides
         mimeType: 'text/markdown'
     )]
     public function read(
-        #[CompletionProvider(values: ['archetypes', 'templates', 'aql'])]
+        #[CompletionProvider(values: ['archetypes', 'templates', 'aql', 'simplified_formats'])]
         string $category,
         #[CompletionProvider(provider: GuidesCompletionProvider::class)]
         string $name

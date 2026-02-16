@@ -31,6 +31,7 @@ class Guides implements ProviderInterface
             APP_RESOURCES_DIR . '/guides/archetypes',
             APP_RESOURCES_DIR . '/guides/templates',
             APP_RESOURCES_DIR . '/guides/aql',
+            APP_RESOURCES_DIR . '/guides/simplified_formats',
         ]);
         $completions = [];
 

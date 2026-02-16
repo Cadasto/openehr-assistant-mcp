@@ -89,11 +89,13 @@ Optional prompts that guide AI assistants through common openEHR and CKM workflo
 - `design_or_review_archetype` - Design or review task for a specific concept/RM class with structured outputs.
 - `design_or_review_template` - Design or review task for an openEHR Template (OET).
 - `design_or_review_aql` - Design or review task for an AQL query, using AQL guides (principles, syntax, idioms, checklist).
+- `design_or_review_simplified_format` - Design or review a Flat or Structured (simplified) format instance, using Simplified Formats guides.
+- `explain_simplified_format` - Explain context, paths, and data elements of a Flat or Structured JSON payload.
 
 ### Completion Providers
 
 Completion providers supply parameter suggestions in MCP clients when invoking tools or resources.
-- `Guides` - suggests guide `{name}` values for categories `archetypes`, `templates`, and `aql` (resource URI `openehr://guides/{category}/{name}`)
+- `Guides` - suggests guide `{name}` values for categories `archetypes`, `templates`, `aql`, and `simplified_formats` (resource URI `openehr://guides/{category}/{name}`)
 - `SpecificationComponents` - suggests `{component}` values based on directories in `resources/bmm`  resource URI
 
 ### Resources
@@ -109,6 +111,8 @@ Guides (Markdown)
   - `openehr://guides/archetypes/checklist`
   - `openehr://guides/archetypes/adl-syntax`
   - `openehr://guides/aql/principles`
+  - `openehr://guides/aql/syntax`
+  - `openehr://guides/simplified_formats/rules`
 
 Type Specifications (BMM JSON)
 - URI template: `openehr://spec/type/{component}/{name}`

@@ -6,6 +6,7 @@ openEHR guides provide:
 - Best practices for archetype and template design
 - ADL syntax references and idiom cheatsheets
 - AQL principles, syntax, idioms and checklists for query design and review
+- Simplified Formats (Flat/Structured) principles, rules, idioms and checklists for composition serialization
 - Structural constraint guidance (cardinality, occurrences, slots)
 - Anti-patterns to avoid
 - Terminology integration guidance

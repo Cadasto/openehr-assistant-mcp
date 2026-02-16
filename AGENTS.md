@@ -60,7 +60,7 @@ These guidelines summarize the high-level architecture, coding conventions, and 
 - **Tools**: in `src/Tools`, annotate public methods with `#[McpTool(name: '...')]` to expose MCP tools.
 - **Prompts**: in `src/Prompts`, annotate classes with `#[McpPrompt(name: '...')]` to expose MCP prompts. Prompt classes should extend `Cadasto\OpenEHR\MCP\Assistant\Prompts\AbstractPrompt` to load their messages from YAML resources via `$this->loadPromptMessages('prompt_name')`.
 - **Resources**:
-  - `Guides` provides `openehr://guides/{category}/{name}` resources and registers guide resources at startup. Categories: `archetypes`, `templates`, `aql` (AQL principles, syntax, idioms-cheatsheet, checklist).
+  - `Guides` provides `openehr://guides/{category}/{name}` resources and registers guide resources at startup. Categories: `archetypes`, `templates`, `aql` (AQL principles, syntax, idioms-cheatsheet, checklist), `simplified_formats` (Flat/Structured principles, rules, idioms-cheatsheet, checklist).
   - `TypeSpecifications` provides `openehr://spec/type/{component}/{name}` resource template.
   - `Terminologies` provides `openehr://terminology` resource.
 - **Completion providers** live in `src/CompletionProviders` and are annotated with `#[CompletionProvider]` to suggest parameter values.
@@ -118,3 +118,4 @@ composer test:coverage
 - When adding or editing guides (e.g. under `resources/guides/`) or prompts that describe a standard (e.g. AQL), keep wording aligned with the authoritative spec and any formal grammar in the repo:
 - Avoid duplicate or misplaced paragraphs in guide files.
 - **Archetypes/templates**: Guides under `resources/guides/archetypes/` and `resources/guides/templates/` should stay consistent with openEHR modelling docs and ADL/OET conventions referenced in the project.
+- **Simplified Formats**: Spec in `docs/flat/*.adoc` (Flat and Structured JSON serialization; Web Template field identifiers, ctx, pipe suffixes, underscore prefix). Guides under `resources/guides/simplified_formats/` should align with that spec.
