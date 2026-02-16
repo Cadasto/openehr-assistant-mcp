@@ -27,7 +27,7 @@ final class Terminologies
 
             try {
                 $this->xml = new SimpleXMLElement($content);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw new ResourceReadException('Error parsing Terminology XML: ' . $e->getMessage());
             }
         }

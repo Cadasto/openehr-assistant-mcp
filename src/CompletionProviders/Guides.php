@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cadasto\OpenEHR\MCP\Assistant\CompletionProviders;
 
 use Mcp\Capability\Completion\ProviderInterface;
@@ -48,6 +50,6 @@ class Guides implements ProviderInterface
             }
         }
 
-        return $completions;
+        return array_values(array_unique($completions));
     }
 }

@@ -6,9 +6,9 @@ namespace Cadasto\OpenEHR\MCP\Assistant\Apis;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientTrait;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\RequestOptions;
+use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
@@ -39,11 +39,8 @@ class CkmClient
     }
 
     /**
-     * @param string $method
-     * @param $uri
      * @param array<string,mixed> $options
-     * @return ResponseInterface
-     * @throws GuzzleException
+     * @throws ClientExceptionInterface
      */
     public function request(string $method, $uri, array $options = []): ResponseInterface
     {
@@ -51,10 +48,7 @@ class CkmClient
     }
 
     /**
-     * @param string $method
-     * @param $uri
      * @param array<string,mixed> $options
-     * @return PromiseInterface
      */
     public function requestAsync(string $method, $uri, array $options = []): PromiseInterface
     {

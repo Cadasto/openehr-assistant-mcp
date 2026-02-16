@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-#[CoversClass(Client::class)]
+#[CoversClass(CkmClient::class)]
 final class CkmClientTest extends TestCase
 {
     public function testRequestDelegatesToGuzzleClient(): void
