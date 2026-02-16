@@ -61,8 +61,12 @@ try {
     $container->set(Guides::class, new Guides());
     $container->set(Terminologies::class, new Terminologies());
 
-    // Initialize cache
-    $cache = new Psr16Cache(new PhpFilesAdapter('mcp-server', 0, APP_DATA_DIR . '/cache'));
+    // Initialize cache (ensure directory exists)
+    $cacheDir = APP_DATA_DIR . '/cache';
+    if (!is_dir($cacheDir)) {
+        mkdir($cacheDir, 0775, true);
+    }
+    $cache = new Psr16Cache(new PhpFilesAdapter('mcp-server', 0, $cacheDir));
 
     // Build the server
     $builder = Server::builder()
