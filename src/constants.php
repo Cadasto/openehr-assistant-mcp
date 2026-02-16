@@ -14,5 +14,6 @@ define('APP_DATA_DIR', (getenv('XDG_DATA_HOME') ?: '/tmp') . '/app');
 
 define('CKM_API_BASE_URL', trim(getenv('CKM_API_BASE_URL') ?: 'https://ckm.openehr.org/ckm/rest', "\/ \t\n\r\0\x0B") . '/');
 
-define('HTTP_SSL_VERIFY', (bool)filter_var((string)getenv('HTTP_SSL_VERIFY'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE));
+$httpSslVerify = filter_var((string)getenv('HTTP_SSL_VERIFY'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+define('HTTP_SSL_VERIFY', $httpSslVerify ?? true);
 define('HTTP_TIMEOUT', (float)getenv('HTTP_TIMEOUT') ?: 10.0);
