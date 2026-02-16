@@ -29,18 +29,8 @@ try {
     // CLI option parsing (supports: --transport=stdio | --transport stdio)
     $transportOption = '';
     if (PHP_SAPI === 'cli') {
-        $argv = $_SERVER['argv'] ?? [];
-        for ($i = 0; $i < count($argv); $i++) {
-            $arg = (string)($argv[$i] ?? '');
-            if (str_starts_with($arg, '--transport=')) {
-                $transportOption = substr($arg, strlen('--transport=')) ?: '';
-                break;
-            }
-            if ($arg === '--transport') {
-                $transportOption = (string)($argv[$i + 1] ?? '');
-                break;
-            }
-        }
+        $opts = getopt('', ['transport:']);
+        $transportOption = isset($opts['transport']) ? (string)$opts['transport'] : '';
     }
 
     // Initialize the DI container
