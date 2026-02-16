@@ -112,3 +112,9 @@ composer test:coverage
 - The dev container expects your host user ID to be `1000`; adjust the `-u` flag if your UID is different.
 - To run a single test class or subset, call `vendor/bin/phpunit --filter SomeTest` inside the dev container.
 - Coverage requires Xdebug; the `composer test:coverage` script sets `XDEBUG_MODE` automatically.
+
+### Guides and specification alignment
+
+- When adding or editing guides (e.g. under `resources/guides/`) or prompts that describe a standard (e.g. AQL), keep wording aligned with the authoritative spec and any formal grammar in the repo:
+- Avoid duplicate or misplaced paragraphs in guide files.
+- **Archetypes/templates**: Guides under `resources/guides/archetypes/` and `resources/guides/templates/` should stay consistent with openEHR modelling docs and ADL/OET conventions referenced in the project.
