@@ -144,9 +144,10 @@ final readonly class CkmService
                 return $b['score'] <=> $a['score'];
             });
 
+            $totalHeader = $response->getHeaderLine('X-Total-Count');
             return [
                 'items' => $data,
-                'total' => (integer)$response->getHeaderLine('X-Total-Count')
+                'total' => $totalHeader !== '' ? (integer)$totalHeader : count($data),
             ];
         } catch (\JsonException $e) {
             $this->logger->error('Failed to decode CKM Archetype response', ['error' => $e->getMessage()]);
@@ -274,7 +275,7 @@ final readonly class CkmService
                         ],
                     ],
                 ],
-                'total' => ['type' => 'integer', 'description' => 'Total number of Archetypes found'],
+                'total' => ['type' => 'integer', 'description' => 'Total number of Templates found'],
             ],
         ]
     )]
@@ -342,9 +343,10 @@ final readonly class CkmService
                 return $b['score'] <=> $a['score'];
             });
 
+            $totalHeader = $response->getHeaderLine('X-Total-Count');
             return [
                 'items' => $data,
-                'total' => (integer)$response->getHeaderLine('X-Total-Count')
+                'total' => $totalHeader !== '' ? (integer)$totalHeader : count($data),
             ];
         } catch (\JsonException $e) {
             $this->logger->error('Failed to decode CKM Template response', ['error' => $e->getMessage()]);
