@@ -27,9 +27,9 @@ Archetypes are terminology-neutral; external code systems (SNOMED CT, LOINC) can
 
 ---
 
-## Unique Identification and Semantic Paths
+## Unique Identification, Paths, and Locatability
 
-Each archetype element has a unique path enabling unambiguous data reference and AQL querying.
+Each archetype node has a **stable identifier** (at-code) and a **unique semantic path**, enabling AQL querying and unambiguous data access. Paths are a public API; stability across compatible versions is mandatory.
 
 ---
 
@@ -39,9 +39,9 @@ Changes must preserve data validity where possible. Incompatible changes require
 
 ---
 
-## Reuse and Specialisation
+## Archetype Reuse, Slots, and Composition
 
-Maximise reuse of existing archetypes. Specialise only for true semantic subtypes, not convenience. Maintain clear lineage to parent artefacts.
+Reuse existing archetypes wherever possible. **Slots** enable controlled inclusion of other archetypes and should be **constrained explicitly** (avoid wildcards). Specialise only for true semantic subtypes, not convenience; maintain clear lineage to parent artefacts.
 
 ---
 

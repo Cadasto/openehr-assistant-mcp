@@ -5,27 +5,27 @@
 
 ---
 
-## Key Principles
+## A. Concept & Scope Validation
 
-1. **Single Coherent Concept**
-   - Ensure archetype represents one clinical concept, universally usable. 
-   - The scope should be universal, usable across diverse care settings.
-2. **Stable Definitions**
-   - Clear names and descriptions reflecting clinical intent.
-   - Archetypes should aim for *wide reuse* where sensible, avoiding unnecessary fragmentation.
+- [ ] Archetype represents **exactly one coherent clinical or domain concept**.
+- [ ] Concept scope is **neither overly narrow nor artificially broad**; suitable for international reuse.
+- [ ] Content does **not mix** observations, evaluations, instructions, or actions inappropriately.
+- [ ] If the concept is scenario- or document-specific, it is modelled as a **template**, not an archetype.
+- [ ] Stable definitions: clear names and descriptions reflecting clinical intent; aim for wide reuse where sensible.
 
 ---
 
-## Header & Metadata
+## B. Header & Metadata
 
-- [ ] Archetype ID follows conventions (namespace, versioning)
-- [ ] Original language set (ISO-639-1)
+- [ ] Archetype ID follows naming and versioning conventions (e.g. `openEHR-EHR-OBSERVATION.<concept>.v1.0.0`).
+- [ ] Correct RM type is used (e.g. OBSERVATION, EVALUATION, INSTRUCTION, ACTION, ADMIN_ENTRY).
+- [ ] Original language set (ISO 639-1, typically `en`)
 - [ ] Purpose and usage fields complete
 - [ ] Author, contributor, licensing metadata present
 
 ---
 
-## Definition & Structure
+## C. Structural & RM Conformance
 
 - [ ] Root node matches targeted clinical concept
 - [ ] Cardinality constraints justified
@@ -36,7 +36,7 @@
 
 ---
 
-## Terminology
+## D. Terminology & Semantics
 
 - [ ] Coded values bind to recognised systems (SNOMED CT, LOINC, ICD)
 - [ ] Terms match clinical concept semantics
@@ -44,15 +44,7 @@
 
 ---
 
-## Semantic Clarity
-
-- [ ] Definitions reflect clinical meaning, not implementation
-- [ ] Data semantics independent of workflow/UI
-- [ ] Required vs optional elements justified
-
----
-
-## Translation
+## E. Translation
 
 - [ ] Translations preserve clinical intent
 - [ ] Natural target-language phrasing
@@ -62,7 +54,7 @@
 
 ---
 
-## Editorial Review
+## F. Editorial & Clinical Review
 
 - [ ] Name accurately reflects content
 - [ ] Single concept scope (not too narrow/broad)
@@ -73,7 +65,7 @@
 
 ---
 
-## Reuse & Specialisation
+## G. Reuse, Slots & Specialisation
 
 - [ ] Existing archetypes reviewed before creating new
 - [ ] Consistent with related domain archetypes
@@ -83,7 +75,7 @@
 
 ---
 
-## Paths & Identifiers
+## H. Paths, Identifiers & Queryability
 
 - [ ] All at-codes defined in `term_definitions`
 - [ ] All ac-codes defined in `constraint_definitions`
@@ -93,7 +85,7 @@
 
 ---
 
-## Versioning
+## I. Versioning & Change Management
 
 - [ ] Version increment reflects semantic impact
 - [ ] Backward compatibility assessed
@@ -102,7 +94,7 @@
 
 ---
 
-## Documentation
+## J. Documentation & Supporting Material
 
 - [ ] Example instances or use-case sketches provided
 - [ ] Rationale for non-obvious choices documented

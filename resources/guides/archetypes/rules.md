@@ -17,7 +17,7 @@
 
 ## B. Metadata
 
-- **B1:** Archetype IDs follow: `openEHR-<DOMAIN>-<TYPE>.<name>.v<N>`
+- **B1:** Archetype IDs SHALL follow the standard pattern: `openEHR-<DOMAIN>-<RM_TYPE>.<concept>.v<MAJOR>.<MINOR>.<PATCH>`.
 - **B2:** Provide a clear, clinician-friendly purpose description.
 
 ---
@@ -83,11 +83,12 @@
 
 ---
 
-## I. Interoperability
+## I. Interoperability and Demographic Modelling
 
 - **I1:** Archetypes SHALL support semantic interoperability across systems and jurisdictions.
 - **I2:** Local business rules, workflow logic, and application-specific validation SHALL NOT be encoded.
 - **I3:** Favour long-term stability over short-term implementation convenience.
+- **I4:** PERSON archetypes SHALL NOT encode role-specific semantics; use ROLE archetypes for role-related data.
 
 ---
 
