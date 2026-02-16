@@ -28,6 +28,7 @@ final class Guides
      *  - openehr://guides/archetypes/checklist
      *  - openehr://guides/archetypes/adl-syntax
      *  - openehr://guides/templates/explain-template
+     *  - openehr://guides/aql/syntax
      */
     #[McpResourceTemplate(
         uriTemplate: 'openehr://guides/{category}/{name}',
@@ -36,7 +37,7 @@ final class Guides
         mimeType: 'text/markdown'
     )]
     public function read(
-        #[CompletionProvider(values: ['archetypes', 'templates'])]
+        #[CompletionProvider(values: ['archetypes', 'templates', 'aql'])]
         string $category,
         #[CompletionProvider(provider: GuidesCompletionProvider::class)]
         string $name

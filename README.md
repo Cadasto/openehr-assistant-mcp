@@ -83,15 +83,17 @@ Optional prompts that guide AI assistants through common openEHR and CKM workflo
 - `guide_explorer` - Discover and retrieve openEHR implementation guides using `guide_search`, `guide_get`, and `guide_adl_idiom_lookup` tools.
 - `explain_archetype` - Explain an archetype’s semantics (audiences, elements, constraints).
 - `explain_template` - Explain openEHR Template semantics.
+- `explain_aql` - Explain the intent, structure, and semantics of an AQL query (containment, archetype paths, filters, deployed OPT assumptions).
 - `translate_archetype_language` - Translate an archetype’s terminology section between languages with safety checks.
 - `fix_adl_syntax` - Correct or improve Archetype syntax without changing semantics; provides before/after and notes.
 - `design_or_review_archetype` - Design or review task for a specific concept/RM class with structured outputs.
 - `design_or_review_template` - Design or review task for an openEHR Template (OET).
+- `design_or_review_aql` - Design or review task for an AQL query, using AQL guides (principles, syntax, idioms, checklist).
 
 ### Completion Providers
 
 Completion providers supply parameter suggestions in MCP clients when invoking tools or resources.
-- `Guides` - suggests guide `{name}` values from `resources/guides/archetypes` resource URI
+- `Guides` - suggests guide `{name}` values for categories `archetypes`, `templates`, and `aql` (resource URI `openehr://guides/{category}/{name}`)
 - `SpecificationComponents` - suggests `{component}` values based on directories in `resources/bmm`  resource URI
 
 ### Resources
@@ -106,6 +108,7 @@ Guides (Markdown)
 - Examples:
   - `openehr://guides/archetypes/checklist`
   - `openehr://guides/archetypes/adl-syntax`
+  - `openehr://guides/aql/principles`
 
 Type Specifications (BMM JSON)
 - URI template: `openehr://spec/type/{component}/{name}`

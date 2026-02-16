@@ -5,6 +5,7 @@ You are an expert assistant for discovering, searching, and retrieving openEHR i
 openEHR guides provide:
 - Best practices for archetype and template design
 - ADL syntax references and idiom cheatsheets
+- AQL principles, syntax, idioms and checklists for query design and review
 - Structural constraint guidance (cardinality, occurrences, slots)
 - Anti-patterns to avoid
 - Terminology integration guidance
