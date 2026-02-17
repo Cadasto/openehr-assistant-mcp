@@ -117,20 +117,17 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml exec mcp vendor\b
 ## MCP conventions (Tools, Prompts, Resources, Completion Providers)
 - Tools live in `src\Tools`; annotate public methods with `#[McpTool(name: '...')]` for discovery by `modelcontextprotocol/php-sdk` in `public/index.php`. Discovery results are cached in the file system (default `/tmp/app/cache`) to improve performance.
 - Prompts live in `src\Prompts`; annotate prompt classes with `#[McpPrompt(name: '...')]`. Current prompt names include:
-  - `ckm_archetype_explorer`, `ckm_template_explorer`, `type_specification_explorer`, `terminology_explorer`
-  - `explain_archetype`, `explain_template`, `translate_archetype_language`, `fix_adl_syntax`, `design_or_review_archetype`, `design_or_review_template`
+  - `ckm_archetype_explorer`, `ckm_template_explorer`, `type_specification_explorer`, `terminology_explorer`, `guide_explorer`
+  - `explain_archetype`, `explain_template`, `explain_aql`, `explain_simplified_format`, `translate_archetype_language`, `fix_adl_syntax`, `design_or_review_archetype`, `design_or_review_template`, `design_or_review_aql`, `design_or_review_simplified_format`
 - Resources & Resource Templates (attribute `#[McpResourceTemplate]`):
-  - Guides (markdown) via `Guides::read()` in `src\Resources\Guides.php`
-    - URI template: `openehr://guides/{category}/{name}` (e.g., `openehr://guides/archetypes/checklist`).
-    - Files map to `resources/guides/{category}/{name}.md`.
-    - Discoverability: `Guides::addResources()` registers all guides as MCP resources at startup.
+  - `Guides` provides `openehr://guides/{category}/{name}` resources and registers guide resources at startup. Categories: `archetypes`, `templates`, `aql` (AQL principles, syntax, idioms-cheatsheet, checklist), `simplified_formats` (Flat/Structured principles, rules, idioms-cheatsheet, checklist).
   - Type Specifications (BMM JSON) via `TypeSpecifications::read()` in `src\Resources\TypeSpecifications.php`
     - URI template: `openehr://spec/type/{component}/{name}` (e.g., `openehr://spec/type/RM/COMPOSITION`).
     - Files map to `resources/bmm/{COMPONENT}/{NAME}.bmm.json`.
   - Terminologies (JSON) via `Terminologies::readAll()` in `src\Resources\Terminologies.php`
     - Files map to `resources/terminology/openehr_terminology.xml`.
 - Completion Providers (attribute `#[CompletionProvider]`) live in `src\CompletionProviders` and provide parameter suggestions to tools/resources:
-  - `Guides`: suggests guide names from `resources/guides/archetypes` for the `{name}` segment of guide resource URIs.
+  - `Guides`: suggests guide `{name}` values for categories `archetypes`, `templates`, `aql`, and `simplified_formats` (resource URI `openehr://guides/{category}/{name}`).
   - `SpecificationComponents`: suggests available `{component}` values from `resources/bmm` for type specification resource URIs.
 - Constants and versioning live in `src\constants.php` (see `APP_VERSION`).
 
