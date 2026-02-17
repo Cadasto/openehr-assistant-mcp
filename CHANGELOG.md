@@ -9,6 +9,26 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-02-17
+
+### Added
+- MCP Prompts: Added `explain_aql`, `design_or_review_aql`, `explain_simplified_format`, and `design_or_review_simplified_format`.
+- Guides: Added comprehensive AQL guides (principles, syntax, idioms, checklist) 
+- Guides: Added Simplified Formats guides (Flat/Structured principles, rules, idioms, checklist).
+- Docs: Added Table of Contents and improved Quick Start and client setup instructions in `README.md`.
+- Docs: Added guide alignment instructions for archetypes, templates, and simplified formats in `AGENTS.md`.
+
+### Changed
+- MCP Server: Simplified transport option parsing using `getopt` in `index.php`.
+- Guides: Updated archetype guides for anti-patterns, structural constraints, and terminology.
+- Dependencies: Updated composer dependencies to latest versions.
+
+### Fixed
+- MCP Server: Ensure cache directory is created if missing.
+- MCP Server: Ensure `HTTP_SSL_VERIFY` defaults to `true` if unset.
+- CKM Service: Improved total count calculation and corrected description text.
+- Core: Refined type hints and error handling across tools and tests.
+
 ## [0.11.0] - 2026-02-03
 
 ### Changed
