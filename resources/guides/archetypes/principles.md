@@ -16,7 +16,7 @@ An archetype is a formal, constraint-based expression of a domain concept ground
 
 ## Two-Level Modelling and Separation of Concerns
 
-openEHR separates stable **Reference Model (RM)** from expressive **archetypes**. 
+openEHR separates stable **Reference Model (RM)** from expressive **archetypes**.
 Archetypes expose domain semantics; the RM provides stable data structures. This enables independent evolution of content and systems.
 
 ---

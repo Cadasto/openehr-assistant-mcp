@@ -113,6 +113,6 @@ Validity rules enforced by tooling:
 - C_ATTRIBUTE: `Rm_attribute_name_valid`, `Existence_set`, `Children_validity`
 - C_MULTIPLE_ATTRIBUTE: `Cardinality_valid`, `Members_valid`
 - ARCHETYPE_SLOT: `Includes_valid`, `Excludes_valid`, `Validity`
-- ARCHETYPE_INTERNAL_REF: `target_path` 
+- ARCHETYPE_INTERNAL_REF: `target_path`
 
 ---
