@@ -245,7 +245,43 @@ uttrykt som systolisk/diastolisk i mmHg.
 
 ---
 
-## J. References
+## K. Available Language Standards Guides
+
+Language-specific extension guides expand this base guide with conventions, terminology, and examples tailored to each language while maintaining the principles of sections A–F.
+
+### Existing Language Guides
+
+- **Norwegian Bokmål** (nb): `openehr://guides/archetypes/language-standards-nb`
+  - Norwegian case conventions, metadata patterns, comprehensive terminology glossary
+  - Sourced from openEHR KLIM archetype resources and analysis of CKM Norwegian translations
+  - Includes glossary maintenance procedures for evolving terminology
+
+### Future Language Guides
+
+Language-specific guides MAY be created following the pattern: `language-standards-<iso-639-1-code>.md`
+
+Examples: `language-standards-de.md` (German), `language-standards-fr.md` (French), `language-standards-sv.md` (Swedish)
+
+Each language guide SHALL:
+
+- Establish clinical terminology standards for the target language
+- Document established translations of common archetype terms
+- Provide examples of Purpose/Use/Misuse statements in the target language
+- Reference authoritative clinical terminology sources for the language/locale
+- Maintain consistency with this base English language standards guide
+- Include guidance on glossary maintenance as new archetypes are published with translations
+
+### Cross-Language Terminology Equivalence
+
+When concepts translate to different terminology across languages, semantic equivalence is maintained through external terminology bindings (SNOMED CT, LOINC), not through identical phrasing across language guides.
+
+**Example:** The concept "unsure" may translate to different Norwegian or German terms appropriate to each language's clinical register, but all translations bind to the same SNOMED CT concept code, ensuring unambiguous semantic reference.
+
+Each language guide MAY specify terminology choices appropriate for that language while documenting the clinical reasoning when terminology differs significantly from literal translation.
+
+---
+
+## L. References
 
 - [openEHR CKM Editorial Style Guide](https://openehr.atlassian.net/wiki/spaces/healthmod/pages/304742407/Archetype+Editorial+style+guide)
 - [ISO 639-1 Language Codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
