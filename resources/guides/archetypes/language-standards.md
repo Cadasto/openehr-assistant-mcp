@@ -55,7 +55,23 @@
   - `Category` — broader, less specific grouping
   - `Type` — narrower, more specific classification
 
-- **B10:** Example: `Category` for an overarching grouping for an intervention identified in 'Intervention name'; `Type` for a more specific method or process for delivering an intervention identified in ‘Intervention name’.
+- **B10:**
+
+Example: `Category` for an overarching grouping for an intervention identified in 'Intervention name'; `Type` for a more specific method or process for delivering an intervention identified in ‘Intervention name’.
+
+### Data Element Descriptions and Comments
+
+- **B11:** Data element descriptions (term definitions in the ontology) SHALL contain the clinical definition only — what the element represents and why it matters clinically.
+  - Example: "The measured force exerted by blood on the walls of the artery when the heart contracts."
+
+- **B12:** Usage examples or detailed implementation guidance for data elements MUST be placed in a comment field (separate from the description), not embedded in the description text itself. Examples in comments SHALL be prefixed with "For example: ".
+  - Correct: Description is the definition; comment contains "For example: 120/80 mmHg, 140/90 mmHg"
+  - Incorrect: "The measured force exerted by blood on the walls of the artery when the heart contracts. Examples: 120/80 mmHg, 140/90 mmHg." (in description)
+
+- **B13:** This separation ensures:
+  - Descriptions remain concise and clinically focused
+  - Examples and notes are clearly distinguished as implementation guidance, not part of the formal definition
+  - Localization and translation focus on the clinical definition without redundant repetition
 
 ---
 
@@ -234,6 +250,7 @@ uttrykt som systolisk/diastolisk i mmHg.
 - ☑ Concept names use sentence case and do NOT end with full stop
 - ☑ All descriptions, Purpose, Use, Misuse statements end with full stop
 - ☑ Data element names follow established patterns and do NOT end with full stop
+- ☑ Data element descriptions contain clinical definition only; examples in comment field
 - ☑ Abbreviations placed immediately after terms
 - ☑ Same clinical concept uses same at-code throughout
 - ☑ Terminology is clinically neutral and internationally recognized
