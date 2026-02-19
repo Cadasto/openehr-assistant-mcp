@@ -28,9 +28,14 @@ Archetypes optimise for reuse and safety, not local workflows.
 
 ## 3. Cardinality & Occurrences
 
+**Cardinality** (on container attributes like `items`, `events`) defines how many children the container may hold.
+
+- **Default for containers:** `1..*` (at least one child; empty containers are semantically invalid)
 - Single vs repeating reflects real-world semantics
-- Avoid `0..*` defaults
+- Avoid `0..*` defaults (an empty container has no meaning)
 - Upper bounds must be clinically justified
+
+**Occurrences** (on object nodes) defines how many times an object may appear in its parent; separate from cardinality.
 
 ---
 

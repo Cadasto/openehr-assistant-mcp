@@ -28,7 +28,7 @@
   - Correct: "Neurologic Assessment in Neuro-Oncology (NANO) scale"
   - Incorrect: "Neurologic Assessment in Neuro-Oncology scale (NANO)"
 
-- **B3:** All descriptions, purpose statements, and data element names SHALL end with a full stop (period) or equivalent terminal punctuation.
+- **B3:** All descriptions and purpose statements SHALL end with a full stop (period) or equivalent terminal punctuation. Concept names and data element names MUST NOT end with full stops.
 
 - **B4:** Use hyphens with spaces for bullet points and lists: `- item text`
 
@@ -231,10 +231,10 @@ uttrykt som systolisk/diastolisk i mmHg.
 ## I. Consistency Checklist
 
 - ☑ Original language is English (en)
-- ☑ Concept names use sentence case
+- ☑ Concept names use sentence case and do NOT end with full stop
 - ☑ All descriptions, Purpose, Use, Misuse statements end with full stop
+- ☑ Data element names follow established patterns and do NOT end with full stop
 - ☑ Abbreviations placed immediately after terms
-- ☑ Data element names follow established patterns (tested, examined, commenced, ceased, Category, Type)
 - ☑ Same clinical concept uses same at-code throughout
 - ☑ Terminology is clinically neutral and internationally recognized
 - ☑ No regional/locale-specific semantics in archetype definitions

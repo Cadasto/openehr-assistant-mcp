@@ -22,11 +22,11 @@ All principles from the base language standards guide (Sections A–F) apply to 
 
 ## B. Norwegian Case and Capitalization
 
-- **B.1:** Concept names SHALL use sentence case: first letter uppercase, remainder lowercase, except proper nouns and acronyms.
+- **B.1:** Concept names SHALL use sentence case: first letter uppercase, remainder lowercase, except proper nouns and acronyms. Concept names MUST NOT end with a full stop.
   - Correct: "ACVPU skala", "Nevrologisk vurdering"
   - Incorrect: "ACVPU Skala", "Nevrologisk Vurdering"
 
-- **B.2:** Data element names SHALL use sentence case: first letter uppercase, remainder lowercase.
+- **B.2:** Data element names SHALL use sentence case: first letter uppercase, remainder lowercase. Data element names MUST NOT end with a full stop.
   - Correct: "Systolisk trykk", "Diastolisk trykk"
   - Incorrect: "Systolisk Trykk", "Diastolisk Trykk"
 
@@ -357,7 +357,7 @@ These are NOT translated; they remain in English:
 
 ## F. Formatting and Style Rules
 
-- **F1:** All descriptions, Purpose, Use, Misuse statements, and data element names SHALL end with a full stop (period) or equivalent terminal punctuation.
+- **F1:** All descriptions, Purpose, Use, and Misuse statements SHALL end with a full stop (period) or equivalent terminal punctuation. Concept names and data element names MUST NOT end with full stops.
 
 - **F2:** Extra whitespace at the beginning or end of descriptions will be flagged; follow standard punctuation spacing rules.
 
@@ -513,9 +513,9 @@ systolisk, diastolisk, blodtrykk
 ## J. Norwegian Consistency Checklist
 
 - ☑ Language set to Norwegian Bokmål (nb)
-- ☑ Concept names use sentence case
+- ☑ Concept names use sentence case and do NOT end with full stop
 - ☑ All descriptions, Purpose, Use, Misuse statements end with full stop
-- ☑ Data element names follow established patterns (undersøkt, testet, navn, start, stopp, etc.)
+- ☑ Data element names follow established patterns (undersøkt, testet, navn, start, stopp, etc.) and do NOT end with full stop
 - ☑ Purpose begins with "For å registrere…"
 - ☑ Use begins with "Brukes for å registrere…"
 - ☑ Misuse begins with "Brukes ikke for å registrere…"
