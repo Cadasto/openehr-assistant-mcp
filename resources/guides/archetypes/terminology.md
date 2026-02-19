@@ -18,6 +18,7 @@ Archetypes define **clinical meaning**, not terminologies.
 ## Internal Terminology (at-codes)
 
 Each `at-code` in `term_definitions` requires:
+
 - **text:** short label
 - **description:** full meaning
 - Stable semantics across versions
@@ -27,6 +28,7 @@ Each `at-code` in `term_definitions` requires:
 ### Specialisation Depth (AOM 1.4)
 
 Term codes use dot-notation based on specialisation depth:
+
 - Depth 0: `at0001`
 - Depth 2 examples:
   - `at0.0.1` — new term, not specialising parent
@@ -40,6 +42,7 @@ Term codes use dot-notation based on specialisation depth:
 ## Constraint Definitions (ac-codes)
 
 Each `ac-code` in `constraint_definitions` requires:
+
 - **text:** value set intent
 - **description:** acceptable values
 
@@ -52,12 +55,14 @@ Describes value set meaning independent of terminology; actual queries defined i
 ### Term Bindings (`term_bindings`)
 
 Map at-codes to external codes:
+
 - **Global:** at-code → external code (applies everywhere)
 - **Path-based:** archetype path → external code (context-specific)
 
 Supported systems: openEHR terminology, SNOMED CT, LOINC, ICD, etc.
 
 **Rules:**
+
 - Match exact semantic intent
 - Avoid generic or loosely related bindings
 - Don't mix code systems in one value set without justification
@@ -86,13 +91,17 @@ Map ac-codes to terminology queries or value set URIs defining which external co
 
 ## Language and Localisation
 
-- **No language primacy:** archetypes are fully translatable (English preferred for CKM)
+See `openehr://guides/archetypes/language-standards` for comprehensive guidance on original language requirements, English conventions, translation philosophy, and per-language frameworks.
+
+**Key principles:**
+
+- **Original language:** English (en) mandatory for international CKM; prevents semantic drift from translation chains
+- **No language primacy:** translated archetypes use target language's natural clinical register
 - **Preserve meaning:** translations preserve clinical intent, not literal wording
-- **Natural phrasing:** use target language's clinical register
-- **Consistency:** maintain internal terminology and grammatical consistency
-- **Prohibitions:** don't translate class names (ACTION, OBSERVATION); never change identifiers or structure
-- **Translate metadata:** Purpose, Use, Misuse fields
-- **Localisation:** avoid locale-specific semantics in term text
+- **Consistency:** internal terminology (at-codes) stable; external bindings (SNOMED CT, LOINC) handle spelling/terminology variants
+- **Prohibitions:** don't translate class names (ACTION, OBSERVATION); never change identifiers, paths, or structure
+- **Translate metadata:** Purpose, Use, Misuse fields translated to reflect target-language clinical practice
+- **Localisation:** avoid locale-specific semantics, healthcare system assumptions, and regional references in archetype definitions
 
 ---
 

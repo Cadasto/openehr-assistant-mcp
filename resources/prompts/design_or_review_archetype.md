@@ -9,6 +9,7 @@ Prerequisites Guides resources (authoritative):
 - openehr://guides/archetypes/rules
 - openehr://guides/archetypes/adl-syntax
 - openehr://guides/archetypes/terminology
+- openehr://guides/archetypes/language-standards
 - openehr://guides/archetypes/structural-constraints
 - openehr://guides/archetypes/anti-patterns
 - openehr://guides/archetypes/reference-formatting
