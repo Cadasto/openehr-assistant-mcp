@@ -396,3 +396,4 @@ This project is inspired by and is grateful to:
 - The PHP MCP Server framework: https://github.com/modelcontextprotocol/php-sdk
 - [Ocean Health Systems](https://oceanhealthsystems.com/) for the Clinical Knowledge Manager (CKM), an essential tool for the openEHR community that enables collaborative development and sharing of archetypes and templates.
 - [freshEHR](https://www.freshehr.com/) for the CGEM framework (Contextual situation, Global background, Event assessment, Managed response), which informs our template-design guides on splitting datasets and composition semantics (CC-BY).
+- [Silje Ljosland Bakke](https://github.com/siljelb) - for the contribution to the archetype and language related guides. 
