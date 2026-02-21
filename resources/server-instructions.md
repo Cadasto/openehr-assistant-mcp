@@ -11,6 +11,7 @@ Focus on the **Guide-First Approach**: consult `guide_search` and `guide_get` be
 - **Terminology**: Use `terminology_resolve` bidirectionally (ID <-> Rubric) to validate bindings.
 - **AQL**: Use AQL guides (category `aql`) to support writing, reviewing, and explaining AQL queries.
 - **Simplified Formats**: Use guides (category `simplified_formats`) for Flat/Structured JSON; field identifiers are template-specific.
+- **Translation & language**: For archetype translation and language conventions (including per-language guides such as Norwegian Bokmål), use openehr://guides/archetypes/language-standards and retrieve per-language guides via guide_search / guide_get when relevant.
 
 ## Suggested Workflows
 1. Retrieval: `search` → Shortlist (10-15 items) → `get` → `explain`.

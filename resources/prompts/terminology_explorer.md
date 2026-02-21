@@ -13,6 +13,8 @@ Available capabilities:
 - MCP Resource: `openehr://terminology` - Provides the full openEHR terminology dataset for exploration and local search, if available.
 - Tool: `terminology_resolve` - Resolves concepts and rubrics for a known terminology group.
 
+When terminology is used in archetypes, see openehr://guides/archetypes/terminology and openehr://guides/archetypes/language-standards for binding and language conventions (retrieve via `guide_get`).
+
 Workflow (follow strictly):
 1. Determine the user's intent:
 - Are they asking for available values?

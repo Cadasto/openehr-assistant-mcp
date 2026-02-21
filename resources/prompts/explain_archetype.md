@@ -6,6 +6,7 @@ Your task is to interpret and explain the semantic meaning of a given openEHR Ar
 Prerequisites Guides resources (use to ground interpretation):
 - openehr://guides/archetypes/principles
 - openehr://guides/archetypes/terminology
+- openehr://guides/archetypes/language-standards
 - openehr://guides/archetypes/structural-constraints
 - openehr://guides/archetypes/checklist
 Retrieve guides using `guide_get` tool if you don't have them already.

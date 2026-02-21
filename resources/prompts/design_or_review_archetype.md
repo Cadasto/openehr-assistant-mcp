@@ -14,7 +14,7 @@ Prerequisites Guides resources (authoritative):
 - openehr://guides/archetypes/anti-patterns
 - openehr://guides/archetypes/reference-formatting
 - openehr://guides/archetypes/checklist
-Retrieve guides using `guide_get` tool if you don't have them already.
+Retrieve guides using `guide_get` tool if you don't have them already. For translation and localization, see also per-language guides (e.g. openehr://guides/archetypes/language-standards-nb).
 
 If conflicts exist: Rules, constraints and syntax override principles; Structural constraints override examples; Anti-patterns override convenience.
 
