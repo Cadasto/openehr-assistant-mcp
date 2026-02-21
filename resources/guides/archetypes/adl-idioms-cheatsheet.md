@@ -1,6 +1,6 @@
 # Minimal ADL Idiom Cheat Sheet
 
-**Purpose:** Normative idioms for writing and reviewing ADL constraint trees **without changing semantics**  
+**Scope:** Normative idioms for writing and reviewing ADL constraint trees **without changing semantics**  
 **Related:** `openehr://guides/archetypes/adl-syntax`, `openehr://guides/archetypes/rules`  
 **Keywords:** ADL, constraint, syntax, idioms, cheat sheet, minimal, fast, QA
 

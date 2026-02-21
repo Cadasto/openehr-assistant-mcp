@@ -198,7 +198,7 @@ Updated 2024 Jan 10. [Cited 2024 Jan 15].
 
 ---
 
-## L. Government Docuents and Reports
+## L. Government Documents and Reports
 
 ### Required Elements
 
