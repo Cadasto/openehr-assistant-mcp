@@ -5,6 +5,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 use Cadasto\OpenEHR\MCP\Assistant\Apis\CkmClient;
+use Cadasto\OpenEHR\MCP\Assistant\Helpers\CliOptions;
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Guides;
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Terminologies;
 use Mcp\Capability\Registry\Container;
@@ -27,11 +28,7 @@ use Symfony\Component\Cache\Psr16Cache;
 
 try {
     // CLI option parsing (supports: --transport=stdio | --transport stdio)
-    $transportOption = '';
-    if (PHP_SAPI === 'cli') {
-        $opts = getopt('', ['transport:']);
-        $transportOption = isset($opts['transport']) ? (string)$opts['transport'] : '';
-    }
+    $transportOption = CliOptions::transportOption();
 
     // Initialize the DI container
     $container = new Container();
@@ -73,7 +70,7 @@ try {
     $server = $builder->build();
 
     // Determine transport: default to streamable-http; allow CLI override to stdio
-    if (strtolower($transportOption) === 'stdio') {
+    if ($transportOption === 'stdio') {
         // Run using stdio transport (blocking loop)
         $logger->info('Using stdio transport as requested by --transport=stdio');
         $transport = new StdioTransport();
