@@ -11,6 +11,8 @@
 - [ ] Is the scope of the template clearly defined (e.g., does it cover a single clinical encounter or document)?
 - [ ] Are all included archetypes necessary for this use case?
 - [ ] Have you chosen the most appropriate COMPOSITION archetype as the root?
+- [ ] For multi-template designs: Is composition type (event vs persistent longitudinal/episodic) and data category (e.g. CGEM) explicit and consistent?
+- [ ] If the template involves orders or referrals: Are Instruction/Action used only where order/fulfilment tracking is required (Managed Response), not for simple yes/no or date records?
 
 ## 2. Archetype Usage and Constraints
 - [ ] Are all mandatory elements from the underlying archetypes present?

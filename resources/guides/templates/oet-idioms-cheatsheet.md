@@ -2,7 +2,7 @@
 
 **Purpose:** Fast grounding for writing and reviewing openEHR templates (OET)
 **Related:** check also `openehr://guides/templates/oet-syntax` and `openehr://guides/templates/rules` guides
-**Keywords:** OET, OPT, constraint, syntax, idioms, cheat sheet, minimal, fast, QA
+**Keywords:** OET, OPT, constraint, syntax, idioms, cheat sheet, minimal, fast, QA, CGEM, event, persistent
 
 ---
 
@@ -69,6 +69,13 @@
 ## The "Flat" Check
 **Idiom:** When designing, visualize how the template will look in a flatten form.
 - Use `hide_on_form="true"` for structural nodes that don't need a UI label (e.g., intermediate Containers).
+
+---
+
+## Composition Type: Event vs Persistent
+**Idiom:** Choose composition semantics when designing templates. 
+- **Event:** many submissions over time, each a new composition (e.g. lab results, clinic visits). 
+- **Persistent:** single “current version”; longitudinal = lifetime (e.g. allergies), episodic = per journey (e.g. cancer care plan). Align with CGEM (Global Background → longitudinal; Contextual Situation → episodic; Event Assessment → event).
 
 ---
 

@@ -2,7 +2,7 @@
 
 **Scope:** Concrete modelling rules and best practices for openEHR templates
 **Related:** openehr://guides/templates/principles, openehr://guides/templates/oet-syntax
-**Keywords:** template, OET, OPT, design, rules, modeling, guidance, structure, lint, checks, validation
+**Keywords:** template, OET, OPT, design, rules, modeling, guidance, structure, lint, checks, validation, CGEM, composition
 
 ---
 
@@ -42,5 +42,11 @@
 - **Rule F1:** Always validate the template against the referenced archetypes.
 - **Rule F2:** For implementation, prefer the **OPT (Operational Template)** format as it is self-contained and stable for runtime use.
 - **Rule F3:** Use **Web Templates (JSON)** for UI development to simplify integration with modern web frameworks.
+
+## G. Dataset Splitting and Composition Type (CGEM)
+
+- **Rule G1:** When splitting a complex dataset across templates, classify datapoints as Global Background, Contextual Situation, Event Assessment, or Managed Response so each template has a clear composition semantics (see openehr://guides/templates/principles).
+- **Rule G2:** Use **event** compositions for data submitted repeatedly (each submission is a new composition). Use **persistent** compositions (longitudinal or episodic) when a single “current version” is maintained; episodic when scoped to a care journey (e.g. cancer pathway), longitudinal for lifetime scope (e.g. allergies).
+- **Rule G3:** Use Instruction and Action archetypes only for datapoints that require order/fulfilment tracking. If a form field is merely a record (e.g. “Seen by Key worker Y/N”), model it as simple data in a Contextual or Event template, not as Managed Response.
 
 ---
