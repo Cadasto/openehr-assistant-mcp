@@ -9,6 +9,19 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-02-21
+
+### Added
+- Docs: Added Norwegian Bokmål Language Standards Guide with specific conventions and terminology.
+- Docs: Added openEHR Archetype Language Standards Guide and reference formatting guide.
+- Docs: Added CGEM framework guidelines and refined composition semantics.
+- Docs: Added clinical modelling guidelines and clarified spec alignment practices.
+
+### Changed
+- Refactor: Moved transport option parsing to `CliOptions` helper.
+- Docs: Clarified usage of Instruction, Action, and Observation archetypes.
+- Docs: Updated archetype guides to reference language standards and per-language conventions.
+
 ## [0.12.0] - 2026-02-17
 
 ### Added
