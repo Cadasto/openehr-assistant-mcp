@@ -51,6 +51,12 @@ Archetypes describe what data means, not when or how it is collected. Workflow a
 
 ---
 
+## Instruction, Action, and Observation
+
+Match the archetype’s root to the concept: **order/request with fulfilment tracking** → use or reuse **Instruction** (and **Action**) archetypes; **one-off assessment or simple record** → use **Observation** or other entry types. Do not combine orders and observations in a single archetype.
+
+---
+
 ## Templates Are Not Archetypes
 
 Templates aggregate archetypes for specific use cases. If a model is scenario-specific, it belongs in a template, not an archetype.
