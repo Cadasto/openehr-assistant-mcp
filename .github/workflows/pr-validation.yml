@@ -22,11 +22,11 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
 
-      - name: Run PHPUnit
-        run: composer test
-
       - name: Run PHPStan
         run: composer check:phpstan
+
+      - name: Run PHPUnit
+        run: composer test
 
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
