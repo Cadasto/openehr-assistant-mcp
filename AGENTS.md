@@ -115,6 +115,7 @@ composer test:coverage
 
 ### Guides and specification alignment
 
+- **Guide markdown style:** See `resources/guides/README.md` for header block (Scope/Purpose, Related, Keywords), section heading style (lettered vs numeric), rule numbering, code blocks, and checklist style (☑ vs `- [ ]`).
 - When adding or editing guides (e.g. under `resources/guides/`) or prompts that describe a standard (e.g. AQL), keep wording aligned with the authoritative spec and any formal grammar in the repo:
 - Avoid duplicate or misplaced paragraphs in guide files.
 - **Archetypes/templates**: Guides under `resources/guides/archetypes/` and `resources/guides/templates/` should stay consistent with openEHR modelling docs and ADL/OET conventions referenced in the project.
