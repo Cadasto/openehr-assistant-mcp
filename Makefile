@@ -1,4 +1,4 @@
-.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio inspector inspector-stop
+.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio inspector inspector-stop sync-skills
 
 # Default target
 .DEFAULT_GOAL := help
@@ -70,3 +70,8 @@ inspector: ## Run modelcontextprotocol/inspector UI
 
 inspector-stop: ## Stop the modelcontextprotocol/inspector UI container
 	docker stop inspector
+
+##@ Cursor / Claude Code skills
+
+sync-skills: ## Sync skills/ to .cursor/skills/ and .claude/skills/ (run after clone or when editing skills)
+	@bash scripts/sync-skills.sh

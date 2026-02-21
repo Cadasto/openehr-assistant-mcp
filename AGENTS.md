@@ -16,6 +16,7 @@ These guidelines summarize the high-level architecture, coding conventions, and 
 - `src/CompletionProviders`: completion providers implementing `Mcp\Capability\Completion\ProviderInterface`.
 - `src/Apis`: internal API clients for CKM and other services.
 - `resources/`: static assets such as guides, BMM JSON, and terminology files.
+- `skills/`: canonical Cursor/Claude Code skill wrappers (one per guide category); synced to `.cursor/skills/` and `.claude/skills/` so both IDEs discover them. Skills point at `resources/guides/`; do not duplicate guide content in skill files.
 - `tests/`: PHPUnit tests and configuration for tools, prompts, resources, and completion providers.
 
 ## Configuration & Environment
@@ -106,6 +107,16 @@ composer test
 composer check:phpstan
 composer test:coverage
 ```
+
+### Cursor / Claude Code skills (one-time setup)
+
+Project skills expose openEHR guides to Cursor and Claude Code. The canonical skill wrappers live in `skills/` and reference `resources/guides/` (single source of truth). To make Cursor and Claude Code discover them, run once after clone or when editing skills:
+
+```bash
+make sync-skills
+```
+
+This copies `skills/*` into `.cursor/skills/` and `.claude/skills/`. Do not duplicate guide content in skill files; keep it only in `resources/guides/`.
 
 ## Additional notes
 
