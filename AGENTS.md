@@ -116,7 +116,11 @@ composer test:coverage
 ### Guides and specification alignment
 
 - **Guide markdown style:** See `resources/guides/README.md` for header block (Scope/Purpose, Related, Keywords), section heading style (lettered vs numeric), rule numbering, code blocks, and checklist style (☑ vs `- [ ]`).
-- When adding or editing guides (e.g. under `resources/guides/`) or prompts that describe a standard (e.g. AQL), keep wording aligned with the authoritative spec and any formal grammar in the repo:
+- When adding or editing guides (e.g. under `resources/guides/`) or prompts that describe a standard (e.g. AQL), keep wording aligned with the authoritative spec and any formal grammar in the repo.
 - Avoid duplicate or misplaced paragraphs in guide files.
 - **Archetypes/templates**: Guides under `resources/guides/archetypes/` and `resources/guides/templates/` should stay consistent with openEHR modelling docs and ADL/OET conventions referenced in the project.
 - **Simplified Formats**: Spec in `docs/flat/*.adoc` (Flat and Structured JSON serialization; Web Template field identifiers, ctx, pipe suffixes, underscore prefix). Guides under `resources/guides/simplified_formats/` should align with that spec.
+
+### Clinical modelling and governance
+
+- When adding or changing guidance on archetypes, templates, or clinical modelling, uphold: **two-level modelling** (RM vs archetype/template); **single-concept archetypes**; **no workflow/UI in archetypes** (those belong in templates or apps); **reusability and semantic correctness** over app-specific convenience; **CKM and spec alignment**.
