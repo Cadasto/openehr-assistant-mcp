@@ -40,6 +40,8 @@ Never substitute a more "convenient" RM type.
 
 **Rule:** Never interchange them.
 
+**Container Cardinality Default:** Containers (CLUSTER, ITEM_LIST, items/events) should default to `1..*` (at least one child) — empty containers have no semantic meaning. Constrain only when clinically justified.
+
 ---
 
 ## 4. Optionality: Prefer Existence Over Structure

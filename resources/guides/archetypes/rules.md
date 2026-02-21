@@ -25,7 +25,7 @@
 ## C. Structural Modelling
 
 - **C1:** RM structures SHALL be used as intended; do not compensate for missing application features.
-- **C2:** Cardinalities SHALL be justified by clinical reality, not UI convenience.
+- **C2:** Cardinalities SHALL be justified by clinical reality, not UI convenience. Container cardinality defaults to `1..*` (at least one child); empty containers are semantically invalid.
 - **C3:** Maximise optionality in archetypes; restriction belongs in templates.
 - **C4:** Leaf nodes SHALL use appropriate RM data types (DV_QUANTITY, DV_CODED_TEXT, etc.).
 - **C5:** Repeating structures SHALL use RM repetition, not duplicated nodes.
@@ -113,6 +113,6 @@ Validity rules enforced by tooling:
 - C_ATTRIBUTE: `Rm_attribute_name_valid`, `Existence_set`, `Children_validity`
 - C_MULTIPLE_ATTRIBUTE: `Cardinality_valid`, `Members_valid`
 - ARCHETYPE_SLOT: `Includes_valid`, `Excludes_valid`, `Validity`
-- ARCHETYPE_INTERNAL_REF: `target_path` 
+- ARCHETYPE_INTERNAL_REF: `target_path`
 
 ---
