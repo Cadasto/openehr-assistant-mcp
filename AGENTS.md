@@ -124,3 +124,13 @@ composer test:coverage
 ### Clinical modelling and governance
 
 - When adding or changing guidance on archetypes, templates, or clinical modelling, uphold: **two-level modelling** (RM vs archetype/template); **single-concept archetypes**; **no workflow/UI in archetypes** (those belong in templates or apps); **reusability and semantic correctness** over app-specific convenience; **CKM and spec alignment**.
+
+## Learned User Preferences
+
+- When updating guides under `resources/guides/`, prefer substantive improvements that add value; avoid trivial or small changes that do not improve the guidelines.
+- Guide content is consumed by AI agents: keep it short, concise, and scannable.
+
+## Learned Workspace Facts
+
+- Repo tooling that can be implemented in PHP should live as classes in `src/` with CLI entrypoints (e.g. `scripts/*.php`) and `composer.json` script entries; update AGENTS.md and related docs when changing such tooling.
+
