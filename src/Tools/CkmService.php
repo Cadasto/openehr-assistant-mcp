@@ -110,7 +110,7 @@ final readonly class CkmService
                     'status' => $item['status'] ?? null,
                     'revision' => $item['revision'] ?? null,
                     'creationTime' => $item['creationTime'] ?? null,
-                    'modificationTime' => $item['modificationTime'] ?? null,
+                    'modificationTime' => $item['modificationTime'] ?? $item['creationTime'] ?? null,
                     'score' => 0,
                 ];
                 foreach (explode(' ', trim($keyword)) as $k) {
@@ -135,7 +135,7 @@ final readonly class CkmService
                         default => 0,
                     };
                 }
-                return $new;
+                return array_filter($new, fn($v) => $v !== null);
             }, $data);
 
             // Calculate score for each item and sort
@@ -311,7 +311,7 @@ final readonly class CkmService
                     'status' => $item['status'] ?? null,
                     'version' => $item['versionAsset'] ?? null,
                     'creationTime' => $item['creationTime'] ?? null,
-                    'modificationTime' => $item['modificationTime'] ?? null,
+                    'modificationTime' => $item['modificationTime'] ?? $item['creationTime'] ??null,
                     'score' => 0,
                 ];
                 foreach (explode(' ', trim($keyword)) as $k) {
@@ -334,7 +334,7 @@ final readonly class CkmService
                         default => 0,
                     };
                 }
-                return $new;
+                return array_filter($new, fn($v) => $v !== null);
             }, $data);
 
             // Calculate score for each item and sort
