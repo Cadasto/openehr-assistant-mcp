@@ -89,6 +89,7 @@ final readonly class CkmService
                     'offset' => $offset,
                     'restrict-search-to-main-data' => 'true',
                     'require-all-search-words' => $requireAllSearchWords ? 'true' : 'false',
+                    'sort-key' => 'RELEVANCE',
                 ],
                 RequestOptions::HEADERS => [
                     'Accept' => 'application/json',
@@ -291,6 +292,7 @@ final readonly class CkmService
                     'template-type' => 'NORMAL',
                     'restrict-search-to-main-data' => 'true',
                     'require-all-search-words' => $requireAllSearchWords ? 'true' : 'false',
+                    'sort-key' => 'RELEVANCE',
                 ],
                 RequestOptions::HEADERS => [
                     'Accept' => 'application/json',
