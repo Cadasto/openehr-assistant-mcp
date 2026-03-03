@@ -1,6 +1,8 @@
+name: openehr-assistant-mcp
+
 services:
 
-  mcp:
+  app:
     image: cadasto/openehr-assistant-mcp:latest
     build:
       context: ..
@@ -11,7 +13,7 @@ services:
       - path: ./.env
         required: false
 
-  caddy:
+  ingress:
     image: caddy:2-alpine
     volumes:
       - caddy-data:/data
@@ -27,7 +29,7 @@ services:
       DOMAIN: ${DOMAIN:-local}
     restart: unless-stopped
     depends_on:
-      - mcp
+      - app
 
 volumes:
   caddy-data:

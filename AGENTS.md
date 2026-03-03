@@ -22,7 +22,7 @@ These guidelines summarize the high-level architecture, coding conventions, and 
 
 - **Runtime**:
   - Docker services (from `.docker/docker-compose.yml` and `.docker/docker-compose.dev.yml`):
-    - `mcp`: single service used for both production-like and development runs. Dev overrides mount the source and expose port 8343.
+    - `app`: application service used for both production-like and development runs. Dev overrides mount the source and expose port 8343. `ingress`: Caddy reverse proxy.
   - PHP 8.4 provided by multi-stage `.docker/Dockerfile`.
 - **Environment variables**: Configured in `.env` (see `.env.example`). Key variables:
   - `CKM_API_BASE_URL`: Base URL for the CKM REST API (default: `https://ckm.openehr.org/ckm/rest`).
@@ -83,17 +83,17 @@ Tool definitions are declared in `composer.json` under `scripts`.
 
 3. **Run PHPUnit**:
    ```bash
-   docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 mcp composer test
+   docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer test
 ```
 
 4. **Run PHPStan**:
    ```bash
-   docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 mcp composer check:phpstan
+   docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer check:phpstan
 ```
 
 5. **Run coverage (HTML)**:
    ```bash
-   docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 mcp composer test:coverage
+   docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer test:coverage
 ```
 
 ### Local (non-Docker) workflow

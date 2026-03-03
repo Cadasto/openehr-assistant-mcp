@@ -52,16 +52,16 @@ env: ## Copy .env.example to .env if not present
 	@echo ".env ready"
 
 install: ## Install PHP dependencies of dev container
-	$(DOCKER_COMPOSE_DEV) run --rm -u 1000:1000 mcp composer install
+	$(DOCKER_COMPOSE_DEV) run --rm -u 1000:1000 app composer install
 
 up-dev: ## Start dev container in background
 	$(DOCKER_COMPOSE_DEV) up -d --force-recreate
 
 sh: ## Open an interactive shell in dev container
-	-$(DOCKER_COMPOSE_DEV) exec -u 1000:1000 mcp sh || $(DOCKER_COMPOSE_DEV) run --rm -it -u 1000:1000 mcp sh
+	-$(DOCKER_COMPOSE_DEV) exec -u 1000:1000 app sh || $(DOCKER_COMPOSE_DEV) run --rm -it -u 1000:1000 app sh
 
 run-stdio: ## Run MCP server (stdio transport) in dev container
-	$(DOCKER_COMPOSE_DEV) run --rm mcp php public/index.php --transport=stdio
+	$(DOCKER_COMPOSE_DEV) run --rm app php public/index.php --transport=stdio
 
 ##@ MCP inspector UI
 

@@ -210,7 +210,7 @@ make up-dev
 #### 4) Install Composer dependencies
 
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 mcp composer install
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer install
 # or
 make install
 ```
@@ -225,7 +225,7 @@ make install
 Alternatively, use stdio by running a similar command to the following when you want your MCP client to launch the server process directly.
 
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec mcp php public/index.php --transport=stdio
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app php public/index.php --transport=stdio
 ```
 
 ---
@@ -239,7 +239,7 @@ Make sure your MCP client supports stdio transport and runs one of the following
 #### 1) From dev containers
 
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec mcp php public/index.php --transport=stdio
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app php public/index.php --transport=stdio
 ```
 
 #### 2) From a published Docker image
@@ -349,9 +349,9 @@ Note: Authorization headers are not required nor configured by default. If you n
 
 ### Testing and QA
 
-- Unit tests: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec mcp composer test` (PHPUnit 12)
-- Test with coverage: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec mcp composer test:coverage`
-- Static analysis: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec mcp composer check:phpstan`
+- Unit tests: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test` (PHPUnit 12)
+- Test with coverage: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test:coverage`
+- Static analysis: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer check:phpstan`
 
 Tips
 - You can also `make sh` and run `composer test` inside the container interactively.
@@ -369,7 +369,7 @@ Tips
   - `Apis/`: Internal API clients
   - `constants.php`: loads env and defaults
 - `.docker/`: Docker assets — `docker-compose.yml`, `docker-compose.dev.yml`, `Dockerfile`, `Caddyfile`, PHP/php-fpm config
-- `.docker/docker-compose.yml`: services (`mcp`, `caddy`) for production-like run (Caddy on 443)
+- `.docker/docker-compose.yml`: services (`app`, `ingress`) for production-like run (Caddy on 443)
 - `.docker/docker-compose.dev.yml`: dev overrides for services, exposing port 8343 via Caddy
 - `.docker/Dockerfile`: multi-stage PHP-FPM build (development, production)
 - `Makefile`: handy shortcuts

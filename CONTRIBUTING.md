@@ -45,11 +45,11 @@ Recommended developer workflow (inside Docker):
    - `make up-dev` (uses both docker-compose files from `.docker/`)
 4. `cp .env.example .env`
 5. Install dependencies inside the dev container:
-   - Compose: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec mcp composer install`
+   - Compose: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer install`
    - Make: `make install`
 
 Notes
-- Always execute PHP/Composer inside the `mcp` dev container to match PHP 8.4 and extensions.
+- Always execute PHP/Composer inside the `app` dev container to match PHP 8.4 and extensions.
 - On Windows/WSL2, edit within the WSL filesystem for performance.
 
 
@@ -65,7 +65,7 @@ Edit `.env` and set at least:
 Inside the dev container:
 - Streamable HTTP (default): available at `http://openehr-assistant-mcp.local:8343/mcp_openehr` when the services are up (`make up-dev` or the compose command above)
 - Stdio (one-off run):
-  - Compose: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm mcp php public/index.php --transport=stdio`
+  - Compose: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm app php public/index.php --transport=stdio`
   - Make: `make run-stdio`
 
 The entrypoint script is `public/index.php`. Available transports:
@@ -75,10 +75,10 @@ The entrypoint script is `public/index.php`. Available transports:
 
 ## Running tests and coverage
 - Full test suite:
-  - Compose: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec mcp composer test`
+  - Compose: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test`
   - Make (inside shell): `make sh` then run `composer test`
-- Run a subset: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec mcp vendor\bin\phpunit --filter SomeTest`
-- Coverage HTML report: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec mcp composer test:coverage`
+- Run a subset: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app vendor\bin\phpunit --filter SomeTest`
+- Coverage HTML report: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test:coverage`
 
 Testing policy:
 - Tests live under `tests/` with namespace `Cadasto\\OpenEHR\\MCP\\Assistant\\Tests` (see `tests/phpunit.xml`).
@@ -104,13 +104,13 @@ final class SmokeTest extends TestCase
 
 To run a single test class:
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec mcp vendor\bin\phpunit --filter SmokeTest
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app vendor\bin\phpunit --filter SmokeTest
 ```
 
 
 ## Static analysis and code style
 - Coding standard: PSR-12. Use PHP CS Fixer (or IDE) if available.
-- Static analysis (PHPStan): `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec mcp composer check:phpstan`
+- Static analysis (PHPStan): `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer check:phpstan`
 - Keep methods small; use typed signatures; add phpdoc where types aren’t obvious.
 
 
@@ -133,7 +133,7 @@ docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml e
 
 
 ## Troubleshooting tips
-- Port `8343` conflicts: adjust published port in `.docker/docker-compose.dev.yml`.
+- Port `8343` conflicts: adjust published port for the `ingress` service in `.docker/docker-compose.dev.yml`.
 - Coverage requires Xdebug; use the `composer test:coverage` script which sets `XDEBUG_MODE`.
 - SSL issues in dev: set `HTTP_SSL_VERIFY=false` (do not use in production).
 - Windows/WSL2: Prefer editing within the WSL filesystem for performance.

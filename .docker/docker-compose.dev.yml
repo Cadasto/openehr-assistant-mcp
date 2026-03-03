@@ -1,6 +1,6 @@
 services:
 
-  mcp:
+  app:
     image: cadasto/openehr-assistant-mcp-dev:latest
     build:
       context: ..
@@ -11,7 +11,7 @@ services:
       - ../:/app
       - composer-cache:/data/.cache/composer
 
-  caddy:
+  ingress:
     ports:
       - "8343:8343"
       - "80:80"
