@@ -11,10 +11,10 @@ RUN set -eux \
       ca-certificates \
     && update-ca-certificates \
     && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-# Add production PHP INI overlays (keep extension configs clean in docker/php)
-COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/
-COPY docker/php/zz-overwrites.ini /usr/local/etc/php/conf.d/
-COPY docker/php-fpm.d/docker.conf /usr/local/etc/php-fpm.d/
+# Add production PHP INI overlays (keep extension configs clean in .docker/php)
+COPY .docker/php/opcache.ini /usr/local/etc/php/conf.d/
+COPY .docker/php/zz-overwrites.ini /usr/local/etc/php/conf.d/
+COPY .docker/php-fpm.d/docker.conf /usr/local/etc/php-fpm.d/
 ENV APP_ENV=production
 # Source code location
 WORKDIR /app
@@ -24,7 +24,7 @@ EXPOSE 9000
 FROM base AS development
 # Development-specific settings and tools only
 ENV APP_ENV=development
-COPY docker/php/zz-development.ini /usr/local/etc/php/conf.d/
+COPY .docker/php/zz-development.ini /usr/local/etc/php/conf.d/
 # Defining XDG Base Directories for composer
 ENV XDG_CONFIG_HOME=/data/.config
 ENV XDG_CACHE_HOME=/data/.cache

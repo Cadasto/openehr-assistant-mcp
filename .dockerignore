@@ -16,7 +16,7 @@ LICENSE
 .DS_Store
 Thumbs.db
 
-# Docker
+# Docker (assets live in .docker/; ignore only if any legacy files at root)
 docker-compose*.yml
 Dockerfile*
 .dockerignore

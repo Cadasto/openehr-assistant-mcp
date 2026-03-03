@@ -3,10 +3,12 @@ services:
   mcp:
     image: cadasto/openehr-assistant-mcp-dev:latest
     build:
+      context: ..
+      dockerfile: .docker/Dockerfile
       target: development
     tty: true
     volumes:
-      - ./:/app
+      - ../:/app
       - composer-cache:/data/.cache/composer
 
   caddy:

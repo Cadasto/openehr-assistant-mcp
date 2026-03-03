@@ -42,7 +42,7 @@ jobs:
         id: push
         with:
           context: .
-          file: ./Dockerfile
+          file: ./.docker/Dockerfile
           target: production
           push: true
           platforms: linux/amd64

@@ -9,6 +9,9 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+### Changed
+- Docker: Moved all Docker assets into `.docker/` (Dockerfile, docker-compose.yml, docker-compose.dev.yml, Caddyfile, php/, php-fpm.d/). Makefile, docs, and GitHub Actions updated to use `.docker/` paths.
+
 ## [0.13.0] - 2026-02-21
 
 ### Added

@@ -3,6 +3,8 @@ services:
   mcp:
     image: cadasto/openehr-assistant-mcp:latest
     build:
+      context: ..
+      dockerfile: .docker/Dockerfile
       target: production
     restart: unless-stopped
     env_file:
@@ -14,8 +16,8 @@ services:
     volumes:
       - caddy-data:/data
       - caddy-config:/config
-      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./public:/app/public:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../public:/app/public:ro
     hostname: openehr-assistant-mcp.${DOMAIN:-local}
     ports:
       - "80:80"
