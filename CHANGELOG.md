@@ -9,9 +9,12 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-03-03
+
 ### Changed
 - Docker: Moved all Docker assets into `.docker/` (Dockerfile, docker-compose.yml, docker-compose.dev.yml, Caddyfile, php/, php-fpm.d/). Makefile, docs, and GitHub Actions updated to use `.docker/` paths.
 - Docker Compose: Renamed services `mcp` → `app`, `caddy` → `ingress`; updated Caddyfile, Makefile, and docs accordingly.
+- Dependencies: Updated composer dependencies to latest versions.
 
 ## [0.13.0] - 2026-02-21
 
