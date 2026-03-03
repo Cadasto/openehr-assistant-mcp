@@ -17,28 +17,20 @@
 }
 
 (server_conf) {
-    # 0. Root MUST be defined early so other directives know where files are
-    root * /app/public
-
     # 1. Block crawlers and robots
     respond /robots.txt "User-agent: *\nDisallow: /"
 
     # 2. Return an early 204 No Content for favicon images
-    # We use a matcher to group these together
     @ignored_files {
         path /favicon.ico
     }
     error @ignored_files 204
 
-    # 3. Explicitly wire PHP-FPM ping path
-    reverse_proxy /health/status app:9000 {
-        transport fastcgi {
-            split .php
-        }
+    # 3. Proxy all requests to the Node.js MCP server (port 3000)
+    reverse_proxy app:3000 {
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Real-IP {remote_host}
     }
-
-    # Enable PHP processing via FastCGI
-    php_fastcgi app:9000
 
     # Security headers
     header {
@@ -57,15 +49,9 @@
     tls {
         protocols tls1.3
     }
-
-    # Serve static files
-    file_server
 }
 
 # HTTP development server (no TLS)
 :8343 {
     import server_conf
-
-    # Serve static files
-    file_server
 }

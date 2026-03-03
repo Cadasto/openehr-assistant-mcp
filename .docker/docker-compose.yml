@@ -19,7 +19,6 @@ services:
       - caddy-data:/data
       - caddy-config:/config
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - ../public:/app/public:ro
     hostname: openehr-assistant-mcp.${DOMAIN:-local}
     ports:
       - "80:80"

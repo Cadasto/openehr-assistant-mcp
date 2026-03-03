@@ -3,7 +3,8 @@
 [![PR validation](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/pr-validation.yml/badge.svg)](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/pr-validation.yml)
 [![Release Docker image (GHCR)](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/release.yml/badge.svg)](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PHP Version](https://img.shields.io/badge/php-8.4-blue.svg)](https://www.php.net/)
+[![Node.js Version](https://img.shields.io/badge/node-22-green.svg)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
 [![MCP](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-orange.svg)](https://modelcontextprotocol.io/)
 
 The MCP Server to assist end-user on various [openEHR](https://openehr.org/) related tasks and APIs.
@@ -39,15 +40,14 @@ This server augments these workflows by providing AI assistants with direct acce
 - Guided Prompts help orchestrate multi-step workflows.
 - Run remotely (endpoint URL: https://openehr-assistant-mcp.apps.cadasto.com/) or locally (transports: streamable HTTP and stdio)
 
-### Implementation aspects 
+### Implementation aspects
 
-- Made with PHP 8.4; PSR-compliant codebase
-- Attribute-based MCP tool discovery (via https://github.com/mcp/sdk) with file-based cache
-- Attribute-based MCP prompt discovery (seeded conversations for complex tasks) with file-based cache
+- Made with TypeScript/Node.js 22; strict-mode ESM codebase
+- Latest `@modelcontextprotocol/sdk` for tools, prompts, resources, and completion providers
 - MCP Resource templates and Completion Providers for better UX in MCP clients
-- Transports: streamable HTTP and stdio (for development)
-- Docker images for production and development
-- Structured logging with Monolog
+- Transports: streamable HTTP (via Express) and stdio
+- Docker images for production and development (Node.js 22 Alpine)
+- Structured logging with Winston
 
 ----
 
@@ -207,10 +207,10 @@ docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml u
 make up-dev
 ```
 
-#### 4) Install Composer dependencies
+#### 4) Install Node.js dependencies
 
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer install
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app npm install
 # or
 make install
 ```
@@ -225,7 +225,7 @@ make install
 Alternatively, use stdio by running a similar command to the following when you want your MCP client to launch the server process directly.
 
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app php public/index.php --transport=stdio
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app node dist/index.js --transport=stdio
 ```
 
 ---
@@ -239,13 +239,13 @@ Make sure your MCP client supports stdio transport and runs one of the following
 #### 1) From dev containers
 
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app php public/index.php --transport=stdio
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app node dist/index.js --transport=stdio
 ```
 
 #### 2) From a published Docker image
 
 ```bash
-docker run --rm -i ghcr.io/cadasto/openehr-assistant-mcp:latest php public/index.php --transport=stdio
+docker run --rm -i ghcr.io/cadasto/openehr-assistant-mcp:latest node dist/index.js --transport=stdio
 ```
 
 ---
@@ -268,7 +268,7 @@ In most cases, add **one** of the following server configurations:
       "args": [
         "run", "-i", "--rm",
         "ghcr.io/cadasto/openehr-assistant-mcp:latest",
-        "php", "public/index.php", "--transport=stdio"
+        "node", "dist/index.js", "--transport=stdio"
       ]
     },
     "openehr-assistant-mcp-http": {
@@ -330,50 +330,58 @@ The terminal may show `http://0.0.0.0:6274/`; open it as `http://localhost:6274/
 - Build images: `make build` (prod) or `make build-dev` (dev)
 - Start services: `make up` (prod) or `make up-dev` (dev override with live volume mounts)
 - Prepare `.env`: `make env`
-- Install dependencies in dev container: `make install`
+- Install dependencies: `make install`
 - Tail logs: `make logs`
 - Open shell in dev container: `make sh`
+- Run tests: `make test`
+- Type check: `make typecheck`
+- Lint: `make lint`
 - Run MCP inspector: `make inspector`
 - Show help: `make help`
 
 ### Environment Variables
 
 - `APP_ENV`: application environment (`development`/`testing`/`production`). Default: `production`
-- `LOG_LEVEL`: Monolog level (`debug`, `info`, `warning`, `error`, etc.). Default: `info`
+- `LOG_LEVEL`: Winston log level (`debug`, `info`, `warning`, `error`, etc.). Default: `info`
 - `CKM_API_BASE_URL`: base URL for the openEHR CKM REST API. Default: `https://ckm.openehr.org/ckm/rest`
-- `HTTP_TIMEOUT`: HTTP client timeout in seconds (float). Default: `3.0`
-- `HTTP_SSL_VERIFY`: set to `false` to disable verification or provide a CA bundle path. Default: `true`
-- `XDG_DATA_HOME`: directory for application data, including cache and sessions. Default: `/tmp` (the app uses `XDG_DATA_HOME/app` or `/tmp/app`)
+- `HTTP_TIMEOUT`: HTTP client timeout in seconds. Default: `10`
+- `HTTP_SSL_VERIFY`: set to `false` to disable SSL verification. Default: `true`
+- `XDG_DATA_HOME`: directory for application data. Default: `/tmp`
+- `PORT`: HTTP port for the Node.js MCP server. Default: `3000`
 
-Note: Authorization headers are not required nor configured by default. If you need to add auth to your upstream openEHR/CKM server, extend the HTTP client in `src/Apis` to add the appropriate headers.
+Note: Authorization headers are not required nor configured by default. If you need to add auth to your upstream openEHR/CKM server, extend the HTTP client in `src/apis/ckmClient.ts` to add the appropriate headers.
 
 ### Testing and QA
 
-- Unit tests: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test` (PHPUnit 12)
-- Test with coverage: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test:coverage`
-- Static analysis: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer check:phpstan`
+- Unit tests: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app npm test` (Vitest)
+- Test with coverage: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app npm run test:coverage`
+- Type checking: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app npm run typecheck`
+- Linting: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app npm run lint`
 
-Tips
-- You can also `make sh` and run `composer test` inside the container interactively.
+Tips:
+- You can also `make sh` and run `npm test` inside the container interactively.
+- To run a single test file: `npx vitest run tests/tools/ckmService.test.ts`
 
 ### Project Structure
 
-- `public/index.php`: MCP server entry point
+- `src/index.ts`: MCP server entry point
+- `src/server.ts`: MCP server builder (registers all tools, prompts, resources)
 - `resources/`: various resources used or exposed by the server
 - `src/`
-  - `Tools/`: MCP Tools (Definition, EHR, Composition, Query)
-  - `Prompts/`: MCP Prompts (including `AbstractPrompt` for loading Markdown-based prompts)
-  - `Resources/`: MCP Resources and Resource Templates
-  - `CompletionProviders/`: MCP Completion Providers
-  - `Helpers/`: Internal helpers (e.g., content type and ADL mapping)
-  - `Apis/`: Internal API clients
-  - `constants.php`: loads env and defaults
-- `.docker/`: Docker assets — `docker-compose.yml`, `docker-compose.dev.yml`, `Dockerfile`, `Caddyfile`, PHP/php-fpm config
+  - `tools/`: MCP Tool service classes
+  - `prompts/`: MCP Prompt classes (extending `AbstractPrompt`)
+  - `resources/`: MCP Resource reader functions
+  - `completionProviders/`: MCP Completion Provider classes
+  - `helpers/`: Internal helpers (format mapping, CLI parsing)
+  - `apis/`: Internal API clients (CKM)
+  - `constants.ts`: environment variable loading and defaults
+  - `logger.ts`: Winston logger factory
+- `.docker/`: Docker assets — `docker-compose.yml`, `docker-compose.dev.yml`, `Dockerfile`, `Caddyfile`
 - `.docker/docker-compose.yml`: services (`app`, `ingress`) for production-like run (Caddy on 443)
-- `.docker/docker-compose.dev.yml`: dev overrides for services, exposing port 8343 via Caddy
-- `.docker/Dockerfile`: multi-stage PHP-FPM build (development, production)
+- `.docker/docker-compose.dev.yml`: dev overrides, exposing port 8343 via Caddy, live reload via tsx
+- `.docker/Dockerfile`: multi-stage Node.js 22 Alpine build (development, production)
 - `Makefile`: handy shortcuts
-- `tests/`: PHPUnit and PHPStan config and tests
+- `tests/`: Vitest tests mirroring `src/` structure
 
 ----
 
@@ -394,7 +402,7 @@ MIT License - see `LICENSE`.
 This project is inspired by and is grateful to:
 - The original Python openEHR MCP Server: https://github.com/deak-ai/openehr-mcp-server
 - [Seref Arikan](https://www.linkedin.com/in/seref-arikan/), [Sidharth Ramesh](https://www.linkedin.com/in/sidharthramesh1/) - for inspiration on MCP integration
-- The PHP MCP Server framework: https://github.com/modelcontextprotocol/php-sdk
+- The TypeScript MCP Server SDK: https://github.com/modelcontextprotocol/typescript-sdk
 - [Ocean Health Systems](https://oceanhealthsystems.com/) for the Clinical Knowledge Manager (CKM), an essential tool for the openEHR community that enables collaborative development and sharing of archetypes and templates.
 - [freshEHR](https://www.freshehr.com/) for the CGEM framework (Contextual situation, Global background, Event assessment, Managed response), which informs our template-design guides on splitting datasets and composition semantics (CC-BY).
 - [Silje Ljosland Bakke](https://github.com/siljelb) - for the contribution to the archetype and language related guides. 

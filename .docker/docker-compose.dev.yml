@@ -9,7 +9,8 @@ services:
     tty: true
     volumes:
       - ../:/app
-      - composer-cache:/data/.cache/composer
+      - npm-cache:/home/node/.npm
+    command: ["node", "--import", "tsx/esm", "src/index.ts"]
 
   ingress:
     ports:
@@ -19,4 +20,4 @@ services:
       - "443:443/udp"
 
 volumes:
-  composer-cache:
+  npm-cache:

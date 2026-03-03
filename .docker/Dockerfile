@@ -1,65 +1,59 @@
-ARG PHP_VERSION=8.4
+ARG NODE_VERSION=22
 
 #
 # Application base
 #
-FROM php:${PHP_VERSION}-fpm-alpine AS base
-# Install extensions and tools
+FROM node:${NODE_VERSION}-alpine AS base
 RUN set -eux \
     && apk update && apk upgrade --no-cache \
-    && apk add --no-cache \
-      ca-certificates \
-    && update-ca-certificates \
-    && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-# Add production PHP INI overlays (keep extension configs clean in .docker/php)
-COPY .docker/php/opcache.ini /usr/local/etc/php/conf.d/
-COPY .docker/php/zz-overwrites.ini /usr/local/etc/php/conf.d/
-COPY .docker/php-fpm.d/docker.conf /usr/local/etc/php-fpm.d/
+    && apk add --no-cache ca-certificates \
+    && update-ca-certificates
 ENV APP_ENV=production
-# Source code location
+ENV NODE_ENV=production
 WORKDIR /app
-EXPOSE 9000
+EXPOSE 3000
 
 
+#
+# Development image (includes dev tools and dev dependencies)
+#
 FROM base AS development
-# Development-specific settings and tools only
 ENV APP_ENV=development
-COPY .docker/php/zz-development.ini /usr/local/etc/php/conf.d/
-# Defining XDG Base Directories for composer
-ENV XDG_CONFIG_HOME=/data/.config
-ENV XDG_CACHE_HOME=/data/.cache
-# Install PHP extensions and minimal OS tools in a single layer
-COPY --chmod=0755 --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+ENV NODE_ENV=development
 RUN set -eux \
-    && mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini" \
-    && adduser -S -u 1000 -G www-data local-user \
-    && apk add --no-cache \
-      git \
-    && install-php-extensions \
-      xdebug \
-      @composer \
-    && mkdir -m 0775 -p "$XDG_CONFIG_HOME/composer" "$XDG_CACHE_HOME/composer" \
-    && chown -R local-user:www-data "$XDG_CONFIG_HOME/composer" "$XDG_CACHE_HOME/composer"
-USER www-data
+    && adduser -S -u 1000 -G node local-user \
+    && apk add --no-cache git
+USER node
+
 
 #
-# PHP Dependencies builder (production deps only)
+# Node.js production dependencies builder
 #
-FROM base AS vendor-builder
-COPY composer.json ./composer.json
-COPY composer.lock ./composer.lock
-COPY public ./public
+FROM base AS deps-builder
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev --ignore-scripts
+
+
+#
+# TypeScript compiler stage
+#
+FROM base AS ts-builder
+COPY package.json package-lock.json* tsconfig.json ./
+RUN npm ci --ignore-scripts
 COPY src ./src
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --no-interaction --no-progress --no-ansi --no-scripts --no-dev --classmap-authoritative --optimize-autoloader
+RUN npm run build
 
 
 #
 # Application (production)
 #
 FROM base AS production
-COPY --from=vendor-builder /app/public ./public
-COPY --from=vendor-builder /app/src ./src
-COPY --from=vendor-builder /app/vendor ./vendor
+# Compiled JavaScript
+COPY --from=ts-builder /app/dist ./dist
+# Production node_modules
+COPY --from=deps-builder /app/node_modules ./node_modules
+COPY --from=ts-builder /app/package.json ./package.json
+# Static resources (guides, bmm, terminology, prompts) — unchanged from PHP version
 COPY resources ./resources
-USER www-data
+USER node
+CMD ["node", "dist/index.js"]

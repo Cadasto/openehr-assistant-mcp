@@ -1,4 +1,4 @@
-.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio inspector inspector-stop
+.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio test typecheck lint inspector inspector-stop
 
 # Default target
 .DEFAULT_GOAL := help
@@ -22,7 +22,7 @@ help: ## Display this help message
 
 ##@ Container Management
 
-up: ## Start dev containers in background
+up: ## Start prod containers in background
 	$(DOCKER_COMPOSE) up -d --force-recreate
 
 down: ## Stop all services (dev/prod) and keep data
@@ -51,8 +51,8 @@ env: ## Copy .env.example to .env if not present
 	@test -f .env || cp .env.example .env
 	@echo ".env ready"
 
-install: ## Install PHP dependencies of dev container
-	$(DOCKER_COMPOSE_DEV) run --rm -u 1000:1000 app composer install
+install: ## Install Node.js dependencies
+	npm install
 
 up-dev: ## Start dev container in background
 	$(DOCKER_COMPOSE_DEV) up -d --force-recreate
@@ -61,7 +61,16 @@ sh: ## Open an interactive shell in dev container
 	-$(DOCKER_COMPOSE_DEV) exec -u 1000:1000 app sh || $(DOCKER_COMPOSE_DEV) run --rm -it -u 1000:1000 app sh
 
 run-stdio: ## Run MCP server (stdio transport) in dev container
-	$(DOCKER_COMPOSE_DEV) run --rm app php public/index.php --transport=stdio
+	$(DOCKER_COMPOSE_DEV) run --rm app node --import tsx/esm src/index.ts --transport=stdio
+
+test: ## Run tests (Vitest)
+	$(DOCKER_COMPOSE_DEV) exec -u 1000:1000 app npm test
+
+typecheck: ## Run TypeScript type checking
+	$(DOCKER_COMPOSE_DEV) exec -u 1000:1000 app npm run typecheck
+
+lint: ## Run ESLint
+	$(DOCKER_COMPOSE_DEV) exec -u 1000:1000 app npm run lint
 
 ##@ MCP inspector UI
 
