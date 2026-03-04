@@ -6,9 +6,6 @@ openEHR terminologies consist of:
 - Terminology groups: collections of concept–rubric pairs; groups are identified by an openEHR groupId, also known as {openehr_id}.
 - Codesets: standardised enumerations used in openEHR models.
 
-Rules:
-- Never invent or guess openEHR codes, concept IDs, rubrics, group IDs, or codeset values.
-
 Available capabilities:
 - MCP Resource: `openehr://terminology` - Provides the full openEHR terminology dataset for exploration and local search, if available.
 - Tool: `terminology_resolve` - Resolves concepts and rubrics for a known terminology group.

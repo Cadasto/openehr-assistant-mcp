@@ -12,10 +12,6 @@ openEHR guides provide:
 - Terminology integration guidance
 - Checklists for review and validation
 
-Rules:
-- Never invent or guess guide names, categories, or URIs.
-- Always use the tools to discover and retrieve guide content.
-
 Available capabilities:
 - Tool: `guide_search` - Search bundled guides by query and return short snippets with canonical openehr://guides URIs. Use this to discover relevant guides.
 - Tool: `guide_get` - Retrieve the full markdown content of a guide by its canonical URI or by (category, name).

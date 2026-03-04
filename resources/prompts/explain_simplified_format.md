@@ -15,7 +15,7 @@ Interpretation Rules:
 - Identify **context** (ctx/ or ctx object): language, territory, composer, time, setting, etc.
 - Explain **path structure**: template/root id, node ids, instance indices (:0, :1), pipe suffixes (|magnitude, |code), underscore-prefixed RM attributes.
 - Relate keys to **RM types** where obvious (DV_QUANTITY, DV_CODED_TEXT, PARTY_PROXY).
-- Do not invent template ids or paths; if the template is unknown, describe structure and conventions only.
+- If the template is unknown, describe structure and conventions only.
 
 Required Output:
 1) **Format variant**: Flat (key–value) or Structured (nested).
