@@ -117,33 +117,35 @@ Example: `Category` for an overarching grouping for an intervention identified i
 
 - **E1:** Translations are NOT literal word-for-word conversions; they SHALL preserve clinical intent while using natural phrasing in the target language.
 
-- **E2:** Each translated archetype SHALL use the target language's established clinical register, terminology, and grammatical conventions.
+- **E2:** Each translated archetype SHALL use the target language's established clinical register, terminology, and grammatical conventions. 
 
-- **E3:** Translated term definitions (term_definitions in target language) SHALL be clinically appropriate and idiomatic in the target language, even if phrasing differs from the English source.
+- **E3:** Translated term definitions (term_definitions in target language) SHALL be clinically appropriate and idiomatic in the target language, even if phrasing differs from the English source. Follow authority language guidelines (e.g., SNOMED CT translation rules for the target language).
 
 - **E4:** All metadata elements (Purpose, Use, Misuse, descriptions) SHALL be translated to reflect clinical practice and terminology in the target language/locale.
 
 - **E5:** Translations SHALL NOT alter:
-  - Internal identifiers (at-codes, ac-codes)
+  - Internal identifiers (at-codes, ac-codes, id-codes)
   - Archetype structure (path hierarchy)
-  - Computable constraints (cardinalities, occurrences)
-  - External terminology bindings (SNOMED CT, LOINC codes remain identical)
+  - Constraints (occurrences, cardinalities), units, value sets
+  - Existing terminology bindings (SNOMED CT, LOINC codes remain identical)
 
 - **E6:** Consistency within a translated archetype SHALL be maintained: the same translated term SHOULD be used for the same at-code throughout the translation.
 
+- **E7:** If source text is ambiguous or incorrect, provide a best-effort translation and flag it in warnings/notes for clinical review. Do not invent new concepts, merge/split terms, change scope, or alter numeric/code systems.
+
 ### Per-Language Guidance Structure
 
-- **E7:** Language-specific guidance documents MAY be created following the pattern: `language-standards-<iso-639-1-code>.md`
+- **E8:** Language-specific guidance documents MAY be created following the pattern: `language-standards-<iso-639-1-code>.md`
   - Examples: `language-standards-nb.md` (Norwegian Bokmål), `language-standards-de.md` (German), `language-standards-fr.md` (French)
 
-- **E8:** Per-language guides SHALL:
+- **E9:** Per-language guides SHALL:
   - Establish clinical terminology standards for the target language
   - Document established translations of common archetype terms
   - Provide examples of Purpose/Use/Misuse statements in the target language
   - Reference authoritative clinical terminology sources for the language/region
   - Maintain consistency with this base English language standards guide
 
-- **E9:** Per-language guides SHOULD extend this guide by:
+- **E10:** Per-language guides SHOULD extend this guide by:
   - Specifying which translation approach (formal, natural, hybrid) is appropriate for the language
   - Documenting established terminology in target-language clinical registers
   - Providing example archetypes with proper translations
@@ -228,37 +230,41 @@ uttrykt som systolisk/diastolisk i mmHg.
 
 ---
 
-## H. Prohibited Practices
+## H. Prohibited Practices (Translation and Terminology)
 
 - **H1:** Do NOT use spelling variants within a single archetype's English source (e.g., mixing "foetus" and "fetus").
 
 - **H2:** Do NOT create multiple at-codes for spelling or terminology variants of the same clinical concept.
 
-- **H3:** Do NOT translate class names (ACTION, OBSERVATION, INSTRUCTION) or internal RM type names.
+- **H3:** Do NOT translate archetype class names (e.g., ACTION, OBSERVATION, CLUSTER, INSTRUCTION) or internal RM type names.
 
-- **H4:** Do NOT alter archetype structure, identifiers, paths, or constraints during translation.
+- **H4:** During translation, NEVER change: node identifiers (at-codes, ac-codes, id-codes); reference model structure or paths; constraints (occurrences, cardinalities); units; value sets; or existing terminology bindings.
 
-- **H5:** Do NOT encode locale-specific legal requirements, healthcare system models, or regional medical assumptions in archetype semantics.
+- **H5:** Do NOT invent new concepts, merge/split terms, change scope, or alter numeric/code systems when translating.
 
-- **H6:** Do NOT use colloquialisms, idioms, or culturally-specific language in original English archetype text intended for international reuse.
+- **H6:** Do NOT encode locale-specific legal requirements, healthcare system models, or regional medical assumptions in archetype semantics.
+
+- **H7:** Do NOT use colloquialisms, idioms, or culturally-specific language in original English archetype text intended for international reuse.
 
 ---
 
 ## I. Consistency Checklist
 
-- ☑ Original language is English (en)
-- ☑ Concept names use sentence case and do NOT end with full stop
-- ☑ All descriptions, Purpose, Use, Misuse statements end with full stop
-- ☑ Data element names follow established patterns and do NOT end with full stop
-- ☑ Data element descriptions contain clinical definition only; examples in comment field
-- ☑ Abbreviations placed immediately after terms
-- ☑ Same clinical concept uses same at-code throughout
-- ☑ Terminology is clinically neutral and internationally recognized
-- ☑ No regional/locale-specific semantics in archetype definitions
-- ☑ External bindings (SNOMED CT, LOINC) reference correct concept codes
-- ☑ Translations preserve intent while using target language clinical register
-- ☑ Translations do NOT alter structure, identifiers, or bindings
-- ☑ Per-language extensions (if created) reference this base guide
+- [ ] Original language is English (en)
+- [ ] Concept names use sentence case and do NOT end with full stop
+- [ ] All descriptions, Purpose, Use, Misuse statements end with full stop
+- [ ] Data element names follow established patterns and do NOT end with full stop
+- [ ] Data element descriptions contain clinical definition only; examples in comment field
+- [ ] Abbreviations placed immediately after terms
+- [ ] Same clinical concept uses same at-code throughout
+- [ ] Terminology is clinically neutral and internationally recognized
+- [ ] No regional/locale-specific semantics in archetype definitions
+- [ ] External bindings (SNOMED CT, LOINC) reference correct concept codes
+- [ ] Translations preserve intent while using target language clinical register
+- [ ] Translations do NOT alter structure, identifiers, units, value sets, or bindings
+- [ ] Same source phrase → same translation; consistent grammatical forms
+- [ ] Ambiguous or incorrect source text flagged in warnings/notes
+- [ ] Per-language extensions (if created) reference this base guide
 
 ---
 
