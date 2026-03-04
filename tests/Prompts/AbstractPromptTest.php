@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Prompts;
 
 use Cadasto\OpenEHR\MCP\Assistant\Prompts\AbstractPrompt;
+use InvalidArgumentException;
 use Mcp\Schema\Content\PromptMessage;
 use Mcp\Schema\Content\TextContent;
 use Mcp\Schema\Enum\Role;
@@ -19,22 +20,30 @@ final class AbstractPromptTest extends TestCase
     protected function setUp(): void
     {
         $this->tempPromptsDir = '/tmp/temp_prompts';
-        if (!is_dir($this->tempPromptsDir)) {
-            mkdir($this->tempPromptsDir, 0777, true);
-        }
+        @mkdir($this->tempPromptsDir . '/_shared', 0777, true);
     }
 
     protected function tearDown(): void
     {
-        if (is_dir($this->tempPromptsDir)) {
-            $files = glob($this->tempPromptsDir . '/*');
-            foreach ($files as $file) {
-                if (is_file($file)) {
-                    unlink($file);
-                }
-            }
-            rmdir($this->tempPromptsDir);
+        if (!is_dir($this->tempPromptsDir)) {
+            return;
         }
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($this->tempPromptsDir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST,
+        );
+
+        foreach ($iterator as $item) {
+            if ($item->isDir()) {
+                rmdir((string) $item);
+                continue;
+            }
+
+            unlink((string) $item);
+        }
+
+        rmdir($this->tempPromptsDir);
     }
 
     private function getMockPrompt(string $promptsDir): AbstractPrompt
@@ -57,49 +66,42 @@ final class AbstractPromptTest extends TestCase
         };
     }
 
-    public function testLoadValidPrompt(): void
+    public function testLoadValidPromptComposesSharedAndTaskSpecificBlocks(): void
     {
-        $mdContent = <<<MD
-## Role: assistant
-
-You are a helpful assistant.
-
-## Role: user
-
-Hello!
-MD;
-        file_put_contents($this->tempPromptsDir . '/test_prompt.md', $mdContent);
+        file_put_contents($this->tempPromptsDir . '/_shared/policy.md', "## Role: assistant\n\nShared policy.");
+        file_put_contents($this->tempPromptsDir . '/test_prompt.md', "## Role: assistant\n\nTask instruction.\n\n## Role: user\n\nHello!");
 
         $promptInstance = $this->getMockPrompt($this->tempPromptsDir);
         $messages = $promptInstance->testLoad('test_prompt');
 
-        $this->assertIsArray($messages);
-        $this->assertCount(2, $messages);
-        $this->assertInstanceOf(PromptMessage::class, $messages[0]);
+        $this->assertCount(3, $messages);
         $this->assertEquals(Role::Assistant, $messages[0]->role);
+        $this->assertEquals('Shared policy.', $messages[0]->content->text);
+        $this->assertEquals(Role::Assistant, $messages[1]->role);
+        $this->assertEquals('Task instruction.', $messages[1]->content->text);
+        $this->assertEquals(Role::User, $messages[2]->role);
+        $this->assertEquals('Hello!', $messages[2]->content->text);
         $this->assertInstanceOf(TextContent::class, $messages[0]->content);
-        $this->assertEquals('You are a helpful assistant.', $messages[0]->content->text);
-
-        $this->assertEquals(Role::User, $messages[1]->role);
-        $this->assertEquals('Hello!', $messages[1]->content->text);
     }
 
     public function testLoadThrowsOnMissingFile(): void
     {
+        file_put_contents($this->tempPromptsDir . '/_shared/policy.md', "## Role: assistant\n\nShared policy.");
         $promptInstance = $this->getMockPrompt($this->tempPromptsDir);
-        $this->expectException(\InvalidArgumentException::class);
+
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Prompt file not found');
         $promptInstance->testLoad('non_existent');
     }
 
     public function testLoadThrowsOnInvalidFormat(): void
     {
-        file_put_contents($this->tempPromptsDir . '/invalid.md', "just some text without roles");
+        file_put_contents($this->tempPromptsDir . '/_shared/policy.md', "## Role: assistant\n\nShared policy.");
+        file_put_contents($this->tempPromptsDir . '/invalid.md', 'just some text without roles');
         $promptInstance = $this->getMockPrompt($this->tempPromptsDir);
-        $this->expectException(\InvalidArgumentException::class);
+
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid prompt file format');
         $promptInstance->testLoad('invalid');
     }
-
-
 }
