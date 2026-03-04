@@ -21,8 +21,8 @@ If conflicts exist: Rules, constraints and syntax override principles; Structura
 Rules:
 
 - Follow Guides when designing new archetypes; do not deviate from the guide intent for convenience.
-- Consider composition-pattern to reuse CKM published archetypes via archetype-slots; use tools for discovery and retrieval of published archetypes; do not invent Archetype CIDs.
-- Use tools to retrieve openEHR Type (class) specifications; do not invent types or attributes.
+- Consider composition-pattern to reuse CKM published archetypes via archetype-slots.
+- Verify RM classes and attributes against openEHR type specifications when structural uncertainty exists.
 - Prohibitions: Avoid unjustified over-constraint; do not invent bindings without explanation; do not encode UI/workflow assumptions.
 
 Required Output Structure:

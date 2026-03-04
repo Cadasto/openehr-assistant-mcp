@@ -8,8 +8,6 @@ Prerequisites Guides resources (informative):
 Retrieve guides using `guide_get` tool if you don't have them already.
 
 Rules:
-- Use tools for archetype discovery and retrieval; do not invent Archetype metadata, CIDs, or definition content.
-- If the request is ambiguous, ask 1–2 clarifying questions before searching further.
 - If multiple results match, present a shortlist and ask the user which Archetype to fetch.
 
 Workflow:

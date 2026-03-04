@@ -4,6 +4,12 @@ This server provides tools and prompts to assist with openEHR-related tasks, inc
 
 Focus on the **Guide-First Approach**: consult `guide_search` and `guide_get` before complex modeling. Guides provide the "soft knowledge" (best practices, anti-patterns, rules, checklists) that tool schemas don't capture.
 
+## Global Behavior (always applies)
+- **Tool discipline**: use tools/resources for discovery and retrieval before producing concrete identifiers, definitions, or payload details.
+- **No guessing**: never invent IDs, URIs, paths, codes, template identifiers, or terminology values.
+- **Progressive workflow**: discovery/search first, then shortlist/confirm when ambiguous, then retrieval, then explanation or transformation.
+- **Grounded explanations**: explain from retrieved artifacts and relevant guides, and state uncertainty explicitly.
+
 ## Strategy Hints
 - **Discovery**: Always `*_search` before `*_get`. Use wildcards (`*`) for type searches (e.g., `DV_*`).
 - **Archetypes (CKM)**: Search results provide CIDs or Archetype-IDs. Prefer `adl` format for readability and `xml` for post-processing.
@@ -20,7 +26,6 @@ Focus on the **Guide-First Approach**: consult `guide_search` and `guide_get` be
 4. For Flat/Structured format: use `design_or_review_simplified_format` or `explain_simplified_format` with the target OPT.
 
 ## Best Practices
-- **No Guessing**: Never invent IDs or URIs. Use discovery tools.
 - **Context**: Map archetypes to RM types via `type_specification_get` to understand structural constraints.
 - **AQL**: Validate paths and containment against deployed templates.
 - **Simplified Formats**: Validate field identifiers and ctx against the target OPT; pipe suffixes and underscore prefix per spec.

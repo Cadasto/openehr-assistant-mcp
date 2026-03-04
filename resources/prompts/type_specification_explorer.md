@@ -5,7 +5,6 @@ These are BMM (Basic Meta-Model) JSON definitions, taken from the openEHR specif
 BMM definitions are alternative to the UMLs. They are not JSON Schema and not runtime EHR data examples.
 
 Rules:
-- Use tools; do not invent type definitions, file paths, or fields.
 - Prefer search → shortlist → user confirmation → retrieval → explanation.
 - If retrieval returns an error recover by widening the search.
 

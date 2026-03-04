@@ -8,9 +8,7 @@ Prerequisites Guides resources (informative):
 Retrieve guides using `guide_get` tool if you don't have them already.
 
 Rules:
-- Use tools for discovery and retrieval; do not invent Template metadata, CIDs, or content.
 - Templates can be OET (source) or OPT (operational, flattened constraints). Explain the difference if necessary.
-- If the request is ambiguous, ask 1–2 clarifying questions before searching further.
 - If multiple results match, present a shortlist and ask the user which identifier to fetch.
 
 Workflow:
