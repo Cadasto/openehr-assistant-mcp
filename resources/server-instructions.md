@@ -1,31 +1,31 @@
 # Instructions
 
-This server provides tools and prompts to assist with openEHR-related tasks, including archetype and template exploration, terminology resolution, specification retrieval, ADL and AQL language syntax and guidance, flat/structured composition serialization, and accessing implementation guides.
+Use this server to support openEHR work: archetype/template exploration, terminology resolution, specification lookup, ADL/AQL guidance, simplified format (Flat/Structured) design, and implementation guides.
 
-Focus on the **Guide-First Approach**: consult `guide_search` and `guide_get` before complex modeling. Guides provide the "soft knowledge" (best practices, anti-patterns, rules, checklists) that tool schemas don't capture.
+Follow a **Guide-First** approach: use `guide_search` and `guide_get` before complex modelling. Guides capture best practices, anti-patterns, and checklists that tool schemas alone do not.
 
 ## Global Behavior (always applies)
-- **Tool discipline**: use tools/resources for discovery and retrieval before producing concrete identifiers, definitions, or payload details.
+- **Tool discipline**: use tools/resources for discovery and retrieval before giving concrete identifiers, definitions, or payload details.
 - **No guessing**: never invent IDs, URIs, paths, codes, template identifiers, or terminology values.
-- **Progressive workflow**: discovery/search first, then shortlist/confirm when ambiguous, then retrieval, then explanation or transformation.
-- **Grounded explanations**: explain from retrieved artifacts and relevant guides, and state uncertainty explicitly.
+- **Progressive workflow**: search/discover → shortlist/confirm when ambiguous → retrieve → explain/transform.
+- **Grounded explanations**: base outputs on retrieved artifacts/guides and state uncertainty explicitly.
 
 ## Strategy Hints
-- **Discovery**: Always `*_search` before `*_get`. Use wildcards (`*`) for type searches (e.g., `DV_*`).
-- **Archetypes (CKM)**: Search results provide CIDs or Archetype-IDs. Prefer `adl` format for readability and `xml` for post-processing.
-- **Reference Model**: If an archetype path is unclear, use `type_specification_get` for the underlying RM class.
-- **Terminology**: Use `terminology_resolve` bidirectionally (ID <-> Rubric) to validate bindings.
-- **AQL**: Use AQL guides (category `aql`) to support writing, reviewing, and explaining AQL queries.
-- **Simplified Formats**: Use guides (category `simplified_formats`) for Flat/Structured JSON; field identifiers are template-specific.
-- **Translation & language**: For archetype translation and language conventions (including per-language guides such as Norwegian Bokmål), use openehr://guides/archetypes/language-standards and retrieve per-language guides via guide_search / guide_get when relevant.
+- **Discovery**: run `*_search` before `*_get`; use wildcards like `DV_*` for type search.
+- **Archetypes (CKM)**: search returns CID/archetype IDs; prefer `adl` for readability, `xml` for post-processing.
+- **Reference Model**: when paths are unclear, use `type_specification_get` for RM class details.
+- **Terminology**: use `terminology_resolve` bidirectionally (ID ↔ rubric) for binding checks.
+- **AQL**: use `aql` guides when writing/reviewing/explaining queries.
+- **Simplified formats**: use `simplified_formats` guides; field identifiers are template-specific.
+- **Translation**: use `openehr://guides/archetypes/language-standards`; fetch per-language guides via `guide_search`/`guide_get` when relevant.
 
 ## Suggested Workflows
-1. Retrieval: `search` → Shortlist (10-15 items) → `get` → `explain`.
-2. Search and load relevant guides (e.g. `openehr://guides/archetypes/principles`, `openehr://guides/archetypes/checklist`, `openehr://guides/aql/syntax`, `openehr://guides/simplified_formats/rules`) and use them against the artifact.
-3. Use tools (e.g. `terminology_resolve`, `guide_adl_idiom_lookup`) to verify any internal terminology links, syntax correctness, semantic correctness, etc.
-4. For Flat/Structured format: use `design_or_review_simplified_format` or `explain_simplified_format` with the target OPT.
+1. Retrieval: `search` → shortlist (10–15) → `get` → `explain`.
+2. Load relevant guides (e.g., archetypes principles/checklist, AQL syntax, simplified format rules) and apply them to the artifact.
+3. Verify with tools such as `terminology_resolve` and `guide_adl_idiom_lookup`.
+4. For Flat/Structured payloads, use `design_or_review_simplified_format` or `explain_simplified_format` with the target OPT.
 
 ## Best Practices
-- **Context**: Map archetypes to RM types via `type_specification_get` to understand structural constraints.
-- **AQL**: Validate paths and containment against deployed templates.
-- **Simplified Formats**: Validate field identifiers and ctx against the target OPT; pipe suffixes and underscore prefix per spec.
+- **Context**: map archetypes to RM types with `type_specification_get`.
+- **AQL**: validate containment and paths against deployed templates.
+- **Simplified formats**: validate field identifiers and `ctx` against the target OPT; apply pipe suffixes and underscore-prefix rules.
