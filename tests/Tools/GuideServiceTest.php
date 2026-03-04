@@ -31,6 +31,33 @@ final class GuideServiceTest extends TestCase
         $first = $results['items'][0];
         $this->assertArrayHasKey('resourceUri', $first);
         $this->assertStringStartsWith('openehr://guides/', $first['resourceUri']);
+        $this->assertLessThanOrEqual(10, count($results['items']));
+    }
+
+    public function test_guideSearch_ranking_consistent_across_candidate_pool_sizes(): void
+    {
+        $default = $this->service->search('cardinality occurrences constraints', 'archetypes', '', 5, 220, 20);
+        $expandedPool = $this->service->search('cardinality occurrences constraints', 'archetypes', '', 5, 220, 40);
+
+        $defaultUris = array_map(static fn(array $item): string => (string)$item['resourceUri'], $default['items']);
+        $expandedUris = array_map(static fn(array $item): string => (string)$item['resourceUri'], $expandedPool['items']);
+
+        $this->assertNotEmpty($defaultUris);
+        $this->assertSame($defaultUris, $expandedUris);
+    }
+
+    public function test_guideSearch_respects_response_size_defaults_and_overrides(): void
+    {
+        $default = $this->service->search('aql');
+        $this->assertLessThanOrEqual(10, count($default['items']));
+        foreach ($default['items'] as $item) {
+            $this->assertLessThanOrEqual(220, mb_strlen((string)$item['snippet']));
+        }
+
+        $expanded = $this->service->search('aql', '', '', 12, 500, 30);
+        $this->assertLessThanOrEqual(12, count($expanded['items']));
+        $this->assertNotEmpty($expanded['items']);
+        $this->assertLessThanOrEqual(500, mb_strlen((string)$expanded['items'][0]['snippet']));
     }
 
     public function test_guideSearch_respects_category_filter(): void

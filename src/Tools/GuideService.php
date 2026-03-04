@@ -16,9 +16,12 @@ use SplFileInfo;
 
 final readonly class GuideService
 {
-    private const int DEFAULT_MAX_RESULTS = 15;
+    private const int DEFAULT_MAX_RESULTS = 10;
+    private const int MAX_RESULTS_LIMIT = 50;
+    private const int DEFAULT_TOP_CANDIDATES = 24;
     private const int DEFAULT_SECTION_LIMIT = 5;
-    private const int SNIPPET_CHARS = 350;
+    private const int DEFAULT_SNIPPET_CHARS = 220;
+    private const int MAX_SNIPPET_CHARS = 1200;
 
     public const string GUIDE_DIR = APP_RESOURCES_DIR . '/guides';
 
@@ -73,37 +76,77 @@ final readonly class GuideService
             ],
         ],
     )]
-    public function search(string $query = '', string $category = '', string $taskType = ''): array
+    public function search(
+        string $query = '',
+        string $category = '',
+        string $taskType = '',
+        int $maxResults = self::DEFAULT_MAX_RESULTS,
+        int $snippetChars = self::DEFAULT_SNIPPET_CHARS,
+        int $topCandidates = self::DEFAULT_TOP_CANDIDATES,
+    ): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $query = trim($query);
         $category = trim($category);
         $taskType = trim($taskType);
+        $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
+        $snippetChars = max(80, min($snippetChars, self::MAX_SNIPPET_CHARS));
+        $topCandidates = max($maxResults, $topCandidates);
 
+        $indexedGuides = $this->loadGuideIndex();
         $results = [];
-        foreach ($this->getGuideFiles() as $fileInfo) {
-            $guide = $this->extractGuide($fileInfo);
-            if ($category && $guide['category'] !== $category) {
-                continue;
-            }
-            if ($taskType && stripos($guide['content'], $taskType) === false) {
+        foreach ($indexedGuides as $guide) {
+            if ($category !== '' && $guide['category'] !== $category) {
                 continue;
             }
 
+            $metadataText = sprintf('%s %s %s', $guide['title'], $guide['abstract'], implode(' ', $guide['headings']));
             $results[] = [
+                'guide' => $guide,
+                'indexScore' => $this->scoreGuide($query, $guide['title'], $metadataText, $guide['category'])
+                    + $this->taskTypeBoost($metadataText, $taskType),
+            ];
+        }
+
+        usort(
+            $results,
+            static fn(array $a, array $b): int => $b['indexScore'] <=> $a['indexScore'] ?: strcmp($a['guide']['name'], $b['guide']['name'])
+        );
+        $results = array_slice($results, 0, $topCandidates);
+
+        $scored = [];
+        foreach ($results as $candidate) {
+            $guide = $candidate['guide'];
+            $path = $this->guidePath($guide['category'], $guide['name']);
+            if (!is_file($path) || !is_readable($path)) {
+                continue;
+            }
+
+            $content = (string)file_get_contents($path);
+            if ($content === '') {
+                continue;
+            }
+
+            if ($taskType !== '' && stripos($content, $taskType) === false) {
+                continue;
+            }
+
+            $score = $candidate['indexScore'] + $this->scoreGuide($query, $guide['title'], $content, $guide['category']);
+
+            $scored[] = [
                 'title' => $guide['title'],
                 'category' => $guide['category'],
                 'name' => $guide['name'],
                 'resourceUri' => $guide['resourceUri'],
-                'snippet' => $this->buildSnippet($guide['content'], $query),
-                'score' => $this->scoreGuide($query, $guide['title'], $guide['content'], $guide['category']),
+                'snippet' => $this->buildSnippet($content, $query, $snippetChars),
+                'score' => $score,
             ];
         }
 
-        usort($results, static fn(array $a, array $b): int => $b['score'] <=> $a['score']);
-        $results = array_slice($results, 0, self::DEFAULT_MAX_RESULTS);
+        usort($scored, static fn(array $a, array $b): int => $b['score'] <=> $a['score']);
+        $scored = array_slice($scored, 0, $maxResults);
 
-        return ['items' => $results];
+        return ['items' => $scored];
     }
 
     /**
@@ -239,14 +282,20 @@ final readonly class GuideService
         }, $matches)];
     }
 
-    /** @return array<int, SplFileInfo> */
-    private function getGuideFiles(): array
+    /** @return array<int, array{title: string, category: string, name: string, resourceUri: string, abstract: string, headings: array<int, string>}> */
+    private function loadGuideIndex(): array
+    {
+        return $this->buildGuideIndex();
+    }
+
+    /** @return array<int, array{title: string, category: string, name: string, resourceUri: string, abstract: string, headings: array<int, string>}> */
+    private function buildGuideIndex(): array
     {
         if (!is_dir(self::GUIDE_DIR)) {
             return [];
         }
 
-        $files = [];
+        $index = [];
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(self::GUIDE_DIR, \FilesystemIterator::SKIP_DOTS)
         );
@@ -258,30 +307,25 @@ final readonly class GuideService
             if (strtolower($fileInfo->getExtension()) !== 'md') {
                 continue;
             }
-            $files[] = $fileInfo;
+
+            $content = (string)file_get_contents($fileInfo->getPathname()) ?: '';
+            $relative = str_replace(self::GUIDE_DIR . '/', '', $fileInfo->getPathname());
+            $parts = explode('/', $relative);
+            $category = $parts[0] ?: 'unknown';
+            $name = $fileInfo->getBasename('.md');
+            $title = $this->extractTitle($content, $name);
+
+            $index[] = [
+                'title' => $title,
+                'category' => $category,
+                'name' => $name,
+                'resourceUri' => $this->buildGuideUri($category, $name),
+                'abstract' => $this->extractAbstract($content),
+                'headings' => $this->extractHeadings($content),
+            ];
         }
 
-        return $files;
-    }
-
-    /**
-     * @return array{title: string, category: string, name: string, resourceUri: string, content: string}
-     */
-    private function extractGuide(SplFileInfo $fileInfo): array
-    {
-        $content = (string)file_get_contents($fileInfo->getPathname()) ?: '';
-        $relative = str_replace(self::GUIDE_DIR . '/', '', $fileInfo->getPathname());
-        $parts = explode('/', $relative);
-        $category = $parts[0] ?: 'unknown';
-        $name = $fileInfo->getBasename('.md');
-
-        return [
-            'title' => $this->extractTitle($content, $name),
-            'category' => $category,
-            'name' => $name,
-            'resourceUri' => $this->buildGuideUri($category, $name),
-            'content' => $content,
-        ];
+        return $index;
     }
 
     private function extractTitle(string $content, string $fallback): string
@@ -350,18 +394,58 @@ final readonly class GuideService
         return $score;
     }
 
-    private function buildSnippet(string $content, string $query): string
+    private function buildSnippet(string $content, string $query, int $snippetChars = self::DEFAULT_SNIPPET_CHARS): string
     {
         $lower = strtolower($content);
         $needle = strtolower($query);
         $pos = strpos($lower, $needle);
         if ($pos === false) {
-            return $this->limitText($content, self::SNIPPET_CHARS);
+            return $this->limitText($content, $snippetChars);
         }
 
-        $start = max(0, $pos - (int)(self::SNIPPET_CHARS / 2));
-        $snippet = substr($content, $start, self::SNIPPET_CHARS);
+        $start = max(0, $pos - (int)($snippetChars / 2));
+        $snippet = substr($content, $start, $snippetChars);
         return trim($snippet);
+    }
+
+    private function taskTypeBoost(string $metadataText, string $taskType): int
+    {
+        if ($taskType === '') {
+            return 0;
+        }
+
+        return stripos($metadataText, $taskType) === false ? 0 : 2;
+    }
+
+    private function extractAbstract(string $content): string
+    {
+        $lines = preg_split('/\r?\n/', $content) ?: [];
+        $paragraph = [];
+        foreach ($lines as $line) {
+            $trimmed = trim($line);
+            if ($trimmed === '' || str_starts_with($trimmed, '#') || preg_match('/^[-*]\s/', $trimmed) === 1) {
+                if ($paragraph !== []) {
+                    break;
+                }
+                continue;
+            }
+
+            $paragraph[] = $trimmed;
+            if (strlen(implode(' ', $paragraph)) > 280) {
+                break;
+            }
+        }
+
+        return $this->limitText(implode(' ', $paragraph), 280);
+    }
+
+    /** @return array<int, string> */
+    private function extractHeadings(string $content): array
+    {
+        preg_match_all('/^#{2,3}\s+(.+)$/m', $content, $matches);
+        $headings = $matches[1] ?? [];
+
+        return array_values(array_slice(array_map(static fn(string $heading): string => trim($heading), $headings), 0, 12));
     }
 
     private function limitText(string $text, int $maxChars): string
