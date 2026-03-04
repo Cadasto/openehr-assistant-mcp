@@ -17,13 +17,21 @@ final class GuideExplorerTest extends TestCase
         $messages = $prompt();
 
         $this->assertIsArray($messages);
-        $this->assertCount(2, $messages);
+        $this->assertCount(3, $messages);
 
-        $this->assertEquals(Role::Assistant, $messages[0]->role);
+        // First message: user role with instructions, tools, guidance, workflow, examples
+        $this->assertEquals(Role::User, $messages[0]->role);
         $this->assertStringContainsString('openEHR implementation guides', $messages[0]->content->text);
         $this->assertStringContainsString('guide_search', $messages[0]->content->text);
+        $this->assertStringContainsString('### Tools', $messages[0]->content->text);
+        $this->assertStringContainsString('### Workflow', $messages[0]->content->text);
+        $this->assertStringContainsString('### Examples', $messages[0]->content->text);
 
-        $this->assertEquals(Role::User, $messages[1]->role);
-        $this->assertStringContainsString('Help me find and retrieve openEHR implementation guidance', $messages[1]->content->text);
+        // Second message: assistant acknowledgment
+        $this->assertEquals(Role::Assistant, $messages[1]->role);
+
+        // Third message: user request
+        $this->assertEquals(Role::User, $messages[2]->role);
+        $this->assertStringContainsString('Help me find and retrieve openEHR implementation guidance', $messages[2]->content->text);
     }
 }

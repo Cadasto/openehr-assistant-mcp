@@ -17,13 +17,21 @@ final class TerminologyExplorerTest extends TestCase
         $messages = $prompt();
 
         $this->assertIsArray($messages);
-        $this->assertCount(2, $messages);
+        $this->assertCount(3, $messages);
 
-        $this->assertEquals(Role::Assistant, $messages[0]->role);
+        // First message: user role with instructions, tools, guidance, workflow, examples
+        $this->assertEquals(Role::User, $messages[0]->role);
         $this->assertStringContainsString('openEHR Terminology definitions', $messages[0]->content->text);
         $this->assertStringContainsString('openehr://terminology', $messages[0]->content->text);
+        $this->assertStringContainsString('### Tools', $messages[0]->content->text);
+        $this->assertStringContainsString('### Workflow', $messages[0]->content->text);
+        $this->assertStringContainsString('### Examples', $messages[0]->content->text);
 
-        $this->assertEquals(Role::User, $messages[1]->role);
-        $this->assertStringContainsString('Help me find and retrieve an openEHR Terminology definition', $messages[1]->content->text);
+        // Second message: assistant acknowledgment
+        $this->assertEquals(Role::Assistant, $messages[1]->role);
+
+        // Third message: user request
+        $this->assertEquals(Role::User, $messages[2]->role);
+        $this->assertStringContainsString('Help me find and retrieve an openEHR Terminology definition', $messages[2]->content->text);
     }
 }

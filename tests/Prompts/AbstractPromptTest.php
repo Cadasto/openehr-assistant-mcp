@@ -57,16 +57,31 @@ final class AbstractPromptTest extends TestCase
         };
     }
 
-    public function testLoadValidPrompt(): void
+    public function testLoadValidPromptWithThreeMessages(): void
     {
         $mdContent = <<<MD
+## Role: user
+
+You are an expert. Do this task.
+
+### Tools
+
+- `tool_a` - does something
+
+### Workflow
+
+1. Step one.
+
 ## Role: assistant
 
-You are a helpful assistant.
+Understood. I will follow the workflow.
 
 ## Role: user
 
-Hello!
+Perform the task.
+
+Input:
+{{input_value}}
 MD;
         file_put_contents($this->tempPromptsDir . '/test_prompt.md', $mdContent);
 
@@ -74,14 +89,23 @@ MD;
         $messages = $promptInstance->testLoad('test_prompt');
 
         $this->assertIsArray($messages);
-        $this->assertCount(2, $messages);
-        $this->assertInstanceOf(PromptMessage::class, $messages[0]);
-        $this->assertEquals(Role::Assistant, $messages[0]->role);
-        $this->assertInstanceOf(TextContent::class, $messages[0]->content);
-        $this->assertEquals('You are a helpful assistant.', $messages[0]->content->text);
+        $this->assertCount(3, $messages);
 
-        $this->assertEquals(Role::User, $messages[1]->role);
-        $this->assertEquals('Hello!', $messages[1]->content->text);
+        // First message: user role with full instructions
+        $this->assertInstanceOf(PromptMessage::class, $messages[0]);
+        $this->assertEquals(Role::User, $messages[0]->role);
+        $this->assertInstanceOf(TextContent::class, $messages[0]->content);
+        $this->assertStringContainsString('You are an expert', $messages[0]->content->text);
+        $this->assertStringContainsString('### Tools', $messages[0]->content->text);
+        $this->assertStringContainsString('### Workflow', $messages[0]->content->text);
+
+        // Second message: assistant acknowledgment
+        $this->assertEquals(Role::Assistant, $messages[1]->role);
+        $this->assertStringContainsString('Understood', $messages[1]->content->text);
+
+        // Third message: user request with placeholders
+        $this->assertEquals(Role::User, $messages[2]->role);
+        $this->assertStringContainsString('{{input_value}}', $messages[2]->content->text);
     }
 
     public function testLoadThrowsOnMissingFile(): void
