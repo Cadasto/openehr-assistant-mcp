@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Prompts;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
+#[CoversNothing]
 final class PromptPolicySeparationTest extends TestCase
 {
     public function test_server_instructions_define_global_policy(): void
