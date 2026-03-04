@@ -443,9 +443,9 @@ final readonly class GuideService
     private function extractHeadings(string $content): array
     {
         preg_match_all('/^#{2,3}\s+(.+)$/m', $content, $matches);
-        $headings = $matches[1] ?? [];
+        $headings = array_map(static fn(string $heading): string => trim($heading), $matches[1]);
 
-        return array_values(array_slice(array_map(static fn(string $heading): string => trim($heading), $headings), 0, 12));
+        return array_slice($headings, 0, 12);
     }
 
     private function limitText(string $text, int $maxChars): string
