@@ -1,0 +1,17 @@
+{
+  "ckm_archetype_explorer.md": {"chars": 1789, "words": 300},
+  "ckm_template_explorer.md": {"chars": 1926, "words": 300},
+  "design_or_review_aql.md": {"chars": 3195, "words": 412},
+  "design_or_review_archetype.md": {"chars": 2687, "words": 300},
+  "design_or_review_simplified_format.md": {"chars": 2332, "words": 300},
+  "design_or_review_template.md": {"chars": 2496, "words": 350},
+  "explain_aql.md": {"chars": 2475, "words": 350},
+  "explain_archetype.md": {"chars": 1965, "words": 300},
+  "explain_simplified_format.md": {"chars": 2146, "words": 300},
+  "explain_template.md": {"chars": 2191, "words": 300},
+  "fix_adl_syntax.md": {"chars": 1795, "words": 250},
+  "guide_explorer.md": {"chars": 2562, "words": 371},
+  "terminology_explorer.md": {"chars": 2420, "words": 335},
+  "translate_archetype_language.md": {"chars": 2972, "words": 355},
+  "type_specification_explorer.md": {"chars": 1986, "words": 285}
+}

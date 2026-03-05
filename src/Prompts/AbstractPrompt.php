@@ -11,6 +11,8 @@ use Mcp\Schema\Enum\Role;
 
 abstract readonly class AbstractPrompt
 {
+    private const string SHARED_PROMPT_PATH = 'shared/policy';
+
     protected function getPromptsDir(): string
     {
         return APP_RESOURCES_DIR . '/prompts';
@@ -21,6 +23,24 @@ abstract readonly class AbstractPrompt
      * @return PromptMessage[]
      */
     protected function loadPromptMessages(string $name): array
+    {
+        $sharedMessages = array_values(array_filter(
+            $this->loadPromptFile(self::SHARED_PROMPT_PATH),
+            static fn (PromptMessage $message): bool => $message->role === Role::User,
+        ));
+
+        if ($sharedMessages === []) {
+            throw new InvalidArgumentException('Shared prompt policy must contain an assistant block.');
+        }
+
+        return array_merge($sharedMessages, $this->loadPromptFile($name));
+    }
+
+    /**
+     * @param string $name
+     * @return PromptMessage[]
+     */
+    private function loadPromptFile(string $name): array
     {
         $path = $this->getPromptsDir() . '/' . $name . '.md';
 

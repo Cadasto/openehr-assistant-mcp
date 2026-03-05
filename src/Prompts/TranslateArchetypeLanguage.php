@@ -11,7 +11,10 @@ use Mcp\Schema\Content\PromptMessage;
 readonly final class TranslateArchetypeLanguage extends AbstractPrompt
 {
     /**
-     * Translate openEHR Archetype (Terminology Only) to a new language.
+     * Translate an openEHR archetype to a new language or add a language.
+     *
+     * Use when the user says: "translate this archetype to X", "add X language", "localize archetype", "add Hungarian".
+     * Terminology only; calls guide_get/guide_search for language-standards and terminology before translating.
      *
      * @return PromptMessage[]
      */

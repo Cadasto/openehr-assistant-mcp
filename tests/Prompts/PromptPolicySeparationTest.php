@@ -43,17 +43,17 @@ final class PromptPolicySeparationTest extends TestCase
     {
         $aqlPrompt = file_get_contents(__DIR__ . '/../../resources/prompts/design_or_review_aql.md');
         $this->assertIsString($aqlPrompt);
-        $this->assertStringContainsString('**Deployed OPT/templates:**', $aqlPrompt);
-        $this->assertStringContainsString('Parameterize all variable inputs', $aqlPrompt);
+        $this->assertStringContainsString('deployed OPT/templates', $aqlPrompt);
+        $this->assertStringContainsString('and parameterize variable inputs', $aqlPrompt);
 
         $translatePrompt = file_get_contents(__DIR__ . '/../../resources/prompts/translate_archetype_language.md');
         $this->assertIsString($translatePrompt);
-        $this->assertStringContainsString('Keep all at-codes and ac-codes unchanged', $translatePrompt);
-        $this->assertStringContainsString('Do NOT translate archetype class names', $translatePrompt);
+        $this->assertStringContainsString('Keep one-to-one mapping for at/ac-codes', $translatePrompt);
+        $this->assertStringContainsString('openehr://guides/archetypes/language-standards', $translatePrompt);
 
         $simplifiedPrompt = file_get_contents(__DIR__ . '/../../resources/prompts/design_or_review_simplified_format.md');
         $this->assertIsString($simplifiedPrompt);
         $this->assertStringContainsString('Simplified Formats are **template-specific**', $simplifiedPrompt);
-        $this->assertStringContainsString('Use **pipe suffixes**', $simplifiedPrompt);
+        $this->assertStringContainsString('pipe suffixes', $simplifiedPrompt);
     }
 }

@@ -17,13 +17,14 @@ final class GuideExplorerTest extends TestCase
         $messages = $prompt();
 
         $this->assertIsArray($messages);
-        $this->assertCount(2, $messages);
+        $this->assertGreaterThanOrEqual(3, count($messages));
 
-        $this->assertEquals(Role::Assistant, $messages[0]->role);
-        $this->assertStringContainsString('openEHR implementation guides', $messages[0]->content->text);
-        $this->assertStringContainsString('guide_search', $messages[0]->content->text);
+        $this->assertEquals(Role::User, $messages[0]->role);
+        $combined = implode("\n", array_map(static fn ($message): string => $message->content->text, $messages));
+        $this->assertStringContainsString('openEHR implementation guides', $combined);
+        $this->assertStringContainsString('guide_search', $combined);
 
-        $this->assertEquals(Role::User, $messages[1]->role);
-        $this->assertStringContainsString('Help me find and retrieve openEHR implementation guidance', $messages[1]->content->text);
+        $this->assertEquals(Role::User, $messages[array_key_last($messages)]->role);
+        $this->assertStringContainsString('Help me find and retrieve openEHR implementation guidance', $messages[array_key_last($messages)]->content->text);
     }
 }

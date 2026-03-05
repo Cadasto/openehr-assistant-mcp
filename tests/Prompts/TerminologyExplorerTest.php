@@ -17,13 +17,14 @@ final class TerminologyExplorerTest extends TestCase
         $messages = $prompt();
 
         $this->assertIsArray($messages);
-        $this->assertCount(2, $messages);
+        $this->assertGreaterThanOrEqual(3, count($messages));
 
-        $this->assertEquals(Role::Assistant, $messages[0]->role);
-        $this->assertStringContainsString('openEHR Terminology definitions', $messages[0]->content->text);
-        $this->assertStringContainsString('openehr://terminology', $messages[0]->content->text);
+        $this->assertEquals(Role::User, $messages[0]->role);
+        $combined = implode("\n", array_map(static fn ($message): string => $message->content->text, $messages));
+        $this->assertStringContainsString('openEHR Terminology definitions', $combined);
+        $this->assertStringContainsString('openehr://terminology', $combined);
 
-        $this->assertEquals(Role::User, $messages[1]->role);
-        $this->assertStringContainsString('Help me find and retrieve an openEHR Terminology definition', $messages[1]->content->text);
+        $this->assertEquals(Role::User, $messages[array_key_last($messages)]->role);
+        $this->assertStringContainsString('Help me find and retrieve an openEHR Terminology', $messages[array_key_last($messages)]->content->text);
     }
 }

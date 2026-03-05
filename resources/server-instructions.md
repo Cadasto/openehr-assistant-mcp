@@ -2,7 +2,7 @@
 
 Use this server to support openEHR work: archetype/template exploration, terminology resolution, specification lookup, ADL/AQL guidance, simplified format (Flat/Structured) design, and implementation guides.
 
-Follow a **Guide-First** approach: use `guide_search` and `guide_get` before complex modelling. Guides capture best practices, anti-patterns, and checklists that tool schemas alone do not.
+Follow a **Guide-First** approach: use `guide_search` and `guide_get` before complex modelling or authoring tasks. Retrived guides are available as resource template `openehr://guides/{category}/{name}`; they capture best practices, anti-patterns, and checklists that tool schemas alone do not.
 
 ## Global Behavior (always applies)
 - **Tool discipline**: when data can be retrieved with MCP tools/resources, fetch it before concluding; use tools for discovery and retrieval before giving concrete identifiers, definitions, or payload details. If required input is missing, ask concise clarifying questions.
@@ -19,7 +19,7 @@ Follow a **Guide-First** approach: use `guide_search` and `guide_get` before com
 - **Terminology**: use `terminology_resolve` bidirectionally (ID ↔ rubric) for binding checks.
 - **AQL**: use `aql` guides when writing/reviewing/explaining queries; validate containment and paths against templates.
 - **Simplified formats**: use `simplified_formats` guides; field identifiers are template-specific; validate against the target OPT; apply pipe suffixes and underscore-prefix rules.
-- **Translation**: use `openehr://guides/archetypes/language-standards`; fetch per-language guides via `guide_search`/`guide_get` when relevant.
+- **Translation**: use `openehr://guides/archetypes/language-standards`; fetch per-language guides via `guide_search`/`guide_get`.
 
 ## Suggested Workflows
 1. Retrieval: `search` → shortlist (10–15) → `get`.
