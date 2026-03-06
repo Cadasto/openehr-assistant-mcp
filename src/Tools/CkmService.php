@@ -15,6 +15,11 @@ use Psr\Log\LoggerInterface;
 
 final readonly class CkmService
 {
+    private const int DEFAULT_MAX_RESULTS = 10;
+    private const int MAX_RESULTS_LIMIT = 50;
+    /** Multiplier for API fetch size so ranking/sorting has more candidates; then slice to maxResults. */
+    private const float FETCH_SIZE_MULTIPLIER = 1.5;
+
     public function __construct(
         private CkmClient $apiClient,
         private LoggerInterface $logger,
@@ -34,11 +39,8 @@ final readonly class CkmService
      * @param string $keyword
      *   Query search string (one or multiple words); wildcards `*` supported; prefer meaningful clinical terms over internal codes, e.g. "blood pressure", "medication", "diabetes", "body weight".
      *
-     * @param int $limit
-     *   The maximum number of result items to be returned; defaults to 20.
-     *
-     * @param int $offset
-     *   The offset into the result set, for paging; defaults to 0.
+     * @param int $maxResults
+     *   The maximum number of result items to be returned; defaults to 10.
      *
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
@@ -74,19 +76,21 @@ final readonly class CkmService
                         ],
                     ],
                 ],
-                'total' => ['type' => 'integer', 'description' => 'Total number of Templates found'],
+                'total' => ['type' => 'integer', 'description' => 'Total number of Archetypes found'],
             ],
         ]
     )]
-    public function archetypeSearch(string $keyword, int $limit = 20, int $offset = 0, bool $requireAllSearchWords = true): array
+    public function archetypeSearch(string $keyword, int $maxResults = self::DEFAULT_MAX_RESULTS, bool $requireAllSearchWords = true): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
+        $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
+        $fetchSize = min(self::MAX_RESULTS_LIMIT, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER));
         try {
             $response = $this->apiClient->get('v1/archetypes', [
                 RequestOptions::QUERY => [
                     'search-text' => $keyword,
-                    'size' => $limit,
-                    'offset' => $offset,
+                    'size' => $fetchSize,
+                    'offset' => 0,
                     'restrict-search-to-main-data' => 'true',
                     'require-all-search-words' => $requireAllSearchWords ? 'true' : 'false',
                     'sort-key' => 'RELEVANCE',
@@ -139,16 +143,16 @@ final readonly class CkmService
                 return array_filter($new, fn($v) => $v !== null);
             }, $data);
 
-            // Calculate score for each item and sort
+            // Sort by score (highest first), then slice to requested maxResults
             usort($data, function ($a, $b) {
-                // Sort in descending order (highest score first)
                 return $b['score'] <=> $a['score'];
             });
+            $data = array_slice($data, 0, $maxResults);
 
             $totalHeader = $response->getHeaderLine('X-Total-Count');
             return [
                 'items' => $data,
-                'total' => $totalHeader !== '' ? (integer)$totalHeader : count($data),
+                'total' => $totalHeader !== '' ? (integer) $totalHeader : count($data),
             ];
         } catch (\JsonException $e) {
             $this->logger->error('Failed to decode CKM Archetype response', ['error' => $e->getMessage()]);
@@ -237,11 +241,8 @@ final readonly class CkmService
      * @param string $keyword
      *   Query search string, one or multiple words, wildcards `*` supported.
      *
-     * @param int $limit
-     *   The maximum number of result items to be returned; defaults to 20.
-     *
-     * @param int $offset
-     *   The offset into the result set, for paging; defaults to 0.
+     * @param int $maxResults
+     *   The maximum number of result items to be returned; defaults to 10.
      *
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
@@ -280,15 +281,17 @@ final readonly class CkmService
             ],
         ]
     )]
-    public function templateSearch(string $keyword, int $limit = 20, int $offset = 0, bool $requireAllSearchWords = true): array
+    public function templateSearch(string $keyword, int $maxResults = self::DEFAULT_MAX_RESULTS, bool $requireAllSearchWords = true): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
+        $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
+        $fetchSize = min(self::MAX_RESULTS_LIMIT, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER));
         try {
             $response = $this->apiClient->get('v1/templates', [
                 RequestOptions::QUERY => [
                     'search-text' => $keyword,
-                    'size' => $limit,
-                    'offset' => $offset,
+                    'size' => $fetchSize,
+                    'offset' => 0,
                     'template-type' => 'NORMAL',
                     'restrict-search-to-main-data' => 'true',
                     'require-all-search-words' => $requireAllSearchWords ? 'true' : 'false',
@@ -339,16 +342,16 @@ final readonly class CkmService
                 return array_filter($new, fn($v) => $v !== null);
             }, $data);
 
-            // Calculate score for each item and sort
+            // Sort by score (highest first), then slice to requested maxResults
             usort($data, function ($a, $b) {
-                // Sort in descending order (highest score first)
                 return $b['score'] <=> $a['score'];
             });
+            $data = array_slice($data, 0, $maxResults);
 
             $totalHeader = $response->getHeaderLine('X-Total-Count');
             return [
                 'items' => $data,
-                'total' => $totalHeader !== '' ? (integer)$totalHeader : count($data),
+                'total' => $totalHeader !== '' ? (integer) $totalHeader : count($data),
             ];
         } catch (\JsonException $e) {
             $this->logger->error('Failed to decode CKM Template response', ['error' => $e->getMessage()]);

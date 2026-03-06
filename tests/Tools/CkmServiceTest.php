@@ -83,6 +83,55 @@ final class CkmServiceTest extends TestCase
         $this->assertStringContainsString('```', $content->text);
     }
 
+    public function testArchetypeSearchFetchesMoreThenSlicesToMaxResults(): void
+    {
+        $maxResults = 10;
+        $fetchSize = (int) ceil($maxResults * 1.5); // 15
+        $payload = array_fill(0, $fetchSize, ['cid' => '1.0.0', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.foo.v1', 'resourceMainDisplayName' => 'Foo']);
+
+        $capturedQuery = null;
+        $this->client
+            ->expects($this->once())
+            ->method('get')
+            ->with(
+                'v1/archetypes',
+                $this->callback(function (array $opts) use (&$capturedQuery): bool {
+                    $capturedQuery = $opts['query'] ?? [];
+                    return true;
+                })
+            )
+            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $result = $svc->archetypeSearch('foo', $maxResults);
+
+        $this->assertSame($fetchSize, (int) ($capturedQuery['size'] ?? 0), 'Request size should be 1.5× maxResults for ranking');
+        $this->assertSame(0, (int) ($capturedQuery['offset'] ?? -1), 'Request offset should always be 0');
+        $this->assertCount($maxResults, $result['items'], 'Returned items should be sliced to maxResults');
+    }
+
+    public function testArchetypeSearchCapsFetchSizeAtMaxResultsLimit(): void
+    {
+        $maxResults = 50; // MAX_RESULTS_LIMIT
+        $fetchSize = min(50, (int) ceil($maxResults * 1.5)); // 50 (cap)
+
+        $capturedQuery = null;
+        $this->client
+            ->expects($this->once())
+            ->method('get')
+            ->with('v1/archetypes', $this->callback(function (array $opts) use (&$capturedQuery): bool {
+                $capturedQuery = $opts['query'] ?? [];
+                return true;
+            }))
+            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], '[]'));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $svc->archetypeSearch('x', $maxResults);
+
+        $this->assertSame(50, (int) ($capturedQuery['size'] ?? 0));
+        $this->assertSame(0, (int) ($capturedQuery['offset'] ?? -1));
+    }
+
     public function testExceptionsAreWrappedAsRuntimeException(): void
     {
         $exception = new class('boom') extends \RuntimeException implements ClientExceptionInterface {
@@ -127,6 +176,34 @@ final class CkmServiceTest extends TestCase
         $this->assertCount(1, $result['items']);
         $this->assertArrayHasKey('cid', $result['items'][0]);
         $this->assertSame($payload[0]['cid'], $result['items'][0]['cid']);
+    }
+
+    public function testTemplateSearchFetchesMoreThenSlicesToMaxResults(): void
+    {
+        $maxResults = 8;
+        $fetchSize = (int) ceil($maxResults * 1.5); // 12
+
+        $payload = array_fill(0, $fetchSize, ['cid' => '1.0.0', 'resourceMainDisplayName' => 'Vital', 'projectName' => 'Test']);
+
+        $capturedQuery = null;
+        $this->client
+            ->expects($this->once())
+            ->method('get')
+            ->with(
+                'v1/templates',
+                $this->callback(function (array $opts) use (&$capturedQuery): bool {
+                    $capturedQuery = $opts['query'] ?? [];
+                    return true;
+                })
+            )
+            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $result = $svc->templateSearch('vital', $maxResults);
+
+        $this->assertSame($fetchSize, (int) ($capturedQuery['size'] ?? 0), 'Request size should be 1.5× maxResults for ranking');
+        $this->assertSame(0, (int) ($capturedQuery['offset'] ?? -1), 'Request offset should always be 0');
+        $this->assertCount($maxResults, $result['items'], 'Returned items should be sliced to maxResults');
     }
 
     public function testTemplateGetRespectsFormatAndReturnsTextContent(): void
