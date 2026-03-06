@@ -64,9 +64,9 @@ final readonly class GuideService
                     'items' => [
                         'type' => 'object',
                         'properties' => [
-                            'title' => ['type' => 'string', 'description' => 'Guide title'],
+                            'title' => ['type' => 'string'],
                             'category' => ['type' => 'string', 'description' => 'Guide category, e.g. archetypes/templates'],
-                            'name' => ['type' => 'string', 'description' => 'Guide filename without extension'],
+                            'name' => ['type' => 'string'],
                             'resourceUri' => ['type' => 'string', 'description' => 'Canonical guide URI in openehr://guides namespace'],
                             'snippet' => ['type' => 'string', 'description' => 'Short, task-relevant snippet'],
                             'score' => ['type' => 'integer', 'description' => 'Relative match score for sorting (higher is better)'],
