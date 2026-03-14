@@ -1,6 +1,7 @@
 # openEHR OET Syntax Guide
 
-**Scope:** Technical specification of the OET (Ocean Template) XML format  
+**Scope:** Technical specification of the OET (Ocean Template) XML format
+**Related:** openehr://guides/templates/oet-idioms-cheatsheet, openehr://guides/templates/rules
 **Source:** Ocean Template Designer Documentation, CKM analysis
 **Keywords:** OET, OPT, XML, constraint, template, specification, syntax, validation, design, clinical, lint, validation, definition
 

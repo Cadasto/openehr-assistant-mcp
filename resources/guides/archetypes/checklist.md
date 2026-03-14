@@ -1,6 +1,7 @@
 # openEHR Archetype Design & Review Checklist
 
 **Purpose:** Quality checklist for archetype design, review, and publication
+**Related:** openehr://guides/archetypes/rules, openehr://guides/archetypes/principles, openehr://guides/archetypes/anti-patterns
 **Keywords:** checklist, QA, design, review, quality, consistency, best practice, assessment, guideline, validation
 
 ---
