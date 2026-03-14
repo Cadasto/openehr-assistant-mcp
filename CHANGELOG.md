@@ -9,6 +9,23 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-03-14
+
+### Added
+- Guides: Added RM guides for demographic model, EHR information model, and platform services with comprehensive summaries. Expanded AQL checklist with stored query governance and operational readiness. Added shared policy and refined related-resources references across guides.
+- MCP Conformance: Added `make conformance` to run the official MCP conformance suite against the server over HTTP. Requires dev stack (`make up-dev`). Results written to `conformance/`; expected failures in `tests/conformance-baseline.yml`. Added `node` service to dev compose (Node 22 + curl) built from multistage Dockerfile target `node`.
+- Tests: Added PromptCompositionTest and PromptPolicySeparationTest; expanded CkmServiceTest and GuideServiceTest for scoring, sizing, and ranking behaviour.
+
+### Changed
+- Tools: CKM archetype and template search now use enhanced scoring, fetch sizing/slicing, and increased default max results. Guide search refactored (dropped guides-index.json persistence); improved heading extraction and ranking. Removed redundant descriptions in guide properties to reduce context bloat.
+- Prompts: Centralized global policy in server instructions; streamlined prompt roles and task guidelines and reduced prompt text. Refined design_or_review and explain prompts across archetypes, templates, AQL, and simplified formats.
+- Guides: Refined ADL syntax and terminology (paths, identifiers); updated archetype guides (anti-patterns, structural constraints, terminology, reference formatting, language standards, principles, checklist), OET syntax, and simplified formats principles. Enhanced translation standards and terminology practices.
+- Docs: README recommends pairing with openEHR Assistant Plugin. AGENTS.md documents Docker-only runtime and MCP conformance workflow. Server instructions refined for tool usage and output policy.
+
+### Fixed
+- Tools: Resolved PHPStan warnings in heading extraction.
+- Tests: Removed xdebug ini setting for CI compatibility. Marked policy separation test as covers-nothing.
+
 ## [0.14.0] - 2026-03-03
 
 ### Changed
