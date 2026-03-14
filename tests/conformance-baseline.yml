@@ -1,0 +1,28 @@
+# Expected conformance failures: scenarios that require test tools or optional
+# MCP features this server does not implement. See README "MCP Conformance".
+# Run: npx @modelcontextprotocol/conformance list --server
+# Remove a scenario from this list when the server supports it (stale baseline fails CI).
+server:
+  - tools-call-with-logging   # expects tool "test_tool_with_logging"
+  - tools-call-with-progress  # optional progress notifications during tool execution
+  - completion-complete
+  - tools-call-simple-text
+  - tools-call-image
+  - tools-call-audio
+  - tools-call-embedded-resource
+  - tools-call-mixed-content
+  - tools-call-error
+  - tools-call-sampling
+  - tools-call-elicitation
+  - elicitation-sep1034-defaults
+  - elicitation-sep1330-enums
+  - resources-read-text
+  - resources-read-binary
+  - resources-templates-read
+  - resources-subscribe
+  - resources-unsubscribe
+  - prompts-get-simple
+  - prompts-get-with-args
+  - prompts-get-embedded-resource
+  - prompts-get-with-image
+  - dns-rebinding-protection

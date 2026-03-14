@@ -1,5 +1,16 @@
 services:
 
+  # Node + curl for MCP conformance (npx) and scripts. Use: docker compose run --rm node npx ...
+  node:
+    image: cadasto/openehr-assistant-mcp-node:latest
+    build:
+      context: ..
+      dockerfile: .docker/Dockerfile
+      target: node
+    working_dir: /app
+    volumes:
+      - ../:/app
+
   app:
     image: cadasto/openehr-assistant-mcp-dev:latest
     build:

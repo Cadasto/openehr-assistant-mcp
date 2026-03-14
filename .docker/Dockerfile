@@ -63,3 +63,10 @@ COPY --from=vendor-builder /app/src ./src
 COPY --from=vendor-builder /app/vendor ./vendor
 COPY resources ./resources
 USER www-data
+
+#
+# Node + curl for MCP conformance (npx) and scripts (dev only)
+#
+FROM node:22-alpine AS node
+RUN apk add --no-cache curl
+WORKDIR /app

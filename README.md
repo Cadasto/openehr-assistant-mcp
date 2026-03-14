@@ -335,6 +335,8 @@ The terminal may show `http://0.0.0.0:6274/`; open it as `http://localhost:6274/
 - Install dependencies in dev container: `make install`
 - Tail logs: `make logs`
 - Open shell in dev container: `make sh`
+- Run MCP server (stdio): `make run-stdio`
+- Run MCP conformance (requires `make up-dev`): `make conformance`
 - Run MCP inspector: `make inspector`
 - Show help: `make help`
 
@@ -355,6 +357,20 @@ Note: Authorization headers are not required nor configured by default. If you n
 - Test with coverage: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test:coverage`
 - Static analysis: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer check:phpstan`
 
+#### MCP Conformance
+
+The [MCP Conformance](https://github.com/modelcontextprotocol/conformance) test framework checks the server against the MCP specification. It talks to the server over **HTTP only** (not stdio). Some scenarios require test tools (e.g. `test_tool_with_logging`) or optional features this server does not implement; those are listed in `tests/conformance-baseline.yml` so that `make conformance` exits 0 when only known failures occur, and fails on new regressions. To see all server scenarios: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm node npx -y @modelcontextprotocol/conformance list --server`. Ensure the dev stack is running (`make up-dev`), then run:
+
+```bash
+make conformance
+```
+
+This runs the conformance suite inside the `node` service (Node + curl) in Docker, so you do not need Node on the host. Results are printed to the terminal and written to `conformance/` in the repo (subdirectories like `conformance/server-<scenario>-<timestamp>/` with `checks.json`). To run a single scenario or pass options (e.g. `--verbose`), use:
+
+```bash
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm node npx -y @modelcontextprotocol/conformance server --url http://ingress:8343/ -o conformance --expected-failures conformance-baseline.yml --scenario server-initialize --verbose
+```
+
 Tips
 - You can also `make sh` and run `composer test` inside the container interactively.
 
@@ -372,8 +388,8 @@ Tips
   - `constants.php`: loads env and defaults
 - `.docker/`: Docker assets — `docker-compose.yml`, `docker-compose.dev.yml`, `Dockerfile`, `Caddyfile`, PHP/php-fpm config
 - `.docker/docker-compose.yml`: services (`app`, `ingress`) for production-like run (Caddy on 443)
-- `.docker/docker-compose.dev.yml`: dev overrides for services, exposing port 8343 via Caddy
-- `.docker/Dockerfile`: multi-stage PHP-FPM build (development, production)
+- `.docker/docker-compose.dev.yml`: dev overrides (port 8343, `node` service for npx/curl and MCP conformance)
+- `.docker/Dockerfile`: multi-stage build (development, production, and `node` for MCP conformance / npx+curl)
 - `Makefile`: handy shortcuts
 - `tests/`: PHPUnit and PHPStan config and tests
 
