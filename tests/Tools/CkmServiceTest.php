@@ -110,6 +110,77 @@ final class CkmServiceTest extends TestCase
         $this->assertCount($maxResults, $result['items'], 'Returned items should be sliced to maxResults');
     }
 
+    public function testArchetypeSearchAllKeywordsMatchedScoresHigherThanPartialMatch(): void
+    {
+        $payload = [
+            ['cid' => '1', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.a.v1', 'resourceMainDisplayName' => 'Blood pressure', 'projectName' => 'Test', 'status' => 'PUBLISHED'],
+            ['cid' => '2', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.b.v1', 'resourceMainDisplayName' => 'Blood glucose', 'projectName' => 'Test', 'status' => 'PUBLISHED'],
+        ];
+        $this->client->method('get')->willReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $result = $svc->archetypeSearch('blood pressure', 10);
+
+        $this->assertCount(2, $result['items']);
+        $first = $result['items'][0];
+        $second = $result['items'][1];
+        $this->assertGreaterThan($second['score'], $first['score'], 'Item matching all keywords (blood + pressure) should score higher than item matching one keyword');
+        $this->assertStringContainsString('pressure', $first['name'] ?? '');
+    }
+
+    public function testArchetypeSearchWordBoundaryScoresHigherThanSubstring(): void
+    {
+        $payload = [
+            ['cid' => '1', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.other.v1', 'resourceMainDisplayName' => 'Blood pressure', 'projectName' => 'Test', 'status' => 'PUBLISHED'],
+            ['cid' => '2', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.blood_glucose.v1', 'resourceMainDisplayName' => 'Glucose', 'projectName' => 'Test', 'status' => 'PUBLISHED'],
+        ];
+        $this->client->method('get')->willReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $result = $svc->archetypeSearch('blood', 10);
+
+        $this->assertCount(2, $result['items']);
+        $first = $result['items'][0];
+        $this->assertStringContainsString('Blood pressure', $first['name'] ?? '', 'Word-boundary match (Blood in "Blood pressure") should rank above substring match (blood in blood_glucose)');
+        $this->assertGreaterThan($result['items'][1]['score'], $first['score']);
+    }
+
+    public function testArchetypeSearchStatusAndProjectBonusApplied(): void
+    {
+        $payload = [
+            ['cid' => '1', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.foo.v1', 'resourceMainDisplayName' => 'Vital signs', 'projectName' => 'Common resources', 'status' => 'PUBLISHED'],
+            ['cid' => '2', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.bar.v1', 'resourceMainDisplayName' => 'Vital signs', 'projectName' => 'Other', 'status' => 'DRAFT'],
+        ];
+        $this->client->method('get')->willReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $result = $svc->archetypeSearch('vital', 10);
+
+        $this->assertCount(2, $result['items']);
+        $first = $result['items'][0];
+        $this->assertSame('PUBLISHED', $first['status']);
+        $this->assertGreaterThan($result['items'][1]['score'], $first['score'], 'PUBLISHED + common resources should score higher than DRAFT + other project');
+    }
+
+    public function testArchetypeSearchOlderDraftScoresLowerThanNewerDraft(): void
+    {
+        $twoYearsAgo = (new \DateTimeImmutable('now'))->modify('-2 years')->format(\DateTimeInterface::ATOM);
+        $recent = (new \DateTimeImmutable('now'))->modify('-1 month')->format(\DateTimeInterface::ATOM);
+        $payload = [
+            ['cid' => '1', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.foo.v1', 'resourceMainDisplayName' => 'Foo', 'projectName' => 'Test', 'status' => 'DRAFT', 'creationTime' => $twoYearsAgo, 'modificationTime' => $twoYearsAgo],
+            ['cid' => '2', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.bar.v1', 'resourceMainDisplayName' => 'Foo', 'projectName' => 'Test', 'status' => 'DRAFT', 'creationTime' => $recent, 'modificationTime' => $recent],
+        ];
+        $this->client->method('get')->willReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $result = $svc->archetypeSearch('foo', 10);
+
+        $this->assertCount(2, $result['items']);
+        $newer = $result['items'][0];
+        $older = $result['items'][1];
+        $this->assertGreaterThan($older['score'], $newer['score'], 'Newer DRAFT should score higher than older DRAFT (age penalty)');
+    }
+
     public function testArchetypeSearchCapsFetchSizeAtMaxResultsLimit(): void
     {
         $maxResults = 50; // MAX_RESULTS_LIMIT
@@ -176,6 +247,70 @@ final class CkmServiceTest extends TestCase
         $this->assertCount(1, $result['items']);
         $this->assertArrayHasKey('cid', $result['items'][0]);
         $this->assertSame($payload[0]['cid'], $result['items'][0]['cid']);
+    }
+
+    public function testTemplateSearchAllKeywordsMatchedScoresHigherThanPartialMatch(): void
+    {
+        $payload = [
+            ['cid' => '1', 'resourceMainDisplayName' => 'Vital signs summary', 'projectName' => 'Test', 'status' => 'PUBLISHED'],
+            ['cid' => '2', 'resourceMainDisplayName' => 'Vital only', 'projectName' => 'Test', 'status' => 'PUBLISHED'],
+        ];
+        $this->client->method('get')->willReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $result = $svc->templateSearch('vital signs', 10);
+
+        $this->assertCount(2, $result['items']);
+        $this->assertGreaterThan($result['items'][1]['score'], $result['items'][0]['score'], 'Template matching all keywords should score higher');
+        $this->assertStringContainsString('summary', $result['items'][0]['name'] ?? '');
+    }
+
+    public function testTemplateSearchWordBoundaryScoresHigherThanSubstring(): void
+    {
+        $payload = [
+            ['cid' => '1', 'resourceMainDisplayName' => 'Vital signs', 'projectName' => 'Test', 'status' => 'PUBLISHED'],
+            ['cid' => '2', 'resourceMainDisplayName' => 'Vitalscreening', 'projectName' => 'Test', 'status' => 'PUBLISHED'],
+        ];
+        $this->client->method('get')->willReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $result = $svc->templateSearch('vital', 10);
+
+        $this->assertCount(2, $result['items']);
+        $this->assertGreaterThan($result['items'][1]['score'], $result['items'][0]['score'], 'Word-boundary match (Vital in "Vital signs") should score higher than substring (vital in Vitalscreening)');
+    }
+
+    public function testTemplateSearchStatusAndProjectBonusApplied(): void
+    {
+        $payload = [
+            ['cid' => '1', 'resourceMainDisplayName' => 'Discharge', 'projectName' => 'Common resources', 'status' => 'PUBLISHED'],
+            ['cid' => '2', 'resourceMainDisplayName' => 'Discharge', 'projectName' => 'Other', 'status' => 'DRAFT'],
+        ];
+        $this->client->method('get')->willReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $result = $svc->templateSearch('discharge', 10);
+
+        $this->assertCount(2, $result['items']);
+        $this->assertSame('PUBLISHED', $result['items'][0]['status']);
+        $this->assertGreaterThan($result['items'][1]['score'], $result['items'][0]['score'], 'PUBLISHED + common resources should score higher than DRAFT');
+    }
+
+    public function testTemplateSearchOlderDraftScoresLowerThanNewerDraft(): void
+    {
+        $twoYearsAgo = (new \DateTimeImmutable('now'))->modify('-2 years')->format(\DateTimeInterface::ATOM);
+        $recent = (new \DateTimeImmutable('now'))->modify('-1 month')->format(\DateTimeInterface::ATOM);
+        $payload = [
+            ['cid' => '1', 'resourceMainDisplayName' => 'Discharge', 'projectName' => 'Test', 'status' => 'DRAFT', 'creationTime' => $twoYearsAgo, 'modificationTime' => $twoYearsAgo],
+            ['cid' => '2', 'resourceMainDisplayName' => 'Discharge', 'projectName' => 'Test', 'status' => 'DRAFT', 'creationTime' => $recent, 'modificationTime' => $recent],
+        ];
+        $this->client->method('get')->willReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $result = $svc->templateSearch('discharge', 10);
+
+        $this->assertCount(2, $result['items']);
+        $this->assertGreaterThan($result['items'][1]['score'], $result['items'][0]['score'], 'Newer DRAFT template should score higher than older DRAFT (age penalty)');
     }
 
     public function testTemplateSearchFetchesMoreThenSlicesToMaxResults(): void

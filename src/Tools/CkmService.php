@@ -15,10 +15,25 @@ use Psr\Log\LoggerInterface;
 
 final readonly class CkmService
 {
-    private const int DEFAULT_MAX_RESULTS = 10;
+    private const int DEFAULT_MAX_RESULTS = 20;
     private const int MAX_RESULTS_LIMIT = 50;
     /** Multiplier for API fetch size so ranking/sorting has more candidates; then slice to maxResults. */
     private const float FETCH_SIZE_MULTIPLIER = 1.5;
+
+    // Scoring weights (wider scale for clearer ranking)
+    private const int SCORE_ARCHETYPE_ID_MATCH = 90;
+    private const int SCORE_NAME_MATCH = 60;
+    private const int SCORE_PROJECT_NAME_MATCH = 25;
+    private const int SCORE_PROJECT_BUCKET = 10;
+    private const int SCORE_ALL_KEYWORDS_BONUS = 80;
+    private const int SCORE_STATUS_PUBLISHED = 50;
+    private const int SCORE_STATUS_TEAMREVIEW = 25;
+    private const int SCORE_STATUS_DRAFT = -15;
+    private const int SCORE_STATUS_INITIAL = -50;
+    /** Extra penalty per year since last modification (only for DRAFT/INITIAL). */
+    private const int SCORE_PENALTY_PER_YEAR_SINCE_MODIFICATION = 7;
+    /** Extra penalty per year since creation (only for DRAFT/INITIAL). */
+    private const int SCORE_PENALTY_PER_YEAR_SINCE_CREATION = 3;
 
     public function __construct(
         private CkmClient $apiClient,
@@ -40,7 +55,7 @@ final readonly class CkmService
      *   Query search string (one or multiple words); wildcards `*` supported; prefer meaningful clinical terms over internal codes, e.g. "blood pressure", "medication", "diabetes", "body weight".
      *
      * @param int $maxResults
-     *   The maximum number of result items to be returned; defaults to 10.
+     *   The maximum number of result items to be returned; defaults to 20.
      *
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
@@ -105,8 +120,8 @@ final readonly class CkmService
             }
             $this->logger->info('Found CKM Archetypes', ['keyword' => $keyword, 'count' => count($data)]);
 
-            // Map each item to a simpler structure
-            $data = array_map(function ($item) use ($keyword) {
+            // Map each item to a simpler structure and score
+            $data = array_map(function (array $item) use ($keyword): array {
                 $new = [
                     'cid' => $item['cid'] ?? null,
                     'archetypeId' => $item['resourceMainId'] ?? null,
@@ -116,30 +131,8 @@ final readonly class CkmService
                     'revision' => $item['revision'] ?? null,
                     'creationTime' => $item['creationTime'] ?? null,
                     'modificationTime' => $item['modificationTime'] ?? $item['creationTime'] ?? null,
-                    'score' => 0,
+                    'score' => $this->scoreArchetypeItem($item, $keyword),
                 ];
-                foreach (explode(' ', trim($keyword)) as $k) {
-                    if (isset($new['archetypeId']) && stripos($new['archetypeId'], $k) !== false) {
-                        $new['score'] += 4;
-                    } elseif (isset($new['name']) && stripos($new['name'], $k) !== false) {
-                        $new['score'] += 3;
-                    }
-                    if (isset($new['projectName']) && stripos($new['projectName'], $k) !== false) {
-                        $new['score'] += 2;
-                    }
-                }
-                if (isset($new['projectName']) && in_array(strtolower($new['projectName']), ['common resources', 'structural archetypes'])) {
-                    $new['score'] += 1;
-                }
-                if (isset($new['status'])) {
-                    $new['score'] += match(strtoupper($new['status'])) {
-                        'PUBLISHED' => 4,
-                        'TEAMREVIEW' => 2,
-                        'DRAFT', 'REVIEWSUSPENDED' => -1,
-                        'INITIAL' => -2,
-                        default => 0,
-                    };
-                }
                 return array_filter($new, fn($v) => $v !== null);
             }, $data);
 
@@ -242,7 +235,7 @@ final readonly class CkmService
      *   Query search string, one or multiple words, wildcards `*` supported.
      *
      * @param int $maxResults
-     *   The maximum number of result items to be returned; defaults to 10.
+     *   The maximum number of result items to be returned; defaults to 20.
      *
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
@@ -307,8 +300,8 @@ final readonly class CkmService
             }
             $this->logger->info('Found CKM Templates', ['keyword' => $keyword, 'count' => count($data)]);
 
-            // Map each item to a simpler structure
-            $data = array_map(function ($item) use ($keyword) {
+            // Map each item to a simpler structure and score
+            $data = array_map(function (array $item) use ($keyword): array {
                 $new = [
                     'cid' => $item['cid'] ?? null,
                     'name' => $item['resourceMainDisplayName'] ?? null,
@@ -316,29 +309,9 @@ final readonly class CkmService
                     'status' => $item['status'] ?? null,
                     'version' => $item['versionAsset'] ?? null,
                     'creationTime' => $item['creationTime'] ?? null,
-                    'modificationTime' => $item['modificationTime'] ?? $item['creationTime'] ??null,
-                    'score' => 0,
+                    'modificationTime' => $item['modificationTime'] ?? $item['creationTime'] ?? null,
+                    'score' => $this->scoreTemplateItem($item, $keyword),
                 ];
-                foreach (explode(' ', trim($keyword)) as $k) {
-                    if (isset($new['name']) && stripos($new['name'], $k) !== false) {
-                        $new['score'] += 3;
-                    }
-                    if (isset($new['projectName']) && stripos($new['projectName'], $k) !== false) {
-                        $new['score'] += 2;
-                    }
-                }
-                if (isset($new['projectName']) && in_array(strtolower($new['projectName']), ['common resources', 'structural archetypes'])) {
-                    $new['score'] += 1;
-                }
-                if (isset($new['status'])) {
-                    $new['score'] += match(strtoupper($new['status'])) {
-                        'PUBLISHED' => 4,
-                        'TEAMREVIEW' => 2,
-                        'DRAFT', 'REVIEWSUSPENDED' => -1,
-                        'INITIAL' => -2,
-                        default => 0,
-                    };
-                }
                 return array_filter($new, fn($v) => $v !== null);
             }, $data);
 
@@ -415,5 +388,170 @@ final readonly class CkmService
             $this->logger->error('Failed to retrieve the CKM Template', ['error' => $e->getMessage(), 'identifier' => $identifier, 'format' => $format]);
             throw new \RuntimeException('Failed to retrieve the CKM Template: ' . $e->getMessage(), 0, $e);
         }
+    }
+
+    /**
+     * Score one archetype search result (archetypeId, name, projectName, status, match quality, all-keywords bonus).
+     *
+     * @param array<string, mixed> $item Raw CKM API item (resourceMainId, resourceMainDisplayName, projectName, status, etc.)
+     */
+    private function scoreArchetypeItem(array $item, string $keyword): int
+    {
+        $archetypeId = $item['resourceMainId'] ?? null;
+        $name = $item['resourceMainDisplayName'] ?? null;
+        $projectName = $item['projectName'] ?? null;
+        $keywords = array_filter(explode(' ', trim($keyword)));
+        $score = 0;
+        $keywordsMatched = 0;
+        foreach ($keywords as $k) {
+            $sId = $this->scoreFieldMatch($k, $archetypeId, self::SCORE_ARCHETYPE_ID_MATCH);
+            $sName = $this->scoreFieldMatch($k, $name, self::SCORE_NAME_MATCH);
+            $sProject = $this->scoreFieldMatch($k, $projectName, self::SCORE_PROJECT_NAME_MATCH);
+            $score += $sId + $sName + $sProject;
+            if ($sId > 0 || $sName > 0 || $sProject > 0) {
+                $keywordsMatched++;
+            }
+        }
+        if ($keywords !== [] && $keywordsMatched === count($keywords)) {
+            $score += self::SCORE_ALL_KEYWORDS_BONUS;
+        }
+        $score += $this->projectBucketBonus($projectName);
+        $score += $this->scoreStatus($item['status'] ?? null);
+        $score += $this->agePenalty(
+            $item['modificationTime'] ?? $item['creationTime'] ?? null,
+            $item['creationTime'] ?? null,
+            $item['status'] ?? null
+        );
+        return $score;
+    }
+
+    /**
+     * Score one template search result (name, projectName, status, match quality, all-keywords bonus).
+     *
+     * @param array<string, mixed> $item Raw CKM API item (resourceMainDisplayName, projectName, status, etc.)
+     */
+    private function scoreTemplateItem(array $item, string $keyword): int
+    {
+        $name = $item['resourceMainDisplayName'] ?? null;
+        $projectName = $item['projectName'] ?? null;
+        $keywords = array_filter(explode(' ', trim($keyword)));
+        $score = 0;
+        $keywordsMatched = 0;
+        foreach ($keywords as $k) {
+            $sName = $this->scoreFieldMatch($k, $name, self::SCORE_NAME_MATCH);
+            $sProject = $this->scoreFieldMatch($k, $projectName, self::SCORE_PROJECT_NAME_MATCH);
+            $score += $sName + $sProject;
+            if ($sName > 0 || $sProject > 0) {
+                $keywordsMatched++;
+            }
+        }
+        if ($keywords !== [] && $keywordsMatched === count($keywords)) {
+            $score += self::SCORE_ALL_KEYWORDS_BONUS;
+        }
+        $score += $this->projectBucketBonus($projectName);
+        $score += $this->scoreStatus($item['status'] ?? null);
+        $score += $this->agePenalty(
+            $item['modificationTime'] ?? $item['creationTime'] ?? null,
+            $item['creationTime'] ?? null,
+            $item['status'] ?? null
+        );
+        return $score;
+    }
+
+    /**
+     * Extra penalty for DRAFT/INITIAL items that are old: per year since last modification (-10), per year since creation (-5).
+     */
+    private function agePenalty(?string $modificationTime, ?string $creationTime, ?string $status): int
+    {
+        if ($status === null) {
+            return 0;
+        }
+        $statusUpper = strtoupper($status);
+        if ($statusUpper !== 'DRAFT' && $statusUpper !== 'REVIEWSUSPENDED' && $statusUpper !== 'INITIAL') {
+            return 0;
+        }
+        $now = new \DateTimeImmutable('now');
+        $yearsSinceMod = $this->yearsSince($modificationTime, $now);
+        $yearsSinceCreation = $this->yearsSince($creationTime, $now);
+        $penalty = 0;
+        $penalty -= self::SCORE_PENALTY_PER_YEAR_SINCE_MODIFICATION * $yearsSinceMod;
+        $penalty -= self::SCORE_PENALTY_PER_YEAR_SINCE_CREATION * $yearsSinceCreation;
+        return $penalty;
+    }
+
+    /**
+     * Parse CKM date string (ISO 8601 or numeric ms) and return full years since reference time.
+     *
+     * @return int Zero if parse fails or date is in the future.
+     */
+    private function yearsSince(?string $dateString, \DateTimeImmutable $reference): int
+    {
+        if ($dateString === null || $dateString === '') {
+            return 0;
+        }
+        $dt = null;
+        if (is_numeric($dateString)) {
+            $ts = (int) $dateString;
+            if ($ts > 2_000_000_000) {
+                $ts = (int) floor($ts / 1000);
+            }
+            $dt = \DateTimeImmutable::createFromFormat('U', (string) $ts);
+        }
+        if ($dt === null || $dt === false) {
+            $dt = \DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, $dateString)
+                ?: \DateTimeImmutable::createFromFormat(\DateTimeInterface::ISO8601, $dateString)
+                ?: @\DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.u\Z', $dateString)
+                ?: @\DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s\Z', $dateString);
+        }
+        if (!$dt instanceof \DateTimeImmutable) {
+            return 0;
+        }
+        $interval = $reference->diff($dt);
+        if ($interval->invert === 0) {
+            return 0;
+        }
+        return (int) $interval->y;
+    }
+
+    /**
+     * Score a single keyword against a field: word-boundary match = full score, substring = half, else 0.
+     */
+    private function scoreFieldMatch(string $keyword, ?string $fieldValue, int $fullScore): int
+    {
+        if ($fieldValue === null || $fieldValue === '') {
+            return 0;
+        }
+        $quoted = preg_quote($keyword, '/');
+        if (preg_match('/\b' . $quoted . '\b/ui', $fieldValue) === 1) {
+            return $fullScore;
+        }
+        if (mb_stripos($fieldValue, $keyword) !== false) {
+            return (int) ($fullScore / 2);
+        }
+        return 0;
+    }
+
+    private function scoreStatus(?string $status): int
+    {
+        if ($status === null) {
+            return 0;
+        }
+        return match (strtoupper($status)) {
+            'PUBLISHED' => self::SCORE_STATUS_PUBLISHED,
+            'TEAMREVIEW' => self::SCORE_STATUS_TEAMREVIEW,
+            'DRAFT', 'REVIEWSUSPENDED' => self::SCORE_STATUS_DRAFT,
+            'INITIAL' => self::SCORE_STATUS_INITIAL,
+            default => 0,
+        };
+    }
+
+    private function projectBucketBonus(?string $projectName): int
+    {
+        if ($projectName === null) {
+            return 0;
+        }
+        return in_array(strtolower($projectName), ['common resources', 'structural archetypes'], true)
+            ? self::SCORE_PROJECT_BUCKET
+            : 0;
     }
 }
