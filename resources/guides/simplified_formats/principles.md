@@ -1,6 +1,7 @@
 # openEHR Simplified Formats — Principles
 
 **Scope:** Foundational principles for Flat and Structured (simplified) serialization of openEHR data
+**Related:** openehr://guides/simplified_formats/rules, openehr://guides/simplified_formats/idioms-cheatsheet, openehr://guides/simplified_formats/checklist
 **Keywords:** simplified format, flat format, structured format, flattening, Web Template, WT, JSON, serialization
 
 ---
