@@ -101,10 +101,8 @@ Constrain RM type and optionally internal attributes (units, magnitude, code). A
 
 ## Paths and Identifiers
 
-- Paths derived from constraint tree
-- Must be stable across versions
-
-> Path stability is more important than aesthetic structure.
+- Paths derived from constraint tree.
+- Paths are a public API: must be stable across versions. Path stability takes precedence over aesthetic structure; path-breaking changes require a major version bump.
 
 ---
 
@@ -149,7 +147,6 @@ Slots (allow_archetype, include, exclude) must:
 All archetypes must:
 - Parse successfully
 - Validate against RM
-- Preserve semantic paths
 
 > Syntax correctness is prerequisite for modelling quality.
 

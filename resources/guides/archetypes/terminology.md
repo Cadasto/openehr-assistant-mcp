@@ -92,18 +92,11 @@ Map ac-codes to terminology queries or value set URIs defining which external co
 
 ## Language and Localisation
 
-See `openehr://guides/archetypes/language-standards` for comprehensive guidance on original language requirements, English conventions, translation philosophy, and per-language frameworks (sections E, H).
+See `openehr://guides/archetypes/language-standards` for full guidance.
 
-**Key principles:**
-
-- Original language: English (en) mandatory for international CKM; prevents semantic drift from translation chains.
-- No language primacy: translated archetypes use target language's natural clinical register.
-- Preserve meaning: translations preserve clinical intent, not literal wording.
-- Consistency: same phrase → same translation; consistent grammatical forms (e.g., definite/indefinite); external bindings (SNOMED CT, LOINC) handle spelling/terminology variants.
-- Prohibitions: internal terminology (at-codes, ac-codes, id-codes) stable; don't translate class names (ACTION, OBSERVATION); never change identifiers, paths, units, value sets or structure.
-- Translate metadata: Purpose, Use, Misuse fields translated to reflect target-language clinical practice.
-- Localisation: avoid locale-specific semantics, healthcare system assumptions, and regional references in archetype definitions.
-- Authority alignment: follow target-language terminology guidelines (e.g., SNOMED CT translation rules); avoid English abbreviations unless established in target clinical vocabulary.
+- Original language: English (en) mandatory for international CKM.
+- Translations preserve clinical intent, not literal wording; use target language's natural clinical register.
+- Internal codes (at/ac/id), paths, structure, and class names are never translated.
 
 ---
 
