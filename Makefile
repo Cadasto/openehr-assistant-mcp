@@ -1,4 +1,4 @@
-.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio inspector inspector-stop
+.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio conformance inspector inspector-stop
 
 # Default target
 .DEFAULT_GOAL := help
@@ -62,6 +62,9 @@ sh: ## Open an interactive shell in dev container
 
 run-stdio: ## Run MCP server (stdio transport) in dev container
 	$(DOCKER_COMPOSE_DEV) run --rm app php public/index.php --transport=stdio
+
+conformance: ## Run MCP conformance tests against server (requires make up-dev; URL: http://ingress:8343/). Results in conformance/
+	$(DOCKER_COMPOSE_DEV) run --rm node npx -y @modelcontextprotocol/conformance server --url http://ingress:8343/ -o conformance --expected-failures tests/conformance-baseline.yml
 
 ##@ MCP inspector UI
 

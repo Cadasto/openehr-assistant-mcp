@@ -21,8 +21,8 @@ These guidelines summarize the high-level architecture, coding conventions, and 
 ## Configuration & Environment
 
 - **Runtime**:
-  - Docker services (from `.docker/docker-compose.yml` and `.docker/docker-compose.dev.yml`):
-    - `app`: application service used for both production-like and development runs. Dev overrides mount the source and expose port 8343. `ingress`: Caddy reverse proxy.
+ - Docker services (from `.docker/docker-compose.yml` and `.docker/docker-compose.dev.yml`):
+ - `app`: application service used for both production-like and development runs. Dev overrides mount the source and expose port 8343. `ingress`: Caddy reverse proxy. `node`: dev-only service with Node and curl for MCP conformance (`make conformance`) and other npx/curl tooling.
   - PHP 8.4 provided by multi-stage `.docker/Dockerfile`.
 - **Environment variables**: Configured in `.env` (see `.env.example`). Key variables:
   - `CKM_API_BASE_URL`: Base URL for the CKM REST API (default: `https://ckm.openehr.org/ckm/rest`).
@@ -96,6 +96,12 @@ Tool definitions are declared in `composer.json` under `scripts`.
    ```bash
    docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer test:coverage
 ```
+
+6. **Run MCP conformance** (server must be up via `make up-dev`):
+   ```bash
+   make conformance
+   ```
+   This runs the official MCP conformance suite against the server over HTTP using the `node` service (Node + curl) in Docker.
 
 ### Local (non-Docker) workflow
 
