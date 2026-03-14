@@ -110,6 +110,7 @@ composer test:coverage
 
 ## Additional notes
 
+- **Docker-only runtime**: There is no local PHP or Composer on the host. All `php`, `composer`, and `vendor/bin/*` commands **must** run inside the dev container. Running them on the host will fail.
 - The dev container expects your host user ID to be `1000`; adjust the `-u` flag if your UID is different.
 - To run a single test class or subset, call `vendor/bin/phpunit --filter SomeTest` inside the dev container.
 - Coverage requires Xdebug; the `composer test:coverage` script sets `XDEBUG_MODE` automatically.
