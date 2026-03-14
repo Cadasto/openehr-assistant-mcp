@@ -19,6 +19,8 @@ This server augments these workflows by providing AI assistants with direct acce
 > NOTE:
 > This project is currently in a pre-release state. Expect frequent updates and potential breaking changes to the architecture and feature set until version 1.0.
 
+**Recommended:** For the best experience, pair this MCP server with the [openEHR Assistant Plugin](https://github.com/Cadasto/openehr-assistant-plugin), which adds skills, rules, and agents that guide AI assistants through openEHR workflows. Claude Code users can install it directly from the [Cadasto Plugin Marketplace](https://github.com/Cadasto/plugin-marketplace).
+
 ## Table of Contents
 
 - [Features](#features)
