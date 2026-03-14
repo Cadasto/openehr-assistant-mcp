@@ -86,3 +86,17 @@ Paths in AQL are **archetype paths** (or RM class attribute paths), grounded in 
 - [ ] Projection minimized to reduce payload and server work.
 
 ---
+
+## 10. Stored Query Governance
+
+- [ ] Stored queries versioned explicitly; deprecate old versions with migration notes.
+- [ ] Template version governance active — template changes can invalidate existing query paths.
+
+---
+
+## 11. Operational Readiness
+
+- [ ] Query timeout thresholds and result row limits configured.
+- [ ] Regression and conformance test packs cover syntax, semantics, results, performance, and engine compatibility.
+
+---

@@ -65,6 +65,24 @@ Implementations can store the same RM content in different physical shapes. AQL 
 
 The spec defines AQL; engines implement subsets and extensions. Treat “supported AQL” as the intersection of spec and engine docs/tests. For portable queries: prefer containment and archetype-id constraints; use node-id predicates on all repeating segments; parameterize external inputs; keep functions and text operations behind engine verification.
 
+Portability cautions:
+
+- **Template disambiguation:** When the same archetype is reused across templates, add `template_id` conditions in WHERE for contextual disambiguation.
+- **VERSION queries:** `CONTAINS VERSION` semantics are not fully settled across engines; treat as a portability risk area unless engine behaviour is explicitly documented and tested.
+- **Repeating structures:** Projecting multiple paths from different repeating scopes can cause row explosion (Cartesian-like combinations). Validate result shape against concrete sample data when querying repeated clinical structures.
+- **Deep path predicates:** Prefer WHERE for non-structural value criteria over exotic path predicates in class expressions; engine support varies.
+
+---
+
+## Stored Queries and API Execution
+
+AQL is executed through the **Query service** (see openehr://guides/rm/platform-services) via:
+
+- **Ad hoc query** — query text submitted directly.
+- **Stored query** — referenced by qualified name (`namespace::query_name`), optionally versioned.
+
+Stored queries are preferred for production: they support governance (review, approval, versioning), performance (planning/caching), and auditability. Maintain a query catalog with owner, purpose, template dependencies, and test cases.
+
 ---
 
 ## Design Workflow Summary
