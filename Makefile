@@ -11,8 +11,8 @@ RED := \033[0;31m
 NC := \033[0m # No Color
 
 # Configuration
-DOCKER_COMPOSE ?= docker compose -f .docker/docker-compose.yml
-DOCKER_COMPOSE_DEV ?= docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml
+DOCKER_COMPOSE ?= docker compose --env-file .env -f .docker/docker-compose.yml
+DOCKER_COMPOSE_DEV ?= docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml
 
 ##@ General
 

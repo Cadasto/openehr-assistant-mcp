@@ -204,7 +204,7 @@ cp .env.example .env
 #### 3) Start dev containers
 
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml up -d --build --force-recreate
+docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml up -d --build --force-recreate
 # or
 make up-dev
 ```
@@ -212,7 +212,7 @@ make up-dev
 #### 4) Install Composer dependencies
 
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer install
+docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer install
 # or
 make install
 ```
@@ -227,7 +227,7 @@ make install
 Alternatively, use stdio by running a similar command to the following when you want your MCP client to launch the server process directly.
 
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app php public/index.php --transport=stdio
+docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app php public/index.php --transport=stdio
 ```
 
 ---
@@ -241,7 +241,7 @@ Make sure your MCP client supports stdio transport and runs one of the following
 #### 1) From dev containers
 
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app php public/index.php --transport=stdio
+docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app php public/index.php --transport=stdio
 ```
 
 #### 2) From a published Docker image
@@ -353,13 +353,13 @@ Note: Authorization headers are not required nor configured by default. If you n
 
 ### Testing and QA
 
-- Unit tests: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test` (PHPUnit 12)
-- Test with coverage: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test:coverage`
-- Static analysis: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer check:phpstan`
+- Unit tests: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test` (PHPUnit 12)
+- Test with coverage: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test:coverage`
+- Static analysis: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer check:phpstan`
 
 #### MCP Conformance
 
-The [MCP Conformance](https://github.com/modelcontextprotocol/conformance) test framework checks the server against the MCP specification. It talks to the server over **HTTP only** (not stdio). Some scenarios require test tools (e.g. `test_tool_with_logging`) or optional features this server does not implement; those are listed in `tests/conformance-baseline.yml` so that `make conformance` exits 0 when only known failures occur, and fails on new regressions. To see all server scenarios: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm node npx -y @modelcontextprotocol/conformance list --server`. Ensure the dev stack is running (`make up-dev`), then run:
+The [MCP Conformance](https://github.com/modelcontextprotocol/conformance) test framework checks the server against the MCP specification. It talks to the server over **HTTP only** (not stdio). Some scenarios require test tools (e.g. `test_tool_with_logging`) or optional features this server does not implement; those are listed in `tests/conformance-baseline.yml` so that `make conformance` exits 0 when only known failures occur, and fails on new regressions. To see all server scenarios: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm node npx -y @modelcontextprotocol/conformance list --server`. Ensure the dev stack is running (`make up-dev`), then run:
 
 ```bash
 make conformance
@@ -368,7 +368,7 @@ make conformance
 This runs the conformance suite inside the `node` service (Node + curl) in Docker, so you do not need Node on the host. Results are printed to the terminal and written to `conformance/` in the repo (subdirectories like `conformance/server-<scenario>-<timestamp>/` with `checks.json`). To run a single scenario or pass options (e.g. `--verbose`), use:
 
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm node npx -y @modelcontextprotocol/conformance server --url http://ingress:8343/ -o conformance --expected-failures conformance-baseline.yml --scenario server-initialize --verbose
+docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm node npx -y @modelcontextprotocol/conformance server --url http://ingress:8343/ -o conformance --expected-failures conformance-baseline.yml --scenario server-initialize --verbose
 ```
 
 Tips

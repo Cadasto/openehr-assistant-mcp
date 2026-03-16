@@ -84,17 +84,17 @@ Tool definitions are declared in `composer.json` under `scripts`.
 
 3. **Run PHPUnit**:
    ```bash
-   docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer test
+   docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer test
 ```
 
 4. **Run PHPStan**:
    ```bash
-   docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer check:phpstan
+   docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer check:phpstan
 ```
 
 5. **Run coverage (HTML)**:
    ```bash
-   docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer test:coverage
+   docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer test:coverage
 ```
 
 6. **Run MCP conformance** (server must be up via `make up-dev`):

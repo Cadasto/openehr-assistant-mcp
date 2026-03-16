@@ -39,13 +39,13 @@ Recommended developer workflow (inside Docker):
 1. `git clone <your-fork-url>`
 2. `cd openehr-assistant-mcp`
 3. Option A - Docker Compose directly:
-   - `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml up -d --build --force-recreate`
+   - `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml up -d --build --force-recreate`
    
    Option B - Makefile shortcuts:
    - `make up-dev` (uses both docker-compose files from `.docker/`)
 4. `cp .env.example .env`
 5. Install dependencies inside the dev container:
-   - Compose: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer install`
+   - Compose: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer install`
    - Make: `make install`
 
 Notes
@@ -65,7 +65,7 @@ Edit `.env` and set at least:
 Inside the dev container:
 - Streamable HTTP (default): available at `http://openehr-assistant-mcp.local:8343/mcp_openehr` when the services are up (`make up-dev` or the compose command above)
 - Stdio (one-off run):
-  - Compose: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm app php public/index.php --transport=stdio`
+  - Compose: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm app php public/index.php --transport=stdio`
   - Make: `make run-stdio`
 
 The entrypoint script is `public/index.php`. Available transports:
@@ -75,10 +75,10 @@ The entrypoint script is `public/index.php`. Available transports:
 
 ## Running tests and coverage
 - Full test suite:
-  - Compose: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test`
+  - Compose: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test`
   - Make (inside shell): `make sh` then run `composer test`
-- Run a subset: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app vendor\bin\phpunit --filter SomeTest`
-- Coverage HTML report: `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test:coverage`
+- Run a subset: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app vendor\bin\phpunit --filter SomeTest`
+- Coverage HTML report: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test:coverage`
 
 Testing policy:
 - Tests live under `tests/` with namespace `Cadasto\\OpenEHR\\MCP\\Assistant\\Tests` (see `tests/phpunit.xml`).
@@ -104,13 +104,13 @@ final class SmokeTest extends TestCase
 
 To run a single test class:
 ```bash
-docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app vendor\bin\phpunit --filter SmokeTest
+docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app vendor\bin\phpunit --filter SmokeTest
 ```
 
 
 ## Static analysis and code style
 - Coding standard: PSR-12. Use PHP CS Fixer (or IDE) if available.
-- Static analysis (PHPStan): `docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer check:phpstan`
+- Static analysis (PHPStan): `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer check:phpstan`
 - Keep methods small; use typed signatures; add phpdoc where types aren’t obvious.
 
 
