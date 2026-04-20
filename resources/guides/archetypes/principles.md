@@ -1,7 +1,7 @@
 # openEHR Archetype Design Principles
 
 **Scope:** Foundational principles for openEHR archetype modelling, community modelling practices
-**Related:** openehr://guides/archetypes/rules, openehr://guides/archetypes/adl-idioms-cheatsheet, openehr://guides/archetypes/checklist, openehr://guides/specs/am2-ADL2, openehr://guides/specs/am2-AOM2
+**Related:** openehr://guides/archetypes/rules, openehr://guides/archetypes/adl-idioms-cheatsheet, openehr://guides/archetypes/checklist, openehr://guides/specs/am-Overview, openehr://guides/specs/am2-ADL2, openehr://guides/specs/am2-AOM2, openehr://guides/specs/am-Identification
 **Keywords:** archetype, design, principles, modelling, foundation
 
 ---

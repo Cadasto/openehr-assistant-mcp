@@ -1,7 +1,7 @@
 # openEHR Archetype Design Rules
 
 **Scope:** Normative rules for modelling openEHR archetypes
-**Related:** `openehr://guides/archetypes/structural-constraints`, `openehr://guides/archetypes/terminology`, `openehr://guides/specs/am2-AOM2`, `openehr://guides/specs/am2-ADL2`
+**Related:** `openehr://guides/archetypes/structural-constraints`, `openehr://guides/archetypes/terminology`, `openehr://guides/specs/am-Overview`, `openehr://guides/specs/am2-AOM2`, `openehr://guides/specs/am2-ADL2`, `openehr://guides/specs/am-Identification`
 **Keywords:** ADL, AOM, rules, modeling, lint, checks, validation
 
 ---

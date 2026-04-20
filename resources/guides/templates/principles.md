@@ -1,7 +1,7 @@
 # openEHR Template Design Principles
 
 **Scope:** Foundational principles for openEHR templates (OET/OPT)
-**Related:** openehr://guides/templates/rules, openehr://guides/templates/oet-idioms-cheatsheet, openehr://guides/templates/checklist, openehr://guides/specs/am2-OPT2, openehr://guides/specs/am2-AOM2
+**Related:** openehr://guides/templates/rules, openehr://guides/templates/oet-idioms-cheatsheet, openehr://guides/templates/checklist, openehr://guides/specs/am-Overview, openehr://guides/specs/am2-OPT2, openehr://guides/specs/am2-AOM2, openehr://guides/specs/am-Identification
 **Keywords:** templates, OET, OPT, design, principles, CGEM, composition, event, persistent
 
 ---

@@ -1,7 +1,7 @@
 # openEHR Archetype ADL & Syntax Guide
 
 **Scope:** Correct and idiomatic use of ADL and the Archetype Object Model (AOM)
-**Related:** openehr://guides/archetypes/adl-idioms-cheatsheet, openehr://guides/archetypes/structural-constraints, openehr://guides/archetypes/rules, openehr://guides/specs/am2-ADL2, openehr://guides/specs/am-ADL1.4, openehr://guides/specs/am2-AOM2
+**Related:** openehr://guides/archetypes/adl-idioms-cheatsheet, openehr://guides/archetypes/structural-constraints, openehr://guides/archetypes/rules, openehr://guides/specs/am-Overview, openehr://guides/specs/am2-ADL2, openehr://guides/specs/am-ADL1.4, openehr://guides/specs/am2-AOM2
 **Keywords:** ADL, archetype, syntax, guide, reference, formal, constraint, AM, AOM, terms, structure, path, definition, lint
 
 ---
