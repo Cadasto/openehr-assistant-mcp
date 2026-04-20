@@ -3,9 +3,9 @@
 **Scope:** Shared abstractions underpinning locatability, change control, provenance, and party reference across the Reference Model.
 **Component:** RM
 **Document:** common
-**Release:** Release-1.1.0
-**Spec URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/common.html
-**Markdown URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/common.md
+**Release:** development
+**Spec URL:** https://specifications.openehr.org/releases/RM/development/common.html
+**Markdown URL:** https://specifications.openehr.org/releases/RM/development/common.md
 **Last updated:** 2026-04-20
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-data_types, openehr://guides/specs/rm-support
 **Keywords:** LOCATABLE, PATHABLE, PARTY_PROXY, VERSIONED_OBJECT, CONTRIBUTION, AUDIT_DETAILS, ATTESTATION, FEEDER_AUDIT, change control, authored resource
@@ -54,6 +54,6 @@ Consult the full document when implementing commit pipelines (`CONTRIBUTION` + `
 
 ## References
 
-- Full spec (HTML): https://specifications.openehr.org/releases/RM/Release-1.1.0/common.html
-- Full spec (Markdown): https://specifications.openehr.org/releases/RM/Release-1.1.0/common.md
+- Full spec (HTML): https://specifications.openehr.org/releases/RM/development/common.html
+- Full spec (Markdown): https://specifications.openehr.org/releases/RM/development/common.md
 - Related digests: specs/rm-ehr, specs/rm-data_types, specs/rm-support, specs/rm-demographic

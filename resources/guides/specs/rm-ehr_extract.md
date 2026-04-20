@@ -3,9 +3,9 @@
 **Scope:** Cross-system packaging of EHR content for coarse-grained transmission between health systems
 **Component:** RM
 **Document:** ehr_extract
-**Release:** Release-1.1.0
-**Spec URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/ehr_extract.html
-**Markdown URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/ehr_extract.md
+**Release:** development
+**Spec URL:** https://specifications.openehr.org/releases/RM/development/ehr_extract.html
+**Markdown URL:** https://specifications.openehr.org/releases/RM/development/ehr_extract.md
 **Last updated:** 2026-04-20
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-common, openehr://guides/specs/rm-demographic
 **Keywords:** EHR_EXTRACT, X_VERSIONED_COMPOSITION, EXTRACT_CHAPTER, EXTRACT_FOLDER, transmission, provenance, demographic extract, messaging
@@ -45,6 +45,6 @@ The EHR Extract model sits *above* the core EHR and demographic information mode
 Read it when you need to (a) implement or consume an extract producer/consumer and must understand `EXTRACT_SPEC` filters; (b) reason about the relationship between `VERSIONED_COMPOSITION` in an EHR and its `X_VERSIONED_COMPOSITION` serialised counterpart, including audit-trail preservation; (c) decide how far the demographic graph should be walked and how `PARTY_REF` rewriting affects downstream consumers; or (d) design synchronisation flows where `EXTRACT_ACTION_REQUEST` standing queries trigger recurring transfers.
 
 ## References
-- Full spec (HTML): https://specifications.openehr.org/releases/RM/Release-1.1.0/ehr_extract.html
-- Full spec (Markdown): https://specifications.openehr.org/releases/RM/Release-1.1.0/ehr_extract.md
+- Full spec (HTML): https://specifications.openehr.org/releases/RM/development/ehr_extract.html
+- Full spec (Markdown): https://specifications.openehr.org/releases/RM/development/ehr_extract.md
 - Related digests: specs/rm-ehr, specs/rm-common, specs/rm-demographic

@@ -3,9 +3,9 @@
 **Scope:** Generalised model of parties (people, organisations, groups, devices) and their roles, identities, contacts, and relationships.
 **Component:** RM
 **Document:** demographic
-**Release:** Release-1.1.0
-**Spec URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/demographic.html
-**Markdown URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/demographic.md
+**Release:** development
+**Spec URL:** https://specifications.openehr.org/releases/RM/development/demographic.html
+**Markdown URL:** https://specifications.openehr.org/releases/RM/development/demographic.md
 **Last updated:** 2026-04-20
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-common
 **Keywords:** demographic, PARTY, ACTOR, PERSON, ORGANISATION, ROLE, CAPABILITY, PARTY_RELATIONSHIP, PARTY_IDENTITY, PMI
@@ -51,6 +51,6 @@ Consult the full spec when implementing the `ACTOR` / `ROLE` split with shared v
 
 ## References
 
-- Full spec (HTML): https://specifications.openehr.org/releases/RM/Release-1.1.0/demographic.html
-- Full spec (Markdown): https://specifications.openehr.org/releases/RM/Release-1.1.0/demographic.md
+- Full spec (HTML): https://specifications.openehr.org/releases/RM/development/demographic.html
+- Full spec (Markdown): https://specifications.openehr.org/releases/RM/development/demographic.md
 - Related digests: specs/rm-ehr, specs/rm-common, specs/rm-support

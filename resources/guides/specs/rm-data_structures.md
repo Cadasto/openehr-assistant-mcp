@@ -3,9 +3,9 @@
 **Scope:** Content-level container classes — item structures and history — that organise values inside every openEHR Entry.
 **Component:** RM
 **Document:** data_structures
-**Release:** Release-1.1.0
-**Spec URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/data_structures.html
-**Markdown URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/data_structures.md
+**Release:** development
+**Spec URL:** https://specifications.openehr.org/releases/RM/development/data_structures.html
+**Markdown URL:** https://specifications.openehr.org/releases/RM/development/data_structures.md
 **Last updated:** 2026-04-20
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-data_types, openehr://guides/specs/rm-common
 **Keywords:** ITEM_TREE, ITEM_LIST, ITEM_TABLE, ITEM_SINGLE, HISTORY, EVENT, INTERVAL_EVENT, POINT_EVENT, CLUSTER, ELEMENT, time-series, representation
@@ -51,6 +51,6 @@ Consult the full spec when selecting the correct `ITEM_STRUCTURE` shape for an a
 
 ## References
 
-- Full spec (HTML): https://specifications.openehr.org/releases/RM/Release-1.1.0/data_structures.html
-- Full spec (Markdown): https://specifications.openehr.org/releases/RM/Release-1.1.0/data_structures.md
+- Full spec (HTML): https://specifications.openehr.org/releases/RM/development/data_structures.html
+- Full spec (Markdown): https://specifications.openehr.org/releases/RM/development/data_structures.md
 - Related digests: specs/rm-ehr, specs/rm-data_types, specs/rm-common

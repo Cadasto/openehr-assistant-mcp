@@ -29,6 +29,8 @@ See `_template.md` for the exact structure.
 - Every named class must exist in the upstream spec (no invention).
 - All URLs must resolve — verify with `curl -sI` before commit.
 - Update `**Last updated:**` on any edit.
-- Digests track the `latest` release; bump `**Release:**` and both URLs on each
-  openEHR release.
+- Default to `**Release:** development` with `/releases/<COMPONENT>/development/`
+  URLs so digests track the living spec rather than a year-old snapshot.
+  Fork to a `-release-X.Y.Z.md` sibling if you need a point-in-time pinned
+  digest for a specific openEHR release.
 - Use the repo's `**Field:**` header convention; do not add YAML frontmatter.

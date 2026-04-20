@@ -3,9 +3,9 @@
 **Scope:** The top-level EHR container and the composition/entry hierarchy that holds all clinical and administrative content.
 **Component:** RM
 **Document:** ehr
-**Release:** Release-1.1.0
-**Spec URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/ehr.html
-**Markdown URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/ehr.md
+**Release:** development
+**Spec URL:** https://specifications.openehr.org/releases/RM/development/ehr.html
+**Markdown URL:** https://specifications.openehr.org/releases/RM/development/ehr.md
 **Last updated:** 2026-04-20
 **Related:** openehr://guides/specs/rm-common, openehr://guides/specs/rm-data_structures, openehr://guides/specs/rm-data_types
 **Keywords:** EHR, COMPOSITION, ENTRY, OBSERVATION, EVALUATION, INSTRUCTION, ACTION, ISM, versioning, CONTRIBUTION
@@ -49,6 +49,6 @@ Reach for the full spec when implementing the ISM state machine (valid transitio
 
 ## References
 
-- Full spec (HTML): https://specifications.openehr.org/releases/RM/Release-1.1.0/ehr.html
-- Full spec (Markdown): https://specifications.openehr.org/releases/RM/Release-1.1.0/ehr.md
+- Full spec (HTML): https://specifications.openehr.org/releases/RM/development/ehr.html
+- Full spec (Markdown): https://specifications.openehr.org/releases/RM/development/ehr.md
 - Related digests: specs/rm-common, specs/rm-data_structures, specs/rm-data_types, specs/rm-support, specs/rm-demographic

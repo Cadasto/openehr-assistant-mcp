@@ -3,7 +3,7 @@
 **Scope:** <One-line hook used by `guide_search` ranking; concise statement of what this document defines.>
 **Component:** <RM | AM | BASE | SM | QUERY | LANG | PROC | CDS | CNF | ITS-REST | ITS-XML | TERM>
 **Document:** <upstream doc ID, e.g. ehr, data_types, ADL2, openehr_platform>
-**Release:** <release tag, e.g. Release-1.1.0 or development>
+**Release:** <branch or release tag; default `development` for living specs; use `Release-X.Y.Z` for a pinned point-in-time digest>
 **Spec URL:** <canonical HTML URL>
 **Markdown URL:** <canonical .md URL>
 **Last updated:** <YYYY-MM-DD>

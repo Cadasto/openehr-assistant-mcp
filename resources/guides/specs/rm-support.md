@@ -3,9 +3,9 @@
 **Scope:** Foundation package of the Reference Model defining identifiers, object references, the terminology-service interface, and assumed primitive types used throughout openEHR.
 **Component:** RM
 **Document:** support
-**Release:** Release-1.1.0
-**Spec URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/support.html
-**Markdown URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/support.md
+**Release:** development
+**Spec URL:** https://specifications.openehr.org/releases/RM/development/support.html
+**Markdown URL:** https://specifications.openehr.org/releases/RM/development/support.md
 **Last updated:** 2026-04-20
 **Related:** openehr://guides/specs/rm-common, openehr://guides/specs/rm-data_types
 **Keywords:** OBJECT_ID, OBJECT_VERSION_ID, HIER_OBJECT_ID, ARCHETYPE_ID, TEMPLATE_ID, OBJECT_REF, PARTY_REF, TERMINOLOGY_SERVICE, identifiers, UID, UUID, primitive types
@@ -53,6 +53,6 @@ Open the full document when parsing or minting an `OBJECT_VERSION_ID` (three-par
 
 ## References
 
-- Full spec (HTML): https://specifications.openehr.org/releases/RM/Release-1.1.0/support.html
-- Full spec (Markdown): https://specifications.openehr.org/releases/RM/Release-1.1.0/support.md
+- Full spec (HTML): https://specifications.openehr.org/releases/RM/development/support.html
+- Full spec (Markdown): https://specifications.openehr.org/releases/RM/development/support.md
 - Related digests: specs/rm-common, specs/rm-data_types

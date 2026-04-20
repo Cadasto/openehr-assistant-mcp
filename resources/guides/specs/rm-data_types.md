@@ -3,9 +3,9 @@
 **Scope:** Leaf-level typed data values carried by every archetyped `ELEMENT` across the openEHR Reference Model.
 **Component:** RM
 **Document:** data_types
-**Release:** Release-1.1.0
-**Spec URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/data_types.html
-**Markdown URL:** https://specifications.openehr.org/releases/RM/Release-1.1.0/data_types.md
+**Release:** development
+**Spec URL:** https://specifications.openehr.org/releases/RM/development/data_types.html
+**Markdown URL:** https://specifications.openehr.org/releases/RM/development/data_types.md
 **Last updated:** 2026-04-20
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-data_structures, openehr://guides/specs/rm-support
 **Keywords:** data types, DV_QUANTITY, DV_CODED_TEXT, DV_INTERVAL, DV_DATE_TIME, DV_MULTIMEDIA, CODE_PHRASE, ordinal, proportion, terminology, ISO 8601
@@ -47,6 +47,6 @@ The `data_types` package defines the clinical and scientific data value classes 
 Consult the full specification when reasoning about `DV_QUANTITY` magnitude/precision invariants or UCUM unit semantics, designing `DV_INTERVAL<T>` generic parameterisation and open/closed boundary semantics, distinguishing `DV_CODED_TEXT` from `DV_TEXT` with language and `TERM_MAPPING` across terminologies, handling partial-precision `DV_DATE_TIME` values, or selecting between `DV_MULTIMEDIA`, `DV_PARSABLE`, and archetyped `CLUSTER` structures for complex payloads.
 
 ## References
-- Full spec (HTML): https://specifications.openehr.org/releases/RM/Release-1.1.0/data_types.html
-- Full spec (Markdown): https://specifications.openehr.org/releases/RM/Release-1.1.0/data_types.md
+- Full spec (HTML): https://specifications.openehr.org/releases/RM/development/data_types.html
+- Full spec (Markdown): https://specifications.openehr.org/releases/RM/development/data_types.md
 - Related digests: specs/rm-ehr, specs/rm-data_structures, specs/rm-support
