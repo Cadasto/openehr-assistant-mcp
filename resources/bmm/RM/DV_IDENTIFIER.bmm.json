@@ -32,10 +32,7 @@
         }
     },
     "invariants": {
-        "Issuer_valid": "not issuer.is_empty",
-        "Assigner_valid": "not assigner.is_empty",
-        "Id_valid": "not id.is_empty",
-        "Type_valid": "not type.is_empty"
+        "Id_valid": "not id.is_empty"
     },
     "package": "org.openehr.rm.data_types.basic",
     "specUrl": "https://specifications.openehr.org/releases/RM/development/data_types.html#_basic_package"

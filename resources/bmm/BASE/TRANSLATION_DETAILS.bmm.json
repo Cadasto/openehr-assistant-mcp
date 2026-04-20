@@ -5,7 +5,7 @@
         "language": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "language",
-            "documentation": "Language of the translation, coded using ISO 639-1 (2 character) language codes.",
+            "documentation": "Language of the translation, encoded following the RFC 5646 standard, using ISO 639-1 (two-character) language codes, e.g. \"en\". It may include a region subtag conforming to ISO 3166-1 alpha-2 (two-character country codes), e.g. \"pt-br\" for Brazilian Portuguese.",
             "is_mandatory": true,
             "type": "Terminology_code"
         },

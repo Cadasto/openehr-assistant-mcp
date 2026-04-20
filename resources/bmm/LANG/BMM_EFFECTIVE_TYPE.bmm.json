@@ -1,0 +1,29 @@
+{
+    "name": "BMM_EFFECTIVE_TYPE",
+    "documentation": "Meta-type for a concrete, unitary type that can be used as an actual parameter type in a generic type declaration.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_UNITARY_TYPE"
+    ],
+    "functions": {
+        "effective_type": {
+            "name": "effective_type",
+            "documentation": "Result = self.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_EFFECTIVE_TYPE"
+            }
+        },
+        "type_base_name": {
+            "name": "type_base_name",
+            "documentation": "Name of base generator type, i.e. excluding any generic parts if present.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

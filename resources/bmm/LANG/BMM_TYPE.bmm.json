@@ -1,0 +1,72 @@
+{
+    "name": "BMM_TYPE",
+    "documentation": "Abstract idea of specifying a type in some context. This is not the same as 'defining' a class. A type specification is essentially a reference of some kind, that defines the type of an attribute, or function result or argument. It may include generic parameters that might or might not be bound. See subtypes.",
+    "is_abstract": true,
+    "functions": {
+        "type_name": {
+            "name": "type_name",
+            "documentation": "Formal string form of the type as per UML.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "type_signature": {
+            "name": "type_signature",
+            "documentation": "Signature form of the type name, which for generics includes generic parameter constrainer types E.g. `Interval<T:Ordered>`.\n\nDefaults to the value of `_type_name()_`.\n",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "is_abstract": {
+            "name": "is_abstract",
+            "documentation": "If true, indicates a type based on an abstract class, i.e. a type that cannot be directly instantiated.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_primitive": {
+            "name": "is_primitive",
+            "documentation": "If True, indicates that a type based solely on primitive classes.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "unitary_type": {
+            "name": "unitary_type",
+            "documentation": "Type with any container abstracted away; may be a formal generic type.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_UNITARY_TYPE"
+            }
+        },
+        "effective_type": {
+            "name": "effective_type",
+            "documentation": "Type with any container abstracted away, and any formal parameter replaced by its effective constraint type.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_EFFECTIVE_TYPE"
+            }
+        },
+        "flattened_type_list": {
+            "name": "flattened_type_list",
+            "documentation": "Completely flattened list of type names, flattening out all generic parameters.",
+            "is_abstract": true,
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

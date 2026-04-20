@@ -1,0 +1,59 @@
+{
+    "name": "BMM_GENERIC_CLASS",
+    "documentation": "Definition of a generic class in an object model.",
+    "ancestors": [
+        "BMM_CLASS"
+    ],
+    "properties": {
+        "generic_parameters": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "generic_parameters",
+            "documentation": "List of formal generic parameters, keyed by name. These are defined either directly on this class or by the inclusion of an ancestor class which is generic.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "BMM_PARAMETER_TYPE"
+                ]
+            }
+        }
+    },
+    "functions": {
+        "suppliers": {
+            "name": "suppliers",
+            "documentation": "Add suppliers from generic parameters.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            },
+            "is_nullable": true
+        },
+        "type": {
+            "name": "type",
+            "documentation": "Generate a fully open `BMM_GENERIC_TYPE` instance that corresponds to this class definition",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_GENERIC_TYPE"
+            }
+        },
+        "generic_parameter_conformance_type": {
+            "name": "generic_parameter_conformance_type",
+            "documentation": "For a generic class, type to which generic parameter `a_name` conforms e.g. if this class is `Interval <T:Comparable>` then the Result will be the single type `Comparable`. For an unconstrained type `T`, the Result will be `Any`.",
+            "parameters": {
+                "a_name": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_name",
+                    "type": "String"
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

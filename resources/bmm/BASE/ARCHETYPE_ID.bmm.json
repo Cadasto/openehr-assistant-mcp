@@ -1,6 +1,6 @@
 {
     "name": "ARCHETYPE_ID",
-    "documentation": "Identifier for archetypes. Ideally these would identify globally unique archetypes.\n\nLexical form: `rm_originator  '-' rm_name  '-' rm_entity  '.' concept_name {  '-' specialisation }*  '.v' number`.",
+    "documentation": "Identifier or reference for archetypes. Ideally, these identify globally unique archetypes. When used as a reference, only partial version information is included (major version only), and the namespace is omitted.\n\nLexical form: `rm_originator  '-' rm_name  '-' rm_entity  '.' concept_name {  '-' specialisation }*  '.v' version_id`.",
     "ancestors": [
         "OBJECT_ID"
     ],
@@ -55,7 +55,7 @@
         },
         "version_id": {
             "name": "version_id",
-            "documentation": "Version of this archetype. \n",
+            "documentation": "Version identification of this archetype, representing the major version, e.g. `\"1\"`.",
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",
                 "type": "String"

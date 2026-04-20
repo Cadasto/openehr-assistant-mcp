@@ -1,0 +1,100 @@
+{
+    "name": "BMM_CONTAINER_TYPE",
+    "documentation": "Meta-type that specifies linear containers with a generic parameter corresponding to the type of contained item, and whose container type is a generic type such as `List<T>`, `Set<T>` etc.",
+    "ancestors": [
+        "BMM_TYPE"
+    ],
+    "properties": {
+        "container_class": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "container_class",
+            "documentation": "The type of the container. This converts to the `_root_type_` in `BMM_GENERIC_TYPE`.",
+            "is_mandatory": true,
+            "type": "BMM_GENERIC_CLASS"
+        },
+        "item_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "item_type",
+            "documentation": "The container item type.",
+            "is_mandatory": true,
+            "type": "BMM_UNITARY_TYPE"
+        },
+        "is_ordered": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_ordered",
+            "documentation": "True indicates that order of the items in the container attribute is considered significant and must be preserved, e.g. across sessions, serialisation, deserialisation etc. Otherwise known as 'list' semantics.",
+            "type": "Boolean",
+            "default": true
+        },
+        "is_unique": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_unique",
+            "documentation": "True indicates that only unique instances of items in the container are allowed. Otherwise known as 'set' semantics.",
+            "type": "Boolean",
+            "default": false
+        }
+    },
+    "functions": {
+        "type_name": {
+            "name": "type_name",
+            "documentation": "Return full type name, e.g. `List<ELEMENT>`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "is_abstract": {
+            "name": "is_abstract",
+            "documentation": "True if the container class is abstract.",
+            "post_conditions": {
+                "Post_is_abstract": "Result = container_type.is_abstract"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "flattened_type_list": {
+            "name": "flattened_type_list",
+            "documentation": "Flattened list of type names of `_item_type_`, i.e. `_item_type.flattened_type_list_()`.",
+            "post_conditions": {
+                "Post_result": "Result = item_type.flattened_type_list"
+            },
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        },
+        "unitary_type": {
+            "name": "unitary_type",
+            "documentation": "Return `_item_type_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_UNITARY_TYPE"
+            }
+        },
+        "is_primitive": {
+            "name": "is_primitive",
+            "documentation": "True if `_item_type_` is primitive.",
+            "post_conditions": {
+                "Post_validity": "Result = base_class.is_primitive",
+                "Post_result": "Result = item_type.is_primitive"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "effective_type": {
+            "name": "effective_type",
+            "documentation": "Return `_item_type.effective_type_()`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_EFFECTIVE_TYPE"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

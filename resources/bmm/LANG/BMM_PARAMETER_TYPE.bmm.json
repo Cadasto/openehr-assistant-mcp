@@ -1,0 +1,95 @@
+{
+    "name": "BMM_PARAMETER_TYPE",
+    "documentation": "Definition of a generic parameter in a class definition of a generic type.",
+    "ancestors": [
+        "BMM_UNITARY_TYPE"
+    ],
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of the parameter, e.g. 'T' etc. The name is limited to 1 character and upper-case.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "type_constraint": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type_constraint",
+            "documentation": "Optional conformance constraint that must be the name of a defined type.",
+            "type": "BMM_EFFECTIVE_TYPE"
+        },
+        "inheritance_precursor": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "inheritance_precursor",
+            "documentation": "If set, is the corresponding generic parameter definition in an ancestor class.",
+            "type": "BMM_PARAMETER_TYPE"
+        }
+    },
+    "functions": {
+        "flattened_conforms_to_type": {
+            "name": "flattened_conforms_to_type",
+            "documentation": "Result is either `_conforms_to_type_` or `_inheritance_precursor.flattened_conforms_to_type_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_EFFECTIVE_TYPE"
+            }
+        },
+        "type_signature": {
+            "name": "type_signature",
+            "documentation": "Signature form of the open type, including constrainer type if there is one, e.g. `T:Ordered`.\n",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "is_primitive": {
+            "name": "is_primitive",
+            "documentation": "Result = `False` - generic parameters are understood by definition to be non-primitive.",
+            "post_conditions": {
+                "Post_validity": "Result = base_class.is_primitive"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_abstract": {
+            "name": "is_abstract",
+            "documentation": "Result = `False` - generic parameters are understood by definition to be non-abstract.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "type_name": {
+            "name": "type_name",
+            "documentation": "Return `_name_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "flattened_type_list": {
+            "name": "flattened_type_list",
+            "documentation": "Result is either `_flattened_conforms_to_type.flattened_type_list_` or the `Any` type.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        },
+        "effective_type": {
+            "name": "effective_type",
+            "documentation": "Generate ultimate conformance type, which is either `_flattened_conforms_to_type_` or if not set, `'Any'`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_EFFECTIVE_TYPE"
+            }
+        }
+    },
+    "invariants": {
+        "Inv_generic_name": "name.count = 1 and name.is_upper"
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

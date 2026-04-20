@@ -17,12 +17,6 @@
             "documentation": "Validity of month in constrained date.",
             "type": "VALIDITY_KIND"
         },
-        "timezone_validity": {
-            "_type": "P_BMM_SINGLE_PROPERTY",
-            "name": "timezone_validity",
-            "documentation": "Validity of timezone in constrained date.",
-            "type": "VALIDITY_KIND"
-        },
         "range": {
             "_type": "P_BMM_GENERIC_PROPERTY",
             "name": "range",

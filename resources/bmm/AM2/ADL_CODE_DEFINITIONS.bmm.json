@@ -1,10 +1,16 @@
 {
     "name": "ADL_CODE_DEFINITIONS",
-    "documentation": "Definitions relating to the internal code system of archetypes.",
+    "documentation": "Definitions relating to the internal code system of archetypes.\n\nNOTE: ADL2 was initially released with code system using id-codes (for nodes), at-codes (for values only) and ac-codes (for value sets). As this proved to hinder its widespread use in the openEHR community (due to its impact on existing openEHR RM data), a code system matching the one used in ADL1.4 was introduced as the openEHR primary code system.\n\nopenEHR systems must support at least the at-coded ADL2 archetypes.",
     "constants": {
+        "At_code_leader": {
+            "name": "At_code_leader",
+            "documentation": "String leader of ‘identifier’ codes, i.e. codes used to identify at-coded archetype nodes.",
+            "type": "String",
+            "value": "\"at\""
+        },
         "Id_code_leader": {
             "name": "Id_code_leader",
-            "documentation": "String leader of ‘identifier’ codes, i.e. codes used to identify archetype nodes.",
+            "documentation": "String leader of ‘identifier’ codes, i.e. codes used to identify id-coded archetype nodes.",
             "type": "String",
             "value": "\"id\""
         },
@@ -34,15 +40,15 @@
         },
         "Root_code_regex_pattern": {
             "name": "Root_code_regex_pattern",
-            "documentation": "Regex pattern of the root id code of any archetype. Corresponds to codes of the form `id1`, `id1.1`, `id1.1.1` etc..",
+            "documentation": "Regex pattern of the root code of any archetype. Corresponds to at-codes of the form `at0000`, `at0000.1`, `at0000.1.1` etc, and id-codes of the form `id1`, `id1.1`, `id1.1.1` etc. For at-coded ADL2 numbering starts with zero (i.e. `at0000`) while the id-coded ADL2 numbering starts with one (i.e. `id1`).",
             "type": "String",
-            "value": "\"^id1(\\.1)*$\""
+            "value": "\"^(id1|at0000)(\\.1)*$\""
         },
         "Primitive_node_id": {
             "name": "Primitive_node_id",
-            "documentation": "Code id used for `C_PRIMITIVE_OBJECT` nodes on creation.",
+            "documentation": "Code id used for `C_PRIMITIVE_OBJECT` nodes on creation.\n\nNOTE: For id-coded archetypes this is `\"id9999\"`.",
             "type": "String",
-            "value": "\"id9999\""
+            "value": "\"at9999\""
         }
     },
     "functions": {
@@ -77,7 +83,25 @@
                 }
             },
             "post_conditions": {
-                "Post": "Result = is_id_code (a_code) or else is_value_code (a_code) or else is_value_set_code (a_code)"
+                "Post": "Result = is_at_code (a_code) or else is_id_code (a_code) or else is_value_code (a_code) or else is_value_set_code (a_code)"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_at_code": {
+            "name": "is_at_code",
+            "documentation": "True if `_a_code_` is an ‘at’ code.",
+            "parameters": {
+                "a_code": {
+                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+                    "name": "a_code",
+                    "type": "String"
+                }
+            },
+            "post_conditions": {
+                "Post": "Result = a_code.starts_with (At_code_leader)"
             },
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",

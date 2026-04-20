@@ -62,7 +62,7 @@
         "other_details": {
             "_type": "P_BMM_GENERIC_PROPERTY",
             "name": "other_details",
-            "documentation": "Additional language-senstive resource metadata, as a list of name/value pairs. ",
+            "documentation": "Additional language-sensitive resource metadata, as a list of name/value pairs. ",
             "type_def": {
                 "root_type": "Hash",
                 "generic_parameters": [

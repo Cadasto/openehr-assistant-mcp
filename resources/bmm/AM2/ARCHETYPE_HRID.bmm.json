@@ -39,7 +39,7 @@
         "release_version": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "release_version",
-            "documentation": "The full numeric version of this archetype consisting of 3 parts, e.g. `\"1.8.2\"`. The `_archetype_hrid_` feature includes only the major version.",
+            "documentation": "The full numeric version of this archetype consisting of 3 parts, e.g. `\"1.8.2\"`.",
             "is_mandatory": true,
             "type": "String"
         },

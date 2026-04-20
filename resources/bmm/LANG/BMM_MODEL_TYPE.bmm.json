@@ -1,0 +1,45 @@
+{
+    "name": "BMM_MODEL_TYPE",
+    "documentation": "A type that is defined by a class (or classes) in the model.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_EFFECTIVE_TYPE"
+    ],
+    "properties": {
+        "value_constraint": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "value_constraint",
+            "type": "BMM_VALUE_SET_SPEC"
+        },
+        "base_class": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "base_class",
+            "documentation": "Base class of this type.",
+            "is_mandatory": true,
+            "type": "BMM_CLASS"
+        }
+    },
+    "functions": {
+        "type_base_name": {
+            "name": "type_base_name",
+            "documentation": "Result = `_base_class.name_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "is_primitive": {
+            "name": "is_primitive",
+            "documentation": "Result = `_base_class.is_primitive_`.",
+            "post_conditions": {
+                "Post_validity": "Result = base_class.is_primitive"
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

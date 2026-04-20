@@ -49,6 +49,9 @@
         },
         "less_than": {
             "name": "less_than",
+            "aliases": [
+                "<"
+            ],
             "documentation": "Lexical comparison of string content based on ordering in relevant character set.",
             "parameters": {
                 "other": {

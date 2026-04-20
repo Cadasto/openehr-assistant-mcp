@@ -1,0 +1,17 @@
+{
+    "name": "BMM_FUNCTION_TYPE",
+    "documentation": "Meta-type for function object signatures.",
+    "ancestors": [
+        "BMM_ROUTINE_TYPE"
+    ],
+    "constants": {
+        "base_name": {
+            "name": "base_name",
+            "documentation": "Base name (built-in).",
+            "type": "String",
+            "value": "\"Function\""
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

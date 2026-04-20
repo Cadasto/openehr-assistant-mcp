@@ -38,24 +38,24 @@
         }
     },
     "functions": {
-        "years_allowed:": {
-            "name": "years_allowed:",
+        "years_allowed": {
+            "name": "years_allowed",
             "documentation": "True if years are allowed in the constrained Duration.",
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",
                 "type": "Boolean"
             }
         },
-        "months_allowed:": {
-            "name": "months_allowed:",
+        "months_allowed": {
+            "name": "months_allowed",
             "documentation": "True if months are allowed in the constrained Duration.",
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",
                 "type": "Boolean"
             }
         },
-        "weeks_allowed:": {
-            "name": "weeks_allowed:",
+        "weeks_allowed": {
+            "name": "weeks_allowed",
             "documentation": "True if weeks are allowed in the constrained Duration.",
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",

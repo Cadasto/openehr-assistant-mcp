@@ -1,0 +1,25 @@
+{
+    "name": "BMM_PROCEDURE_TYPE",
+    "documentation": "Form of routine specific to procedure object signatures, with  `_result_type_` being the special Status meta-type",
+    "ancestors": [
+        "BMM_ROUTINE_TYPE"
+    ],
+    "constants": {
+        "base_name": {
+            "name": "base_name",
+            "documentation": "Base name (built-in).",
+            "type": "String",
+            "value": "\"Procedure\""
+        }
+    },
+    "properties": {
+        "result_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "result_type",
+            "documentation": "Result type of a procedure.",
+            "type": "BMM_STATUS_TYPE"
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

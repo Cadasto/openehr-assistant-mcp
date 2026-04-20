@@ -57,7 +57,18 @@
                     "name": "rmcc",
                     "documentation": "Reference Model conformance checker lambda.",
                     "type_def": {
-                        "root_type": "FUNCTION"
+                        "root_type": "FUNCTION",
+                        "generic_parameters": [
+                            "Boolean",
+                            {
+                                "_type": "P_BMM_GENERIC_TYPE",
+                                "root_type": "TUPLE2",
+                                "generic_parameters": [
+                                    "String",
+                                    "String"
+                                ]
+                            }
+                        ]
                     }
                 }
             },

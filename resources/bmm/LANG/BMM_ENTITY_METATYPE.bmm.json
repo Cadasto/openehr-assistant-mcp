@@ -1,0 +1,25 @@
+{
+    "_type": "P_BMM_ENUMERATION_STRING",
+    "name": "BMM_ENTITY_METATYPE",
+    "ancestors": [
+        "String"
+    ],
+    "item_names": [
+        "Entity_metatype_simple",
+        "Entity_metatype_generic",
+        "Entity_metatype_generic_parameter",
+        "Entity_metatype_range_constrained",
+        "Entity_metatype_enumeration",
+        "Entity_metatype_container"
+    ],
+    "item_documentations": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

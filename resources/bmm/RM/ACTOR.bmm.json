@@ -34,8 +34,7 @@
         }
     },
     "invariants": {
-        "Roles_valid": "roles /= Void implies not roles.is_empty",
-        "Legal_identity_exists": "has_legal_identity"
+        "Roles_valid": "roles /= Void implies not roles.is_empty"
     },
     "package": "org.openehr.rm.demographic",
     "specUrl": "https://specifications.openehr.org/releases/RM/development/demographic.html#_demographic_package"

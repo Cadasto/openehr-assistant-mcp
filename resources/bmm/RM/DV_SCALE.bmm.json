@@ -49,6 +49,9 @@
                     "type": "DV_SCALE"
                 }
             },
+            "pre_conditions": {
+                "Pre_comparable": "is_strictly_comparable_to (other)"
+            },
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",
                 "type": "Boolean"
