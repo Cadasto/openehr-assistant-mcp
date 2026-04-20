@@ -9,6 +9,12 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+### Added
+- Guides: New `specs` category with nine per-document openEHR spec digests (RM plus SM platform services) and a `howto` category seeded with `spec-lookup`. MCP `instructions` gains a `Digest-First` clause pairing with the existing `Spec-Lookup-First` clause.
+
+### Changed
+- Guides: Retired the ad-hoc `rm` category; its files moved into `specs/` under the new digest schema (with the `platform-services` file reclassified from RM to SM).
+
 ## [0.15.0] - 2026-03-14
 
 ### Added

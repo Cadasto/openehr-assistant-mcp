@@ -37,7 +37,7 @@ final class Guides
         mimeType: 'text/markdown'
     )]
     public function read(
-        #[CompletionProvider(values: ['archetypes', 'templates', 'aql', 'simplified_formats', 'howto'])]
+        #[CompletionProvider(values: ['archetypes', 'templates', 'aql', 'simplified_formats', 'specs', 'howto'])]
         string $category,
         #[CompletionProvider(provider: GuidesCompletionProvider::class)]
         string $name
@@ -92,6 +92,13 @@ final class Guides
                 $parts = explode('/', $relative);
                 if (count($parts) < 2) {
                     // not matching guides structure
+                    continue;
+                }
+
+                $basename = $fileInfo->getBasename('.md');
+                if ($basename === 'README' || str_starts_with($basename, '_')) {
+                    // skip per-category README files and underscore-prefixed
+                    // templates/scaffolding — they are authoring artifacts, not guides
                     continue;
                 }
 

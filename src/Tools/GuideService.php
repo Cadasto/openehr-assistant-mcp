@@ -308,11 +308,17 @@ final readonly class GuideService
                 continue;
             }
 
+            $name = $fileInfo->getBasename('.md');
+            if ($name === 'README' || str_starts_with($name, '_')) {
+                // skip per-category README files and underscore-prefixed
+                // templates/scaffolding — authoring artifacts, not guides
+                continue;
+            }
+
             $content = (string)file_get_contents($fileInfo->getPathname()) ?: '';
             $relative = str_replace(self::GUIDE_DIR . '/', '', $fileInfo->getPathname());
             $parts = explode('/', $relative);
             $category = $parts[0] ?: 'unknown';
-            $name = $fileInfo->getBasename('.md');
             $title = $this->extractTitle($content, $name);
 
             $index[] = [
