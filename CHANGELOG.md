@@ -9,6 +9,17 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+### Added
+- Guides: New `specs` category under `resources/guides/specs/` with nine per-document openEHR spec digests — `rm-ehr`, `rm-common`, `rm-data_structures`, `rm-data_types`, `rm-support`, `rm-demographic`, `rm-integration`, `rm-ehr_extract`, `sm-openehr_platform`. Each follows a fixed seven-section schema (Purpose, Scope, Key Classes / Constructs, Relations to Other Specs, Architectural Placement, When to Read the Full Spec, References) with a header block carrying Component, Document, Release, Spec URL, and Markdown URL. Validated by new `SpecDigestsTest`.
+- Guides: New `howto` category holds toolchain how-to guides, starting with `spec-lookup` (documents `llms.txt` index, `.md` URL twins, `/api/*.json` endpoints, and the Markdown class-table caveat).
+- MCP Server Instructions: Added a `Digest-First` clause pairing with the existing `Spec-Lookup-First` clause, routing digest-level spec questions to `guide_get(category="specs", name="<component>-<doc>")` before full-spec retrieval.
+- Tests: Added `SpecDigestsTest` validating digest title, header field completeness, required section headings, body word budget (250–900), and canonical URL pattern across every file under `resources/guides/specs/`.
+
+### Changed
+- Guides: Retired the ad-hoc `rm` guide category; its three files were normalised into the new digest schema and moved — `rm/ehr-information-model` → `specs/rm-ehr`, `rm/demographic-model` → `specs/rm-demographic`, `rm/platform-services` → `specs/sm-openehr_platform` (component correction: the Platform Service Model is SM, not RM).
+- Resources: Extended the `Guides` completion provider to include the new `specs` and `howto` categories.
+- Docs: README and AGENTS.md updated to enumerate the new `specs` and `howto` categories and to point at the new digest URIs.
+
 ## [0.15.0] - 2026-03-14
 
 ### Added
