@@ -95,6 +95,13 @@ final class Guides
                     continue;
                 }
 
+                $basename = $fileInfo->getBasename('.md');
+                if ($basename === 'README' || str_starts_with($basename, '_')) {
+                    // skip per-category README files and underscore-prefixed
+                    // templates/scaffolding — they are authoring artifacts, not guides
+                    continue;
+                }
+
                 $content = @file_get_contents($fileInfo->getPathname());
                 if (empty($content)) {
                     continue;

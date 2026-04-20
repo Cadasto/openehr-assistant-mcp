@@ -78,5 +78,22 @@ final class GuidesTest extends TestCase
         $this->assertNotSame('', (string)($found['description'] ?? ''));
     }
 
+    public function test_addResources_skips_readme_and_underscore_prefixed_files(): void
+    {
+        $builder = new Builder();
+        Guides::addResources($builder);
 
+        $ref = new \ReflectionClass($builder);
+        $prop = $ref->getProperty('resources');
+        $resources = $prop->getValue($builder);
+        $uris = array_map(static fn(array $r): string => (string)($r['uri'] ?? ''), (array)$resources);
+
+        foreach ($uris as $uri) {
+            $this->assertDoesNotMatchRegularExpression(
+                '#/README$|/_[^/]+$#',
+                $uri,
+                sprintf('Guide registry leaked authoring artifact: %s', $uri)
+            );
+        }
+    }
 }
