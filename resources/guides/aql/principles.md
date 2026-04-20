@@ -1,7 +1,7 @@
 # openEHR AQL Principles
 
 **Scope:** Foundational principles for the Archetype Query Language (AQL)
-**Related:** openehr://guides/aql/syntax, openehr://guides/aql/idioms-cheatsheet, openehr://guides/aql/checklist
+**Related:** openehr://guides/aql/syntax, openehr://guides/aql/idioms-cheatsheet, openehr://guides/aql/checklist, openehr://guides/specs/query-AQL, openehr://guides/specs/rm-ehr, openehr://guides/specs/sm-openehr_platform
 **Keywords:** AQL, query, principles, semantics, containment, archetype, RM, portability
 
 ---

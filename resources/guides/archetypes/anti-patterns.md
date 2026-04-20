@@ -1,7 +1,7 @@
 # openEHR Archetype Anti-Patterns
 
 **Purpose:** Recognisable modelling failures and how to correct them
-**Related:** openehr://guides/archetypes/rules, openehr://guides/archetypes/principles
+**Related:** openehr://guides/archetypes/rules, openehr://guides/archetypes/principles, openehr://guides/specs/am2-AOM2
 **Keywords:** archetype, anti-patterns, modelling, pitfalls, avoid, best practice
 
 ---

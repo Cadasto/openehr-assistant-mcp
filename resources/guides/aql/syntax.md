@@ -1,7 +1,7 @@
 # openEHR AQL Syntax and Grammar
 
 **Scope:** Rules and grammar for writing and validating AQL
-**Related:** openehr://guides/aql/principles, openehr://guides/aql/idioms-cheatsheet
+**Related:** openehr://guides/aql/principles, openehr://guides/aql/idioms-cheatsheet, openehr://guides/specs/query-AQL
 **Keywords:** AQL, syntax, grammar, containment, path, predicate, SELECT, FROM, WHERE
 
 **Official specification:** For full syntax, operators, and grammar details, visit the openEHR AQL specification: https://specifications.openehr.org/releases/QUERY/development/AQL — agents should consult it when looking for more information beyond this guide.

@@ -3,7 +3,7 @@
 **URI:** `openehr://guides/archetypes/structural-constraints`  
 **Version:** 1.1.0  
 **Scope:** Normative guidance for existence, cardinality, occurrences, and slots
-**Related:** openehr://guides/archetypes/adl-syntax, openehr://guides/archetypes/adl-idioms-cheatsheet
+**Related:** openehr://guides/archetypes/adl-syntax, openehr://guides/archetypes/adl-idioms-cheatsheet, openehr://guides/specs/am2-AOM2, openehr://guides/specs/rm-data_types
 **Keywords:** cardinality, existence, occurrences, slots, constraints
 
 ---
