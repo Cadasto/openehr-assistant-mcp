@@ -77,7 +77,7 @@ Portability cautions:
 
 ## Stored Queries and API Execution
 
-AQL is executed through the **Query service** (see openehr://guides/rm/platform-services) via:
+AQL is executed through the **Query service** (see openehr://guides/specs/sm-openehr_platform) via:
 
 - **Ad hoc query** — query text submitted directly.
 - **Stored query** — referenced by qualified name (`namespace::query_name`), optionally versioned.
