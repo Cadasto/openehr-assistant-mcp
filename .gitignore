@@ -32,3 +32,9 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# ai assistants
+/.aiassistant/
+/.claude/
+/.cursor/
+/.junie/
