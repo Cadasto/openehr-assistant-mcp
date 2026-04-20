@@ -1,7 +1,7 @@
 # openEHR Template Design Rules
 
 **Scope:** Concrete modelling rules and best practices for openEHR templates
-**Related:** openehr://guides/templates/principles, openehr://guides/templates/oet-syntax
+**Related:** openehr://guides/templates/principles, openehr://guides/templates/oet-syntax, openehr://guides/specs/am2-OPT2
 **Keywords:** template, OET, OPT, design, rules, modeling, guidance, structure, lint, checks, validation, CGEM, composition
 
 ---

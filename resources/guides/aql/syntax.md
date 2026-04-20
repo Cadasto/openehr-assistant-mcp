@@ -1,7 +1,7 @@
 # openEHR AQL Syntax and Grammar
 
 **Scope:** Rules and grammar for writing and validating AQL
-**Related:** openehr://guides/aql/principles, openehr://guides/aql/idioms-cheatsheet
+**Related:** openehr://guides/aql/principles, openehr://guides/aql/idioms-cheatsheet, openehr://guides/specs/query-AQL
 **Keywords:** AQL, syntax, grammar, containment, path, predicate, SELECT, FROM, WHERE
 
 **Official specification:** For full syntax, operators, and grammar details, visit the openEHR AQL specification: https://specifications.openehr.org/releases/QUERY/development/AQL — agents should consult it when looking for more information beyond this guide.
@@ -13,14 +13,14 @@
 AQL has a fixed, SQL-like clause order:
 
 ```aql
-SELECT <select_list>
+SELECT [DISTINCT] <select_list>
 FROM <from_expr>
 [WHERE <boolean_expr>]
 [ORDER BY <order_list>]
 [LIMIT <n> [OFFSET <m>]]
 ```
 
-Clause order is not permutable. Optional clauses (WHERE, ORDER BY, LIMIT) may not be supported by all engines; check engine docs.
+Clause order is not permutable. `WHERE`, `ORDER BY`, `LIMIT`, and `OFFSET` are optional but **spec-normative**. `TOP <n>` existed in earlier releases and is **deprecated** as of QUERY Release-1.1.0 in favour of `LIMIT … [OFFSET …]` — the two must not coexist in one query. AQL has no `GROUP BY` / `HAVING` clauses.
 
 ---
 
@@ -30,6 +30,7 @@ Clause order is not permutable. Optional clauses (WHERE, ORDER BY, LIMIT) may no
 - **Aliases:** Identifiers bound in FROM/CONTAINS (e.g. `e`, `c`, `o`). Use short, role-based names (e = EHR, c = COMPOSITION).
 - **Literals:** Strings in single or double quotes (`'text'` or `"text"` per spec); numbers unquoted; prefer parameters for dates/times.
 - **Parameters:** `$name` (e.g. `$ehrId`, `$from`, `$to`). Always parameterize variable input; never interpolate untrusted values into AQL.
+- **Comments:** `--` introduces a line comment to end of line.
 
 ---
 
@@ -59,7 +60,7 @@ CONTAINS COMPOSITION c
 
 ## SELECT List
 
-Comma-separated expressions: alias references, path projections, function/aggregate calls, with optional `AS` alias. Use explicit `AS` for every projected column for stable downstream use.
+Comma-separated expressions: alias references, path projections, function/aggregate calls, literals; with optional `AS` alias. Optional `DISTINCT` modifier (`SELECT DISTINCT …`) filters duplicate rows. Use explicit `AS` for every projected column for stable downstream use. AQL does not support `SELECT *` — columns must be explicit.
 
 Example:
 
@@ -86,7 +87,17 @@ Common value access by RM type: DV_TEXT `.../value/value`; DV_CODED_TEXT `.../va
 
 ## WHERE Clause
 
-Boolean expressions with AND, OR, NOT; comparison (=, !=, <, <=, >, >=); IN (engine-dependent); matches (implementation varies); EXISTS (unary operator: operand is an identified path, e.g. `EXISTS o/.../value` or `NOT EXISTS c/content[...]`). Prefer half-open time windows (`>= $from` AND `< $to`) to avoid boundary duplication.
+Spec-normative operators:
+
+- **Comparison:** `=`, `!=`, `<`, `<=`, `>`, `>=`
+- **Logical:** `AND`, `OR`, `NOT`
+- **EXISTS** — unary prefix; operand is an identified path; returns boolean (`EXISTS o/.../value`, `NOT EXISTS c/content[…]`)
+- **MATCHES** — binary infix; right operand is a value list `{…}`, a terminology URI, or a `TERMINOLOGY(…)` function call (e.g. `code_string MATCHES {'1234', '5678'}`)
+- **LIKE** — binary infix string pattern; wildcards `?` (single char) and `*` (zero or more chars)
+
+**Not in spec** (engine-dependent; check docs before use): `IN`, `NULLS FIRST/LAST`.
+
+Prefer half-open time windows (`>= $from` AND `< $to`) to avoid boundary duplication.
 
 ---
 
@@ -98,7 +109,10 @@ ORDER BY: comma-separated expressions with optional DESC/ASC. LIMIT n [OFFSET m]
 
 ## Functions and Aggregates
 
-Grammar allows function calls; engine support varies. Commonly portable: COUNT(expr); MIN, MAX often supported; SUM, AVG verify per engine.
+Spec-normative aggregates: `COUNT`, `MIN`, `MAX`, `SUM`, `AVG`. In practice: `COUNT`, `MIN`, `MAX` are broadly supported; `SUM` and `AVG` are spec-level but engine coverage varies — verify against your target engine before relying on them. Scalar functions (e.g. `CONCAT`, `LENGTH`, `SUBSTRING`, date/time helpers) are entirely engine-dependent.
+
+- `COUNT([DISTINCT] expr | *)` — `COUNT(*)` returns 0 on empty; other aggregates return NULL on empty.
+- `MIN(expr)`, `MAX(expr)`, `SUM(expr)`, `AVG(expr)` — NULL on empty result.
 
 ---
 

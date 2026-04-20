@@ -1,7 +1,7 @@
 # openEHR Archetype Terminology & Ontology Guide
 
 **Scope:** Terminology modelling and binding guidance for archetypes  
-**Related:** `openehr://guides/archetypes/language-standards`  
+**Related:** `openehr://guides/archetypes/language-standards`, `openehr://guides/specs/term-SupportTerminology`, `openehr://guides/specs/rm-support`  
 **Keywords:** terminology, value sets, bindings, ontology, term, at-code, ac-code, code
 
 ---

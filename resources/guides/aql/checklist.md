@@ -72,8 +72,8 @@ Paths in AQL are **archetype paths** (or RM class attribute paths), grounded in 
 ## 8. Engine Compatibility
 
 - [ ] Query uses only features supported by the target engine (docs/tests).
-- [ ] Functions/aggregates verified (do not assume beyond COUNT/MIN/MAX).
-- [ ] Text/pattern operators verified (matches support varies).
+- [ ] Functions/aggregates verified — COUNT, MIN, MAX, SUM, AVG are spec-normative, but SUM and AVG are not always implemented; scalar functions (CONCAT, LENGTH, etc.) are engine-dependent.
+- [ ] Text/pattern operators — MATCHES and LIKE are spec-normative; IN is engine-dependent.
 - [ ] Tested with representative data and edge cases.
 
 ---

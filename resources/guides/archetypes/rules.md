@@ -1,7 +1,7 @@
 # openEHR Archetype Design Rules
 
 **Scope:** Normative rules for modelling openEHR archetypes
-**Related:** `openehr://guides/archetypes/structural-constraints`, `openehr://guides/archetypes/terminology`
+**Related:** `openehr://guides/archetypes/structural-constraints`, `openehr://guides/archetypes/terminology`, `openehr://guides/specs/am-Overview`, `openehr://guides/specs/am2-AOM2`, `openehr://guides/specs/am2-ADL2`, `openehr://guides/specs/am-Identification`
 **Keywords:** ADL, AOM, rules, modeling, lint, checks, validation
 
 ---
@@ -92,9 +92,12 @@
 
 ---
 
-## J. ADL 1.4 Validity
+## J. Archetype Validity Codes (Tooling)
 
-Validity rules enforced by tooling:
+These codes are emitted by the **openEHR archetype validator tooling** (ADL
+Workbench, `adl-lt`, `archie`, etc.) — not defined in the ADL 1.4 or AOM 1.4
+spec text itself. They are the de facto convention used by linters and CKM
+validation and are useful to recognise in tool output:
 
 - **VARID:** Valid `archetype_id` per openEHR specification
 - **VARCN:** `concept` references a term in ontology

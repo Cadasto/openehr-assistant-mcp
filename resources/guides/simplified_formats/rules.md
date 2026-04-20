@@ -1,7 +1,7 @@
 # openEHR Simplified Formats — Rules
 
 **Scope:** Structural and syntactic rules for Flat and Structured formats
-**Related:** openehr://guides/simplified_formats/principles, openehr://guides/simplified_formats/idioms-cheatsheet
+**Related:** openehr://guides/simplified_formats/principles, openehr://guides/simplified_formats/idioms-cheatsheet, openehr://guides/specs/its-rest-simplified_formats
 **Keywords:** flat, structured, field identifier, path, suffix, context, validation
 
 **Official specification:** For full structure, RM mappings, and context details, visit the openEHR Simplified Formats specification: https://specifications.openehr.org/releases/ITS-REST/development/simplified_formats — agents should consult it when looking for more information beyond this guide.

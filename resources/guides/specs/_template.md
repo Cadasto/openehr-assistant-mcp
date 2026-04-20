@@ -5,7 +5,7 @@
 **Document:** <upstream doc ID, e.g. ehr, data_types, ADL2, openehr_platform>
 **Release:** <branch or release tag; default `development` for living specs; use `Release-X.Y.Z` for a pinned point-in-time digest>
 **Spec URL:** <canonical HTML URL>
-**Markdown URL:** <canonical .md URL>
+**Markdown URL:** <canonical .md URL, or `N/A` if no .md twin exists (e.g. OpenAPI-rendered docs)>
 **Last updated:** <YYYY-MM-DD>
 **Related:** <optional, comma-separated openehr://guides/specs/... URIs for sibling digests>
 **Keywords:** <comma-separated short search terms>
