@@ -41,7 +41,8 @@ final class SpecDigestsTest extends TestCase
 
     private const int MIN_WORDS = 250;
     private const int MAX_WORDS = 900;
-    private const string URL_REGEX = '#^https://specifications\.openehr\.org/releases/[A-Z_-]+/[^/]+/[A-Za-z0-9_-]+\.(html|md)$#';
+    private const string URL_REGEX = '#^https://specifications\.openehr\.org/releases/[A-Z_-]+/[^/]+/[A-Za-z0-9_.-]+\.(html|md)$#';
+    private const string MARKDOWN_URL_UNAVAILABLE = 'N/A';
 
     private const string SKIP_SENTINEL = '__no_digests_yet__';
 
@@ -149,13 +150,19 @@ final class SpecDigestsTest extends TestCase
             $specUrl,
             sprintf('%s: Spec URL %s does not match canonical pattern', basename($path), $specUrl)
         );
-        $this->assertMatchesRegularExpression(
-            self::URL_REGEX,
-            $mdUrl,
-            sprintf('%s: Markdown URL %s does not match canonical pattern', basename($path), $mdUrl)
-        );
         $this->assertStringEndsWith('.html', $specUrl, 'Spec URL must end with .html');
-        $this->assertStringEndsWith('.md', $mdUrl, 'Markdown URL must end with .md');
+
+        // Markdown URL is optional: some upstream docs (e.g. OpenAPI-based
+        // ITS-REST endpoints) have no `.md` twin. Authors declare that with
+        // the sentinel `N/A`; in that case skip the pattern/suffix check.
+        if ($mdUrl !== self::MARKDOWN_URL_UNAVAILABLE) {
+            $this->assertMatchesRegularExpression(
+                self::URL_REGEX,
+                $mdUrl,
+                sprintf('%s: Markdown URL %s does not match canonical pattern', basename($path), $mdUrl)
+            );
+            $this->assertStringEndsWith('.md', $mdUrl, 'Markdown URL must end with .md or be N/A');
+        }
     }
 
     private function extractHeaderBlock(string $content): string

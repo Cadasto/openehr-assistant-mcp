@@ -27,7 +27,15 @@ See `_template.md` for the exact structure.
 
 - 250–900 words body (header block excluded).
 - Every named class must exist in the upstream spec (no invention).
-- All URLs must resolve — verify with `curl -sI` before commit.
+- All URLs must resolve — verify with `curl -sI` before commit. When the
+  upstream doc has no `.md` twin (e.g. OpenAPI-rendered ITS-REST endpoints
+  whose source is YAML rather than prose), set `**Markdown URL:** N/A` and
+  let the Spec URL carry the HTML reference. The validator recognises the
+  `N/A` sentinel and skips the pattern check.
+- Keep the **Key Classes / Constructs** section intentionally terse — list
+  5–8 top constructs with half-line roles. Per-class attribute / function /
+  invariant detail belongs in `type_specification_get` (BMM-backed), not
+  here. Cite that tool explicitly when recommending deeper lookups.
 - Update `**Last updated:**` on any edit.
 - Default to `**Release:** development` with `/releases/<COMPONENT>/development/`
   URLs so digests track the living spec rather than a year-old snapshot.
