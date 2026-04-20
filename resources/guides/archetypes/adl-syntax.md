@@ -39,28 +39,42 @@ An archetype constrains RM classes, attributes, occurrences/cardinalities, and d
 
 ## Archetype Sections
 
-### Header
-- Archetype identifier, original language, description/metadata
+An ADL 1.4 archetype has these top-level sections in this order:
+
+### `archetype` (header)
+- `adl_version` declaration and archetype identifier
 - ID must follow naming conventions; version reflects semantic compatibility
 
-### Definition
+### `concept`
+- Single at-code pointing at the root concept term in `ontology` / `term_definitions`
+
+### `language`
+- `original_language` (code_phrase) and optional `translations` block
+
+### `description`
+- Archetype metadata: purpose, use, misuse, keywords, authorship, other details, lifecycle state
+
+### `definition` (cADL)
 - Formal constraint tree
 - Root node matches declared RM type
 - All constraints follow RM attribute semantics
-
-### Ontology / Terminology
-- `term_definitions`: at-codes with text and description
-- `constraint_definitions`: ac-codes explaining value set meaning
-- `term_bindings`: at-codes → external terminology codes
-- `constraint_bindings`: ac-codes → terminology queries
-
-### Invariant 
-Optional section for first-order predicate logic assertions (cross-node relationships, formulae, conditional constraints):
+- May contain an `invariant` clause within a `C_COMPLEX_OBJECT` for first-order predicate logic assertions (cross-node relationships, formulae, conditional constraints):
 
 ```adl
 invariant
     speed_validity: /speed[at0002]/km/magnitude = /speed[at0004]/miles/magnitude * 1.6
 ```
+
+> `invariant` is a cADL block-level clause within `C_COMPLEX_OBJECT`, not a top-level archetype section.
+
+### `ontology` / terminology
+- `term_definitions`: at-codes with text and description (per language)
+- `constraint_definitions`: ac-codes explaining value set meaning
+- `term_bindings`: at-codes → external terminology codes
+- `constraint_bindings`: ac-codes → terminology queries
+
+### `revision_history` (optional)
+- Monotonically-growing audit of revisions; preserved across specialisations
 
 ---
 
