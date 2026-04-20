@@ -18,7 +18,7 @@ Archetypes optimise for reuse and safety, not local workflows.
 
 ## 2. Existence
 
-**Existence** (AOM 1.4) constrains `C_ATTRIBUTE` — whether an attribute value must be present.
+**Existence** constrains `C_ATTRIBUTE` — whether an attribute value must be present. (Present in both AOM 1.4 and AOM 2.)
 
 - Mandatory only when intrinsic to the concept
 - Optional by default

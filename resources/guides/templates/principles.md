@@ -46,7 +46,7 @@ Templates can only **further constrain** archetypes — never relax or add unsup
 Templates bridge clinical models and user interfaces.
 
 - Rename elements for local context (e.g., "Body mass index" → "BMI")
-- UI flags (`hide_on_form`) guide form generation without altering data model
+- Tooling-level annotations (e.g. `hide_on_form` in OET / Better / EHRbase conventions — not part of normative OPT 2) can guide form generation without altering the data model
 
 ---
 
@@ -60,9 +60,9 @@ Templates can embed other templates for modularity and consistency across docume
 
 When one form or use case touches many datapoints, split the dataset across templates so data is **strategic** (patient-centric, reusable) while forms stay **tactical** (good UX). The CGEM framework categorises data to guide this split:
 
-- **Global Background:** True regardless of care context (e.g. allergies, CPR decision). One current version per patient → **longitudinal** persistent composition.
-- **Contextual Situation:** Single source of truth for a care journey or episode (e.g. cancer staging, care plan). One current version per journey → **episodic** persistent composition.
-- **Event Assessment:** Each submission is a new record (e.g. clinic visit, lab result). Many compositions over time → **event** composition.
+- **Global Background:** True regardless of care context (e.g. allergies, CPR decision). One current version per patient → composition `category = persistent`.
+- **Contextual Situation:** Single source of truth for a care journey or episode (e.g. cancer staging, care plan). One current version per journey → composition `category = episodic` (a standalone RM category with persistent-like semantics but bounded to an episode; not a subtype of `persistent`).
+- **Event Assessment:** Each submission is a new record (e.g. clinic visit, lab result). Many compositions over time → composition `category = event`.
 - **Managed Response:** Formal order/fulfilment cycle (referral, prescription). Use Instruction and Action archetypes; place in dedicated or encounter template as appropriate.
 
 One form can read/write multiple compositions; Global Background may be read-only (AQL) in a form. Distinguish true managed workflows (Instruction/Action) from simple yes/no or date records—the latter belong in Contextual or Event templates.
