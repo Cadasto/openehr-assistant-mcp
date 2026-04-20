@@ -1,0 +1,51 @@
+{
+    "name": "BMM_ENUMERATION",
+    "documentation": "Definition of an enumeration class, understood as a class whose value range is constrained extensionally, i.e. by an explicit enumeration of named singleton instances.\n\nOnly one inheritance ancestor is allowed in order to provide the base type to which the range constraint is applied.\n\nThe common notion of a set of literals with no explicit defined values is represented as the degenerate subtype `BMM_ENUMERATION_INTEGER`, whose values are 0, 1, ...",
+    "ancestors": [
+        "BMM_SIMPLE_CLASS"
+    ],
+    "properties": {
+        "item_names": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "item_names",
+            "documentation": "The list of names of the enumeration. If no values are supplied, the integer values 0, 1, 2, ... are assumed.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "item_values": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "item_values",
+            "documentation": "Optional list of specific values. Must be 1:1 with `_item_names_` list.",
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_PRIMITIVE_VALUE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "name_map": {
+            "name": "name_map",
+            "documentation": "Map of `_item_names_` to `_item_values_` (stringified).",
+            "result": {
+                "_type": "P_BMM_GENERIC_TYPE",
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity.range_constrained",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/core.html#_range_constrained_package"
+}

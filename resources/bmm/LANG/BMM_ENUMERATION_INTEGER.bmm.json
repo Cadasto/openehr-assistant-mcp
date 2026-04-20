@@ -1,0 +1,24 @@
+{
+    "name": "BMM_ENUMERATION_INTEGER",
+    "documentation": "Integer-based enumeration meta-type.",
+    "ancestors": [
+        "BMM_ENUMERATION"
+    ],
+    "properties": {
+        "item_values": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "item_values",
+            "documentation": "Optional list of specific values. Must be 1:1 with `_item_names_` list.",
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_INTEGER_VALUE"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity.range_constrained",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/core.html#_range_constrained_package"
+}

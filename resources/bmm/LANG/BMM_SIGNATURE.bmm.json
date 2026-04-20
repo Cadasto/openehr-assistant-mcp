@@ -1,0 +1,37 @@
+{
+    "name": "BMM_SIGNATURE",
+    "documentation": "Built-in meta-type that expresses the type structure of any referenceable element of a model. Consists of potential `_arguments_` and `_result_`, with constraints in descendants determining the exact form.",
+    "ancestors": [
+        "BMM_BUILTIN_TYPE"
+    ],
+    "constants": {
+        "base_name": {
+            "name": "base_name",
+            "documentation": "Base name (built-in).",
+            "type": "String",
+            "value": "\"Signature\""
+        }
+    },
+    "properties": {
+        "result_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "result_type",
+            "documentation": "Result type of signature.",
+            "is_mandatory": true,
+            "type": "BMM_TYPE"
+        }
+    },
+    "functions": {
+        "flattened_type_list": {
+            "name": "flattened_type_list",
+            "documentation": "Return the logical set (i.e. unique items) consisting of `_argument_types.flattened_type_list_()` and `_result_type.flattened_type_list_()`.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

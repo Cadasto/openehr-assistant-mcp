@@ -1,0 +1,20 @@
+{
+    "name": "BMM_UNITARY_TYPE",
+    "documentation": "Parent of meta-types that may be used as the type of any instantiated object that is not a container object.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_TYPE"
+    ],
+    "functions": {
+        "unitary_type": {
+            "name": "unitary_type",
+            "documentation": "Result = self.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_UNITARY_TYPE"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

@@ -19,14 +19,14 @@
         "concept_code": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "concept_code",
-            "documentation": "Term code defining the meaning of the artefact as a whole, and always used as the id-code on the root node of the artefact. Must be defined in the `_term_definitions_` property.",
+            "documentation": "Term code defining the meaning of the artefact as a whole, and always used as the at-code (at-coded archetypes) or id-code (id-coded archetypes) on the root node of the artefact. Must be defined in the `_term_definitions_` property.",
             "is_mandatory": true,
             "type": "String"
         },
         "term_definitions": {
             "_type": "P_BMM_GENERIC_PROPERTY",
             "name": "term_definitions",
-            "documentation": "Directory of term definitions as a two-level table. The outer hash keys are language codes, e.g. `\"en\"`, `\"de\"`, while the inner hash keys are term codes, e.g. `\"id17\"`, `\"at4\"`.",
+            "documentation": "Directory of term definitions as a two-level table. The outer hash keys are language codes, e.g. `\"en\"`, `\"de\"`, while the inner hash keys are term codes, e.g. `\"at0017\"`, `\"at0004\"` (at-coded archetypes) or `\"id17\"`, `\"at4\"` (id-coded archetypes).",
             "is_mandatory": true,
             "type_def": {
                 "root_type": "Hash",
@@ -49,7 +49,7 @@
         "term_bindings": {
             "_type": "P_BMM_GENERIC_PROPERTY",
             "name": "term_bindings",
-            "documentation": "Directory of bindings to external terminology codes and value sets, as a two-level table. The outer hash keys are terminology ids, e.g. `\"SNOMED_CT\"`, and the inner hash keys are constraint codes, e.g. `\"at4\"`, `\"ac13\"` or paths. The indexed `Uri` objects represent references to externally defined resources, either terms, ontology concepts, or terminology subsets / ref-sets.",
+            "documentation": "Directory of bindings to external terminology codes and value sets, as a two-level table. The outer hash keys are terminology ids, e.g. `\"SNOMED_CT\"`, and the inner hash keys are constraint codes, e.g. `\"at0004\"`, `\"at4\"`, \"ac13\"` or paths. The indexed `Uri` objects represent references to externally defined resources, either terms, ontology concepts, or terminology subsets / ref-sets.",
             "type_def": {
                 "root_type": "Hash",
                 "generic_parameter_defs": {
@@ -76,16 +76,15 @@
             "type": "ARCHETYPE"
         },
         "value_sets": {
-            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "_type": "P_BMM_GENERIC_PROPERTY",
             "name": "value_sets",
             "documentation": "Archetype-local value sets, each keyed by value-set id, i.e. an ac-code.",
             "type_def": {
-                "container_type": "List",
-                "type": "String"
-            },
-            "cardinality": {
-                "lower": 0,
-                "upper_unbounded": true
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "VALUE_SET"
+                ]
             }
         },
         "terminology_extracts": {
@@ -120,9 +119,9 @@
                 "type": "Integer"
             }
         },
-        "id_codes": {
-            "name": "id_codes",
-            "documentation": "List of all id codes in the terminology., i.e. the 'id' codes in an ADL archetype, which are the `_node_id_` values on `C_OBJECT` descendants.",
+        "node_codes": {
+            "name": "node_codes",
+            "documentation": "For at-coded archetypes: list of all at codes in the terminology., i.e. the 'at' codes in an ADL archetype, which are the `_node_id_` values on `C_OBJECT` descendants. For id-coded archetypes: list of all id codes in the terminology., i.e. the 'id' codes in an ADL archetype, which are the `_node_id_` values on `C_OBJECT` descendants.",
             "result": {
                 "_type": "P_BMM_CONTAINER_TYPE",
                 "container_type": "List",

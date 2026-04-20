@@ -22,7 +22,7 @@
         "Regex_any_pattern": {
             "name": "Regex_any_pattern",
             "type": "String",
-            "value": "\".*\""
+            "value": "\".&#42;\""
         },
         "Default_encoding": {
             "name": "Default_encoding",

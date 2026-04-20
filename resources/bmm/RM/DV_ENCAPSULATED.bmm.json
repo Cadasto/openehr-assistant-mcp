@@ -20,7 +20,6 @@
         }
     },
     "invariants": {
-        "Size_valid": "size >= 0",
         "Language_valid": "language /= Void implies code_set (Code_set_id_languages).has_code (language)",
         "Charset_valid": "charset /= Void implies code_set (Code_set_id_character_sets).has_code (charset)"
     },

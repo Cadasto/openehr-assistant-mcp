@@ -1,0 +1,53 @@
+{
+    "name": "BMM_SIMPLE_TYPE",
+    "documentation": "Type reference to a single type i.e. not generic or container type.",
+    "ancestors": [
+        "BMM_MODEL_TYPE"
+    ],
+    "properties": {
+        "base_class": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "base_class",
+            "documentation": "Defining class of this type.",
+            "is_mandatory": true,
+            "type": "BMM_SIMPLE_CLASS"
+        }
+    },
+    "functions": {
+        "type_name": {
+            "name": "type_name",
+            "documentation": "Result is `_base_class.name_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "is_abstract": {
+            "name": "is_abstract",
+            "documentation": "Result is `_base_class.is_abstract_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "flattened_type_list": {
+            "name": "flattened_type_list",
+            "documentation": "Result is `_base_class.name_` .",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        },
+        "effective_base_class": {
+            "name": "effective_base_class",
+            "documentation": "Main design class for this type, from which properties etc can be extracted.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_SIMPLE_CLASS"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

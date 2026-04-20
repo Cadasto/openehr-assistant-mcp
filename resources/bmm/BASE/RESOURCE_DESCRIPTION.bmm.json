@@ -134,7 +134,7 @@
             "type_def": {
                 "root_type": "Hash",
                 "generic_parameters": [
-                    "Any",
+                    "String",
                     "RESOURCE_DESCRIPTION_ITEM"
                 ]
             }

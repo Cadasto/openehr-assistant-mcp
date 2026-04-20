@@ -1,0 +1,91 @@
+{
+    "name": "BMM_GENERIC_TYPE",
+    "documentation": "Meta-type based on a non-container generic class, e.g. `Packet<Header>`.",
+    "ancestors": [
+        "BMM_MODEL_TYPE"
+    ],
+    "properties": {
+        "generic_parameters": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "generic_parameters",
+            "documentation": "Generic parameters of the `_root_type_` in this type specifier. The order must match the order of the owning class's formal generic parameter declarations, and the types may be defined types or formal parameter types.",
+            "is_mandatory": true,
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_UNITARY_TYPE"
+            },
+            "cardinality": {
+                "lower": 1,
+                "upper_unbounded": true
+            }
+        },
+        "base_class": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "base_class",
+            "documentation": "Defining generic class of this type.",
+            "is_mandatory": true,
+            "type": "BMM_GENERIC_CLASS"
+        }
+    },
+    "functions": {
+        "type_name": {
+            "name": "type_name",
+            "documentation": "Return the full name of the type including generic parameters, e.g. `DV_INTERVAL<T>`, `TABLE<List<THING>,String>`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "type_signature": {
+            "name": "type_signature",
+            "documentation": "Signature form of the type, which for generics includes generic parameter constrainer types E.g. `Interval<T:Ordered>`.\n",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "is_abstract": {
+            "name": "is_abstract",
+            "documentation": "True if `_base_class.is_abstract_` or if any (non-open) parameter type is abstract.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "flattened_type_list": {
+            "name": "flattened_type_list",
+            "documentation": "Result is `_base_class.name_` followed by names of all generic parameter type names, which may be open or closed.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        },
+        "is_partially_closed": {
+            "name": "is_partially_closed",
+            "documentation": "Returns True if there is any substituted generic parameter.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "effective_base_class": {
+            "name": "effective_base_class",
+            "documentation": "Effective underlying class for this type, abstracting away any container type.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_GENERIC_CLASS"
+            }
+        },
+        "is_open": {
+            "name": "is_open",
+            "documentation": "True if all generic parameters from ancestor generic types have been substituted in this type.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

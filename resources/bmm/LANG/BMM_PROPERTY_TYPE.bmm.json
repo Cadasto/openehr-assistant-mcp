@@ -1,0 +1,9 @@
+{
+    "name": "BMM_PROPERTY_TYPE",
+    "documentation": "Meta-type for property and variable signatures.",
+    "ancestors": [
+        "BMM_SIGNATURE"
+    ],
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

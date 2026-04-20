@@ -27,6 +27,14 @@
                 "type": "Boolean"
             }
         },
+        "is_first": {
+            "name": "is_first",
+            "documentation": "True if this version identifier corresponds to the first version, i.e. `_trunk_version_` is 1.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
         "branch_number": {
             "name": "branch_number",
             "documentation": "Number of branch from the trunk point; numbering starts at 1. ",

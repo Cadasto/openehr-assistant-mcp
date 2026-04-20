@@ -5,7 +5,7 @@
         "language": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "language",
-            "documentation": "The localised language in which the items in this description item are written. Coded using ISO 639-1 (2 character) language codes.",
+            "documentation": "The localised language in which the items in this description item are written. Encoded following the RFC 5646 standard, using ISO 639-1 (two-character) language codes, e.g. \"en\". It may include a region subtag conforming to ISO 3166-1 alpha-2 (two-character country codes), e.g. \"pt-br\" for Brazilian Portuguese.",
             "is_mandatory": true,
             "type": "Terminology_code"
         },
@@ -56,7 +56,7 @@
         "other_details": {
             "_type": "P_BMM_GENERIC_PROPERTY",
             "name": "other_details",
-            "documentation": "Additional language-senstive resource metadata, as a list of name/value pairs. ",
+            "documentation": "Additional language-sensitive resource metadata, as a list of name/value pairs. ",
             "type_def": {
                 "root_type": "Hash",
                 "generic_parameters": [

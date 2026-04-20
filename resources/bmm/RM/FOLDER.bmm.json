@@ -38,9 +38,6 @@
             "type": "ITEM_STRUCTURE"
         }
     },
-    "invariants": {
-        "Folders_valid": "not folders.is_empty"
-    },
     "package": "org.openehr.rm.common.directory",
     "specUrl": "https://specifications.openehr.org/releases/RM/development/common.html#_directory_package"
 }

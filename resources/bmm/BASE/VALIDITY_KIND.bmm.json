@@ -8,12 +8,14 @@
     "item_names": [
         "mandatory",
         "optional",
-        "prohibited"
+        "prohibited",
+        "disallowed"
     ],
     "item_documentations": [
         "Constant to indicate mandatory presence of something.",
         "Constant to indicate optional presence of something.",
-        "Constant to indicate disallowed presence of something."
+        "Constant to indicate disallowed presence of something.",
+        "(DEPRECATED) Constant to indicate disallowed presence of something.\n\nNOTE: This is only used by AOM 1.4, while AOM 2 is using the `prohibited` alternative value."
     ],
     "package": "org.openehr.base.base_types.definitions",
     "specUrl": "https://specifications.openehr.org/releases/BASE/development/base_types.html#_definitions_package"

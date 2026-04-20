@@ -83,7 +83,7 @@
                 }
             },
             "pre_conditions": {
-                "Pre_comparable": "is_strictly_comparable()"
+                "Pre_comparable": "is_strictly_comparable_to (other)"
             },
             "post_conditions": {
                 "Post_result": "Result = magnitude < other.magnitude"

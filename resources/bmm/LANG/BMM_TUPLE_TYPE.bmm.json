@@ -1,0 +1,43 @@
+{
+    "name": "BMM_TUPLE_TYPE",
+    "documentation": "Built-in meta-type representing the type of a tuple, i.e. an array of any number of other types. This includes both container and unitary types, since tuple instances represent concrete objects.\n\nNote that both open and closed generic parameters are allowed, as with any generic type, but open generic parameters are only valid within the scope of a generic class.",
+    "ancestors": [
+        "BMM_BUILTIN_TYPE"
+    ],
+    "constants": {
+        "base_name": {
+            "name": "base_name",
+            "documentation": "Base name (built-in).",
+            "type": "String",
+            "value": "\"Tuple\""
+        }
+    },
+    "properties": {
+        "item_types": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "item_types",
+            "documentation": "List of types of the items of the tuple, keyed by purpose in the tuple.",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "BMM_TYPE"
+                ]
+            }
+        }
+    },
+    "functions": {
+        "flattened_type_list": {
+            "name": "flattened_type_list",
+            "documentation": "Return the logical set (i.e. unique types) from the merge of `_flattened_type_list_()` called on each member of `_item_types_`.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

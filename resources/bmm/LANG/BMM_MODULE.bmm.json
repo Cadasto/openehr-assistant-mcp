@@ -1,0 +1,45 @@
+{
+    "name": "BMM_MODULE",
+    "documentation": "Meta-type defining a generalised module concept. Descendants define actual structure and contents.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_MODEL_ELEMENT"
+    ],
+    "properties": {
+        "scope": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "scope",
+            "documentation": "Model within which module is defined.",
+            "is_mandatory": true,
+            "type": "BMM_MODEL"
+        },
+        "feature_groups": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "feature_groups",
+            "documentation": "List of feature groups in this class.",
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_FEATURE_GROUP"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "features": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "features",
+            "documentation": "Features of this module.",
+            "type_def": {
+                "container_type": "List",
+                "type": "BMM_FORMAL_ELEMENT"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

@@ -22,9 +22,22 @@
         "node_id": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "node_id",
-            "documentation": "Semantic identifier of this node, used to dis-tinguish sibling nodes. All nodes must have a `_node_id_`; for nodes under a container `C_ATTRIBUTE`, the id must be an id-code must be defined in the archetype terminology. For valid structures, all node ids are id-codes.\n\nFor `C_PRIMITIVE_OBJECTs` represented in ADL inline form, this attribute will have the special value `Primitive_node_id`; otherwise it will have the node id read during parsing.",
+            "documentation": "Semantic identifier of this node, used to distinguish sibling nodes. All nodes must have a `_node_id_`; for nodes under a container `C_ATTRIBUTE`. For at-coded archetypes `_node_id_` must be an at-code defined in the archetype terminology and for valid structures all node ids are at-codes. For id-coded archetypes  `_node_id_` must be an id-code defined in the archetype terminology and for valid structures all node ids are id-codes.\n\nFor `C_PRIMITIVE_OBJECTs` represented in ADL inline form, this attribute will have the special value `Primitive_node_id`; otherwise it will have the node id read during parsing.\n\n",
             "is_mandatory": true,
             "type": "String"
+        },
+        "alternative_ids": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "alternative_ids",
+            "documentation": "Additional identifiers of this node. openEHR archetypes can carry original ALD2 id-codes in this attribute and it can also carry human readable codes for future use. Alternative ids must be unique within the archetype.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
         },
         "is_deprecated": {
             "_type": "P_BMM_SINGLE_PROPERTY",
@@ -70,7 +83,18 @@
                     "name": "rmcc",
                     "documentation": "Reference Model conformance checker agent (lambda).",
                     "type_def": {
-                        "root_type": "FUNCTION"
+                        "root_type": "FUNCTION",
+                        "generic_parameters": [
+                            "Boolean",
+                            {
+                                "_type": "P_BMM_GENERIC_TYPE",
+                                "root_type": "TUPLE2",
+                                "generic_parameters": [
+                                    "String",
+                                    "String"
+                                ]
+                            }
+                        ]
                     }
                 }
             },

@@ -35,15 +35,15 @@
             "documentation": "Validity of second in constrained time.",
             "type": "VALIDITY_KIND"
         },
-        "millisecond_valdity": {
+        "millisecond_validity": {
             "_type": "P_BMM_SINGLE_PROPERTY",
-            "name": "millisecond_valdity",
+            "name": "millisecond_validity",
             "documentation": "Validity of millisecond in constrained time.",
             "type": "VALIDITY_KIND"
         },
-        "timezone_valdity": {
+        "timezone_validity": {
             "_type": "P_BMM_SINGLE_PROPERTY",
-            "name": "timezone_valdity",
+            "name": "timezone_validity",
             "documentation": "Validity of timezone in constrained date.",
             "type": "VALIDITY_KIND"
         },

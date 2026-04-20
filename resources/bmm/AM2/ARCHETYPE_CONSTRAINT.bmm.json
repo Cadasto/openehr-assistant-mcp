@@ -66,7 +66,18 @@
                     "name": "rmcc",
                     "documentation": "RM conformance checker - a lambda (i.e. function object) that can compute conformance of type-names within the  Reference Model on which the current archetype is based. The signature provides two arguments representing respectively, the `_rm_type_name_` of the current node and the `_rm_type_name_` of the node being redefined in a specialisation parent archetype.",
                     "type_def": {
-                        "root_type": "FUNCTION"
+                        "root_type": "FUNCTION",
+                        "generic_parameters": [
+                            "Boolean",
+                            {
+                                "_type": "P_BMM_GENERIC_TYPE",
+                                "root_type": "TUPLE2",
+                                "generic_parameters": [
+                                    "String",
+                                    "String"
+                                ]
+                            }
+                        ]
                     }
                 }
             },

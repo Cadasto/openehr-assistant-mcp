@@ -39,19 +39,6 @@
             "documentation": "All other details for this Party.",
             "type": "ITEM_STRUCTURE"
         },
-        "reverse_relationships": {
-            "_type": "P_BMM_CONTAINER_PROPERTY",
-            "name": "reverse_relationships",
-            "documentation": "References to relationships in which this Party takes part as target.",
-            "type_def": {
-                "container_type": "List",
-                "type": "LOCATABLE_REF"
-            },
-            "cardinality": {
-                "lower": 0,
-                "upper_unbounded": true
-            }
-        },
         "relationships": {
             "_type": "P_BMM_CONTAINER_PROPERTY",
             "name": "relationships",
@@ -74,6 +61,19 @@
                 "_type": "P_BMM_SIMPLE_TYPE",
                 "type": "DV_TEXT"
             }
+        },
+        "reverse_relationships": {
+            "name": "reverse_relationships",
+            "documentation": "References to relationships in which this Party takes part as target.",
+            "post_conditions": {
+                "Post_reverse_relationships_validity": "Result /= Void implies (not Result.empty and then Result.for_all (item | repository (\"demographics\").all_party_relationships.has_object (item) and then repository (\"demographics\").all_party_relationships.object (item).target = self))"
+            },
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "LOCATABLE_REF"
+            },
+            "is_nullable": true
         }
     },
     "invariants": {

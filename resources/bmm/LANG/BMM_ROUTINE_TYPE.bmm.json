@@ -1,0 +1,25 @@
+{
+    "name": "BMM_ROUTINE_TYPE",
+    "documentation": "Meta-type for routine objects.",
+    "ancestors": [
+        "BMM_SIGNATURE"
+    ],
+    "constants": {
+        "base_name": {
+            "name": "base_name",
+            "documentation": "Base name (built-in).",
+            "type": "String",
+            "value": "\"Routine\""
+        }
+    },
+    "properties": {
+        "argument_types": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "argument_types",
+            "documentation": "Type of arguments in the signature, if any; represented as a type-tuple (list of arbitrary types).",
+            "type": "BMM_TUPLE_TYPE"
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

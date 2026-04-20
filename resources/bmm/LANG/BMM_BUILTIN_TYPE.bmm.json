@@ -1,0 +1,51 @@
+{
+    "name": "BMM_BUILTIN_TYPE",
+    "documentation": "Parent of built-in types, which are treated as being primitive and non-abstract.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_EFFECTIVE_TYPE"
+    ],
+    "constants": {
+        "base_name": {
+            "name": "base_name",
+            "documentation": "Base name (built-in typename).",
+            "type": "String"
+        }
+    },
+    "functions": {
+        "is_abstract": {
+            "name": "is_abstract",
+            "documentation": "Return False.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_primitive": {
+            "name": "is_primitive",
+            "documentation": "Return True.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "type_base_name": {
+            "name": "type_base_name",
+            "documentation": "Return `_base_name_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "type_name": {
+            "name": "type_name",
+            "documentation": "Return `_base_name_`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.core.entity",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+}

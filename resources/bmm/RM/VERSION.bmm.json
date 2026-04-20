@@ -68,7 +68,7 @@
         },
         "canonical_form": {
             "name": "canonical_form",
-            "documentation": "A canonical serial form of this Version, suitable for generating reliable hashes and signatures.",
+            "documentation": "A canonical serial form of this Version, created by serialising all attributes except signature, suitable for generating reliable hashes and signatures.",
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",
                 "type": "String"
