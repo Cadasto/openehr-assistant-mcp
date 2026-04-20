@@ -61,7 +61,7 @@ These guidelines summarize the high-level architecture, coding conventions, and 
 - **Prompts**: in `src/Prompts`, annotate classes with `#[McpPrompt(name: '...')]` to expose MCP prompts. Prompt classes should extend `Cadasto\OpenEHR\MCP\Assistant\Prompts\AbstractPrompt` to load their messages from YAML resources via `$this->loadPromptMessages('prompt_name')`.
   - **Prompt policy split (rule of thumb)**: put global, always-applicable policy (tool discipline, no guessing, workflow principles) in `resources/server-instructions.md`; keep `resources/prompts/*.md` focused on task-specific constraints, required output structure, and domain-specialized rules.
 - **Resources**:
-  - `Guides` provides `openehr://guides/{category}/{name}` resources and registers guide resources at startup. Categories: `archetypes`, `templates`, `aql` (AQL principles, syntax, idioms-cheatsheet, checklist), `simplified_formats` (Flat/Structured principles, rules, idioms-cheatsheet, checklist).
+  - `Guides` provides `openehr://guides/{category}/{name}` resources and registers guide resources at startup. Categories: `archetypes`, `templates`, `aql` (AQL principles, syntax, idioms-cheatsheet, checklist), `simplified_formats` (Flat/Structured principles, rules, idioms-cheatsheet, checklist), `rm` (RM information-model digests — planned refactor into `specs/`), `howto` (toolchain how-to guides such as `spec-lookup`).
   - `TypeSpecifications` provides `openehr://spec/type/{component}/{name}` resource template.
   - `Terminologies` provides `openehr://terminology` resource.
 - **Completion providers** live in `src/CompletionProviders` and are annotated with `#[CompletionProvider]` to suggest parameter values.
@@ -120,6 +120,17 @@ composer test:coverage
 - The dev container expects your host user ID to be `1000`; adjust the `-u` flag if your UID is different.
 - To run a single test class or subset, call `vendor/bin/phpunit --filter SomeTest` inside the dev container.
 - Coverage requires Xdebug; the `composer test:coverage` script sets `XDEBUG_MODE` automatically.
+
+### Looking up openEHR specification content
+
+When authoring or editing guides, prompts, BMM JSON, terminology data, AQL grammar notes, or any artifact that must stay aligned with the upstream openEHR standards, **do not guess or rely on training memory**. Retrieve from the authoritative source on `specifications.openehr.org`, preferring the cheapest representation that answers the question:
+
+1. **Site index** — `https://specifications.openehr.org/llms.txt` enumerates every release, document, and JSON endpoint; use it to resolve doc phrases to canonical URLs and confirm the current `latest` release tag.
+2. **Markdown twin** — every `*.html` spec page has a `.md` counterpart (e.g. `releases/RM/latest/ehr.html` → `releases/RM/latest/ehr.md`). Prefer it for prose, rationale, and examples. **Caveat:** the Markdown representation omits the per-class tables of attributes, functions, invariants, and inherited members — for those, fall through to the HTML page or a structured API.
+3. **Structured APIs** — `/api/components.json`, `/api/classes.json`, `/api/releases.json` for component enumeration, class lookup, and release-tag resolution.
+4. **Only then** scrape the HTML page.
+
+The full policy, fall-through order, and failure modes live in the [`spec-lookup` how-to guide](resources/guides/howto/spec-lookup.md). AI agents running against the MCP server itself should read it via `guide_get(category="howto", name="spec-lookup")` — this is also stated in `resources/server-instructions.md`.
 
 ### Guides and specification alignment
 

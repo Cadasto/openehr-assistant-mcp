@@ -4,6 +4,8 @@ Use this server to support openEHR work: archetype/template exploration, termino
 
 Follow a **Guide-First** approach: use `guide_search` and `guide_get` before complex modelling or authoring tasks. Retrived guides are available as resource template `openehr://guides/{category}/{name}`; they capture best practices, anti-patterns, and checklists that tool schemas alone do not.
 
+**Spec-Lookup-First for retrieval**: before fetching any document or class from `specifications.openehr.org`, consult `guide_get(category="howto", name="spec-lookup")`. It covers the `llms.txt` index, `.md` URL twin for every HTML page, and `/api/*.json` endpoints — and warns that Markdown omits per-class attribute/function/invariant tables. Prefer the cheapest source before falling back to HTML.
+
 ## Global Behavior (always applies)
 
 - **Tool discipline**: when data can be retrieved with MCP tools/resources, fetch it before concluding; use tools for discovery and retrieval before giving concrete identifiers, definitions, or payload details. If required input is missing, ask concise clarifying questions.
