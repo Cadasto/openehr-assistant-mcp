@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Resources;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -12,6 +13,7 @@ use PHPUnit\Framework\TestCase;
  * Enforces header field completeness, required section headings, body word budget,
  * and canonical URL patterns per docs/plans/2026-04-20-openehr-assistant-mcp-synopsis.md.
  */
+#[CoversNothing]
 final class SpecDigestsTest extends TestCase
 {
     private const string SPECS_DIR = APP_RESOURCES_DIR . '/guides/specs';
