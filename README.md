@@ -97,7 +97,7 @@ Optional prompts that guide AI assistants through common openEHR and CKM workflo
 ### Completion Providers
 
 Completion providers supply parameter suggestions in MCP clients when invoking tools or resources.
-- `Guides` - suggests guide `{name}` values for categories `archetypes`, `templates`, `aql`, and `simplified_formats` (resource URI `openehr://guides/{category}/{name}`)
+- `Guides` - suggests guide `{name}` values for categories `archetypes`, `templates`, `aql`, `simplified_formats`, `specs`, and `howto` (resource URI `openehr://guides/{category}/{name}`)
 - `SpecificationComponents` - suggests `{component}` values based on directories in `resources/bmm`  resource URI
 
 ### Resources
@@ -115,6 +115,8 @@ Guides (Markdown)
   - `openehr://guides/aql/principles`
   - `openehr://guides/aql/syntax`
   - `openehr://guides/simplified_formats/rules`
+  - `openehr://guides/specs/rm-ehr` — per-document openEHR spec digests (250–900 words)
+  - `openehr://guides/howto/spec-lookup` — toolchain how-to guides
 
 Type Specifications (BMM JSON)
 - URI template: `openehr://spec/type/{component}/{name}`
