@@ -10,21 +10,20 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 ## [Unreleased]
 
 ### Added
-- Guides: New `specs` category (31 per-document openEHR spec digests across RM, SM, BASE, AM, AM2, QUERY, TERM, LANG, CDS, ITS-REST) and new `howto` category (seeded with `spec-lookup`). Authoring guides cross-link to relevant `specs/*` digests via `**Related:**`.
-- Prompts: Task prompts reference applicable `specs/*` digests and point at `type_specification_get` for per-class detail.
+- Guides & Prompts: Added `specs` (31 openEHR digests) and `howto` (with `spec-lookup`), and updated prompts/authoring guides to point to related `specs/*` digests and `type_specification_get`.
 - Tests: New `SpecDigestsTest` validates every `specs/*.md` against the digest schema.
 - Resources: New `LANG` BMM component with the BMM meta-model definitions.
-- Examples: New `openehr://examples/{kind}/{name}` resource namespace for curated artefacts (AQL queries, FLAT/STRUCTURED JSON pairs). New `examples_search` / `examples_get` tools. Seeded with 6 AQL patterns and a FLAT+STRUCTURED pair. MCP `instructions` gains an `Examples-First` clause.
+- Examples: Added `openehr://examples/{kind}/{name}` plus `examples_search` / `examples_get` for curated AQL and FLAT/STRUCTURED artefacts (seeded with 6 AQL patterns and 1 FLAT+STRUCTURED pair). MCP `instructions` now includes an `Examples-First` clause.
+- MCP Conformance: Added Docker-based conformance checks with updated workflow docs.
 
 ### Changed
-- Guides: Retired the ad-hoc `rm` category (content migrated into `specs/`; `platform-services` reclassified to SM). Digests pin `**Release:** development`.
-- Guides: Audit against upstream specs corrected drift in composition categories, `hide_on_form` attribution, AOM 1.4/2 scope notes, validator-tooling vs spec-code distinction, ADL 1.4 Archetype Sections, and AQL operator/aggregate normativity.
-- Resources: Guide scanners skip per-category `README.md` and `_*.md` so authoring artifacts don't leak to MCP clients. MCP `instructions` gains `Spec-Lookup-First` and `Digest-First` clauses. Refreshed BMM JSON across AM/AM2/BASE/RM (obsolete `BYTE` removed).
-- Docs: `AGENTS.md`, `README.md`, `server-instructions.md`, and `guide_explorer` prompt refreshed to surface the new categories and the layered `authoring guide → specs digest → type_specification_get` hand-off.
-- Docs: Dev-facing authoring artifacts (guide markdown style, spec-digest authoring rules, and the copy-ready digest skeleton) moved out of `resources/guides/` into `src/templates/`. AGENTS.md gains a "CHANGELOG.md entries" convention bullet (keep Unreleased entries short and high-level).
-- Helpers: Extracted `TerminologyXmlLoader` to share openEHR-terminology XML loading/validation between `Terminologies` resource and `TerminologyService` tool.
-- Tools: Added path-traversal validation on guide and type-specification identifier inputs. Completion provider for `Guides` now lists the six live categories.
+- Guides & Resources: Retired `rm` (migrated to `specs/`; `platform-services` moved to SM), pinned digests to `**Release:** development`, synced content with upstream specs, tightened scanner filtering (`README.md` / `_*.md`), refreshed AM/AM2/BASE/RM BMM JSON (removed obsolete `BYTE`), and added `Spec-Lookup-First` / `Digest-First` instruction clauses.
+- Docs: Updated `AGENTS.md`, `README.md`, `server-instructions.md`, and `guide_explorer` for the `authoring guide → specs digest → type_specification_get` flow; moved guide-authoring templates from `resources/guides/` to `src/templates/`; added an AGENTS.md convention to keep Unreleased entries concise.
+- Docker/Workflows: Standardized `--env-file` usage, fixed compose keys/paths/service names, and aligned CI environment variables.
+- Helpers: Extracted `TerminologyXmlLoader` to share terminology XML loading/validation between `Terminologies` and `TerminologyService`.
+- Tools: Added path-traversal checks for guide and type-spec identifiers. `Guides` completion now lists all six live categories.
 - Dependencies: Bumped Symfony cache / finder / uid / var-exporter / polyfill-uuid and phpdocumentor/reflection-docblock.
+- Repo: Added ignore rules for local AI assistant directories.
 
 ### Fixed
 - Prompts: Corrected error message for missing user block in shared policy; added regression test.
