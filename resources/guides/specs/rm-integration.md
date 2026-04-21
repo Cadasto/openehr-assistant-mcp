@@ -13,11 +13,11 @@
 ---
 
 ## Purpose
-The Integration Information Model is the RM's dedicated boundary for migrating legacy, proprietary, or otherwise non-openEHR-native clinical data into the standardised, patient-centric EHR. It defines a minimal surface — a single generic entry container — that accepts externally sourced payloads in a form that can still be stored, versioned, and audited by an openEHR repository. Its premise is a two-step transformation: syntactic import first (data lands as a `GENERIC_ENTRY`), followed by semantic transformation to properly archetyped `ENTRY` subtypes once mappings mature. The package is intentionally small because the heavy lifting of clinical semantics belongs in archetype-driven entries under `rm/ehr`.
+The Integration Information Model is the RM's dedicated boundary for migrating legacy, proprietary, or otherwise non-openEHR-native clinical data into the standardised, patient-centric EHR. It defines a minimal surface — a single generic entry container — that accepts externally sourced payloads in a form that can still be stored, versioned, and audited by an openEHR repository. Its premise is a two-step transformation: syntactic import first (data lands as a `GENERIC_ENTRY`), followed by semantic transformation to properly archetyped `ENTRY` subtypes once mappings mature. The package is intentionally small because the heavy lifting of clinical semantics belongs in archetype-driven entries in the EHR RM (`openehr://guides/specs/rm-ehr`).
 
 ## Scope
 - In: wrapping legacy/external content (HL7v2 messages, CDA documents, CSV feeds, proprietary exports) as archetypable entries; carrying source-system provenance through `FEEDER_AUDIT`; enabling ingestion pipelines to produce valid `COMPOSITION` instances.
-- Out: designed clinical archetypes; strongly-typed observation/evaluation/instruction/action semantics (those live in `rm/ehr`); terminology binding logic; transformation rules themselves (an implementation concern); long-term storage strategy for legacy-shaped data.
+- Out: designed clinical archetypes; strongly-typed observation/evaluation/instruction/action semantics (covered in the EHR RM, `openehr://guides/specs/rm-ehr`); terminology binding logic; transformation rules themselves (an implementation concern); long-term storage strategy for legacy-shaped data.
 
 ## Key Classes / Constructs
 - `GENERIC_ENTRY` — the sole class defined by the package; an archetypable entry whose only hard-wired attribute is `data` (an `ITEM_TREE` or comparable generic structure), intended to hold externally sourced content while its shape is governed by integration-specific archetypes.
@@ -25,7 +25,7 @@ The Integration Information Model is the RM's dedicated boundary for migrating l
 Note: this package is deliberately minimal. development specifies exactly one class; all additional behaviour is inherited from `ENTRY`, `CONTENT_ITEM`, and `LOCATABLE` in other RM packages.
 
 ## Relations to Other Specs
-- Depends on: `RM/ehr` — `GENERIC_ENTRY` is a sibling of `SECTION` and the archetyped `ENTRY` subtypes, and is a legal value for `COMPOSITION.content`.
+- Depends on: the EHR RM (`openehr://guides/specs/rm-ehr`) — `GENERIC_ENTRY` is a sibling of `SECTION` and the archetyped `ENTRY` subtypes, and is a legal value for `COMPOSITION.content`.
 - Depends on: `RM/common` — `FEEDER_AUDIT` (inherited via `LOCATABLE`) carries source-system identifiers, original content references, and originating-system-item IDs, preserving provenance across the import boundary.
 - Depends on: `RM/data_structures` — the `data` payload is typically an `ITEM_TREE` (or other generic structure), letting integration archetypes model arbitrary externally sourced shapes without inventing new RM primitives.
 - Consumed by: ingestion gateways, HL7v2/CDA/FHIR-to-openEHR mapping pipelines, EHR Extract import flows, and any system staging legacy clinical data prior to semantic harmonisation.
