@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Resources;
 
+use Cadasto\OpenEHR\MCP\Assistant\Helpers\TerminologyXmlLoader;
 use Mcp\Capability\Attribute\McpResource;
 use Mcp\Exception\ResourceReadException;
 use SimpleXMLElement;
@@ -11,28 +12,13 @@ final class Terminologies
 {
     public const string FILE_PATH = APP_RESOURCES_DIR . '/terminology/openehr_terminology.xml';
 
-    private SimpleXMLElement|null $xml = null;
-
     private function loadXml(): SimpleXMLElement
     {
-        if ($this->xml === null) {
-            if (!file_exists(self::FILE_PATH) || !is_readable(self::FILE_PATH)) {
-                throw new ResourceReadException('Terminology file not found or not readable.');
-            }
-
-            $content = file_get_contents(self::FILE_PATH);
-            if ($content === false) {
-                throw new ResourceReadException('Unable to read terminology file.');
-            }
-
-            try {
-                $this->xml = new SimpleXMLElement($content);
-            } catch (\Throwable $e) {
-                throw new ResourceReadException('Error parsing Terminology XML: ' . $e->getMessage());
-            }
+        try {
+            return TerminologyXmlLoader::load(self::FILE_PATH);
+        } catch (\Throwable $e) {
+            throw new ResourceReadException($e->getMessage());
         }
-
-        return $this->xml;
     }
 
     /**
