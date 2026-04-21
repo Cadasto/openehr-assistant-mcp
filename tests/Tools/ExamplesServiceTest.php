@@ -91,4 +91,26 @@ final class ExamplesServiceTest extends TestCase
         $this->assertStringContainsString('wt.flat+json', $flat->resource->text);
         $this->assertStringContainsString('wt.structured+json', $structured->resource->text);
     }
+
+    public function test_get_archetype_returns_native_adl_with_text_plain_mime(): void
+    {
+        $payload = $this->service->get('', 'archetypes', 'openEHR-EHR-OBSERVATION.blood_pressure.v2');
+
+        $this->assertInstanceOf(EmbeddedResource::class, $payload);
+        $this->assertSame('openehr://examples/archetypes/openEHR-EHR-OBSERVATION.blood_pressure.v2', $payload->resource->uri);
+        $this->assertSame('text/plain', $payload->resource->mimeType);
+        $this->assertStringContainsString('archetype', $payload->resource->text);
+        $this->assertStringContainsString('openEHR-EHR-OBSERVATION.blood_pressure.v2', $payload->resource->text);
+    }
+
+    public function test_search_kind_archetypes_lists_curated_set(): void
+    {
+        $results = $this->service->search('', 'archetypes');
+
+        $this->assertNotEmpty($results['items']);
+        foreach ($results['items'] as $item) {
+            $this->assertSame('archetypes', $item['kind']);
+            $this->assertStringStartsWith('openEHR-EHR-', $item['name']);
+        }
+    }
 }

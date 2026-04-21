@@ -23,6 +23,9 @@ final readonly class ExamplesService
 
     public const string EXAMPLES_DIR = APP_RESOURCES_DIR . '/examples';
 
+    /** Extensions the scanner/reader recognise, in preferred-lookup order. */
+    private const array SUPPORTED_EXTENSIONS = ['md', 'adl'];
+
     public function __construct(
         private LoggerInterface $logger,
     ) {
@@ -43,7 +46,7 @@ final readonly class ExamplesService
      *   Leave empty to list all examples in the optional kind filter.
      *
      * @param string $kind
-     *   Optional kind filter: "aql" | "flat" | "structured". Leave empty to search all kinds.
+     *   Optional kind filter: "aql" | "flat" | "structured" | "archetypes". Leave empty to search all kinds.
      *
      * @return array<string, array<int, array<string, string|int>>>
      *   A list of matching examples with short snippets and URIs.
@@ -61,7 +64,7 @@ final readonly class ExamplesService
                         'type' => 'object',
                         'properties' => [
                             'title' => ['type' => 'string'],
-                            'kind' => ['type' => 'string', 'description' => 'Example kind: aql | flat | structured'],
+                            'kind' => ['type' => 'string', 'description' => 'Example kind: aql | flat | structured | archetypes'],
                             'name' => ['type' => 'string'],
                             'resourceUri' => ['type' => 'string', 'description' => 'Canonical example URI in openehr://examples namespace'],
                             'snippet' => ['type' => 'string', 'description' => 'Short, task-relevant snippet'],
@@ -121,7 +124,7 @@ final readonly class ExamplesService
      *   Canonical example URI (openehr://examples/{kind}/{name}). Optional when kind and name are provided.
      *
      * @param string $kind
-     *   Example kind: "aql" | "flat" | "structured". Optional when URI is provided.
+     *   Example kind: "aql" | "flat" | "structured" | "archetypes". Optional when URI is provided.
      *
      * @param string $name
      *   Example filename without extension. Optional when URI is provided.
@@ -152,20 +155,22 @@ final readonly class ExamplesService
         $name = $this->validateExampleSegment($name, 'name');
 
         $path = $this->examplePath($kind, $name);
-        $this->assertPathWithinExamples($path);
-        if (!is_file($path) || !is_readable($path)) {
+        if ($path === '' || !is_file($path) || !is_readable($path)) {
             throw new ToolCallException(sprintf('Example not found: %s/%s', $kind, $name));
         }
+        $this->assertPathWithinExamples($path);
 
         $content = (string)file_get_contents($path);
         if (!$content) {
             throw new ToolCallException(sprintf('Example content is empty: %s/%s', $kind, $name));
         }
 
+        $mimeType = str_ends_with(strtolower($path), '.adl') ? 'text/plain' : 'text/markdown';
+
         return new EmbeddedResource(
             resource: new TextResourceContents(
                 uri: $this->buildExampleUri($kind, $name),
-                mimeType: 'text/markdown',
+                mimeType: $mimeType,
                 text: $content,
             ),
         );
@@ -184,11 +189,15 @@ final readonly class ExamplesService
         );
         /** @var SplFileInfo $fileInfo */
         foreach ($iterator as $fileInfo) {
-            if (!$fileInfo->isFile() || strtolower($fileInfo->getExtension()) !== 'md') {
+            if (!$fileInfo->isFile()) {
+                continue;
+            }
+            $ext = strtolower($fileInfo->getExtension());
+            if (!in_array($ext, self::SUPPORTED_EXTENSIONS, true)) {
                 continue;
             }
 
-            $name = $fileInfo->getBasename('.md');
+            $name = $fileInfo->getBasename('.' . $ext);
             if ($name === 'README' || str_starts_with($name, '_')) {
                 continue;
             }
@@ -205,6 +214,7 @@ final readonly class ExamplesService
                 'title' => $this->extractTitle($content, $name),
                 'kind' => $kind,
                 'name' => $name,
+                'ext' => $ext,
                 'resourceUri' => $this->buildExampleUri($kind, $name),
                 'metadata' => $this->extractMetadataBlock($content),
             ];
@@ -298,7 +308,15 @@ final readonly class ExamplesService
         if (!$kind || !$name) {
             return '';
         }
-        return self::EXAMPLES_DIR . '/' . $kind . '/' . $name . '.md';
+        $base = self::EXAMPLES_DIR . '/' . $kind . '/' . $name;
+        foreach (self::SUPPORTED_EXTENSIONS as $ext) {
+            $candidate = $base . '.' . $ext;
+            if (is_file($candidate)) {
+                return $candidate;
+            }
+        }
+        // Return the default `.md` path so the "not found" error is still meaningful
+        return $base . '.md';
     }
 
     private function validateExampleSegment(string $segment, string $label): string

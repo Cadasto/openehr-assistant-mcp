@@ -31,6 +31,7 @@ class Examples implements ProviderInterface
             APP_RESOURCES_DIR . '/examples/aql',
             APP_RESOURCES_DIR . '/examples/flat',
             APP_RESOURCES_DIR . '/examples/structured',
+            APP_RESOURCES_DIR . '/examples/archetypes',
         ]);
         $completions = [];
 
@@ -42,11 +43,14 @@ class Examples implements ProviderInterface
                 continue;
             }
 
+            $filename = null;
             if (str_ends_with($file, '.md')) {
                 $filename = substr($file, 0, -3);
-                if (!$currentValue || str_starts_with($filename, $currentValue)) {
-                    $completions[] = $filename;
-                }
+            } elseif (str_ends_with($file, '.adl')) {
+                $filename = substr($file, 0, -4);
+            }
+            if ($filename !== null && (!$currentValue || str_starts_with($filename, $currentValue))) {
+                $completions[] = $filename;
             }
         }
 

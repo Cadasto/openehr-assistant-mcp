@@ -54,6 +54,15 @@ final class ExamplesTest extends TestCase
         $reader->read('aql', '../../../etc/passwd');
     }
 
+    public function test_can_read_native_adl_archetype(): void
+    {
+        $reader = new Examples();
+        $content = $reader->read('archetypes', 'openEHR-EHR-OBSERVATION.blood_pressure.v2');
+
+        $this->assertStringContainsString('archetype', $content);
+        $this->assertStringContainsString('openEHR-EHR-OBSERVATION.blood_pressure.v2', $content);
+    }
+
     public function test_addResources_registers_examples(): void
     {
         $builder = new Builder();
@@ -67,10 +76,21 @@ final class ExamplesTest extends TestCase
         $this->assertNotEmpty($resources);
 
         $uris = array_map(static fn(array $r): string => (string)($r['uri'] ?? ''), (array)$resources);
+        $byUri = [];
+        foreach ((array)$resources as $r) {
+            $byUri[(string)($r['uri'] ?? '')] = $r;
+        }
 
         $this->assertContains('openehr://examples/aql/latest_blood_pressure_per_ehr', $uris);
         $this->assertContains('openehr://examples/flat/vital_signs_blood_pressure', $uris);
         $this->assertContains('openehr://examples/structured/vital_signs_blood_pressure', $uris);
+        $this->assertContains('openehr://examples/archetypes/openEHR-EHR-OBSERVATION.blood_pressure.v2', $uris);
+
+        // Archetypes register with text/plain; Markdown examples with text/markdown
+        $adlRes = $byUri['openehr://examples/archetypes/openEHR-EHR-OBSERVATION.blood_pressure.v2'] ?? [];
+        $this->assertSame('text/plain', $adlRes['mimeType'] ?? null);
+        $mdRes = $byUri['openehr://examples/flat/vital_signs_blood_pressure'] ?? [];
+        $this->assertSame('text/markdown', $mdRes['mimeType'] ?? null);
 
         foreach ($uris as $uri) {
             $this->assertDoesNotMatchRegularExpression(

@@ -123,15 +123,16 @@ Guides (Markdown)
   - `openehr://guides/specs/rm-ehr` — per-document openEHR spec digests (250–900 words)
   - `openehr://guides/howto/spec-lookup` — toolchain how-to guides
 
-Examples (Markdown-wrapped artefacts)
+Examples (curated artefacts)
 - URI template: `openehr://examples/{kind}/{name}`
-- On-disk mapping: `resources/examples/{kind}/{name}.md`
-- Kinds: `aql` (reference AQL queries), `flat` / `structured` (paired simplified-format JSON payloads).
-- Model access: use `examples_search` and `examples_get`. Each example file has a metadata header (pattern, demonstrates, related specs/guides) and a fenced code block carrying the query / payload.
+- On-disk mapping: `resources/examples/{kind}/{name}.{md|adl}`
+- Kinds: `aql` (reference AQL queries — Markdown), `flat` / `structured` (paired simplified-format JSON payloads — Markdown), `archetypes` (gold-standard CKM-published ADL files — native `.adl`).
+- Model access: use `examples_search` and `examples_get`. Markdown examples carry a metadata header (pattern, demonstrates, related specs/guides) + fenced code block. ADL archetypes are served as `text/plain` — the archetype's own `description` section is its embedded metadata.
 - Examples:
   - `openehr://examples/aql/latest_blood_pressure_per_ehr`
   - `openehr://examples/flat/vital_signs_blood_pressure`
   - `openehr://examples/structured/vital_signs_blood_pressure`
+  - `openehr://examples/archetypes/openEHR-EHR-OBSERVATION.blood_pressure.v2`
 
 Type Specifications (BMM JSON)
 - URI template: `openehr://spec/type/{component}/{name}`

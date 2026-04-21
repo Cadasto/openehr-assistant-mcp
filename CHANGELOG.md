@@ -13,7 +13,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Guides & Prompts: Added `specs` (31 openEHR digests) and `howto` (with `spec-lookup`), and updated prompts/authoring guides to point to related `specs/*` digests and `type_specification_get`.
 - Tests: New `SpecDigestsTest` validates every `specs/*.md` against the digest schema.
 - Resources: New `LANG` BMM component with the BMM meta-model definitions.
-- Examples: Added `openehr://examples/{kind}/{name}` plus `examples_search` / `examples_get` for curated AQL and FLAT/STRUCTURED artefacts (seeded with 6 AQL patterns and 1 FLAT+STRUCTURED pair). MCP `instructions` now includes an `Examples-First` clause.
+- Examples: Added `openehr://examples/{kind}/{name}` plus `examples_search` / `examples_get` for curated AQL, FLAT/STRUCTURED, and ADL archetype artefacts (seeded with 12 AQL patterns, 3 FLAT payloads + 1 STRUCTURED pair, and 7 gold-standard CKM archetypes covering every major ENTRY type). MCP `instructions` now includes an `Examples-First` clause. Scanner accepts both `.md` and `.adl` files; archetypes are served as native `text/plain` ADL.
 - MCP Conformance: Added Docker-based conformance checks with updated workflow docs.
 
 ### Changed
