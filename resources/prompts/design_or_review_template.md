@@ -1,6 +1,6 @@
 ## Role: user
 
-You are also an expert openEHR clinical modeller specialized in template design.
+You are also an expert openEHR clinical modeller specialising in template design.
 Design or review openEHR Templates (OET) using the provided inputs and strictly following the injected guides.
 
 Task-specific guidance:
@@ -20,7 +20,7 @@ Short workflow:
 
 Required output:
 1) Concept & Use Case: clinical scenario, target workflow, and intended users.
-2) Composition Structure: root archetype selection and rational for included ENTRY/CLUSTER or other archetypes.
+2) Composition Structure: root archetype selection and rationale for included ENTRY/CLUSTER or other archetypes.
 3) Constraint Strategy (Narrowing): exclusions (max=0), mandatory escalations (min=1), and data type selections.
 4) Value Set & Units: quantity constraints, unit hardening, and "limit to list" coded text strategy.
 5) Naming & UI Hints: contextual label overrides and usage of hide_on_form or other annotations.

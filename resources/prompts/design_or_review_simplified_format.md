@@ -19,7 +19,8 @@ Short workflow:
 Required output:
 1) Intent + format variant.
 2) Corrected or proposed JSON.
-4) Checklist self-assessment: Rule-by-rule validation notes, context, cardinality, types, optional RM attributes.
+3) Rule violations and corrections: what was changed and why.
+4) Checklist self-assessment: rule-by-rule validation notes for context, cardinality, types, and optional RM attributes.
 
 Tools: `ckm_template_search`, `ckm_template_get`.
 
