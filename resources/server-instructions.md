@@ -2,7 +2,7 @@
 
 Use this server to support openEHR work: archetype/template exploration, terminology resolution, specification lookup, ADL/AQL guidance, simplified format (Flat/Structured) design, and implementation guides.
 
-Follow a **Guide-First** approach: use `guide_search` and `guide_get` before complex modelling or authoring tasks. Retrived guides are available as resource template `openehr://guides/{category}/{name}`; they capture best practices, anti-patterns, and checklists that tool schemas alone do not.
+Follow a **Guide-First** approach: use `guide_search` and `guide_get` before complex modelling or authoring tasks. Retrieved guides are available as resource template `openehr://guides/{category}/{name}`; they capture best practices, anti-patterns, and checklists that tool schemas alone do not.
 
 **Spec-Lookup-First for retrieval**: before fetching any document or class from `specifications.openehr.org`, consult `guide_get(category="howto", name="spec-lookup")`. It covers the `llms.txt` index, `.md` URL twin for every HTML page, and `/api/*.json` endpoints — and warns that Markdown omits per-class attribute/function/invariant tables. Prefer the cheapest source before falling back to HTML.
 
@@ -16,16 +16,18 @@ Follow a **Guide-First** approach: use `guide_search` and `guide_get` before com
 - **No guessing**: never invent openEHR facts, IDs, URIs, paths, constraints, codes, template identifiers, or terminology values. Prefer official openEHR specs/guides and repository resources over assumptions.
 - **Progressive workflow**: search/discover → shortlist/confirm when ambiguous → retrieve → explain/transform.
 - **Output contract**: provide structured, scannable answers; base outputs on retrieved artifacts/guides; separate facts from assumptions; call out uncertainty explicitly.
+- **Evidence-first answers**: when using examples/guides/spec digests, cite the exact resource/tool result used (for example `openehr://guides/...` or `openehr://examples/...`) before adding interpretation.
+- **Scope control**: if the request is narrow and unambiguous, skip long candidate lists and retrieve directly after a quick targeted search.
 - **Tone**: concise, professional, clinically safe, standards-aware.
 
 ## Discovery Pattern
 
 - Run `*_search` before `*_get`; use wildcards like `DV_*` for type search.
-- Shortlist 10–15 candidates → confirm with user → retrieve.
+- Shortlist up to 10 candidates when ambiguous; if confidence is high, retrieve directly.
 
 ## Suggested Workflows
 
 1. Retrieval: `*_search` → shortlist → `*_get`.
 2. Load relevant guides (e.g., authoring guides — archetypes principles/checklist, AQL syntax, simplified format rules; `specs/*` digests for normative references; `howto/*` for toolchain usage) and apply them to the artifact.
 3. Verify with tools (such as `terminology_resolve`, `type_specification_get`, and `guide_adl_idiom_lookup`).
-4. Summarize: `*_explain`.
+4. Summarize with a clear split between retrieved facts, assumptions, and next retrieval step (if needed).
