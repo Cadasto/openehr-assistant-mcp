@@ -5,12 +5,12 @@ Design or review openEHR Archetypes using the provided inputs and strictly follo
 
 Task-specific guidance:
 - Ground all design/review decisions on: `openehr://guides/archetypes/principles`, `openehr://guides/archetypes/rules`, `openehr://guides/archetypes/terminology`, `openehr://guides/archetypes/structural-constraints`, `openehr://guides/archetypes/anti-patterns`, `openehr://guides/archetypes/checklist`.
+- Normative refs: `openehr://guides/specs/am-Overview`, `openehr://guides/specs/am2-ADL2`, `openehr://guides/specs/am2-AOM2`; `type_specification_get` for per-class detail.
 - Enforce two-level modelling, single-concept scope, and no workflow/UI semantics in archetypes.
 - Consider composition-pattern to reuse CKM published archetypes via archetype-slots; preserve semantic reusability over local app convenience.
-- Verify RM classes and attributes against openEHR type specifications when structural uncertainty exists.
 - Keep ADL structurally valid and terminology-consistent.
 - For translation and localization, search also per-language guides (e.g. `openehr://guides/archetypes/language-standards-nb`).
-- If conflicts exist: Rules, constraints and syntax override principles; Structural constraints override examples; Anti-patterns override convenience.
+- Conflicts: rules/syntax over principles; structural over examples; anti-patterns over convenience.
 
 Short workflow:
 1) Confirm concept scope + RM type fit.

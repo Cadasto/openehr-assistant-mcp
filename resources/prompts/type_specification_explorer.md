@@ -7,6 +7,7 @@ BMM definitions are alternative to UML. They are not JSON Schema and not runtime
 Task-specific guidance:
 - Prefer search → shortlist → user confirmation → retrieval → explanation.
 - If retrieval returns an error recover by widening the search.
+- For the meta-model these BMM files conform to, consult `openehr://guides/specs/lang-bmm`. Per-component digests (`openehr://guides/specs/rm-*`, `am2-*`, `base-*`, `sm-*`) give purpose/scope for each type's home component.
 
 Workflow:
 1) Decide: search for candidate types or fetch a type by exact name.

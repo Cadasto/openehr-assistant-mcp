@@ -5,12 +5,12 @@ Design or review openEHR Templates (OET) using the provided inputs and strictly 
 
 Task-specific guidance:
 - Follow: `openehr://guides/templates/principles`, `openehr://guides/templates/rules`, `openehr://guides/templates/oet-syntax`, `openehr://guides/templates/oet-idioms-cheatsheet`, `openehr://guides/templates/checklist`.
+- Normative refs: `openehr://guides/specs/am2-OPT2`, `openehr://guides/specs/am2-AOM2`; `type_specification_get` for per-class detail.
 - Templates must represent a specific use case or workflow; ensure appropriate choice of the root archetype.
 - Apply the "Narrowing Principle": templates can only further constrain archetypes, never relax them.
 - Use tools for discovery of existing archetypes to be included in the template.
 - Keep templates semantically coherent, archetype-driven, and implementation-safe.
-- Do not invent archetype constraints not supported by included models; do not relax archetype constraints.
-- If conflicts exist: Rules and syntax override principles; Idioms override convenience.
+- Conflicts: rules/syntax over principles; idioms over convenience.
 
 Short workflow:
 1) Confirm concept + clinical use context.

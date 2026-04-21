@@ -44,7 +44,7 @@ final readonly class GuideService
      *   The query string describing what guidance you need (e.g. "cardinality vs occurrences", "slot constraints"). Leave empty to search all guides.
      *
      * @param string $category
-     *   Optional guide category filter (e.g. "archetypes", "templates"). Leave empty to search all guides.
+     *   Optional guide category filter: "archetypes", "templates", "aql", "simplified_formats" (authoring guides), "specs" (per-document openEHR spec digests), "howto" (toolchain how-to guides). Leave empty to search all categories.
      *
      * @param string $taskType
      *   Optional task hint (e.g. "lint", "review", "refactor", "author"). If supplied, matches guides containing it.
@@ -65,7 +65,7 @@ final readonly class GuideService
                         'type' => 'object',
                         'properties' => [
                             'title' => ['type' => 'string'],
-                            'category' => ['type' => 'string', 'description' => 'Guide category, e.g. archetypes/templates'],
+                            'category' => ['type' => 'string', 'description' => 'Guide category: archetypes | templates | aql | simplified_formats | specs | howto'],
                             'name' => ['type' => 'string'],
                             'resourceUri' => ['type' => 'string', 'description' => 'Canonical guide URI in openehr://guides namespace'],
                             'snippet' => ['type' => 'string', 'description' => 'Short, task-relevant snippet'],
@@ -152,14 +152,14 @@ final readonly class GuideService
     /**
      * Fetch the full content of an openEHR guide by its canonical URI or by specifying its category and name.
      *
-     * Use this tool to retrieve an openEHR guide for a specific processing or implementation task around Archetype, Templates or specifications.
-     * Such guides describe modeling workflows, best practices, syntax checklists, principal rules, antipatterns and other guidance on demand.
+     * Use this tool to retrieve an openEHR guide for a specific processing or implementation task around archetypes, templates, AQL, simplified formats, spec digests, or toolchain how-tos.
+     * Such guides describe modelling workflows, best practices, syntax checklists, principal rules, anti-patterns, normative spec digests, and other guidance on demand.
      *
      * @param string $uri
      *   Canonical guide URI (openehr://guides/{category}/{name}). Optional when category and name are provided.
      *
      * @param string $category
-     *   Guide category (e.g. "archetypes" or "templates"). Optional when URI is provided.
+     *   Guide category: "archetypes", "templates", "aql", "simplified_formats" (authoring guides), "specs" (per-document openEHR spec digests), "howto" (toolchain how-to guides). Optional when URI is provided.
      *
      * @param string $name
      *   Guide filename without extension. Optional when URI is provided.

@@ -10,10 +10,16 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 ## [Unreleased]
 
 ### Added
-- Guides: New `specs` category with nine per-document openEHR spec digests (RM plus SM platform services) and a `howto` category seeded with `spec-lookup`. MCP `instructions` gains a `Digest-First` clause pairing with the existing `Spec-Lookup-First` clause.
+- Guides: New `specs` category (31 per-document openEHR spec digests across RM, SM, BASE, AM, AM2, QUERY, TERM, LANG, CDS, ITS-REST) and new `howto` category (seeded with `spec-lookup`). Authoring guides cross-link to relevant `specs/*` digests via `**Related:**`.
+- Prompts: Task prompts reference applicable `specs/*` digests and point at `type_specification_get` for per-class detail.
+- Tests: New `SpecDigestsTest` validates every `specs/*.md` against the digest schema.
+- Resources: New `LANG` BMM component with the BMM meta-model definitions.
 
 ### Changed
-- Guides: Retired the ad-hoc `rm` category; its files moved into `specs/` under the new digest schema (with the `platform-services` file reclassified from RM to SM).
+- Guides: Retired the ad-hoc `rm` category (content migrated into `specs/`; `platform-services` reclassified to SM). Digests pin `**Release:** development`.
+- Guides: Audit against upstream specs corrected drift in composition categories, `hide_on_form` attribution, AOM 1.4/2 scope notes, validator-tooling vs spec-code distinction, ADL 1.4 Archetype Sections, and AQL operator/aggregate normativity.
+- Resources: Guide scanners skip per-category `README.md` and `_*.md` so authoring artifacts don't leak to MCP clients. MCP `instructions` gains `Spec-Lookup-First` and `Digest-First` clauses. Refreshed BMM JSON across AM/AM2/BASE/RM (obsolete `BYTE` removed).
+- Docs: `AGENTS.md`, `README.md`, `server-instructions.md`, and `guide_explorer` prompt refreshed to surface the new categories and the layered `authoring guide → specs digest → type_specification_get` hand-off.
 
 ## [0.15.0] - 2026-03-14
 

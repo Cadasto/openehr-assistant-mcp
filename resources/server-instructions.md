@@ -24,6 +24,6 @@ Follow a **Guide-First** approach: use `guide_search` and `guide_get` before com
 ## Suggested Workflows
 
 1. Retrieval: `*_search` → shortlist → `*_get`.
-2. Load relevant guides (e.g., archetypes principles/checklist, AQL syntax, simplified format rules) and apply them to the artifact.
+2. Load relevant guides (e.g., authoring guides — archetypes principles/checklist, AQL syntax, simplified format rules; `specs/*` digests for normative references; `howto/*` for toolchain usage) and apply them to the artifact.
 3. Verify with tools (such as `terminology_resolve`, `type_specification_get`, and `guide_adl_idiom_lookup`).
 4. Summarize: `*_explain`.
