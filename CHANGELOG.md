@@ -7,26 +7,24 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: https://keepachangelog.com/en/1.1.0/
 - Semantic Versioning: https://semver.org/spec/v2.0.0.html
 
-## [Unreleased]
+## [0.16.0] - 2026-04-21
 
 ### Added
-- Guides & Prompts: Added `specs` (31 openEHR digests) and `howto` (with `spec-lookup`), and updated prompts/authoring guides to point to related `specs/*` digests and `type_specification_get`.
-- Tests: New `SpecDigestsTest` validates every `specs/*.md` against the digest schema.
-- Resources: New `LANG` BMM component with the BMM meta-model definitions.
-- Examples: Added `openehr://examples/{kind}/{name}` plus `examples_search` / `examples_get` for curated AQL, FLAT/STRUCTURED, and ADL archetype artefacts (seeded with 12 AQL patterns, 3 FLAT payloads + 1 STRUCTURED pair, and 7 gold-standard CKM archetypes covering every major ENTRY type). MCP `instructions` now includes an `Examples-First` clause. Scanner accepts both `.md` and `.adl` files; archetypes are served as native `text/plain` ADL.
-- MCP Conformance: Added Docker-based conformance checks with updated workflow docs.
+- Guides: new `specs` and `howto` categories (spec digests + toolchain how-tos); new `LANG` BMM component.
+- Examples: new `openehr://examples/{kind}/{name}` namespace with `examples_search` / `examples_get` (AQL, FLAT, STRUCTURED, ADL archetypes).
+- MCP `instructions`: `Spec-Lookup-First`, `Digest-First`, and `Examples-First` clauses.
+- MCP conformance tests via Docker.
 
 ### Changed
-- Guides & Resources: Retired `rm` (migrated to `specs/`; `platform-services` moved to SM), pinned digests to `**Release:** development`, synced content with upstream specs, tightened scanner filtering (`README.md` / `_*.md`), refreshed AM/AM2/BASE/RM BMM JSON (removed obsolete `BYTE`), and added `Spec-Lookup-First` / `Digest-First` instruction clauses.
-- Docs: Updated `AGENTS.md`, `README.md`, `server-instructions.md`, and `guide_explorer` for the `authoring guide → specs digest → type_specification_get` flow; moved guide-authoring templates from `resources/guides/` to `src/templates/`; added an AGENTS.md convention to keep Unreleased entries concise.
-- Docker/Workflows: Standardized `--env-file` usage, fixed compose keys/paths/service names, and aligned CI environment variables.
-- Helpers: Extracted `TerminologyXmlLoader` to share terminology XML loading/validation between `Terminologies` and `TerminologyService`.
-- Tools: Added path-traversal checks for guide and type-spec identifiers. `Guides` completion now lists all six live categories.
-- Dependencies: Bumped Symfony cache / finder / uid / var-exporter / polyfill-uuid and phpdocumentor/reflection-docblock.
-- Repo: Added ignore rules for local AI assistant directories.
+- Retired `rm` category (migrated to `specs/`); digests track `development`.
+- Moved guide-authoring scaffolding from `resources/guides/` to `src/templates/`.
+- Refreshed BMM JSON across AM/AM2/BASE/RM.
+- Extracted `TerminologyXmlLoader` helper.
+- Hardened guide / type-spec identifier handling (path-traversal checks).
+- Bumped Symfony + phpdocumentor dependencies.
 
 ### Fixed
-- Prompts: Corrected error message for missing user block in shared policy; added regression test.
+- `AbstractPrompt`: error message for missing user block.
 
 ## [0.15.0] - 2026-03-14
 
