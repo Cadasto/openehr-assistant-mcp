@@ -480,7 +480,7 @@ final class GuideService
      */
     private function parseGuideUri(string $uri): array
     {
-        $pattern = '#^openehr://guides/([\w-]+)/([\w-]+)$#';
+        $pattern = '#^openehr://guides/([\w-]+)/([\w.-]+)$#';
         if (!preg_match($pattern, $uri, $matches)) {
             throw new ToolCallException(sprintf('Invalid guide URI: %s', $uri));
         }
@@ -502,7 +502,7 @@ final class GuideService
     private function validateGuideSegment(string $segment, string $label): string
     {
         $value = trim($segment);
-        if ($value === '' || preg_match('/^[\w-]+$/', $value) !== 1) {
+        if ($value === '' || preg_match('/^[\w.-]+$/', $value) !== 1) {
             throw new ToolCallException(sprintf('Invalid guide %s: %s', $label, $segment));
         }
 
