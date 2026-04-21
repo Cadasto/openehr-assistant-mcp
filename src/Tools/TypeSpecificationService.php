@@ -33,7 +33,7 @@ readonly final class TypeSpecificationService
      * Matching behavior:
      * - The `namePattern` is transformed into a case-insensitive regular expression.
      * - The pattern supports `*` as a wildcard for multiple characters.
-     * - Only files with the `.json` extension are considered.
+     * - Only files with the `.bmm.json` naming pattern are considered.
      * - Files must be readable and non-empty to be included in the results.
      *
      * @param string $namePattern

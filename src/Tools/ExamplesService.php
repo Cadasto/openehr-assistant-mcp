@@ -148,7 +148,11 @@ final readonly class ExamplesService
             throw new ToolCallException('Example kind and name are required when URI is not provided.');
         }
 
+        $kind = $this->validateExampleSegment($kind, 'kind');
+        $name = $this->validateExampleSegment($name, 'name');
+
         $path = $this->examplePath($kind, $name);
+        $this->assertPathWithinExamples($path);
         if (!is_file($path) || !is_readable($path)) {
             throw new ToolCallException(sprintf('Example not found: %s/%s', $kind, $name));
         }
@@ -295,6 +299,25 @@ final readonly class ExamplesService
             return '';
         }
         return self::EXAMPLES_DIR . '/' . $kind . '/' . $name . '.md';
+    }
+
+    private function validateExampleSegment(string $segment, string $label): string
+    {
+        $value = trim($segment);
+        if ($value === '' || preg_match('/^[\w.-]+$/', $value) !== 1) {
+            throw new ToolCallException(sprintf('Invalid example %s: %s', $label, $segment));
+        }
+
+        return $value;
+    }
+
+    private function assertPathWithinExamples(string $path): void
+    {
+        $examplesRoot = realpath(self::EXAMPLES_DIR);
+        $resolvedPath = realpath($path);
+        if ($examplesRoot === false || $resolvedPath === false || !str_starts_with($resolvedPath, $examplesRoot . '/')) {
+            throw new ToolCallException('Example path is outside examples directory.');
+        }
     }
 
     private function buildExampleUri(string $kind, string $name): string

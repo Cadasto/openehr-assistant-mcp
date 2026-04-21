@@ -162,7 +162,7 @@ final readonly class CkmService
      * Use this tool after you have identified a candidate archetype (usually from the `ckm_archetype_search` tool),
      * or when you already know the archetype CID (e.g. "1013.1.7850") or archetype-id (e.g. "openEHR-EHR-OBSERVATION.blood_pressure.v1").
      * It fetches the *full archetype definition* from CKM so an LLM can process it according to relevant guides, e.g.:
-     * - understand the structure and semantic or meaning of nodes/attributes,
+     * - understand the structure and semantics of nodes/attributes,
      * - extract constraints, translations, and terminology bindings,
      * - generate templates or implementation guidance,
      * - or cite the definition content in downstream reasoning.
@@ -341,7 +341,7 @@ final readonly class CkmService
      * Use this tool to *retrieve* an openEHR Template from CKM after you have identified a candidate template (usually from the `ckm_template_search` tool),
      * or when you already know the template CID (e.g. "1013.26.244").
      * It fetches the *full Template definition* from CKM so an LLM can process it according to relevant guides, e.g.:
-     * - understand the structure and semantic or meaning of nodes/attributes,
+     * - understand the structure and semantics of nodes/attributes,
      * - extract constraints, translations, and terminology bindings,
      * - or cite the definition content in downstream reasoning.
      * When guides are not yet available, use the `guide_search` tool to discover them applicable to the Template and the user request.
@@ -365,7 +365,7 @@ final readonly class CkmService
         name: 'ckm_template_get',
         annotations: new ToolAnnotations(readOnlyHint: true)
     )]
-    public function templateGet(string $identifier, string $format = 'opt'): TextContent
+    public function templateGet(string $identifier, string $format = 'oet'): TextContent
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $identifier = trim($identifier);
