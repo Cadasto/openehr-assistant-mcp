@@ -30,7 +30,7 @@ abstract readonly class AbstractPrompt
         ));
 
         if ($sharedMessages === []) {
-            throw new InvalidArgumentException('Shared prompt policy must contain an assistant block.');
+            throw new InvalidArgumentException('Shared prompt policy must contain a user block.');
         }
 
         return array_merge($sharedMessages, $this->loadPromptFile($name));

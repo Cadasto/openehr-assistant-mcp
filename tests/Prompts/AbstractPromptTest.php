@@ -104,4 +104,15 @@ final class AbstractPromptTest extends TestCase
         $this->expectExceptionMessage('Invalid prompt file format');
         $promptInstance->testLoad('invalid');
     }
+
+    public function testLoadThrowsWhenSharedPolicyHasNoUserBlock(): void
+    {
+        file_put_contents($this->tempPromptsDir . '/shared/policy.md', "## Role: assistant\n\nShared policy.");
+        file_put_contents($this->tempPromptsDir . '/test_prompt.md', "## Role: user\n\nTask instruction.");
+        $promptInstance = $this->getMockPrompt($this->tempPromptsDir);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Shared prompt policy must contain a user block.');
+        $promptInstance->testLoad('test_prompt');
+    }
 }
