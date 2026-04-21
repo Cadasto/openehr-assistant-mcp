@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Tools;
 
 use Cadasto\OpenEHR\MCP\Assistant\Tools\GuideService;
+use Mcp\Exception\ToolCallException;
 use Mcp\Schema\Content\EmbeddedResource;
 use Mcp\Schema\Content\TextResourceContents;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -106,5 +107,20 @@ final class GuideServiceTest extends TestCase
         $this->assertArrayHasKey('items', $results);
         $this->assertNotEmpty($results['items']);
         $this->assertArrayHasKey('resourceUri', $results['items'][0]);
+    }
+
+    public function test_guideGet_rejects_path_traversal_segments(): void
+    {
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('Invalid guide category');
+
+        $this->service->get('', '../secrets', 'anything');
+    }
+
+    public function test_guideGet_rejects_path_traversal_in_uri(): void
+    {
+        $this->expectException(ToolCallException::class);
+
+        $this->service->get('openehr://guides/../secrets/anything');
     }
 }

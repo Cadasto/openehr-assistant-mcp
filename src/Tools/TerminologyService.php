@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tools;
 
+use Cadasto\OpenEHR\MCP\Assistant\Helpers\TerminologyXmlLoader;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Exception\ToolCallException;
 use Mcp\Schema\ToolAnnotations;
@@ -100,29 +101,11 @@ readonly final class TerminologyService
 
     private function loadXml(): SimpleXMLElement
     {
-        if (!file_exists(self::FILE_PATH) || !is_readable(self::FILE_PATH)) {
-            $this->logger->error('Terminology file not found or not readable.', ['path' => self::FILE_PATH]);
-            throw new RuntimeException('Terminology file not found or not readable.');
-        }
-
-        $content = file_get_contents(self::FILE_PATH);
-        if ($content === false) {
-            throw new RuntimeException('Unable to read terminology file.');
-        }
-
         try {
-            $xml = new SimpleXMLElement($content);
-        } catch (\Exception $e) {
+            return TerminologyXmlLoader::load(self::FILE_PATH);
+        } catch (\Throwable $e) {
             $this->logger->error('Error parsing terminology XML', ['error' => $e->getMessage()]);
             throw new RuntimeException('Error parsing terminology XML: ' . $e->getMessage());
         }
-
-        $groups = $xml->xpath('/terminology/group');
-        if (empty($groups)) {
-            $this->logger->error('Terminology does not contains groups.');
-            throw new RuntimeException('No terminology groups found.');
-        }
-
-        return $xml;
     }
 }

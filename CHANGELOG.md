@@ -20,6 +20,13 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Guides: Audit against upstream specs corrected drift in composition categories, `hide_on_form` attribution, AOM 1.4/2 scope notes, validator-tooling vs spec-code distinction, ADL 1.4 Archetype Sections, and AQL operator/aggregate normativity.
 - Resources: Guide scanners skip per-category `README.md` and `_*.md` so authoring artifacts don't leak to MCP clients. MCP `instructions` gains `Spec-Lookup-First` and `Digest-First` clauses. Refreshed BMM JSON across AM/AM2/BASE/RM (obsolete `BYTE` removed).
 - Docs: `AGENTS.md`, `README.md`, `server-instructions.md`, and `guide_explorer` prompt refreshed to surface the new categories and the layered `authoring guide → specs digest → type_specification_get` hand-off.
+- Docs: Dev-facing authoring artifacts (guide markdown style, spec-digest authoring rules, and the copy-ready digest skeleton) moved out of `resources/guides/` into `src/templates/`. AGENTS.md gains a "CHANGELOG.md entries" convention bullet (keep Unreleased entries short and high-level).
+- Helpers: Extracted `TerminologyXmlLoader` to share openEHR-terminology XML loading/validation between `Terminologies` resource and `TerminologyService` tool.
+- Tools: Added path-traversal validation on guide and type-specification identifier inputs. Completion provider for `Guides` now lists the six live categories.
+- Dependencies: Bumped Symfony cache / finder / uid / var-exporter / polyfill-uuid and phpdocumentor/reflection-docblock.
+
+### Fixed
+- Prompts: Corrected error message for missing user block in shared policy; added regression test.
 
 ## [0.15.0] - 2026-03-14
 

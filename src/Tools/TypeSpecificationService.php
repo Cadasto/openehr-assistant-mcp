@@ -112,7 +112,7 @@ readonly final class TypeSpecificationService
         $namePattern = trim($namePattern);
         $keyword = trim($keyword);
         if (!$namePattern || strlen($namePattern) < 3) {
-            return [];
+            return ['items' => []];
         }
 
         $results = [];
@@ -191,6 +191,7 @@ readonly final class TypeSpecificationService
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $name = trim((string)str_replace(['.', '*', '/', '\\'], '', $name));
+        $component = strtoupper(trim($component));
         if (!$name) {
             throw new ToolCallException('Name cannot be empty');
         }
