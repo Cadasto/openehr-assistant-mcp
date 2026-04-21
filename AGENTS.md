@@ -49,6 +49,8 @@ These guidelines summarize the high-level architecture, coding conventions, and 
   - Keep tests unit/integration focused; **mock external HTTP calls** to CKM rather than relying on live APIs.
 - **Commit messages**:
   - Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) conventions, e.g. `fix(resources): refreshed BMM definitions in resources`, `feat(tools): added new tool for operational templates`.
+- **CHANGELOG.md entries**:
+  - Keep `## [Unreleased]` entries **short and high-level**: one-line bullets naming the artefact class and scope. Do not enumerate individual files, classes, drift fixes, or audit details — those belong in commit messages and PR bodies, not the CHANGELOG.
 - **Branching**:
   - Use feature branches and pull requests. Standard PR validation runs on every push.
 - **Documentation**:
@@ -134,11 +136,11 @@ The full policy, fall-through order, and failure modes live in the [`spec-lookup
 
 ### Guides and specification alignment
 
-- **Guide markdown style:** See `resources/guides/README.md` for header block (Scope/Purpose, Related, Keywords), section heading style (lettered vs numeric), rule numbering, code blocks, and checklist style (☑ vs `- [ ]`).
 - When adding or editing guides (e.g. under `resources/guides/`) or prompts that describe a standard (e.g. AQL), keep wording aligned with the authoritative spec and any formal grammar in the repo.
 - Avoid duplicate or misplaced paragraphs in guide files.
 - **Archetypes/templates**: Guides under `resources/guides/archetypes/` and `resources/guides/templates/` should stay consistent with openEHR modelling docs and ADL/OET conventions referenced in the project.
 - **Simplified Formats**: Spec in `docs/flat/*.adoc` (Flat and Structured JSON serialization; Web Template field identifiers, ctx, pipe suffixes, underscore prefix). Guides under `resources/guides/simplified_formats/` should align with that spec.
+- **Authoring conventions and templates** — guide markdown style, spec-digest authoring rules, and the copy-ready digest skeleton all live under [`src/templates/`](src/templates/). Start there before adding or modifying a guide.
 
 ### Clinical modelling and governance
 
