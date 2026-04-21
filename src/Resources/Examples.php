@@ -111,10 +111,13 @@ final class Examples
                 // Description: Markdown first heading, or archetype identifier line for .adl, else fallback
                 $description = self::extractDescription($content, $ext, $kind, $name);
 
+                // MCP resource names allow only [A-Za-z0-9_-], so sanitize punctuation in example IDs.
+                $resourceName = preg_replace('/[^\w-]/', '-', sprintf('example_%s_%s', $kind, $name)) ?: sprintf('example_%s_%s', $kind, $name);
+
                 $builder->addResource(
                     handler: fn() => (string)$content,
                     uri: sprintf('openehr://examples/%s/%s', $kind, $name),
-                    name: sprintf('example_%s_%s', $kind, $name),
+                    name: $resourceName,
                     description: $description,
                     mimeType: $ext === 'adl' ? 'text/plain' : 'text/markdown',
                     size: strlen($content),

@@ -72,8 +72,8 @@ Guides (model-reachable)
 - `guide_adl_idiom_lookup` - Lookup targeted ADL idiom snippets from the cheatsheet for common modelling patterns.
 
 Examples (curated artefacts)
-- `examples_search` - Search bundled example artefacts (AQL queries, FLAT/STRUCTURED JSON payloads) by query and return short snippets with canonical openehr://examples URIs.
-- `examples_get` - Retrieve an example artefact by URI or (kind, name). Each example wraps its query/payload in a Markdown file with a metadata header describing the pattern demonstrated and related specs/guides.
+- `examples_search` - Search bundled example artefacts (AQL queries, FLAT/STRUCTURED JSON payloads, ADL archetypes) by query and return short snippets with canonical openehr://examples URIs.
+- `examples_get` - Retrieve an example artefact by URI or (kind, name). Markdown examples (AQL / FLAT / STRUCTURED) wrap the query/payload in a file with metadata header + fenced code block; archetype examples (`kind=archetypes`) are native `.adl` served as `text/plain`.
 
 openEHR Type specification
 - `type_specification_search` - List bundled openEHR Type specifications matching search criteria.
@@ -102,7 +102,7 @@ Optional prompts that guide AI assistants through common openEHR and CKM workflo
 
 Completion providers supply parameter suggestions in MCP clients when invoking tools or resources.
 - `Guides` - suggests guide `{name}` values for categories `archetypes`, `templates`, `aql`, `simplified_formats`, `specs`, and `howto` (resource URI `openehr://guides/{category}/{name}`)
-- `Examples` - suggests example `{name}` values across kinds `aql`, `flat`, `structured` (resource URI `openehr://examples/{kind}/{name}`)
+- `Examples` - suggests example `{name}` values across kinds `aql`, `flat`, `structured`, `archetypes` (resource URI `openehr://examples/{kind}/{name}`)
 - `SpecificationComponents` - suggests `{component}` values based on directories in `resources/bmm`  resource URI
 
 ### Resources
@@ -386,7 +386,7 @@ make conformance
 This runs the conformance suite inside the `node` service (Node + curl) in Docker, so you do not need Node on the host. Results are printed to the terminal and written to `conformance/` in the repo (subdirectories like `conformance/server-<scenario>-<timestamp>/` with `checks.json`). To run a single scenario or pass options (e.g. `--verbose`), use:
 
 ```bash
-docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm node npx -y @modelcontextprotocol/conformance server --url http://ingress:8343/ -o conformance --expected-failures conformance-baseline.yml --scenario server-initialize --verbose
+docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm node npx -y @modelcontextprotocol/conformance server --url http://ingress:8343/mcp_openehr -o conformance --expected-failures tests/conformance-baseline.yml --scenario server-initialize --verbose
 ```
 
 Tips
