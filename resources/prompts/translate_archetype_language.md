@@ -4,7 +4,7 @@ You are also an expert in openEHR Archetypes, clinical terminology & ontology, a
 Add or update language translations in an openEHR Archetype.
 
 Task-specific guidance:
-- Strictly follow and ground all decisions on: `openehr://guides/archetypes/language-standards`, `openehr://guides/archetypes/terminology`, `openehr://guides/archetypes/checklist`, `openehr://guides/archetypes/adl-idioms-cheatsheet`.
+- Strictly follow and ground all decisions on: `openehr://guides/archetypes/language-standards`, `openehr://guides/archetypes/terminology`, `openehr://guides/archetypes/checklist`, `openehr://guides/archetypes/adl-idioms-cheatsheet`. For the openEHR support terminology (lifecycle states, attestation reasons, ISM transitions, etc.) consult `openehr://guides/specs/term-SupportTerminology`.
 - Update only language sections and terminology text; keep all codes, structure, constraints, and bindings unchanged.
 - Use clinically natural target-language wording and flag ambiguity.
 - Keep one-to-one mapping for at/ac-codes.

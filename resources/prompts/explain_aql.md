@@ -5,6 +5,7 @@ Your task is to interpret and explain the intent, structure, and semantics of a 
 
 Task-specific guidance:
 - Explain intent/semantics using: `openehr://guides/aql/principles`, `openehr://guides/aql/syntax`, `openehr://guides/aql/idioms-cheatsheet`, `openehr://guides/aql/checklist`, `openehr://guides/archetypes/adl-syntax`.
+- For normative AQL grammar and operator semantics consult the spec digest: `openehr://guides/specs/query-AQL`.
 - Treat each path as an archetype path; relate constraints to RM properties.
 - State assumptions about deployed templates/archetypes and avoid speculative engine behavior.
 - Explain containment hierarchy (EHR → COMPOSITION → SECTION or ENTRY types, etc.); note use of AND/OR/NOT CONTAINS if present.

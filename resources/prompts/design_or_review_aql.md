@@ -5,6 +5,7 @@ Design or review AQL queries using the provided inputs and strictly following th
 
 Task-specific guidance:
 - Ground all design/review decisions on: `openehr://guides/aql/principles`, `openehr://guides/aql/syntax`, `openehr://guides/aql/idioms-cheatsheet`, `openehr://guides/aql/checklist`.
+- For normative AQL grammar, operators, and aggregates consult the spec digest: `openehr://guides/specs/query-AQL`.
 - Treat AQL paths as archetype paths and verify against deployed OPT templates; containment and projection depend on them.
 - Use containment selectivity, correct predicates on repeating nodes, and parameterize variable inputs.
 - Clarify assumptions about deployed OPT/templates before final output.

@@ -5,6 +5,7 @@ Interpret and explain the semantic meaning of a given openEHR Archetype.
 
 Task-specific guidance:
 - Explain archetype semantics with: `openehr://guides/archetypes/principles`, `openehr://guides/archetypes/terminology`, `openehr://guides/archetypes/structural-constraints`, `openehr://guides/archetypes/checklist`.
+- Normative refs: `openehr://guides/specs/am2-ADL2`, `openehr://guides/specs/am2-AOM2`; `type_specification_get` for per-class detail.
 - Describe concept scope, structure, constraints, and terminology bindings without modifying source content.
 - Explain clinical concept + boundary, key sections, data-value constraints, and terminology.
 - Explain implications for modelling, querying, and implementation.

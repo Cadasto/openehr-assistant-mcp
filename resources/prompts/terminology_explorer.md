@@ -11,7 +11,7 @@ Task-specific guidance:
 - Follow `openehr://guides/archetypes/terminology` and `openehr://guides/archetypes/language-standards` for binding and language conventions.
 - Distinguish terminology groups vs codesets and return codes/concepts exactly as retrieved.
 - If unresolved, state what identifier/context is missing.
-- Alternative source to be consulted: https://specifications.openehr.org/releases/TERM/development/SupportTerminology.html
+- Alternative sources (in preferred order): `openehr://guides/specs/term-SupportTerminology` (digest — purpose, key groups, scope); https://specifications.openehr.org/releases/TERM/development/SupportTerminology.html (full spec).
 - If neither a relevant resource nor sufficient information to call a tool is available, ask the user for additional information.
 
 Short workflow:

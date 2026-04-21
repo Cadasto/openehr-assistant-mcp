@@ -5,6 +5,7 @@ Interpret and explain the semantic meaning and design decisions of a given openE
 
 Task-specific guidance:
 - Explain template meaning and quality using: `openehr://guides/templates/principles`, `openehr://guides/templates/rules`, `openehr://guides/templates/oet-syntax`, `openehr://guides/templates/checklist`.
+- For normative OPT/AOM formalism consult the spec digests: `openehr://guides/specs/am-Overview`, `openehr://guides/specs/am2-OPT2`.
 - Cover purpose, archetype composition, constraints, and implementation implications.
 - When necessary, use tools for discovery and retrieval of referred archetypes; use tools to retrieve openEHR Type (class) specifications.
 - Strict Prohibitions: do not suggest design improvements or corrections; do not assume template or UI behaviour; do not introduce new clinical concepts.
