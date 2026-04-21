@@ -44,7 +44,7 @@ final class Guides
     ): string
     {
         foreach ([$category, $name] as $segment) {
-            if ($segment === '' || !\preg_match('/^[\w-]+$/', $segment)) {
+            if ($segment === '' || !\preg_match('/^[\w.-]+$/', $segment)) {
                 throw new ResourceReadException(\sprintf('Invalid guide resource identifier: %s', $segment));
             }
         }
@@ -113,10 +113,13 @@ final class Guides
                 $lines = explode("\n", $content, 2);
                 $description = trim($lines[0], ' #') ?: sprintf('Guide %s for %s', $name, $category);
 
+                // MCP resource names allow only [A-Za-z0-9_-], so sanitize dots or any other guide-name punctuation.
+                $resourceName = preg_replace('/[^\w-]/', '-', sprintf('guide_%s_%s', $category, $name)) ?: sprintf('guide_%s_%s', $category, $name);
+
                 $builder->addResource(
                     handler: fn() => (string)$content,
                     uri: sprintf('openehr://guides/%s/%s', $category, $name),
-                    name: sprintf('guide_%s_%s', $category, $name),
+                    name: $resourceName,
                     description: $description,
                     mimeType: 'text/markdown',
                     size: strlen($content),
