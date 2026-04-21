@@ -24,6 +24,8 @@ final class GuidesTest extends TestCase
         $this->assertContains('checklist', $items);
         $this->assertContains('adl-syntax', $items);
         $this->assertContains('adl-idioms-cheatsheet', $items);
+        $this->assertContains('am-Overview', $items);
+        $this->assertContains('spec-lookup', $items);
 
         // Ensure no extensions are included
         foreach ($items as $i) {
