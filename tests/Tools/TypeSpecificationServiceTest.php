@@ -88,6 +88,18 @@ final class TypeSpecificationServiceTest extends TestCase
         $svc = new TypeSpecificationService($this->logger);
         $results = $svc->search('*', 'archetype');
         $this->assertIsArray($results);
+        $this->assertArrayHasKey('items', $results);
+        $this->assertIsArray($results['items']);
+    }
+
+    /**
+     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::search
+     */
+    public function test_list_with_short_pattern_returns_empty_items_shape(): void
+    {
+        $svc = new TypeSpecificationService($this->logger);
+        $results = $svc->search('dv');
+        $this->assertSame(['items' => []], $results);
     }
 
     /**
@@ -120,7 +132,17 @@ final class TypeSpecificationServiceTest extends TestCase
         $svc = new TypeSpecificationService($this->logger);
         $content = $svc->get('COMPOSITION');
         $this->assertIsArray($content);
-        $this->assertContains('COMPOSITION', $content);
+        $this->assertSame('COMPOSITION', $content['name'] ?? null);
+    }
+
+    /**
+     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::get
+     */
+    public function test_get_by_identifier_accepts_lowercase_component(): void
+    {
+        $svc = new TypeSpecificationService($this->logger);
+        $content = $svc->get('COMPOSITION', 'rm');
+        $this->assertSame('COMPOSITION', $content['name'] ?? null);
     }
 
     /**

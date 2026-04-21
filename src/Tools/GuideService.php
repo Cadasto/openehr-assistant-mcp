@@ -14,7 +14,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 
-final readonly class GuideService
+final class GuideService
 {
     private const int DEFAULT_MAX_RESULTS = 10;
     private const int MAX_RESULTS_LIMIT = 50;
@@ -24,6 +24,8 @@ final readonly class GuideService
     private const int MAX_SNIPPET_CHARS = 1200;
 
     public const string GUIDE_DIR = APP_RESOURCES_DIR . '/guides';
+    /** @var array<int, array{title: string, category: string, name: string, resourceUri: string, abstract: string, headings: array<int, string>}>|null */
+    private ?array $guideIndex = null;
 
     public function __construct(
         private LoggerInterface $logger,
@@ -186,7 +188,11 @@ final readonly class GuideService
             throw new ToolCallException('Guide category and name are required when URI is not provided.');
         }
 
+        $category = $this->validateGuideSegment($category, 'category');
+        $name = $this->validateGuideSegment($name, 'name');
+
         $path = $this->guidePath($category, $name);
+        $this->assertPathWithinGuides($path);
         if (!is_file($path) || !is_readable($path)) {
             throw new ToolCallException(sprintf('Guide not found: %s/%s', $category, $name));
         }
@@ -285,7 +291,11 @@ final readonly class GuideService
     /** @return array<int, array{title: string, category: string, name: string, resourceUri: string, abstract: string, headings: array<int, string>}> */
     private function loadGuideIndex(): array
     {
-        return $this->buildGuideIndex();
+        if ($this->guideIndex === null) {
+            $this->guideIndex = $this->buildGuideIndex();
+        }
+
+        return $this->guideIndex;
     }
 
     /** @return array<int, array{title: string, category: string, name: string, resourceUri: string, abstract: string, headings: array<int, string>}> */
@@ -487,6 +497,25 @@ final readonly class GuideService
         }
 
         return self::GUIDE_DIR . '/' . $category . '/' . $name . '.md';
+    }
+
+    private function validateGuideSegment(string $segment, string $label): string
+    {
+        $value = trim($segment);
+        if ($value === '' || preg_match('/^[\w-]+$/', $value) !== 1) {
+            throw new ToolCallException(sprintf('Invalid guide %s: %s', $label, $segment));
+        }
+
+        return $value;
+    }
+
+    private function assertPathWithinGuides(string $path): void
+    {
+        $guideRoot = realpath(self::GUIDE_DIR);
+        $resolvedPath = realpath($path);
+        if ($guideRoot === false || $resolvedPath === false || !str_starts_with($resolvedPath, $guideRoot . '/')) {
+            throw new ToolCallException('Guide path is outside guides directory.');
+        }
     }
 
     private function buildGuideUri(string $category, string $name): string
