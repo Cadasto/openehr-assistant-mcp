@@ -14,6 +14,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Prompts: Task prompts reference applicable `specs/*` digests and point at `type_specification_get` for per-class detail.
 - Tests: New `SpecDigestsTest` validates every `specs/*.md` against the digest schema.
 - Resources: New `LANG` BMM component with the BMM meta-model definitions.
+- Examples: New `openehr://examples/{kind}/{name}` resource namespace for curated artefacts (AQL queries, FLAT/STRUCTURED JSON pairs). New `examples_search` / `examples_get` tools. Seeded with 6 AQL patterns and a FLAT+STRUCTURED pair. MCP `instructions` gains an `Examples-First` clause.
 
 ### Changed
 - Guides: Retired the ad-hoc `rm` category (content migrated into `specs/`; `platform-services` reclassified to SM). Digests pin `**Release:** development`.

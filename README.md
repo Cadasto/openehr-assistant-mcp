@@ -71,6 +71,10 @@ Guides (model-reachable)
 - `guide_get` - Retrieve guide content by URI or (category, name) with chunked sections by default.
 - `guide_adl_idiom_lookup` - Lookup targeted ADL idiom snippets from the cheatsheet for common modelling patterns.
 
+Examples (curated artefacts)
+- `examples_search` - Search bundled example artefacts (AQL queries, FLAT/STRUCTURED JSON payloads) by query and return short snippets with canonical openehr://examples URIs.
+- `examples_get` - Retrieve an example artefact by URI or (kind, name). Each example wraps its query/payload in a Markdown file with a metadata header describing the pattern demonstrated and related specs/guides.
+
 openEHR Type specification
 - `type_specification_search` - List bundled openEHR Type specifications matching search criteria.
 - `type_specification_get` - Retrieve an openEHR Type specification (as BMM JSON).
@@ -98,6 +102,7 @@ Optional prompts that guide AI assistants through common openEHR and CKM workflo
 
 Completion providers supply parameter suggestions in MCP clients when invoking tools or resources.
 - `Guides` - suggests guide `{name}` values for categories `archetypes`, `templates`, `aql`, `simplified_formats`, `specs`, and `howto` (resource URI `openehr://guides/{category}/{name}`)
+- `Examples` - suggests example `{name}` values across kinds `aql`, `flat`, `structured` (resource URI `openehr://examples/{kind}/{name}`)
 - `SpecificationComponents` - suggests `{component}` values based on directories in `resources/bmm`  resource URI
 
 ### Resources
@@ -117,6 +122,16 @@ Guides (Markdown)
   - `openehr://guides/simplified_formats/rules`
   - `openehr://guides/specs/rm-ehr` — per-document openEHR spec digests (250–900 words)
   - `openehr://guides/howto/spec-lookup` — toolchain how-to guides
+
+Examples (Markdown-wrapped artefacts)
+- URI template: `openehr://examples/{kind}/{name}`
+- On-disk mapping: `resources/examples/{kind}/{name}.md`
+- Kinds: `aql` (reference AQL queries), `flat` / `structured` (paired simplified-format JSON payloads).
+- Model access: use `examples_search` and `examples_get`. Each example file has a metadata header (pattern, demonstrates, related specs/guides) and a fenced code block carrying the query / payload.
+- Examples:
+  - `openehr://examples/aql/latest_blood_pressure_per_ehr`
+  - `openehr://examples/flat/vital_signs_blood_pressure`
+  - `openehr://examples/structured/vital_signs_blood_pressure`
 
 Type Specifications (BMM JSON)
 - URI template: `openehr://spec/type/{component}/{name}`

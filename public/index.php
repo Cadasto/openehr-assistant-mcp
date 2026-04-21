@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 use Cadasto\OpenEHR\MCP\Assistant\Apis\CkmClient;
 use Cadasto\OpenEHR\MCP\Assistant\Helpers\CliOptions;
+use Cadasto\OpenEHR\MCP\Assistant\Resources\Examples;
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Guides;
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Terminologies;
 use Mcp\Capability\Registry\Container;
@@ -66,6 +67,7 @@ try {
         ->setLogger($logger);
     // add resources
     Guides::addResources($builder);
+    Examples::addResources($builder);
 
     $server = $builder->build();
 
