@@ -1,17 +1,24 @@
 {
     "name": "BMM_PACKAGE",
-    "documentation": "Abstraction of a package as a tree structure whose nodes can contain other packages and classes.\n\nThe `_name_` may be qualified if it is a top-level package.",
+    "documentation": "Abstraction of a package as a tree structure whose nodes can contain other packages and classes.",
     "ancestors": [
         "BMM_PACKAGE_CONTAINER"
     ],
     "properties": {
-        "members": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of this package. This name may be qualified if it is a top-level package.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "classes": {
             "_type": "P_BMM_CONTAINER_PROPERTY",
-            "name": "members",
-            "documentation": "Member modules in this package.",
+            "name": "classes",
+            "documentation": "Classes listed as being in this package.",
             "type_def": {
                 "container_type": "List",
-                "type": "BMM_MODULE"
+                "type": "BMM_CLASS"
             },
             "cardinality": {
                 "lower": 0,
@@ -39,6 +46,6 @@
             }
         }
     },
-    "package": "org.openehr.lang.bmm.core.model",
-    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_model_package"
+    "package": "org.openehr.lang.bmm.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_core_package"
 }

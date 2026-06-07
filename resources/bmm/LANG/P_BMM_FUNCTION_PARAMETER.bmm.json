@@ -1,0 +1,25 @@
+{
+    "name": "P_BMM_FUNCTION_PARAMETER",
+    "documentation": "Persistent form of a BMM function (routine) parameter; abstract parent of the concrete persisted parameter kinds.",
+    "is_abstract": true,
+    "ancestors": [
+        "P_BMM_MODEL_ELEMENT"
+    ],
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of this parameter within its function signature. Persisted attribute.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "is_nullable": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_nullable",
+            "documentation": "True if this parameter is allowed to be Void (null) in a call. Persisted attribute.",
+            "type": "Boolean"
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

@@ -3,9 +3,28 @@
     "documentation": "Persisted form of `BMM_SCHEMA`.",
     "ancestors": [
         "P_BMM_PACKAGE_CONTAINER",
-        "BMM_SCHEMA"
+        "BMM_SCHEMA_CORE"
     ],
     "properties": {
+        "bmm_version": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "bmm_version",
+            "documentation": "Version of the BMM (P_BMM) meta-model to which this schema conforms, e.g. `2.4`. Persisted attribute.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "includes": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "includes",
+            "documentation": "Other schemas included by this schema, keyed by schema id. Persisted attribute.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "BMM_INCLUDE_SPEC"
+                ]
+            }
+        },
         "primitive_types": {
             "_type": "P_BMM_CONTAINER_PROPERTY",
             "name": "primitive_types",

@@ -1,0 +1,29 @@
+{
+    "name": "P_BMM_CONTAINER_FUNCTION_PARAMETER",
+    "documentation": "Persistent form of a function parameter whose type is a container type such as `List<T>`.",
+    "ancestors": [
+        "P_BMM_FUNCTION_PARAMETER"
+    ],
+    "properties": {
+        "type_def": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type_def",
+            "documentation": "Type definition of this parameter. Persisted attribute.",
+            "is_mandatory": true,
+            "type": "P_BMM_CONTAINER_TYPE"
+        },
+        "cardinality": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "cardinality",
+            "documentation": "Cardinality of this parameter, if a container type. Persisted attribute.",
+            "type_def": {
+                "root_type": "Interval",
+                "generic_parameters": [
+                    "Integer"
+                ]
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

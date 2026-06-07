@@ -25,6 +25,18 @@
                 "upper_unbounded": true
             }
         },
+        "constants": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "constants",
+            "documentation": "Constants defined in this class, keyed by name. Persistent attribute.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "P_BMM_CONSTANT"
+                ]
+            }
+        },
         "properties": {
             "_type": "P_BMM_GENERIC_PROPERTY",
             "name": "properties",
@@ -34,6 +46,30 @@
                 "generic_parameters": [
                     "String",
                     "P_BMM_PROPERTY"
+                ]
+            }
+        },
+        "functions": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "functions",
+            "documentation": "List of functions (routines) defined in this class, keyed by name. Persistent attribute.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "P_BMM_FUNCTION"
+                ]
+            }
+        },
+        "invariants": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "invariants",
+            "documentation": "Invariants defined on this class, as a Hash of assertion expressions keyed by tag. Persisted attribute.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
                 ]
             }
         },

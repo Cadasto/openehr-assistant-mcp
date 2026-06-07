@@ -2,7 +2,7 @@
     "name": "P_BMM_SCHEMA_DESCRIPTOR",
     "documentation": "Concrete descendant of `BMM_SCHEMA_DESCRIPTOR` that provides a way to read an ODIN or other similarly encoded P_BMM schema file.",
     "ancestors": [
-        "BMM_SCHEMA_DESCRIPTOR"
+        "SCHEMA_DESCRIPTOR"
     ],
     "properties": {
         "bmm_schema": {

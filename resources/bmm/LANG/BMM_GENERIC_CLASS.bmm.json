@@ -8,13 +8,13 @@
         "generic_parameters": {
             "_type": "P_BMM_GENERIC_PROPERTY",
             "name": "generic_parameters",
-            "documentation": "List of formal generic parameters, keyed by name. These are defined either directly on this class or by the inclusion of an ancestor class which is generic.",
+            "documentation": "List of generic parameter definitions, keyed by name of generic parameter; these are defined either directly on this class or by the addition of an ancestor class which is generic.",
             "is_mandatory": true,
             "type_def": {
                 "root_type": "Hash",
                 "generic_parameters": [
                     "String",
-                    "BMM_PARAMETER_TYPE"
+                    "BMM_GENERIC_PARAMETER"
                 ]
             }
         }
@@ -30,30 +30,23 @@
             },
             "is_nullable": true
         },
-        "type": {
-            "name": "type",
-            "documentation": "Generate a fully open `BMM_GENERIC_TYPE` instance that corresponds to this class definition",
+        "type_signature": {
+            "name": "type_signature",
+            "documentation": "Signature form of the type, which for generics includes generic parameter constrainer types e.g. Interval<T:Ordered>.",
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",
-                "type": "BMM_GENERIC_TYPE"
+                "type": "String"
             }
         },
-        "generic_parameter_conformance_type": {
-            "name": "generic_parameter_conformance_type",
-            "documentation": "For a generic class, type to which generic parameter `a_name` conforms e.g. if this class is `Interval <T:Comparable>` then the Result will be the single type `Comparable`. For an unconstrained type `T`, the Result will be `Any`.",
-            "parameters": {
-                "a_name": {
-                    "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
-                    "name": "a_name",
-                    "type": "String"
-                }
-            },
+        "type_name": {
+            "name": "type_name",
+            "documentation": "Formal string form of the type as per UML.",
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",
                 "type": "String"
             }
         }
     },
-    "package": "org.openehr.lang.bmm.core.entity",
-    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+    "package": "org.openehr.lang.bmm.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_core_package"
 }

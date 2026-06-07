@@ -29,6 +29,19 @@
                 "upper_unbounded": true
             }
         },
+        "item_documentations": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "item_documentations",
+            "documentation": "Optional documentation strings for the enumeration items, in the same order as `_item_names_`. Persisted attribute.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
         "bmm_class": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "bmm_class",
