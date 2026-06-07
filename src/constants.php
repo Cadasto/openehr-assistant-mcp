@@ -17,3 +17,8 @@ define('CKM_API_BASE_URL', trim(getenv('CKM_API_BASE_URL') ?: 'https://ckm.opene
 $httpSslVerify = filter_var((string)getenv('HTTP_SSL_VERIFY'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 define('HTTP_SSL_VERIFY', $httpSslVerify ?? true);
 define('HTTP_TIMEOUT', (float)getenv('HTTP_TIMEOUT') ?: 10.0);
+
+// Comma-separated hostnames the streamable-http transport accepts (SDK >= 0.6 DNS-rebinding
+// protection). Secure default is loopback only; set per deployment to the reverse-proxy host
+// and/or public domain (e.g. "localhost,127.0.0.1,[::1],mcp.example.com").
+define('MCP_ALLOWED_HOSTS', getenv('MCP_ALLOWED_HOSTS') ?: 'localhost,127.0.0.1,[::1]');

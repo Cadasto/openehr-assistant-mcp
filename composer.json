@@ -15,13 +15,14 @@
         "ext-json": "*",
         "ext-simplexml": "*",
         "guzzlehttp/guzzle": "^7.9",
-        "mcp/sdk": "^0.4.0",
+        "mcp/sdk": "^0.6.0",
         "monolog/monolog": "^3.9",
         "nyholm/psr7": "^1.8",
         "nyholm/psr7-server": "^1.1",
         "psr/log": "^3.0",
         "psr/simple-cache": "^3.0",
-        "symfony/cache": "^7.3"
+        "symfony/cache": "^8.0",
+        "symfony/finder": "^7.3 || ^8.0"
     },
     "require-dev": {
         "phpstan/phpstan": "^2.1",

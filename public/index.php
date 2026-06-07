@@ -14,6 +14,9 @@ use Mcp\Schema\Enum\ProtocolVersion;
 use Mcp\Schema\Icon;
 use Mcp\Server;
 use Mcp\Server\Session\FileSessionStore;
+use Mcp\Server\Transport\Http\Middleware\CorsMiddleware;
+use Mcp\Server\Transport\Http\Middleware\DnsRebindingProtectionMiddleware;
+use Mcp\Server\Transport\Http\Middleware\ProtocolVersionMiddleware;
 use Mcp\Server\Transport\StdioTransport;
 use Mcp\Server\Transport\StreamableHttpTransport;
 use Monolog\Handler\StreamHandler;
@@ -60,7 +63,7 @@ try {
     $builder = Server::builder()
         ->setServerInfo(APP_TITLE, APP_VERSION, APP_DESCRIPTION, [new Icon(APP_ICON)])
         ->setDiscovery(APP_DIR, ['src/Prompts', 'src/Tools', 'src/Resources'], cache: $cache)
-        ->setSession(new FileSessionStore(APP_DATA_DIR . '/sessions'), ttl: 10 * 60)
+        ->setSession(new FileSessionStore(APP_DATA_DIR . '/sessions', ttl: 10 * 60))
         ->setProtocolVersion(ProtocolVersion::V2025_03_26)
         ->setContainer($container)
         ->setInstructions(file_get_contents(APP_DIR . '/resources/server-instructions.md') ?: null)
@@ -91,11 +94,20 @@ try {
     );
     $request = $creator->fromGlobals();
 
-    // Create the Streamable HTTP transport
+    // Create the Streamable HTTP transport. SDK >= 0.6 enables CORS, DNS-rebinding,
+    // and protocol-version middleware by default; we keep those but configure the
+    // DNS-rebinding allow-list from MCP_ALLOWED_HOSTS (the server runs behind a reverse proxy).
+    $allowedHosts = array_values(array_filter(array_map('trim', explode(',', MCP_ALLOWED_HOSTS))));
     $transport = new StreamableHttpTransport(
         $request,
         $psr17Factory,
-        $psr17Factory
+        $psr17Factory,
+        $logger,
+        [
+            new CorsMiddleware(),
+            new DnsRebindingProtectionMiddleware($allowedHosts),
+            new ProtocolVersionMiddleware(),
+        ]
     );
 
     // Run the server and get the response
