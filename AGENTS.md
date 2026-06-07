@@ -2,6 +2,25 @@
 
 These guidelines summarize the high-level architecture, coding conventions, and developer workflows for this repository, with the goal of helping an AI agent quickly discover available tooling and work within the project structure.
 
+## Documentation map
+
+This repo follows a lightweight **Specification-Driven Development** paradigm. The
+spec set under [`docs/`](docs/README.md) is the source of truth; AGENTS.md is the
+concise conventions layer that links into it.
+
+- [`docs/requirements.md`](docs/requirements.md) — `REQ-#` functional + non-functional requirements (the *what*).
+- [`docs/architecture.md`](docs/architecture.md) — components mapped to requirements (the *how*).
+- [`docs/decisions/`](docs/decisions/README.md) — Architecture Decision Records (the *why*).
+- [`docs/traceability.md`](docs/traceability.md) — REQ ↔ code ↔ test ↔ ADR matrix.
+- [`docs/development.md`](docs/development.md) · [`docs/testing.md`](docs/testing.md) — Docker dev environment and the test/validation workflow.
+
+> **Maintainer tooling.** Authoring tools/prompts/guides/examples and managing
+> releases for this repo is supported by the
+> [openehr-assistant-dev plugin](https://github.com/cadasto/openehr-assistant-dev-plugin)
+> (Claude Code + Cursor). The user-facing
+> [openehr-assistant plugin](https://github.com/cadasto/openehr-assistant-plugin)
+> wraps this server for clinical end users — do not confuse the two audiences.
+
 ## Project overview
 
 - The openEHR Assistant MCP Server is a PHP 8.4 MCP server that exposes openEHR tools, prompts, and resources for MCP clients. The codebase is PSR-compliant and structured around attribute-driven discovery. See `README.md` for the feature overview and capabilities.
@@ -29,6 +48,7 @@ These guidelines summarize the high-level architecture, coding conventions, and 
   - `LOG_LEVEL`: Monolog logging level (e.g., `debug`).
   - `HTTP_TIMEOUT`, `HTTP_SSL_VERIFY`: Guzzle client settings.
   - `XDG_DATA_HOME`: directory for application data, including cache and sessions (default: `/tmp`).
+  - `MCP_ALLOWED_HOSTS`: comma-separated DNS-rebinding allow-list for the `streamable-http` transport (SDK ≥ 0.6; default loopback only). Set to the reverse-proxy host / public domain when deployed behind a proxy.
 - **Server Transports**:
   - `streamable-http`: Default; in development exposes SSE endpoint on port `:8343` (mapped from Caddy).
   - `stdio`: For CLI/Desktop clients. Run via `php public/index.php --transport=stdio`.
@@ -71,58 +91,21 @@ These guidelines summarize the high-level architecture, coding conventions, and 
 
 ## Discovering and running developer tools
 
-Tool definitions are declared in `composer.json` under `scripts`.
-
-### Recommended workflow (Docker dev container)
-
-1. **Start dev containers** (uses `.docker/docker-compose.dev.yml` overrides):
-   ```bash
-   make up-dev
-   ```
-
-2. **Install Composer dev dependencies**:
-   ```bash
-   make install
-   ```
-
-3. **Run PHPUnit**:
-   ```bash
-   docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer test
-```
-
-4. **Run PHPStan**:
-   ```bash
-   docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer check:phpstan
-```
-
-5. **Run coverage (HTML)**:
-   ```bash
-   docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer test:coverage
-```
-
-6. **Run MCP conformance** (server must be up via `make up-dev`):
-   ```bash
-   make conformance
-   ```
-   This runs the official MCP conformance suite against the server over HTTP using the `node` service (Node + curl) in Docker.
-
-### Local (non-Docker) workflow
-
-If you already have PHP 8.4 and required extensions installed locally, you can install dev deps and run tools directly:
+Tool definitions are declared in `composer.json` under `scripts`. The runtime is
+**Docker-only** — there is no host PHP/Composer; all `php`, `composer`, and
+`vendor/bin/*` commands run inside the `app` dev container, or they fail
+([ADR-0004](docs/decisions/0004-docker-only-runtime.md)).
 
 ```bash
-composer install
-composer test
-composer check:phpstan
-composer test:coverage
+make up-dev      # start dev containers
+make install     # install Composer dev dependencies
+make conformance # MCP conformance suite (stack must be up)
 ```
 
-## Additional notes
-
-- **Docker-only runtime**: There is no local PHP or Composer on the host. All `php`, `composer`, and `vendor/bin/*` commands **must** run inside the dev container. Running them on the host will fail.
-- The dev container expects your host user ID to be `1000`; adjust the `-u` flag if your UID is different.
-- To run a single test class or subset, call `vendor/bin/phpunit --filter SomeTest` inside the dev container.
-- Coverage requires Xdebug; the `composer test:coverage` script sets `XDEBUG_MODE` automatically.
+- Full `docker compose … exec` invocations for **tests**, **PHPStan**, and
+  **coverage**, plus configuration and the discovery-cache gotcha →
+  [`docs/development.md`](docs/development.md) and [`docs/testing.md`](docs/testing.md).
+- Run a single test class: `vendor/bin/phpunit --filter SomeTest` (in the container).
 
 ### Looking up openEHR specification content
 
@@ -140,7 +123,7 @@ The full policy, fall-through order, and failure modes live in the [`spec-lookup
 - When adding or editing guides (e.g. under `resources/guides/`) or prompts that describe a standard (e.g. AQL), keep wording aligned with the authoritative spec and any formal grammar in the repo.
 - Avoid duplicate or misplaced paragraphs in guide files.
 - **Archetypes/templates**: Guides under `resources/guides/archetypes/` and `resources/guides/templates/` should stay consistent with openEHR modelling docs and ADL/OET conventions referenced in the project.
-- **Simplified Formats**: Spec in `docs/flat/*.adoc` (Flat and Structured JSON serialization; Web Template field identifiers, ctx, pipe suffixes, underscore prefix). Guides under `resources/guides/simplified_formats/` should align with that spec.
+- **Simplified Formats**: Guides under `resources/guides/simplified_formats/` (Flat and Structured JSON serialization; Web Template field identifiers, ctx, pipe suffixes, underscore prefix) must align with the authoritative openEHR **ITS Simplified Formats** specification — retrieve it per the spec-lookup policy below, not from memory.
 - **Authoring conventions and templates** — guide markdown style, spec-digest authoring rules, and the copy-ready digest skeleton all live under [`src/templates/`](src/templates/). Start there before adding or modifying a guide.
 
 ### Clinical modelling and governance
