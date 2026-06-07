@@ -4,18 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
-- Keep a Changelog: https://keepachangelog.com/en/1.1.0/
-- Semantic Versioning: https://semver.org/spec/v2.0.0.html
+- Keep a Changelog: [https://keepachangelog.com/en/1.1.0/](https://keepachangelog.com/en/1.1.0/)
+- Semantic Versioning: [https://semver.org/spec/v2.0.0.html](https://semver.org/spec/v2.0.0.html)
 
 ## [0.16.0] - 2026-04-21
 
 ### Added
+
 - Guides: new `specs` and `howto` categories (spec digests + toolchain how-tos); new `LANG` BMM component.
 - Examples: new `openehr://examples/{kind}/{name}` namespace with `examples_search` / `examples_get` (AQL, FLAT, STRUCTURED, ADL archetypes).
 - MCP `instructions`: `Spec-Lookup-First`, `Digest-First`, and `Examples-First` clauses.
 - MCP conformance tests via Docker.
 
 ### Changed
+
 - Retired `rm` category (migrated to `specs/`); digests track `development`.
 - Moved guide-authoring scaffolding from `resources/guides/` to `src/templates/`.
 - Refreshed BMM JSON across AM/AM2/BASE/RM.
@@ -24,28 +26,33 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Bumped Symfony + phpdocumentor dependencies.
 
 ### Fixed
+
 - `AbstractPrompt`: error message for missing user block.
 
 ## [0.15.0] - 2026-03-14
 
 ### Added
+
 - Guides: Added RM guides for demographic model, EHR information model, and platform services with comprehensive summaries. Expanded AQL checklist with stored query governance and operational readiness. Added shared policy and refined related-resources references across guides.
 - MCP Conformance: Added `make conformance` to run the official MCP conformance suite against the server over HTTP. Requires dev stack (`make up-dev`). Results written to `conformance/`; expected failures in `tests/conformance-baseline.yml`. Added `node` service to dev compose (Node 22 + curl) built from multistage Dockerfile target `node`.
 - Tests: Added PromptCompositionTest and PromptPolicySeparationTest; expanded CkmServiceTest and GuideServiceTest for scoring, sizing, and ranking behaviour.
 
 ### Changed
+
 - Tools: CKM archetype and template search now use enhanced scoring, fetch sizing/slicing, and increased default max results. Guide search refactored (dropped guides-index.json persistence); improved heading extraction and ranking. Removed redundant descriptions in guide properties to reduce context bloat.
 - Prompts: Centralized global policy in server instructions; streamlined prompt roles and task guidelines and reduced prompt text. Refined design_or_review and explain prompts across archetypes, templates, AQL, and simplified formats.
 - Guides: Refined ADL syntax and terminology (paths, identifiers); updated archetype guides (anti-patterns, structural constraints, terminology, reference formatting, language standards, principles, checklist), OET syntax, and simplified formats principles. Enhanced translation standards and terminology practices.
 - Docs: README recommends pairing with openEHR Assistant Plugin. AGENTS.md documents Docker-only runtime and MCP conformance workflow. Server instructions refined for tool usage and output policy.
 
 ### Fixed
+
 - Tools: Resolved PHPStan warnings in heading extraction.
 - Tests: Removed xdebug ini setting for CI compatibility. Marked policy separation test as covers-nothing.
 
 ## [0.14.0] - 2026-03-03
 
 ### Changed
+
 - Docker: Moved all Docker assets into `.docker/` (Dockerfile, docker-compose.yml, docker-compose.dev.yml, Caddyfile, php/, php-fpm.d/). Makefile, docs, and GitHub Actions updated to use `.docker/` paths.
 - Docker Compose: Renamed services `mcp` → `app`, `caddy` → `ingress`; updated Caddyfile, Makefile, and docs accordingly.
 - Dependencies: Updated composer dependencies to latest versions.
@@ -53,12 +60,14 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 ## [0.13.0] - 2026-02-21
 
 ### Added
+
 - Docs: Added Norwegian Bokmål Language Standards Guide with specific conventions and terminology.
 - Docs: Added openEHR Archetype Language Standards Guide and reference formatting guide.
 - Docs: Added CGEM framework guidelines and refined composition semantics.
 - Docs: Added clinical modelling guidelines and clarified spec alignment practices.
 
 ### Changed
+
 - Refactor: Moved transport option parsing to `CliOptions` helper.
 - Docs: Clarified usage of Instruction, Action, and Observation archetypes.
 - Docs: Updated archetype guides to reference language standards and per-language conventions.
@@ -66,6 +75,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 ## [0.12.0] - 2026-02-17
 
 ### Added
+
 - MCP Prompts: Added `explain_aql`, `design_or_review_aql`, `explain_simplified_format`, and `design_or_review_simplified_format`.
 - Guides: Added comprehensive AQL guides (principles, syntax, idioms, checklist) 
 - Guides: Added Simplified Formats guides (Flat/Structured principles, rules, idioms, checklist).
@@ -73,11 +83,13 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Docs: Added guide alignment instructions for archetypes, templates, and simplified formats in `AGENTS.md`.
 
 ### Changed
+
 - MCP Server: Simplified transport option parsing using `getopt` in `index.php`.
 - Guides: Updated archetype guides for anti-patterns, structural constraints, and terminology.
 - Dependencies: Updated composer dependencies to latest versions.
 
 ### Fixed
+
 - MCP Server: Ensure cache directory is created if missing.
 - MCP Server: Ensure `HTTP_SSL_VERIFY` defaults to `true` if unset.
 - CKM Service: Improved total count calculation and corrected description text.
@@ -86,17 +98,20 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 ## [0.11.0] - 2026-02-03
 
 ### Changed
+
 - MCP Prompts: migrate files to markdown format.
-- added Instructions and an Icon to ServerInitialise response 
+- added Instructions and an Icon to ServerInitialise response
 
 ## [0.10.0] - 2026-02-03
 
 ### Added
+
 - Docs: Added `AGENTS.md` file with AI guidelines for project structure, coding conventions, and developer workflows.
 - MCP Tools: Added `guide_search`, `guide_get`, and `guide_adl_idiom_lookup` tools for model-reachable guide content retrieval.
 - MCP Prompts: Added `guide_explorer` prompt to orchestrate guide discovery and retrieval workflows.
 
 ### Changed
+
 - MCP Resources: Changed terminology URI from `openehr://terminology/all` to `openehr://terminology`; removed URI templates for terminology resources.
 - MCP Server: Implemented file-based cache for discovery using Symfony Cache.
 - MCP Tools: Improve JSON handling with exceptions; improve search results scores and ordering.
@@ -107,11 +122,13 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Infra: Update PHP-FPM and Caddy config for improved logging, health checks, and file handling.
 
 ### Fixed
+
 - Tests: Update temp prompts directory path to use standard `/tmp` location.
 
 ## [0.9.0] - 2026-01-20
 
 ### Changed
+
 - Dependencies: Updated `mcp/sdk` to v0.3.0 and other developer tools (PHPUnit, PHPStan).
 - MCP Tools: Added `outputSchema` to all tools for better AI client integration and structured outputs.
 - CKM Service: Enhanced `ckm_archetype_search` and `ckm_template_search` with improved scoring logic and structured metadata.
@@ -120,15 +137,17 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 ## [0.8.0] - 2026-01-20
 
 ### Added
+
 - MCP Resource (Terminology): `openehr://terminology/all` to expose the entire openEHR terminology in JSON format.
 - BMM Specifications: Added AM2 (Archetype Model 2.0) components to bundled resources and updated existing ones for better compliance.
 - CI/CD: Added GitHub Actions for PR validation and enhanced Docker release process.
 
 ### Changed
+
 - CKM Service: Refactored `ckm_archetype_search` and `ckm_template_search` tools to simplify result mapping and introduce result scoring for better relevance in AI workflows.
 - MCP Prompts:
-    - Updated `ckm_archetype_explorer` and `ckm_template_explorer` to leverage improved CKM search results.
-    - Enhanced `translate_archetype_language` with detailed clinical terminology guidelines and better structure.
+  - Updated `ckm_archetype_explorer` and `ckm_template_explorer` to leverage improved CKM search results.
+  - Enhanced `translate_archetype_language` with detailed clinical terminology guidelines and better structure.
 - Terminology: Improved `terminology_resolve` tool and `terminology_explorer` prompt for better clarity and coverage.
 - Specification: Updated and reorganized BMM files, moving AM to AM2 for better alignment with latest openEHR specifications.
 - Documentation: Updated `README.md` acknowledgments, documentation examples, and guides (checklist, rules, terminology).
@@ -144,7 +163,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ### Added
 
-- MCP server published at https://openehr-assistant-mcp.apps.cadasto.com/
+- MCP server published at [https://openehr-assistant-mcp.apps.cadasto.com/](https://openehr-assistant-mcp.apps.cadasto.com/)
 
 ### Changed
 
@@ -162,7 +181,6 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 ### Fixed
 
 - Removed redundant format parameters from internal `TextContent::code` calls in CKM archetype and template retrieval.
-
 
 ## [0.4.0] - 2025-12-29
 
@@ -211,7 +229,8 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 Initial public release.
 
 ### Added
-- PHP-based MCP server builder on top of https://github.com/modelcontextprotocol/php-sdk.
+
+- PHP-based MCP server builder on top of [https://github.com/modelcontextprotocol/php-sdk](https://github.com/modelcontextprotocol/php-sdk).
 - Configuration via environment variables (APP_ENV, LOG_LEVEL, HTTP_SSL_VERIFY, HTTP_TIMEOUT).
 - Two transport protocols: stdio and streamable-http.
 - Core tools and prompts 
@@ -220,4 +239,3 @@ Initial public release.
 - PHPUnit tests and PHPStan configuration.
 - Makefile, Dockerfile and docker-compose setup for local development.
 - Documentation and contribution guidelines.
-
