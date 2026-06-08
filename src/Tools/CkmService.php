@@ -22,19 +22,19 @@ final readonly class CkmService
     private const float FETCH_SIZE_MULTIPLIER = 1.5;
 
     // Scoring weights (wider scale for clearer ranking)
-    private const int SCORE_ARCHETYPE_ID_MATCH = 90;
-    private const int SCORE_NAME_MATCH = 60;
+    private const int SCORE_ARCHETYPE_ID_MATCH = 100;
+    private const int SCORE_NAME_MATCH = 50;
     private const int SCORE_PROJECT_NAME_MATCH = 25;
     private const int SCORE_PROJECT_BUCKET = 10;
     private const int SCORE_ALL_KEYWORDS_BONUS = 80;
-    private const int SCORE_STATUS_PUBLISHED = 50;
+    private const int SCORE_STATUS_PUBLISHED = 75;
     private const int SCORE_STATUS_TEAMREVIEW = 25;
-    private const int SCORE_STATUS_DRAFT = -15;
-    private const int SCORE_STATUS_INITIAL = -50;
+    private const int SCORE_STATUS_DRAFT = -25;
+    private const int SCORE_STATUS_INITIAL = -75;
     /** Extra penalty per year since last modification (only for DRAFT/INITIAL). */
-    private const int SCORE_PENALTY_PER_YEAR_SINCE_MODIFICATION = 7;
+    private const int SCORE_PENALTY_PER_YEAR_SINCE_MODIFICATION = 5;
     /** Extra penalty per year since creation (only for DRAFT/INITIAL). */
-    private const int SCORE_PENALTY_PER_YEAR_SINCE_CREATION = 3;
+    private const int SCORE_PENALTY_PER_YEAR_SINCE_CREATION = 1;
 
     public function __construct(
         private CkmClient $apiClient,
@@ -468,7 +468,7 @@ final readonly class CkmService
     }
 
     /**
-     * Extra penalty for DRAFT/INITIAL items that are old: per year since last modification (-10), per year since creation (-5).
+     * Extra penalty for DRAFT/INITIAL items that are old: per year since last modification (-5), per year since creation (-1).
      */
     private function agePenalty(?string $modificationTime, ?string $creationTime, ?string $status): int
     {

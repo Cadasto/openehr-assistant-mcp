@@ -132,7 +132,7 @@ final class CkmServiceTest extends TestCase
     {
         $payload = [
             ['cid' => '1', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.other.v1', 'resourceMainDisplayName' => 'Blood pressure', 'projectName' => 'Test', 'status' => 'PUBLISHED'],
-            ['cid' => '2', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.blood_glucose.v1', 'resourceMainDisplayName' => 'Glucose', 'projectName' => 'Test', 'status' => 'PUBLISHED'],
+            ['cid' => '2', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.glucose.v1', 'resourceMainDisplayName' => 'Bloodstream infection', 'projectName' => 'Test', 'status' => 'PUBLISHED'],
         ];
         $this->client->method('get')->willReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)));
 
@@ -141,7 +141,7 @@ final class CkmServiceTest extends TestCase
 
         $this->assertCount(2, $result['items']);
         $first = $result['items'][0];
-        $this->assertStringContainsString('Blood pressure', $first['name'] ?? '', 'Word-boundary match (Blood in "Blood pressure") should rank above substring match (blood in blood_glucose)');
+        $this->assertStringContainsString('Blood pressure', $first['name'] ?? '', 'Word-boundary match (Blood in "Blood pressure") should rank above substring match (blood in "Bloodstream infection")');
         $this->assertGreaterThan($result['items'][1]['score'], $first['score']);
     }
 
