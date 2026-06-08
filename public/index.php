@@ -94,10 +94,18 @@ try {
     );
     $request = $creator->fromGlobals();
 
+    // Some proxy chains send the Host header twice; PSR-7 joins duplicates with ", ".
+    // Collapse to the first value so the DNS-rebinding check sees a clean host.
+    $hostLine = $request->getHeaderLine('Host');
+    if (str_contains($hostLine, ',')) {
+        $request = $request->withHeader('Host', trim(explode(',', $hostLine)[0]));
+    }
+
     // Create the Streamable HTTP transport. SDK >= 0.6 enables CORS, DNS-rebinding,
     // and protocol-version middleware by default; we keep those but configure the
     // DNS-rebinding allow-list from MCP_ALLOWED_HOSTS (the server runs behind a reverse proxy).
     $allowedHosts = array_values(array_filter(array_map('trim', explode(',', MCP_ALLOWED_HOSTS))));
+
     $transport = new StreamableHttpTransport(
         $request,
         $psr17Factory,
