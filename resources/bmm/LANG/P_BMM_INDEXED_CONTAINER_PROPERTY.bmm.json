@@ -14,7 +14,7 @@
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "bmm_property",
             "documentation": "`BMM_PROPERTY` created by `_create_bmm_property_`.",
-            "type": "BMM_INDEXED_CONTAINER_PROPERTY"
+            "type": "BMM_CONTAINER_PROPERTY"
         }
     },
     "package": "org.openehr.lang.bmm_persistence",

@@ -1,6 +1,6 @@
 {
     "name": "BMM_CONTAINER_PROPERTY",
-    "documentation": "Meta-type of for properties of linear container type, such as List<T> etc.",
+    "documentation": "Subtype of BMM_PROPERTY that represents a container type based on one of the inbuilt types List <>, Set <>, Array <>.",
     "ancestors": [
         "BMM_PROPERTY"
     ],
@@ -14,7 +14,7 @@
         "type": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "type",
-            "documentation": "Declared or inferred static type of the entity.",
+            "documentation": "Redefined to BMM_CONTAINER_TYPE.",
             "is_mandatory": true,
             "type": "BMM_CONTAINER_TYPE"
         }
@@ -22,13 +22,13 @@
     "functions": {
         "display_name": {
             "name": "display_name",
-            "documentation": "Name of this property in form `name: ContainerTypeName<>`.",
+            "documentation": "Name of this attribute to display in UI.",
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",
                 "type": "String"
             }
         }
     },
-    "package": "org.openehr.lang.bmm.core.feature",
-    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+    "package": "org.openehr.lang.bmm.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_core_package"
 }

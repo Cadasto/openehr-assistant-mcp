@@ -1,6 +1,6 @@
 {
     "name": "BMM_INDEXED_CONTAINER_TYPE",
-    "documentation": "Meta-type of linear container type that indexes the contained items in the manner of a standard Hash table, map or dictionary.",
+    "documentation": "Type reference that specifies an indexed container such as `Hash<K,V>`, i.e. a container whose members are accessed via a key (index) type.",
     "ancestors": [
         "BMM_CONTAINER_TYPE"
     ],
@@ -8,21 +8,11 @@
         "index_type": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "index_type",
-            "documentation": "Type of the element index, typically `String` or `Integer`, but may be a numeric type or indeed any type from which a hash value can be derived.",
+            "documentation": "The key (index) type of the container, e.g. `String` in `Hash<String,EVENT_ACTION>`.",
             "is_mandatory": true,
             "type": "BMM_SIMPLE_TYPE"
         }
     },
-    "functions": {
-        "type_name": {
-            "name": "type_name",
-            "documentation": "Return full type name, e.g. `HashMap<String, ELEMENT>`.",
-            "result": {
-                "_type": "P_BMM_SIMPLE_TYPE",
-                "type": "String"
-            }
-        }
-    },
-    "package": "org.openehr.lang.bmm.core.entity",
-    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_entity_package"
+    "package": "org.openehr.lang.bmm.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_core_package"
 }

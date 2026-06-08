@@ -6,29 +6,20 @@
 [![PHP Version](https://img.shields.io/badge/php-8.4-blue.svg)](https://www.php.net/)
 [![MCP](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-orange.svg)](https://modelcontextprotocol.io/)
 
-The MCP Server to assist end-user on various [openEHR](https://openehr.org/) related tasks and APIs.
+An [MCP](https://modelcontextprotocol.io/) server that helps AI assistants work with [openEHR](https://openehr.org/) — archetypes, templates, AQL, terminology, and specifications.
 
-The [Model Context Protocol (MCP)](https://modelcontextprotocol.io/docs/getting-started/intro) is an open standard that enables AI assistants to connect to external data sources and tools in a secure and standardized way. MCP servers act as bridges between AI clients (like Claude Desktop, Cursor, or LibreChat) and domain-specific APIs, databases, or knowledge bases. 
+Working with openEHR means navigating the [Clinical Knowledge Manager (CKM)](https://ckm.openehr.org/), [intricate type systems](https://specifications.openehr.org/), and ADL syntax rules. This server gives MCP clients (Claude Desktop, Cursor, LibreChat, …) direct access to those resources so assistants can help with archetype exploration, semantic explanation, language translation, syntax correction, and design reviews.
 
-The **openEHR Assistant MCP Server** brings this power to the healthcare informatics domain, specifically targeting openEHR modelers and developers. 
-Working with openEHR archetypes, templates, and specifications often involves navigating complex APIs, searching through [Clinical Knowledge Manager (CKM)](https://ckm.openehr.org/) repositories, understanding [intricate type systems](https://specifications.openehr.org/), and ensuring compliance with ADL syntax rules. 
-Many of these workflows, such as archetype design, template composition, terminology resolution, and syntax validation, are repetitive, time-consuming, and sometimes too complex to automate. 
+> **Pre-release:** expect frequent updates and breaking changes until version 1.0.
 
-This server augments these workflows by providing AI assistants with direct access to openEHR resources, terminology services, and CKM APIs, enabling them to assist with tasks like archetype exploration, semantic explanation, language translation, syntax correction, and design reviews. 
-
-> NOTE:
-> This project is currently in a pre-release state. Expect frequent updates and potential breaking changes to the architecture and feature set until version 1.0.
-
-**Recommended:** For the best experience, pair this MCP server with the [openEHR Assistant Plugin](https://github.com/Cadasto/openehr-assistant-plugin), which adds skills, rules, and agents that guide AI assistants through openEHR workflows. Claude Code users can install it directly from the [Cadasto Plugin Marketplace](https://github.com/Cadasto/plugin-marketplace).
+> **Recommended:** pair this server with the [openEHR Assistant Plugin](https://github.com/cadasto/openehr-assistant-plugin) — skills, prompts, and agents that guide assistants through openEHR workflows. Claude Code users can install it from the [Cadasto Plugin Marketplace](https://github.com/cadasto/plugin-marketplace).
 
 ## Table of Contents
 
 - [Features](#features)
-- [Available MCP Elements](#available-mcp-elements)
-- [Transports](#transports)
 - [Quick Start](#quick-start)
-- [Common client configurations](#common-client-configurations)
-- [Development tips](#development-tips)
+- [Available MCP Elements](#available-mcp-elements)
+- [Documentation](#documentation)
 - [Contributing](#contributing)
 - [Acknowledgments](#acknowledgments)
 
@@ -36,20 +27,34 @@ This server augments these workflows by providing AI assistants with direct acce
 
 ## Features
 
-- Works with MCP clients such as Claude Desktop, Cursor, LibreChat, etc.
-- Exposes tools for openEHR Archetypes and specifications.
-- Guided Prompts help orchestrate multi-step workflows.
-- Run remotely (endpoint URL: https://openehr-assistant-mcp.apps.cadasto.com/) or locally (transports: streamable HTTP and stdio)
+- Works with any MCP client (Claude Desktop, Cursor, LibreChat, …).
+- Tools, prompts, resources, and completions for openEHR archetypes, templates, AQL, terminology, and specifications.
+- Guided prompts orchestrate multi-step modelling and review workflows.
+- Use the hosted endpoint, or run locally (transports: streamable HTTP and stdio).
 
-### Implementation aspects 
+----
 
-- Made with PHP 8.4; PSR-compliant codebase
-- Attribute-based MCP tool discovery (via https://github.com/mcp/sdk) with file-based cache
-- Attribute-based MCP prompt discovery (seeded conversations for complex tasks) with file-based cache
-- MCP Resource templates and Completion Providers for better UX in MCP clients
-- Transports: streamable HTTP and stdio (for development)
-- Docker images for production and development
-- Structured logging with Monolog
+## Quick Start
+
+The quickest path is the **hosted endpoint** — point your MCP client at it:
+
+| | |
+|---|---|
+| **URL** | `https://openehr-assistant-mcp.apps.cadasto.com/` |
+| **Transport** | `streamable-http` |
+
+```json
+{
+  "mcpServers": {
+    "openehr-assistant-mcp": {
+      "type": "streamable-http",
+      "url": "https://openehr-assistant-mcp.apps.cadasto.com/"
+    }
+  }
+}
+```
+
+To run your own instance (Docker or stdio) and for per-client setup (Claude Desktop, LibreChat, Cursor, Junie), see **[docs/install.md](docs/install.md)**.
 
 ----
 
@@ -58,379 +63,92 @@ This server augments these workflows by providing AI assistants with direct acce
 ### Tools
 
 CKM (Clinical Knowledge Manager)
-- `ckm_archetype_search` - List Archetypes from the CKM server matching search criteria
-- `ckm_archetype_get` - Get a CKM Archetype by its identifier
-- `ckm_template_search` - List Templates (OET/OPT) from the CKM server matching search criteria
-- `ckm_template_get` - Get a CKM Template (OET/OPT) by its identifier
+- `ckm_archetype_search` — List Archetypes from CKM matching search criteria
+- `ckm_archetype_get` — Get a CKM Archetype by its identifier
+- `ckm_template_search` — List Templates (OET/OPT) from CKM matching search criteria
+- `ckm_template_get` — Get a CKM Template (OET/OPT) by its identifier
 
 openEHR Terminology
-- `terminology_resolve` - Resolve an openEHR terminology concept ID to its rubric, or find the ID for a given rubric across groups.
+- `terminology_resolve` — Resolve a terminology concept ID to its rubric, or find the ID for a given rubric across groups
 
 Guides (model-reachable)
-- `guide_search` - Search bundled guides by query and return short snippets with canonical openehr://guides URIs.
-- `guide_get` - Retrieve guide content by URI or (category, name) with chunked sections by default.
-- `guide_adl_idiom_lookup` - Lookup targeted ADL idiom snippets from the cheatsheet for common modelling patterns.
+- `guide_search` — Search bundled guides and return short snippets with canonical `openehr://guides` URIs
+- `guide_get` — Retrieve guide content by URI or (category, name), chunked by default
+- `guide_adl_idiom_lookup` — Look up targeted ADL idiom snippets for common modelling patterns
 
 Examples (curated artefacts)
-- `examples_search` - Search bundled example artefacts (AQL queries, FLAT/STRUCTURED JSON payloads, ADL archetypes) by query and return short snippets with canonical openehr://examples URIs.
-- `examples_get` - Retrieve an example artefact by URI or (kind, name). Markdown examples (AQL / FLAT / STRUCTURED) wrap the query/payload in a file with metadata header + fenced code block; archetype examples (`kind=archetypes`) are native `.adl` served as `text/plain`.
+- `examples_search` — Search bundled examples (AQL, FLAT/STRUCTURED payloads, ADL archetypes) and return snippets with `openehr://examples` URIs
+- `examples_get` — Retrieve an example by URI or (kind, name)
 
 openEHR Type specification
-- `type_specification_search` - List bundled openEHR Type specifications matching search criteria.
-- `type_specification_get` - Retrieve an openEHR Type specification (as BMM JSON).
+- `type_specification_search` — List bundled openEHR Type specifications matching search criteria
+- `type_specification_get` — Retrieve an openEHR Type specification (as BMM JSON)
 
 ### Prompts
 
 Optional prompts that guide AI assistants through common openEHR and CKM workflows using the tools above.
-- `ckm_archetype_explorer` - Explore CKM Archetypes by discovering and fetching definitions (ADL/XML/Mindmap), using `ckm_archetype_search` and `ckm_archetype_get` tools.
-- `ckm_template_explorer` - Explore CKM Templates by discovering and fetching definitions (OET/OPT), using `ckm_template_search` and `ckm_template_get` tools.
-- `type_specification_explorer` - Discover and fetch openEHR Type specifications (as BMM JSON) using `type_specification_search` and `type_specification_get` tools.
-- `terminology_explorer` - Discover and retrieve openEHR terminology definitions (groups and codesets) using terminology resources.
-- `guide_explorer` - Discover and retrieve openEHR implementation guides using `guide_search`, `guide_get`, and `guide_adl_idiom_lookup` tools.
-- `explain_archetype` - Explain an archetype’s semantics (audiences, elements, constraints).
-- `explain_template` - Explain openEHR Template semantics.
-- `explain_aql` - Explain the intent, structure, and semantics of an AQL query (containment, archetype paths, filters, deployed OPT assumptions).
-- `translate_archetype_language` - Translate an archetype’s terminology section between languages with safety checks.
-- `fix_adl_syntax` - Correct or improve Archetype syntax without changing semantics; provides before/after and notes.
-- `design_or_review_archetype` - Design or review task for a specific concept/RM class with structured outputs.
-- `design_or_review_template` - Design or review task for an openEHR Template (OET).
-- `design_or_review_aql` - Design or review task for an AQL query, using AQL guides (principles, syntax, idioms, checklist).
-- `design_or_review_simplified_format` - Design or review a Flat or Structured (simplified) format instance, using Simplified Formats guides.
-- `explain_simplified_format` - Explain context, paths, and data elements of a Flat or Structured JSON payload.
+- `ckm_archetype_explorer` — Discover and fetch CKM Archetype definitions (ADL/XML/Mindmap)
+- `ckm_template_explorer` — Discover and fetch CKM Template definitions (OET/OPT)
+- `type_specification_explorer` — Discover and fetch openEHR Type specifications (BMM JSON)
+- `terminology_explorer` — Discover and retrieve openEHR terminology (groups and codesets)
+- `guide_explorer` — Discover and retrieve openEHR implementation guides
+- `explain_archetype` — Explain an archetype's semantics (audiences, elements, constraints)
+- `explain_template` — Explain openEHR Template semantics
+- `explain_aql` — Explain an AQL query's intent, structure, and semantics
+- `explain_simplified_format` — Explain context, paths, and data elements of a FLAT/STRUCTURED payload
+- `translate_archetype_language` — Translate an archetype's terminology section between languages with safety checks
+- `fix_adl_syntax` — Correct or improve ADL syntax without changing semantics; before/after + notes
+- `design_or_review_archetype` — Design or review an archetype for a concept/RM class, with structured output
+- `design_or_review_template` — Design or review an openEHR Template (OET)
+- `design_or_review_aql` — Design or review an AQL query, using the AQL guides
+- `design_or_review_simplified_format` — Design or review a FLAT/STRUCTURED instance, using the Simplified Formats guides
 
 ### Completion Providers
 
-Completion providers supply parameter suggestions in MCP clients when invoking tools or resources.
-- `Guides` - suggests guide `{name}` values for categories `archetypes`, `templates`, `aql`, `simplified_formats`, `specs`, and `howto` (resource URI `openehr://guides/{category}/{name}`)
-- `Examples` - suggests example `{name}` values across kinds `aql`, `flat`, `structured`, `archetypes` (resource URI `openehr://examples/{kind}/{name}`)
-- `SpecificationComponents` - suggests `{component}` values based on directories in `resources/bmm`  resource URI
+Parameter suggestions in MCP clients when invoking tools or resources.
+- `Guides` — guide `{name}` values per category (`openehr://guides/{category}/{name}`)
+- `Examples` — example `{name}` values per kind (`openehr://examples/{kind}/{name}`)
+- `SpecificationComponents` — `{component}` values from `resources/bmm` (`openehr://spec/type/{component}/{name}`)
 
 ### Resources
 
-MCP Server Resources are exposed via `#[McpResource]` annotated methods and can be fetched by MCP clients using `openehr://...` URIs. 
-They are used to provide access to openEHR resources (guides, specifications, terminology) and to orchestrate complex workflows.
+Exposed via `#[McpResource]` and fetchable by clients using `openehr://…` URIs.
 
-Guides (Markdown)
-- URI template: `openehr://guides/{category}/{name}`
-- On-disk mapping: `resources/guides/{category}/{name}.md`
-- Model access: use `guide_search` and `guide_get` to retrieve guide content in short, task-relevant chunks.
-- Examples:
-  - `openehr://guides/archetypes/checklist`
-  - `openehr://guides/archetypes/adl-syntax`
-  - `openehr://guides/aql/principles`
-  - `openehr://guides/aql/syntax`
-  - `openehr://guides/simplified_formats/rules`
-  - `openehr://guides/specs/rm-ehr` — per-document openEHR spec digests (250–900 words)
-  - `openehr://guides/howto/spec-lookup` — toolchain how-to guides
-
-Examples (curated artefacts)
-- URI template: `openehr://examples/{kind}/{name}`
-- On-disk mapping: `resources/examples/{kind}/{name}.{md|adl}`
-- Kinds: `aql` (reference AQL queries — Markdown), `flat` / `structured` (paired simplified-format JSON payloads — Markdown), `archetypes` (gold-standard CKM-published ADL files — native `.adl`).
-- Model access: use `examples_search` and `examples_get`. Markdown examples carry a metadata header (pattern, demonstrates, related specs/guides) + fenced code block. ADL archetypes are served as `text/plain` — the archetype's own `description` section is its embedded metadata.
-- Examples:
-  - `openehr://examples/aql/latest_blood_pressure_per_ehr`
-  - `openehr://examples/flat/vital_signs_blood_pressure`
-  - `openehr://examples/structured/vital_signs_blood_pressure`
-  - `openehr://examples/archetypes/openEHR-EHR-OBSERVATION.blood_pressure.v2`
-
-Type Specifications (BMM JSON)
-- URI template: `openehr://spec/type/{component}/{name}`
-- On-disk mapping: `resources/bmm/{COMPONENT}/{NAME}.bmm.json`
-- Examples:
-  - `openehr://spec/type/RM/COMPOSITION`
-  - `openehr://spec/type/AM/ARCHETYPE`
-  - `openehr://spec/type/AM2/ARCHETYPE_HRID`
-
-Terminologies (JSON)
-- URI: `openehr://terminology` contains all terminology groups and codesets
-- Provides access to both terminology groups (concepts/rubrics) and codesets.
-- On-disk mapping: `resources/terminology/openehr_terminology.xml`
+- **Guides** — `openehr://guides/{category}/{name}` (Markdown). Categories: `archetypes`, `templates`, `aql`, `simplified_formats`, `specs` (per-document spec digests), `howto` (toolchain how-tos). Retrieve via `guide_search` / `guide_get`.
+  - e.g. `openehr://guides/aql/principles`, `openehr://guides/specs/rm-ehr`, `openehr://guides/howto/spec-lookup`
+- **Examples** — `openehr://examples/{kind}/{name}`. Kinds: `aql`, `flat`, `structured` (Markdown: metadata header + fenced code block), `archetypes` (native `.adl`, `text/plain`). Retrieve via `examples_search` / `examples_get`.
+  - e.g. `openehr://examples/aql/latest_blood_pressure_per_ehr`, `openehr://examples/archetypes/openEHR-EHR-OBSERVATION.blood_pressure.v2`
+- **Type Specifications** — `openehr://spec/type/{component}/{name}` (BMM JSON).
+  - e.g. `openehr://spec/type/RM/COMPOSITION`, `openehr://spec/type/AM/ARCHETYPE`
+- **Terminology** — `openehr://terminology` (JSON): all openEHR terminology groups and codesets.
 
 ----
 
-## Transports
-
-MCP Transports are used to communicate with MCP clients. 
-
-- `streamable-http` (default): HTTPS (port 443); dev setup exposes an additional HTTP port `8343` via Caddy.
-- `stdio`: Suitable for process-based MCP clients, or for local development. 
-  - Start option: pass `--transport=stdio` to `public/index.php`.
-
----
-
-## Quick Start
-
-To get started, use one of the following options:
-
-1. **No local setup (fastest):** use our hosted endpoint.
-2. **Local via Docker (recommended for contributors):** run the server with `docker compose`.
-3. **Local via stdio:** run as a process for MCP clients that prefer stdio.
-
-----
-
-### Option 1: Use our hosted server (no install)
-
-If you just want to use this MCP server with minimal setup, start here.
-
-Use this MCP server URL directly in your client:
-
-- **URL:** `https://openehr-assistant-mcp.apps.cadasto.com/`
-- **Transport:** `streamable-http`
-
-Example MCP config:
-
-```json
-{
-  "mcpServers": {
-    "openehr-assistant-remote": {
-      "type": "streamable-http",
-      "url": "https://openehr-assistant-mcp.apps.cadasto.com/"
-    }
-  }
-}
-```
-
-See below for more [specific client configurations](#common-client-configurations).
-
-----
-
-### Option 2: Run locally with Docker (recommended for contributors)
-
-Use this when editing tools/prompts/resources and wanting immediate feedback.
-
-#### Prerequisites
-
-- Docker + Docker Compose
-- Git
-
-#### 1) Clone the repository
-
-```bash
-git clone https://github.com/cadasto/openehr-assistant-mcp.git
-cd openehr-assistant-mcp
-```
-
-#### 2) Prepare environment
-
-```bash
-cp .env.example .env
-```
-
-> Tip: Default values work for most users. You usually only need to edit `.env` if you want to change domain, logging, or CKM endpoint.
-
-#### 3) Start dev containers
-
-```bash
-docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml up -d --build --force-recreate
-# or
-make up-dev
-```
-
-#### 4) Install Composer dependencies
-
-```bash
-docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer install
-# or
-make install
-```
-
-#### 5) Connect your MCP client
-
-- Default local endpoint (streamable HTTP): `https://openehr-assistant-mcp.local/`; set also this name in your host file, asscociating it with `127.0.0.1 openehr-assistant-mcp.local`.
-- Dev endpoint (with dev override): `http://localhost:8343/`
-
-> If `openehr-assistant-mcp.local` does not resolve on your machine, use the dev setup below and connect to `http://localhost:8343/`.
-
-Alternatively, use stdio by running a similar command to the following when you want your MCP client to launch the server process directly.
-
-```bash
-docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app php public/index.php --transport=stdio
-```
-
----
-
-### Option 3: Run locally via stdio
-
-Use stdio when your MCP client launches the server process directly.
-
-Make sure your MCP client supports stdio transport and runs one of the following commands.
-
-#### 1) From dev containers
-
-```bash
-docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app php public/index.php --transport=stdio
-```
-
-#### 2) From a published Docker image
-
-```bash
-docker run --rm -i ghcr.io/cadasto/openehr-assistant-mcp:latest php public/index.php --transport=stdio
-```
-
----
-
-## Common client configurations
-
-### Typical configuration
-
-In most cases, add **one** of the following server configurations:
-
-```json
-{
-  "mcpServers": {
-    "openehr-assistant-mcp": {
-      "type": "streamable-http",
-      "url": "https://openehr-assistant-mcp.apps.cadasto.com/"
-    },
-    "openehr-assistant-mcp-stdio": {
-      "command": "docker",
-      "args": [
-        "run", "-i", "--rm",
-        "ghcr.io/cadasto/openehr-assistant-mcp:latest",
-        "php", "public/index.php", "--transport=stdio"
-      ]
-    },
-    "openehr-assistant-mcp-http": {
-      "type": "streamable-http",
-      "url": "http://host.docker.internal:8343/"
-    }
-  }
-}
-```
-
-### Claude Desktop (`mcpServers`)
-
-Add the remote URL `https://openehr-assistant-mcp.apps.cadasto.com/` in Menu > Settings > Connectors > Add custom connector.
-
-Alternatively, use **Menu** → **Developer** → **Edit Config** to add one of the server configurations – see above.
-
-### LibreChat (streamable HTTP)
-
-```yaml
-mcpServers:
-  openehr-assistant-mcp:
-    type: streamable-http
-    url: http://host.docker.internal:8343/
-```
-
-### Cursor
-
-1. Open **Cursor Settings** → **MCP**.
-2. Add a new MCP server.
-3. Choose one of these connection options:
-   - **Hosted**: `type=streamable-http`, `url=https://openehr-assistant-mcp.apps.cadasto.com/`
-   - **Local dev**: `type=streamable-http`, `url=http://host.docker.internal:8343/`
-   - **Local stdio**: run with Docker – see above.
-
-### IntelliJ Junie
-
-1. Open **Settings/Preferences** → **Tools** → **Junie** → **MCP Servers** (wording may vary by version).
-2. Add a server using either:
-   - **Streamable HTTP** URL (`https://openehr-assistant-mcp.apps.cadasto.com/` or `http://host.docker.internal:8343/`), or
-   - **Stdio command** (Docker command above).
-3. Save configuration and refresh/restart Junie so tools are discovered.
-
----
-
-## Development tips
-
-### MCP Inspector
-
-Run the MCP Inspector to inspect requests/responses and debug behavior:
-
-```bash
-make inspector
-```
-
-The terminal may show `http://0.0.0.0:6274/`; open it as `http://localhost:6274/` (or your machine IP) in your browser.
-
-### Makefile shortcuts
-
-- Build images: `make build` (prod) or `make build-dev` (dev)
-- Start services: `make up` (prod) or `make up-dev` (dev override with live volume mounts)
-- Prepare `.env`: `make env`
-- Install dependencies in dev container: `make install`
-- Tail logs: `make logs`
-- Open shell in dev container: `make sh`
-- Run MCP server (stdio): `make run-stdio`
-- Run MCP conformance (requires `make up-dev`): `make conformance`
-- Run MCP inspector: `make inspector`
-- Show help: `make help`
-
-### Environment Variables
-
-- `APP_ENV`: application environment (`development`/`testing`/`production`). Default: `production`
-- `LOG_LEVEL`: Monolog level (`debug`, `info`, `warning`, `error`, etc.). Default: `info`
-- `CKM_API_BASE_URL`: base URL for the openEHR CKM REST API. Default: `https://ckm.openehr.org/ckm/rest`
-- `HTTP_TIMEOUT`: HTTP client timeout in seconds (float). Default: `3.0`
-- `HTTP_SSL_VERIFY`: set to `false` to disable verification or provide a CA bundle path. Default: `true`
-- `XDG_DATA_HOME`: directory for application data, including cache and sessions. Default: `/tmp` (the app uses `XDG_DATA_HOME/app` or `/tmp/app`)
-
-Note: Authorization headers are not required nor configured by default. If you need to add auth to your upstream openEHR/CKM server, extend the HTTP client in `src/Apis` to add the appropriate headers.
-
-### Testing and QA
-
-- Unit tests: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test` (PHPUnit 12)
-- Test with coverage: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer test:coverage`
-- Static analysis: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec app composer check:phpstan`
-
-#### MCP Conformance
-
-The [MCP Conformance](https://github.com/modelcontextprotocol/conformance) test framework checks the server against the MCP specification. It talks to the server over **HTTP only** (not stdio). Some scenarios require test tools (e.g. `test_tool_with_logging`) or optional features this server does not implement; those are listed in `tests/conformance-baseline.yml` so that `make conformance` exits 0 when only known failures occur, and fails on new regressions. To see all server scenarios: `docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm node npx -y @modelcontextprotocol/conformance list --server`. Ensure the dev stack is running (`make up-dev`), then run:
-
-```bash
-make conformance
-```
-
-This runs the conformance suite inside the `node` service (Node + curl) in Docker, so you do not need Node on the host. Results are printed to the terminal and written to `conformance/` in the repo (subdirectories like `conformance/server-<scenario>-<timestamp>/` with `checks.json`). To run a single scenario or pass options (e.g. `--verbose`), use:
-
-```bash
-docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml run --rm node npx -y @modelcontextprotocol/conformance server --url http://ingress:8343/mcp_openehr -o conformance --expected-failures tests/conformance-baseline.yml --scenario server-initialize --verbose
-```
-
-Tips
-- You can also `make sh` and run `composer test` inside the container interactively.
-
-### Project Structure
-
-- `public/index.php`: MCP server entry point
-- `resources/`: various resources used or exposed by the server
-- `src/`
-  - `Tools/`: MCP Tools (Definition, EHR, Composition, Query)
-  - `Prompts/`: MCP Prompts (including `AbstractPrompt` for loading Markdown-based prompts)
-  - `Resources/`: MCP Resources and Resource Templates
-  - `CompletionProviders/`: MCP Completion Providers
-  - `Helpers/`: Internal helpers (e.g., content type and ADL mapping)
-  - `Apis/`: Internal API clients
-  - `constants.php`: loads env and defaults
-- `.docker/`: Docker assets — `docker-compose.yml`, `docker-compose.dev.yml`, `Dockerfile`, `Caddyfile`, PHP/php-fpm config
-- `.docker/docker-compose.yml`: services (`app`, `ingress`) for production-like run (Caddy on 443)
-- `.docker/docker-compose.dev.yml`: dev overrides (port 8343, `node` service for npx/curl and MCP conformance)
-- `.docker/Dockerfile`: multi-stage build (development, production, and `node` for MCP conformance / npx+curl)
-- `Makefile`: handy shortcuts
-- `tests/`: PHPUnit and PHPStan config and tests
+## Documentation
+
+- **[docs/install.md](docs/install.md)** — hosted & local setup, client configurations
+- **[docs/development.md](docs/development.md)** — Docker dev environment, Makefile, configuration, MCP Inspector
+- **[docs/conventions.md](docs/conventions.md)** — coding standard and MCP authoring conventions
+- **[docs/testing.md](docs/testing.md)** — tests, static analysis, MCP conformance
+- **[docs/](docs/README.md)** — the Specification-Driven Development spec set (requirements, architecture, decisions, traceability)
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — how to contribute · **[AGENTS.md](AGENTS.md)** — repository instructions for AI coding agents
 
 ----
 
 ## Contributing
 
-We welcome contributions! Please read CONTRIBUTING.md for guidelines on setting up your environment, coding style, testing, and how to propose changes. Most routine tasks can be executed via the Makefile.
+Contributions are welcome — see **[CONTRIBUTING.md](CONTRIBUTING.md)** for setup, conventions, and how to propose changes, and **[CHANGELOG.md](CHANGELOG.md)** for notable changes.
 
-See CHANGELOG.md for notable changes and update it with every release.
-
-### License
-
-MIT License - see `LICENSE`.
+**License:** MIT — see [LICENSE](LICENSE).
 
 ----
 
 ## Acknowledgments
 
-This project is inspired by and is grateful to:
+This project is inspired by and grateful to:
 - The original Python openEHR MCP Server: https://github.com/deak-ai/openehr-mcp-server
-- [Seref Arikan](https://www.linkedin.com/in/seref-arikan/), [Sidharth Ramesh](https://www.linkedin.com/in/sidharthramesh1/) - for inspiration on MCP integration
+- [Seref Arikan](https://www.linkedin.com/in/seref-arikan/), [Sidharth Ramesh](https://www.linkedin.com/in/sidharthramesh1/) — for inspiration on MCP integration
 - The PHP MCP Server framework: https://github.com/modelcontextprotocol/php-sdk
 - [Ocean Health Systems](https://oceanhealthsystems.com/) for the Clinical Knowledge Manager (CKM), an essential tool for the openEHR community that enables collaborative development and sharing of archetypes and templates.
-- [freshEHR](https://www.freshehr.com/) for the CGEM framework (Contextual situation, Global background, Event assessment, Managed response), which informs our template-design guides on splitting datasets and composition semantics (CC-BY).
-- [Silje Ljosland Bakke](https://github.com/siljelb) - for the contribution to the archetype and language related guides. 
+- [freshEHR](https://www.freshehr.com/) for the CGEM framework (Contextual situation, Global background, Event assessment, Managed response), which informs our template-design guides (CC-BY).
+- [Silje Ljosland Bakke](https://github.com/siljelb) — for contributions to the archetype and language related guides.

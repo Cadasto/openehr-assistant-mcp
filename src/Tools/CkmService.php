@@ -8,6 +8,7 @@ use Cadasto\OpenEHR\MCP\Assistant\Apis\CkmClient;
 use Cadasto\OpenEHR\MCP\Assistant\Helpers\Map;
 use GuzzleHttp\RequestOptions;
 use Mcp\Capability\Attribute\McpTool;
+use Mcp\Capability\Attribute\Schema;
 use Mcp\Schema\Content\TextContent;
 use Mcp\Schema\ToolAnnotations;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -188,7 +189,11 @@ final readonly class CkmService
         name: 'ckm_archetype_get',
         annotations: new ToolAnnotations(readOnlyHint: true)
     )]
-    public function archetypeGet(string $identifier, string $format = 'adl'): TextContent
+    public function archetypeGet(
+        string $identifier,
+        #[Schema(enum: ['adl', 'xml', 'mindmap'])]
+        string $format = 'adl',
+    ): TextContent
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $identifier = trim($identifier);
@@ -365,7 +370,11 @@ final readonly class CkmService
         name: 'ckm_template_get',
         annotations: new ToolAnnotations(readOnlyHint: true)
     )]
-    public function templateGet(string $identifier, string $format = 'oet'): TextContent
+    public function templateGet(
+        string $identifier,
+        #[Schema(enum: ['oet', 'opt'])]
+        string $format = 'oet',
+    ): TextContent
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $identifier = trim($identifier);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cadasto\OpenEHR\MCP\Assistant\Tools;
 
 use Mcp\Capability\Attribute\McpTool;
+use Mcp\Capability\Attribute\Schema;
 use Mcp\Exception\ToolCallException;
 use Mcp\Schema\Content\EmbeddedResource;
 use Mcp\Schema\Content\TextResourceContents;
@@ -77,6 +78,7 @@ final readonly class ExamplesService
     )]
     public function search(
         string $query = '',
+        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes'])]
         string $kind = '',
         int $maxResults = self::DEFAULT_MAX_RESULTS,
         int $snippetChars = self::DEFAULT_SNIPPET_CHARS,
@@ -136,7 +138,12 @@ final readonly class ExamplesService
         name: 'examples_get',
         annotations: new ToolAnnotations(readOnlyHint: true),
     )]
-    public function get(string $uri = '', string $kind = '', string $name = ''): EmbeddedResource
+    public function get(
+        string $uri = '',
+        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes'])]
+        string $kind = '',
+        string $name = '',
+    ): EmbeddedResource
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $uri = trim($uri);

@@ -6,6 +6,7 @@ namespace Cadasto\OpenEHR\MCP\Assistant\Tools;
 
 use Generator;
 use Mcp\Capability\Attribute\McpTool;
+use Mcp\Capability\Attribute\Schema;
 use Mcp\Exception\ToolCallException;
 use Mcp\Schema\ToolAnnotations;
 use Psr\Log\LoggerInterface;
@@ -187,7 +188,11 @@ readonly final class TypeSpecificationService
             ],
         ],
     )]
-    public function get(string $name, string $component = ''): array
+    public function get(
+        string $name,
+        #[Schema(enum: ['AM', 'AM2', 'BASE', 'LANG', 'RM', 'TERM'])]
+        string $component = '',
+    ): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $name = trim((string)str_replace(['.', '*', '/', '\\'], '', $name));

@@ -1,0 +1,30 @@
+{
+    "name": "P_BMM_INTERFACE",
+    "documentation": "Persistent form of a BMM interface, i.e. a class-like definition consisting only of functions (no state). Used to capture pure operation interfaces.",
+    "ancestors": [
+        "P_BMM_MODEL_ELEMENT"
+    ],
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of this interface. Persisted attribute.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "functions": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "functions",
+            "documentation": "Functions (routines) declared by this interface, keyed by name. Persistent attribute.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "P_BMM_FUNCTION"
+                ]
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

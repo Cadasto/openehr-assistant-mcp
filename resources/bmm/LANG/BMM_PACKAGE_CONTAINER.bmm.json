@@ -1,7 +1,6 @@
 {
     "name": "BMM_PACKAGE_CONTAINER",
-    "documentation": "A BMM model component that contains packages and classes.",
-    "is_abstract": true,
+    "documentation": "Abstraction of a BMM model component that contains packages and classes.",
     "ancestors": [
         "BMM_MODEL_ELEMENT"
     ],
@@ -17,19 +16,12 @@
                     "BMM_PACKAGE"
                 ]
             }
-        },
-        "scope": {
-            "_type": "P_BMM_SINGLE_PROPERTY",
-            "name": "scope",
-            "documentation": "Model element within which a referenceable element is known.",
-            "is_mandatory": true,
-            "type": "BMM_PACKAGE_CONTAINER"
         }
     },
     "functions": {
         "package_at_path": {
             "name": "package_at_path",
-            "documentation": "Package at the path `_a_path_`.",
+            "documentation": "Package at the path `a_path'.",
             "parameters": {
                 "a_path": {
                     "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
@@ -40,27 +32,22 @@
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",
                 "type": "BMM_PACKAGE"
-            },
-            "is_nullable": true
+            }
         },
         "do_recursive_packages": {
             "name": "do_recursive_packages",
-            "documentation": "Recursively execute `_action_`, which is a procedure taking a `BMM_PACKAGE` argument, on all members of packages.",
+            "documentation": "Recursively execute `action', which is a procedure taking a BMM_PACKAGE argument, on all members of packages.",
             "parameters": {
                 "action": {
                     "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
                     "name": "action",
-                    "type": "EL_PROCEDURE_AGENT"
+                    "type": "PROCEDURE"
                 }
-            },
-            "result": {
-                "_type": "P_BMM_SIMPLE_TYPE",
-                "type": "void"
             }
         },
         "has_package_path": {
             "name": "has_package_path",
-            "documentation": "True if there is a package at the path `_a_path_`; paths are delimited with delimiter `{BMM_DEFINITIONS} _Package_name_delimiter_`.",
+            "documentation": "True if there is a package at the path `a_path'; paths are delimited with Package_name_delimiter.",
             "parameters": {
                 "a_path": {
                     "_type": "P_BMM_SINGLE_FUNCTION_PARAMETER",
@@ -74,6 +61,6 @@
             }
         }
     },
-    "package": "org.openehr.lang.bmm.core.model",
-    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_model_package"
+    "package": "org.openehr.lang.bmm.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_core_package"
 }

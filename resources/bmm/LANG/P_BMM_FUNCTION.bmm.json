@@ -1,0 +1,84 @@
+{
+    "name": "P_BMM_FUNCTION",
+    "documentation": "Persistent form of a BMM function (routine) definition within a class definition.",
+    "ancestors": [
+        "P_BMM_MODEL_ELEMENT"
+    ],
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of this function within its class. Persisted attribute.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "aliases": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "aliases",
+            "documentation": "Optional alias names for this function, keyed by alias. Persisted attribute.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "is_abstract": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_abstract",
+            "documentation": "True if this function is abstract in its class, i.e. has no implementation. Persisted attribute.",
+            "type": "Boolean"
+        },
+        "parameters": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "parameters",
+            "documentation": "Formal parameters of the function, keyed by parameter name. Persisted attribute.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "P_BMM_FUNCTION_PARAMETER"
+                ]
+            }
+        },
+        "pre_conditions": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "pre_conditions",
+            "documentation": "Optional pre-condition assertions on this function, keyed by tag. Persisted attribute.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "post_conditions": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "post_conditions",
+            "documentation": "Optional post-condition assertions on this function, keyed by tag. Persisted attribute.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "result": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "result",
+            "documentation": "Type definition of the function result, if any (absent for procedures). Persisted attribute.",
+            "type": "P_BMM_TYPE"
+        },
+        "is_nullable": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_nullable",
+            "documentation": "True if the result of this function is allowed to be Void (null). Persisted attribute.",
+            "type": "Boolean"
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

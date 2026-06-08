@@ -1,0 +1,9 @@
+{
+    "name": "BMM_TYPE_ELEMENT",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_CLASSIFIER"
+    ],
+    "package": "org.openehr.lang.bmm.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_core_package"
+}

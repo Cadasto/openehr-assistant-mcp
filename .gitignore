@@ -35,6 +35,16 @@ Thumbs.db
 
 # ai assistants
 /.aiassistant/
-/.claude/
-/.cursor/
 /.junie/
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Cursor local hook state (machine-specific paths)
+.cursor/hooks/state/
+
+# Git worktrees
+.worktrees/
+worktrees/
+# Claude Code local project memory (machine-specific)
+CLAUDE.local.md

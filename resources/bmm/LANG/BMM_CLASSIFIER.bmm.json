@@ -1,0 +1,54 @@
+{
+    "name": "BMM_CLASSIFIER",
+    "documentation": "Abstract idea of specifying a type either by definition or by reference.",
+    "is_abstract": true,
+    "ancestors": [
+        "BMM_MODEL_ELEMENT"
+    ],
+    "functions": {
+        "type_name": {
+            "name": "type_name",
+            "documentation": "Formal string form of the type as per UML.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "type_category": {
+            "name": "type_category",
+            "documentation": "Generate a type category of main target type from Type_category_xx values.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "type_signature": {
+            "name": "type_signature",
+            "documentation": "Signature form of the type, which for generics includes generic parameter constrainer types e.g. Interval<T:Ordered>.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "base_class": {
+            "name": "base_class",
+            "documentation": "Main design class for this type, from which properties etc can be extracted.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_CLASS"
+            }
+        },
+        "flattened_type_list": {
+            "name": "flattened_type_list",
+            "documentation": "Completely flattened list of type names, flattening out all generic parameters.",
+            "result": {
+                "_type": "P_BMM_CONTAINER_TYPE",
+                "container_type": "List",
+                "type": "String"
+            },
+            "is_nullable": true
+        }
+    },
+    "package": "org.openehr.lang.bmm.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_core_package"
+}

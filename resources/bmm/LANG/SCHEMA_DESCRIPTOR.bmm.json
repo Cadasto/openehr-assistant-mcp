@@ -1,0 +1,121 @@
+{
+    "name": "SCHEMA_DESCRIPTOR",
+    "documentation": "Descriptor for a BMM schema. Contains a meta-data table of attributes obtained from a mini-ODIN parse of the schema file.",
+    "ancestors": [
+        "BMM_DEFINITIONS"
+    ],
+    "properties": {
+        "p_schema": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "p_schema",
+            "documentation": "Persistent form of model.",
+            "type": "P_BMM_SCHEMA"
+        },
+        "schema": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "schema",
+            "documentation": "Computable form of model.",
+            "type": "BMM_MODEL"
+        },
+        "schema_id": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "schema_id",
+            "documentation": "Schema id, formed from meta_data model_publisher '_' schema_name '_' model_release, e.g. openehr_rm_1.0.3.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "meta_data": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "meta_data",
+            "documentation": "Table of {key, value} pairs of schema meta-data (bmm_version, model_publisher, schema_name, model_release, schema_revision, schema_lifecycle_state, schema_description, schema_path).",
+            "is_mandatory": true,
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "String"
+                ]
+            }
+        },
+        "includes": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "includes",
+            "documentation": "Schema_ids of schemas included by this schema.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        }
+    },
+    "functions": {
+        "is_top_level": {
+            "name": "is_top_level",
+            "documentation": "True if this is a top-level schema, i.e. not included by some other schema.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "is_bmm_compatible": {
+            "name": "is_bmm_compatible",
+            "documentation": "True if the BMM version found in the schema (or assumed, if none) is compatible with that in this software.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "Boolean"
+            }
+        },
+        "load": {
+            "name": "load",
+            "documentation": "Load schema into in-memory form.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "validate": {
+            "name": "validate",
+            "documentation": "Validate entire schema.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "validate_includes": {
+            "name": "validate_includes",
+            "documentation": "Validate includes list for this schema, to see if each mentioned schema exists in read schemas.",
+            "parameters": {
+                "all_schemas_list": {
+                    "_type": "P_BMM_CONTAINER_FUNCTION_PARAMETER",
+                    "name": "all_schemas_list",
+                    "is_nullable": true,
+                    "type_def": {
+                        "container_type": "List",
+                        "type": "String"
+                    },
+                    "cardinality": {
+                        "lower": 0,
+                        "upper_unbounded": true
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "create_schema": {
+            "name": "create_schema",
+            "documentation": "Create `schema`.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.rm_access",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_rm_access_package"
+}

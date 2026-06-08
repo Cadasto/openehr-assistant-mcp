@@ -1,0 +1,49 @@
+---
+description: Run PHP, Composer, tests, and static analysis only via Docker in this project
+alwaysApply: true
+---
+
+# Docker-only workflow for PHP/Composer
+
+This project has **no local PHP or Composer** in the host (e.g. WSL). All PHP and Composer commands **must** run inside the dev container.
+
+## Do not run
+
+- `composer ...` on the host
+- `php ...` on the host
+- `vendor/bin/phpunit ...` on the host
+
+These will fail; use the Docker workflow below instead.
+
+## Correct commands
+
+**Start dev containers (once):**
+```bash
+make up-dev
+```
+
+**Install dependencies:**
+```bash
+make install
+```
+
+**Run tests:**
+```bash
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer test
+```
+
+**Run PHPStan:**
+```bash
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer check:phpstan
+```
+
+**Run coverage (HTML):**
+```bash
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app composer test:coverage
+```
+
+**Single test class or filter:**
+```bash
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml exec -u 1000:1000 app vendor/bin/phpunit --filter SomeTest
+```
+

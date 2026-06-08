@@ -22,7 +22,7 @@
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "bmm_generic_parameter",
             "documentation": "`BMM_GENERIC_PARAMETER` created by `_create_bmm_generic_parameter_`.",
-            "type": "BMM_PARAMETER_TYPE"
+            "type": "BMM_GENERIC_PARAMETER"
         }
     },
     "functions": {

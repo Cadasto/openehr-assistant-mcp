@@ -1,6 +1,6 @@
 {
     "name": "P_BMM_BASE_TYPE",
-    "documentation": "Persistent form of `BMM_PROPER_TYPE`.",
+    "documentation": "Persistent form of a proper (non-container) BMM type.",
     "is_abstract": true,
     "ancestors": [
         "P_BMM_TYPE"

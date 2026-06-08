@@ -1,0 +1,101 @@
+{
+    "name": "REFERENCE_MODEL_ACCESS",
+    "documentation": "Access to service interface to BMM object model.",
+    "ancestors": [
+        "BMM_DEFINITIONS"
+    ],
+    "properties": {
+        "schema_directories": {
+            "_type": "P_BMM_CONTAINER_PROPERTY",
+            "name": "schema_directories",
+            "documentation": "List of directories where all the schemas loaded here are found.",
+            "type_def": {
+                "container_type": "List",
+                "type": "String"
+            },
+            "cardinality": {
+                "lower": 0,
+                "upper_unbounded": true
+            }
+        },
+        "all_schemas": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "all_schemas",
+            "documentation": "All schemas found and loaded from `schema_directories`. Keyed by schema_id, i.e. model_publisher '_' schema_name '_' model_release, e.g. openehr_rm_1.0.3.",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "SCHEMA_DESCRIPTOR"
+                ]
+            }
+        },
+        "valid_models": {
+            "_type": "P_BMM_GENERIC_PROPERTY",
+            "name": "valid_models",
+            "documentation": "Top-level (root) models in use. Keyed by logical schema_name, i.e. model_publisher '_' model_name, e.g. \"openehr_rm\".",
+            "type_def": {
+                "root_type": "Hash",
+                "generic_parameters": [
+                    "String",
+                    "BMM_MODEL"
+                ]
+            }
+        }
+    },
+    "functions": {
+        "initialise_with_load_list": {
+            "name": "initialise_with_load_list",
+            "documentation": "Initialise with a specific schema load list, usually a sub-set of schemas that will be found in the directories `a_schema_dirs`.",
+            "parameters": {
+                "a_schema_dirs": {
+                    "_type": "P_BMM_CONTAINER_FUNCTION_PARAMETER",
+                    "name": "a_schema_dirs",
+                    "type_def": {
+                        "container_type": "List",
+                        "type": "String"
+                    },
+                    "cardinality": {
+                        "lower": 1,
+                        "upper_unbounded": true
+                    }
+                },
+                "a_schema_load_list": {
+                    "_type": "P_BMM_CONTAINER_FUNCTION_PARAMETER",
+                    "name": "a_schema_load_list",
+                    "is_nullable": true,
+                    "type_def": {
+                        "container_type": "List",
+                        "type": "String"
+                    },
+                    "cardinality": {
+                        "lower": 0,
+                        "upper_unbounded": true
+                    }
+                }
+            },
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "initialise_all": {
+            "name": "initialise_all",
+            "documentation": "Initialise with all schemas found in the schema directories.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        },
+        "reload_schemas": {
+            "name": "reload_schemas",
+            "documentation": "Reload all schemas.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "void"
+            }
+        }
+    },
+    "package": "org.openehr.lang.bmm.rm_access",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_rm_access_package"
+}

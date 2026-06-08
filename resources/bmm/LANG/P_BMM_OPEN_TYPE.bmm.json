@@ -1,6 +1,6 @@
 {
     "name": "P_BMM_OPEN_TYPE",
-    "documentation": "Persistent form of `BMM_PARAMETER_TYPE`.",
+    "documentation": "Persistent form of `BMM_GENERIC_PARAMETER` or `BMM_PARAMETER_TYPE` (in BMM v3).",
     "ancestors": [
         "P_BMM_BASE_TYPE"
     ],
@@ -16,7 +16,7 @@
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "bmm_type",
             "documentation": "Result of `_create_bmm_type()_` call.",
-            "type": "Any"
+            "type": "BMM_OPEN_TYPE"
         }
     },
     "package": "org.openehr.lang.bmm_persistence",

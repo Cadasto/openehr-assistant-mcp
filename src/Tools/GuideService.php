@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cadasto\OpenEHR\MCP\Assistant\Tools;
 
 use Mcp\Capability\Attribute\McpTool;
+use Mcp\Capability\Attribute\Schema;
 use Mcp\Exception\ToolCallException;
 use Mcp\Schema\Content\EmbeddedResource;
 use Mcp\Schema\Content\TextResourceContents;
@@ -80,6 +81,7 @@ final class GuideService
     )]
     public function search(
         string $query = '',
+        #[Schema(enum: ['archetypes', 'templates', 'aql', 'simplified_formats', 'specs', 'howto'])]
         string $category = '',
         string $taskType = '',
         int $maxResults = self::DEFAULT_MAX_RESULTS,
@@ -173,7 +175,12 @@ final class GuideService
         name: 'guide_get',
         annotations: new ToolAnnotations(readOnlyHint: true),
     )]
-    public function get(string $uri = '', string $category = '', string $name = ''): EmbeddedResource
+    public function get(
+        string $uri = '',
+        #[Schema(enum: ['archetypes', 'templates', 'aql', 'simplified_formats', 'specs', 'howto'])]
+        string $category = '',
+        string $name = '',
+    ): EmbeddedResource
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $uri = trim($uri);

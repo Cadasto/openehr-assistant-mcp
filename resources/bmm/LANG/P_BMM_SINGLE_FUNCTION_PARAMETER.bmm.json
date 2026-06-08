@@ -1,0 +1,18 @@
+{
+    "name": "P_BMM_SINGLE_FUNCTION_PARAMETER",
+    "documentation": "Persistent form of a single-valued function parameter, i.e. one whose type is a simple class reference.",
+    "ancestors": [
+        "P_BMM_FUNCTION_PARAMETER"
+    ],
+    "properties": {
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "Type name of this parameter, as a simple class name. Persisted attribute.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

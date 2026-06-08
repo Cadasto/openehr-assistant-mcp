@@ -18,6 +18,10 @@ services:
       dockerfile: .docker/Dockerfile
       target: development
     tty: true
+    # Allow the dev reverse-proxy host so the streamable-http transport's DNS-rebinding
+    # protection (SDK >= 0.6) accepts requests proxied via the `ingress` service.
+    environment:
+      MCP_ALLOWED_HOSTS: "localhost,127.0.0.1,[::1],ingress,app,openehr-assistant-mcp.${DOMAIN:-local}"
     volumes:
       - ../:/app
       - composer-cache:/data/.cache/composer
@@ -28,6 +32,19 @@ services:
       - "80:80"
       - "443:443"
       - "443:443/udp"
+
+  # MCP Inspector UI — on-demand (not started by `make up-dev`; see profile).
+  # Runs on the project network so its proxy can reach the server at
+  # http://openehr-assistant-mcp.${DOMAIN:-local}:8343/mcp (or http://ingress:8343/mcp).
+  inspector:
+    image: ghcr.io/modelcontextprotocol/inspector:latest
+    pull_policy: always
+    profiles: ["inspector"]
+    environment:
+      HOST: 0.0.0.0
+    ports:
+      - "6274:6274"
+      - "6277:6277"
 
 volumes:
   composer-cache:

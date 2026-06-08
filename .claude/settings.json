@@ -1,0 +1,9 @@
+{
+    "enabledPlugins": {
+        "claude-md-management@claude-plugins-official": true,
+        "mcp-dev@claude-plugins-official": true,
+        "openehr-assistant-dev@cadasto": true,
+        "php-lsp@claude-plugins-official": true,
+        "superpowers@claude-plugins-official": true
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "name": "P_BMM_SINGLE_FUNCTION_PARAMETER_OPEN",
+    "documentation": "Persistent form of a single-valued function parameter whose type is an open generic parameter, e.g. `T`.",
+    "ancestors": [
+        "P_BMM_FUNCTION_PARAMETER"
+    ],
+    "properties": {
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "type",
+            "documentation": "Open type parameter, i.e. a generic parameter name such as `T`, `G` etc. Persisted attribute.",
+            "is_mandatory": true,
+            "type": "String"
+        }
+    },
+    "package": "org.openehr.lang.bmm_persistence",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html#_bmm_persistence_package"
+}

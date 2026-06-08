@@ -1,0 +1,59 @@
+{
+    "name": "BMM_GENERIC_PARAMETER",
+    "documentation": "Definition of a generic parameter in a class definition of a generic type.",
+    "ancestors": [
+        "BMM_TYPE_ELEMENT"
+    ],
+    "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of the parameter, e.g. 'T' etc. The name is limited to 1 character and upper-case.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "conforms_to_type": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "conforms_to_type",
+            "documentation": "Optional conformance constraint that must be another valid class name.",
+            "type": "BMM_CLASS"
+        },
+        "inheritance_precursor": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "inheritance_precursor",
+            "documentation": "If set, is the corresponding generic parameter definition in an ancestor class.",
+            "type": "BMM_GENERIC_PARAMETER"
+        }
+    },
+    "functions": {
+        "flattened_conforms_to_type": {
+            "name": "flattened_conforms_to_type",
+            "documentation": "Get any ultimate type conformance constraint on this generic parameter due to inheritance.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        },
+        "effective_conforms_to_type": {
+            "name": "effective_conforms_to_type",
+            "documentation": "Generate ultimate conformance type, which is either from `conforms_to_type' or if not set, 'Any'.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "BMM_CLASS"
+            }
+        },
+        "type_signature": {
+            "name": "type_signature",
+            "documentation": "Signature form of the open type, including constrainer type if there is one, e.g. 'T:Ordered'.",
+            "result": {
+                "_type": "P_BMM_SIMPLE_TYPE",
+                "type": "String"
+            }
+        }
+    },
+    "invariants": {
+        "Inv_generic_name": "name.count = 1 and name.is_upper"
+    },
+    "package": "org.openehr.lang.bmm.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_core_package"
+}

@@ -1,4 +1,4 @@
-.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio conformance inspector inspector-stop
+.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio conformance ci inspector inspector-stop
 
 # Default target
 .DEFAULT_GOAL := help
@@ -66,10 +66,25 @@ run-stdio: ## Run MCP server (stdio transport) in dev container
 conformance: ## Run MCP conformance tests against server (requires make up-dev; URL: http://ingress:8343/mcp). Results in conformance/
 	$(DOCKER_COMPOSE_DEV) run --rm node npx -y @modelcontextprotocol/conformance server --url http://ingress:8343/mcp -o conformance --expected-failures tests/conformance-baseline.yml
 
+##@ Quality & CI
+
+ci: ## Run CI checks in dev container (PHPStan + tests)
+	$(DOCKER_COMPOSE_DEV) run --rm -u 1000:1000 app sh -c "composer check:phpstan && composer test"
+
 ##@ MCP inspector UI
 
-inspector: ## Run modelcontextprotocol/inspector UI
-	docker run --rm -p 6274:6274 -p 6277:6277 -e HOST=0.0.0.0 --name inspector --pull always ghcr.io/modelcontextprotocol/inspector:latest
+inspector: ## Run modelcontextprotocol/inspector UI (prints the auth URL; target http://openehr-assistant-mcp.local:8343/mcp)
+	$(DOCKER_COMPOSE_DEV) up -d inspector
+	@printf 'Waiting for MCP Inspector'; \
+	for i in $$(seq 1 30); do \
+		url=$$($(DOCKER_COMPOSE_DEV) logs inspector 2>/dev/null | grep -oE 'http://[^[:space:]]*:6274/\?MCP_PROXY_AUTH_TOKEN=[A-Za-z0-9]+' | tail -1); \
+		if [ -n "$$url" ]; then \
+			printf '\n\nMCP Inspector ready — open:\n  %s\n' "$$(echo "$$url" | sed 's#://0\.0\.0\.0:#://localhost:#')"; \
+			exit 0; \
+		fi; \
+		printf '.'; sleep 1; \
+	done; \
+	printf '\nTimed out; check manually: $(DOCKER_COMPOSE_DEV) logs inspector\n'
 
-inspector-stop: ## Stop the modelcontextprotocol/inspector UI container
-	docker stop inspector
+inspector-stop: ## Stop and remove the modelcontextprotocol/inspector UI container
+	$(DOCKER_COMPOSE_DEV) rm -sf inspector

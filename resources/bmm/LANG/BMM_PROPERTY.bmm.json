@@ -1,11 +1,42 @@
 {
     "name": "BMM_PROPERTY",
-    "documentation": "Meta-type of a writable property definition within a class definition of an object model. The `_is_composition_` attribute indicates whether the property has sub-part or an association semantics with respect to the owning class.",
-    "is_abstract": true,
+    "documentation": "Model of a property definition within a class definition of an object model. Generic parameter takes care of variants.",
     "ancestors": [
-        "BMM_INSTANTIABLE_FEATURE"
+        "BMM_MODEL_ELEMENT"
     ],
+    "generic_parameter_defs": {
+        "T": {
+            "name": "T",
+            "conforms_to_type": "BMM_TYPE"
+        }
+    },
     "properties": {
+        "name": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "name",
+            "documentation": "Name of this property in the model.",
+            "is_mandatory": true,
+            "type": "String"
+        },
+        "is_mandatory": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_mandatory",
+            "documentation": "True if this property is mandatory in its class.",
+            "type": "Boolean"
+        },
+        "is_computed": {
+            "_type": "P_BMM_SINGLE_PROPERTY",
+            "name": "is_computed",
+            "documentation": "True if this property is computed rather than stored in objects of this class.",
+            "type": "Boolean"
+        },
+        "type": {
+            "_type": "P_BMM_SINGLE_PROPERTY_OPEN",
+            "name": "type",
+            "documentation": "Formal type of this property.",
+            "is_mandatory": true,
+            "type": "T"
+        },
         "is_im_runtime": {
             "_type": "P_BMM_SINGLE_PROPERTY",
             "name": "is_im_runtime",
@@ -19,19 +50,12 @@
             "documentation": "True if this property was marked with info model `_im_infrastructure_` flag.",
             "type": "Boolean",
             "default": false
-        },
-        "is_composition": {
-            "_type": "P_BMM_SINGLE_PROPERTY",
-            "name": "is_composition",
-            "documentation": "True if this property instance is a compositional sub-part of the owning class instance. Equivalent to 'composition' in UML associations (but missing from UML properties without associations) and also 'cascade-delete' semantics in ER schemas.",
-            "type": "Boolean",
-            "default": false
         }
     },
     "functions": {
         "existence": {
             "name": "existence",
-            "documentation": "Interval form of `0..1`, `1..1` etc, derived from `_is_nullable_`.",
+            "documentation": "Interval form of `0..1`, `1..1` etc, generated from `_is_mandatory_`.",
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",
                 "type": "Multiplicity_interval"
@@ -39,16 +63,13 @@
         },
         "display_name": {
             "name": "display_name",
-            "documentation": "Name of this property to display in UI.",
+            "documentation": "Name of this attribute to display in UI.",
             "result": {
                 "_type": "P_BMM_SIMPLE_TYPE",
                 "type": "String"
             }
         }
     },
-    "invariants": {
-        "Inv_signature_no_args": "signature().arguments = Void"
-    },
-    "package": "org.openehr.lang.bmm.core.feature",
-    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_feature_package"
+    "package": "org.openehr.lang.bmm.core",
+    "specUrl": "https://specifications.openehr.org/releases/LANG/development/bmm.html#_core_package"
 }
