@@ -7,6 +7,22 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: [https://keepachangelog.com/en/1.1.0/](https://keepachangelog.com/en/1.1.0/)
 - Semantic Versioning: [https://semver.org/spec/v2.0.0.html](https://semver.org/spec/v2.0.0.html)
 
+## [0.17.0] - 2026-06-08
+
+### Added
+
+- Tools: JSON Schema `enum` constraints on the `format`, `kind`, `category`, and `component` parameters.
+- Docs: Specification-Driven Development set under `docs/` (requirements, architecture, decision records, traceability), plus `install.md` and `conventions.md`.
+- Build: `make ci` target; the MCP Inspector now runs on the dev Docker network.
+- Config: `MCP_ALLOWED_HOSTS` allow-list for the `streamable-http` transport (SDK ≥ 0.6 DNS-rebinding protection).
+
+### Changed
+
+- Dependencies: upgraded `mcp/sdk` to `^0.6` and `symfony/cache` to `^8`; refreshed Guzzle/Symfony.
+- Docs: restructured `README.md`, `AGENTS.md`, and `CONTRIBUTING.md` for progressive disclosure (compact user-facing README; setup and conventions moved into `docs/`).
+- Resources: regenerated the `LANG` BMM schema resources.
+- Repo: track shared AI-assistant config (`.claude/`, `.cursor/`) and enable the maintainer dev plugin.
+
 ## [0.16.0] - 2026-04-21
 
 ### Added
