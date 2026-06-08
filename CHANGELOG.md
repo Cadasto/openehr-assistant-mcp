@@ -7,6 +7,16 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: [https://keepachangelog.com/en/1.1.0/](https://keepachangelog.com/en/1.1.0/)
 - Semantic Versioning: [https://semver.org/spec/v2.0.0.html](https://semver.org/spec/v2.0.0.html)
 
+## [0.18.0] - 2026-06-08
+
+### Changed
+
+- Tools: retuned CKM archetype/template search scoring — wider status gap (DRAFT now ranks above INITIAL more reliably) and gentler age decay.
+
+### Fixed
+
+- Transport: collapse a duplicated `Host` header before the DNS-rebinding check, fixing 403 "Invalid Host header" behind proxies that send `Host` twice.
+
 ## [0.17.0] - 2026-06-08
 
 ### Added
