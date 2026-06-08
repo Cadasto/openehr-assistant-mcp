@@ -25,7 +25,9 @@ requirements.md  →  architecture.md  →  src/  →  tests/        (forward)
 
 | Document | Role |
 |----------|------|
+| [install.md](install.md) | Hosted & local setup, MCP client configurations (user-facing) |
 | [development.md](development.md) | Docker dev environment, transports, configuration, the discovery-cache gotcha |
+| [conventions.md](conventions.md) | Coding standard (PSR-12) and MCP authoring conventions |
 | [testing.md](testing.md) | PHPUnit, PHPStan, coverage, MCP conformance |
 
 ## How to change the system (SDD flow)

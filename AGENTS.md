@@ -13,6 +13,7 @@ concise conventions layer that links into it.
 - [`docs/decisions/`](docs/decisions/README.md) — Architecture Decision Records (the *why*).
 - [`docs/traceability.md`](docs/traceability.md) — REQ ↔ code ↔ test ↔ ADR matrix.
 - [`docs/development.md`](docs/development.md) · [`docs/testing.md`](docs/testing.md) — Docker dev environment and the test/validation workflow.
+- [`docs/install.md`](docs/install.md) — hosted & local setup and MCP client configurations (user-facing).
 
 > **Maintainer tooling.** Authoring tools/prompts/guides/examples and managing
 > releases for this repo is supported by the
@@ -37,57 +38,21 @@ concise conventions layer that links into it.
 - `resources/`: static assets such as guides, BMM JSON, and terminology files.
 - `tests/`: PHPUnit tests and configuration for tools, prompts, resources, and completion providers.
 
-## Configuration & Environment
+## Configuration & environment
 
-- **Runtime**:
- - Docker services (from `.docker/docker-compose.yml` and `.docker/docker-compose.dev.yml`):
- - `app`: application service used for both production-like and development runs. Dev overrides mount the source and expose port 8343. `ingress`: Caddy reverse proxy. `node`: dev-only service with Node and curl for MCP conformance (`make conformance`) and other npx/curl tooling.
-  - PHP 8.4 provided by multi-stage `.docker/Dockerfile`.
-- **Environment variables**: Configured in `.env` (see `.env.example`). Key variables:
-  - `CKM_API_BASE_URL`: Base URL for the CKM REST API (default: `https://ckm.openehr.org/ckm/rest`).
-  - `LOG_LEVEL`: Monolog logging level (e.g., `debug`).
-  - `HTTP_TIMEOUT`, `HTTP_SSL_VERIFY`: Guzzle client settings.
-  - `XDG_DATA_HOME`: directory for application data, including cache and sessions (default: `/tmp`).
-  - `MCP_ALLOWED_HOSTS`: comma-separated DNS-rebinding allow-list for the `streamable-http` transport (SDK ≥ 0.6; default loopback only). Set to the reverse-proxy host / public domain when deployed behind a proxy.
-- **Server Transports**:
-  - `streamable-http`: Default; in development exposes SSE endpoint on port `:8343` (mapped from Caddy).
-  - `stdio`: For CLI/Desktop clients. Run via `php public/index.php --transport=stdio`.
-- **Versioning**: App version is defined in `src/constants.php` (`APP_VERSION`).
+- **Runtime:** Docker-only (PHP 8.4 via `.docker/Dockerfile`); services `app`, `ingress` (Caddy), and dev-only `node` (conformance / npx). The full env-var table, service detail, and the discovery-cache gotcha live in [`docs/development.md`](docs/development.md).
+- **Transports:** `streamable-http` (default; dev port `:8343`) and `stdio` (`php public/index.php --transport=stdio`).
+- **DNS-rebinding (gotcha):** the `streamable-http` transport (SDK ≥ 0.6) accepts only hosts in `MCP_ALLOWED_HOSTS` (loopback by default); set it to the reverse-proxy host / public domain when deployed behind a proxy.
+- **Versioning:** `APP_VERSION` in `src/constants.php`.
 
-## Coding style and conventions
+## Conventions
 
-- **Coding standard**: 
-  - PSR-12. Use PHP CS Fixer or IDE formatting where available.
-  - Keep methods small; prefer typed signatures. Add phpdoc only when types aren’t self-evident.
-  - Run full test + static analysis before pushing: composer test; composer check:phpstan.
-- **Namespaces**:
-  - Production code uses `Cadasto\OpenEHR\MCP\Assistant\` (mapped to `src/`).
-  - Tests use `Cadasto\OpenEHR\MCP\Assistant\Tests\` (mapped to `tests/`).
-- **Testing conventions**:
-  - Tests live under `tests/` and follow `*Test.php` naming.
-  - Run tests with `composer test` within the dev container or docker compose equivalent (see below at Recommended workflow).
-  - Keep tests unit/integration focused; **mock external HTTP calls** to CKM rather than relying on live APIs.
-- **Commit messages**:
-  - Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) conventions, e.g. `fix(resources): refreshed BMM definitions in resources`, `feat(tools): added new tool for operational templates`.
-- **CHANGELOG.md entries**:
-  - Keep `## [Unreleased]` entries **short and high-level**: one-line bullets naming the artefact class and scope. Do not enumerate individual files, classes, drift fixes, or audit details — those belong in commit messages and PR bodies, not the CHANGELOG.
-- **Branching**:
-  - Use feature branches and pull requests. Standard PR validation runs on every push.
-- **Documentation**:
-  - Use PHPDoc for public methods and classes.
-  - Use Markdown for guides and other documentation.
+Coding standard (PSR-12), namespaces, and MCP capability authoring (tools, prompts, resources, completion providers — including the prompt policy split and the discovery-cache gotcha) are canonical in [`docs/conventions.md`](docs/conventions.md). Process rules when working here:
 
-## MCP conventions (tools, prompts, resources)
-
-- **Tools**: in `src/Tools`, annotate public methods with `#[McpTool(name: '...')]` to expose MCP tools.
-- **Prompts**: in `src/Prompts`, annotate classes with `#[McpPrompt(name: '...')]` to expose MCP prompts. Prompt classes should extend `Cadasto\OpenEHR\MCP\Assistant\Prompts\AbstractPrompt` to load their messages from YAML resources via `$this->loadPromptMessages('prompt_name')`.
-  - **Prompt policy split (rule of thumb)**: put global, always-applicable policy (tool discipline, no guessing, workflow principles) in `resources/server-instructions.md`; keep `resources/prompts/*.md` focused on task-specific constraints, required output structure, and domain-specialized rules.
-- **Resources**:
-  - `Guides` provides `openehr://guides/{category}/{name}` resources and registers guide resources at startup. Categories: `archetypes`, `templates`, `aql` (AQL principles, syntax, idioms-cheatsheet, checklist), `simplified_formats` (Flat/Structured principles, rules, idioms-cheatsheet, checklist), `specs` (per-document openEHR spec digests, e.g. `rm-ehr`, `rm-data_types`, `am-Overview`, `am2-ADL2`, `sm-openehr_platform`), `howto` (toolchain how-to guides such as `spec-lookup`).
-  - `Examples` provides `openehr://examples/{kind}/{name}` resources and registers curated example artefacts at startup. Kinds: `aql` (reference AQL queries), `flat` / `structured` (paired simplified-format JSON payloads), `archetypes` (gold-standard CKM-published ADL archetypes covering OBSERVATION, EVALUATION, INSTRUCTION, ACTION, CLUSTER, COMPOSITION, ADMIN_ENTRY). `aql` / `flat` / `structured` files are Markdown (metadata header + fenced code block); `archetypes` files are native `.adl` served as `text/plain`. Search via `examples_search`, fetch via `examples_get`.
-  - `TypeSpecifications` provides `openehr://spec/type/{component}/{name}` resource template.
-  - `Terminologies` provides `openehr://terminology` resource.
-- **Completion providers** live in `src/CompletionProviders` and are annotated with `#[CompletionProvider]` to suggest parameter values.
+- **Commits:** [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) with a scope, e.g. `feat(tools):`, `fix(resources):`, `docs:`.
+- **CHANGELOG.md:** keep `## [Unreleased]` entries **short and high-level** — one-line bullets naming the artefact class and scope; do not enumerate individual files, classes, or audit details (those belong in commit messages / PR bodies).
+- **Branching:** feature branches + pull requests; PR validation runs on every push.
+- **Before pushing:** run `make ci` (PHPStan + tests).
 
 ## Discovering and running developer tools
 
@@ -109,14 +74,9 @@ make conformance # MCP conformance suite (stack must be up)
 
 ### Looking up openEHR specification content
 
-When authoring or editing guides, prompts, BMM JSON, terminology data, AQL grammar notes, or any artifact that must stay aligned with the upstream openEHR standards, **do not guess or rely on training memory**. Retrieve from the authoritative source on `specifications.openehr.org`, preferring the cheapest representation that answers the question:
+When authoring or editing guides, prompts, BMM JSON, terminology, AQL grammar, or anything that must track the upstream openEHR standards, **do not guess or rely on training memory** — retrieve from `specifications.openehr.org`, cheapest representation first: `llms.txt` index → `.md` twin → structured `/api/*.json` → HTML. The Markdown twin omits per-class attribute/function/invariant tables; use `type_specification_get` (BMM-backed) or the HTML page for those. Track the `development` branch, not `latest`.
 
-1. **Site index** — `https://specifications.openehr.org/llms.txt` enumerates every release, document, and JSON endpoint; use it to resolve doc phrases to canonical URLs and confirm the current `latest` release tag.
-2. **Markdown twin** — every `*.html` spec page has a `.md` counterpart (e.g. `releases/RM/latest/ehr.html` → `releases/RM/latest/ehr.md`). Prefer it for prose, rationale, and examples. **Caveat:** the Markdown representation omits the per-class tables of attributes, functions, invariants, and inherited members — for those, fall through to the HTML page or a structured API.
-3. **Structured APIs** — `/api/components.json`, `/api/classes.json`, `/api/releases.json` for component enumeration, class lookup, and release-tag resolution.
-4. **Only then** scrape the HTML page.
-
-The full policy, fall-through order, and failure modes live in the [`spec-lookup` how-to guide](resources/guides/howto/spec-lookup.md). AI agents running against the MCP server itself should read it via `guide_get(category="howto", name="spec-lookup")` — this is also stated in `resources/server-instructions.md`.
+The full policy, fall-through order, and failure modes live in the [`spec-lookup` how-to](resources/guides/howto/spec-lookup.md) (read via `guide_get(category="howto", name="spec-lookup")`, also stated in `resources/server-instructions.md`) and [ADR-0005](docs/decisions/0005-spec-aligned-content-retrieval.md).
 
 ### Guides and specification alignment
 
