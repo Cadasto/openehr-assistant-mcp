@@ -85,7 +85,8 @@ readonly final class TypeSpecificationService
      */
     #[McpTool(
         name: 'type_specification_search',
-        annotations: new ToolAnnotations(readOnlyHint: true),
+        title: 'Search RM/AM type specifications',
+        annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: false),
         outputSchema: [
             'type' => 'object',
             'properties' => [
@@ -159,7 +160,7 @@ readonly final class TypeSpecificationService
      *   The openEHR Type name (e.g. `DV_QUANTITY`, `COMPOSITION`, etc.)
      *
      * @param string $component
-     *   Optional, the openEHR Component name (e.g. `RM`, `AM`, `BASE`, etc.), for better matching or filtering; if omitted, the first matching openEHR Type specification is returned.
+     *   Optional openEHR Component name, for better matching or filtering; if omitted, the first matching openEHR Type specification is returned.
      *
      * @return array<string, mixed>
      *   The openEHR Type as BMM JSON.
@@ -169,7 +170,8 @@ readonly final class TypeSpecificationService
      */
     #[McpTool(
         name: 'type_specification_get',
-        annotations: new ToolAnnotations(readOnlyHint: true),
+        title: 'Get RM/AM type specification',
+        annotations: new ToolAnnotations(readOnlyHint: true, idempotentHint: true, openWorldHint: false),
         outputSchema: [
             'type' => 'object',
             'additionalProperties' => true,

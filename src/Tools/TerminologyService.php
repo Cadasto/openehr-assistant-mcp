@@ -39,7 +39,8 @@ readonly final class TerminologyService
      */
     #[McpTool(
         name: 'terminology_resolve',
-        annotations: new ToolAnnotations(readOnlyHint: true),
+        title: 'Resolve openEHR terminology',
+        annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: false),
         outputSchema: [
             'type' => 'object',
             'properties' => [

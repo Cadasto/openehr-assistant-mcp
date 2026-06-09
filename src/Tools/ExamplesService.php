@@ -47,14 +47,15 @@ final readonly class ExamplesService
      *   Leave empty to list all examples in the optional kind filter.
      *
      * @param string $kind
-     *   Optional kind filter: "aql" | "flat" | "structured" | "archetypes". Leave empty to search all kinds.
+     *   Optional artefact-kind filter (AQL query, FLAT/STRUCTURED JSON payload, or native archetype). Leave empty to search all kinds.
      *
      * @return array<string, array<int, array<string, string|int>>>
      *   A list of matching examples with short snippets and URIs.
      */
     #[McpTool(
         name: 'examples_search',
-        annotations: new ToolAnnotations(readOnlyHint: true),
+        title: 'Search openEHR examples',
+        annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: false),
         outputSchema: [
             'type' => 'object',
             'properties' => [
@@ -126,7 +127,7 @@ final readonly class ExamplesService
      *   Canonical example URI (openehr://examples/{kind}/{name}). Optional when kind and name are provided.
      *
      * @param string $kind
-     *   Example kind: "aql" | "flat" | "structured" | "archetypes". Optional when URI is provided.
+     *   Artefact kind (AQL query, FLAT/STRUCTURED JSON payload, or native archetype). Optional when URI is provided.
      *
      * @param string $name
      *   Example filename without extension. Optional when URI is provided.
@@ -136,7 +137,8 @@ final readonly class ExamplesService
      */
     #[McpTool(
         name: 'examples_get',
-        annotations: new ToolAnnotations(readOnlyHint: true),
+        title: 'Get openEHR example',
+        annotations: new ToolAnnotations(readOnlyHint: true, idempotentHint: true, openWorldHint: false),
     )]
     public function get(
         string $uri = '',
