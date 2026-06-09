@@ -7,6 +7,18 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: [https://keepachangelog.com/en/1.1.0/](https://keepachangelog.com/en/1.1.0/)
 - Semantic Versioning: [https://semver.org/spec/v2.0.0.html](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased]
+
+### Added
+
+- Tools: human-readable titles and behaviour annotations (read-only / idempotent / open-world hints) across all tools; optional `rmClass` filter on `ckm_archetype_search`.
+- Guides: new `templates/serialization-formats` (OET vs OPT vs ADL-Designer `.t.json` vs web-template) and Dutch `archetypes/language-standards-nl`; OET attribute reference and a `DV_SCALE` vs `DV_ORDINAL` rating-scale idiom added to the archetype/template guides.
+
+### Changed
+
+- Tools: improved CKM search recall and ranking (wider candidate window, exact-concept boost, scoring aliases); trimmed redundant value-lists from parameter descriptions where an `enum` constraint already conveys the options.
+- Guides: refined archetype lint rules (idiomatic `ITEM_TREE.items {0..*}`, translation-accuracy and prose↔slot consistency checks) and a reuse-survey containers-vs-content note.
+
 ## [0.18.0] - 2026-06-08
 
 ### Changed
