@@ -66,6 +66,23 @@ Use DV_CODED_TEXT when values come from a value set.
 Use DV_QUANTITY when you have magnitude + units.
 **Idiom:** constrain units and/or magnitude where clinically universal.
 
+### Ordinal vs scale rating leaf (DV_ORDINAL vs DV_SCALE)
+
+Ordered rating scale, coded `symbol` per rung (codes from `term_definitions`). Pick by rung **value** type:
+- **DV_ORDINAL** — integer rungs (`value` Integer): Apgar, pain `0/+/++/+++`.
+- **DV_SCALE** (RM ≥ 1.1.0) — non-integer rungs (`value` Real): modified Borg CR10 with a `0.5` step.
+
+**Idiom:** value/symbol pairs as a `<value>|[local::<at-code>]` list.
+
+```cadl
+value matches { DV_ORDINAL matches {            -- integer rungs
+    0|[local::at0010], 1|[local::at0011], 2|[local::at0012], 3|[local::at0013] } }
+value matches { DV_SCALE matches {              -- Real rungs, incl. 0.5
+    0.0|[local::at0020], 0.5|[local::at0021], 1.0|[local::at0022] } }   -- ...
+```
+
+> ADL 1.4 has no profiled `C_DV_SCALE`; the form mirrors DV_ORDINAL with Real values — confirm your toolchain's serialization. **Caveat:** DV_SCALE needs RM 1.1.0-aware tooling; keep DV_ORDINAL for integer-only scales and existing data.
+
 ---
 
 ## 6. Value Sets (ac-codes)
@@ -98,6 +115,8 @@ Use DV_QUANTITY when you have magnitude + units.
 - **state** = relevant subject state
 
 Never encode workflow ordering.
+
+**Worked example (event `state` + observation `protocol`):** `openehr://examples/archetypes/openEHR-EHR-OBSERVATION.blood_pressure.v2` — subject state on the **event** (Position, Confounding factors), method/instrument facts in the observation `protocol` (Cuff size, Location, Method).
 
 ---
 ## 10. "Syntax Fix ≠ Semantic Change"

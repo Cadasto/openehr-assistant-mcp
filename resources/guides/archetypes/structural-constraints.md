@@ -60,6 +60,8 @@ Constraints:
 - **ELEMENT** = atomic value
 - Never use clusters as generic containers
 
+**Ordered rating-scale leaf:** DV_ORDINAL (integer rungs) or DV_SCALE (Real rungs, RM ≥ 1.1.0) — see `openehr://guides/archetypes/adl-idioms-cheatsheet` §5.
+
 ---
 
 ## 6. Avoid Over-Constraint

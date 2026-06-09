@@ -47,7 +47,7 @@ final class GuideService
      *   The query string describing what guidance you need (e.g. "cardinality vs occurrences", "slot constraints"). Leave empty to search all guides.
      *
      * @param string $category
-     *   Optional guide category filter: "archetypes", "templates", "aql", "simplified_formats" (authoring guides), "specs" (per-document openEHR spec digests), "howto" (toolchain how-to guides). Leave empty to search all categories.
+     *   Optional guide category filter. Categories: authoring guides for archetypes/templates/AQL/simplified_formats, plus "specs" (per-document openEHR spec digests) and "howto" (toolchain how-to guides). Leave empty to search all categories.
      *
      * @param string $taskType
      *   Optional task hint (e.g. "lint", "review", "refactor", "author"). If supplied, matches guides containing it.
@@ -57,7 +57,8 @@ final class GuideService
      */
     #[McpTool(
         name: 'guide_search',
-        annotations: new ToolAnnotations(readOnlyHint: true),
+        title: 'Search openEHR guides',
+        annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: false),
         outputSchema: [
             'type' => 'object',
             'properties' => [
@@ -163,7 +164,7 @@ final class GuideService
      *   Canonical guide URI (openehr://guides/{category}/{name}). Optional when category and name are provided.
      *
      * @param string $category
-     *   Guide category: "archetypes", "templates", "aql", "simplified_formats" (authoring guides), "specs" (per-document openEHR spec digests), "howto" (toolchain how-to guides). Optional when URI is provided.
+     *   Guide category (authoring guides for archetypes/templates/AQL/simplified_formats, plus "specs" per-document spec digests and "howto" toolchain guides). Optional when URI is provided.
      *
      * @param string $name
      *   Guide filename without extension. Optional when URI is provided.
@@ -173,7 +174,8 @@ final class GuideService
      */
     #[McpTool(
         name: 'guide_get',
-        annotations: new ToolAnnotations(readOnlyHint: true),
+        title: 'Get openEHR guide',
+        annotations: new ToolAnnotations(readOnlyHint: true, idempotentHint: true, openWorldHint: false),
     )]
     public function get(
         string $uri = '',
@@ -232,7 +234,8 @@ final class GuideService
      */
     #[McpTool(
         name: 'guide_adl_idiom_lookup',
-        annotations: new ToolAnnotations(readOnlyHint: true),
+        title: 'Look up ADL idiom',
+        annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: false),
         outputSchema: [
             'type' => 'object',
             'properties' => [

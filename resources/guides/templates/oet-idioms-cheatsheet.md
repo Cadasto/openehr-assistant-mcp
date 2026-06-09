@@ -1,7 +1,7 @@
 # OET Idioms Cheat Sheet
 
 **Purpose:** Fast grounding for writing and reviewing openEHR templates (OET)
-**Related:** openehr://guides/templates/oet-syntax, openehr://guides/templates/rules
+**Related:** openehr://guides/templates/oet-syntax, openehr://guides/templates/serialization-formats, openehr://guides/templates/rules
 **Keywords:** OET, OPT, constraint, syntax, idioms, cheat sheet, minimal, fast, QA, CGEM, event, persistent
 
 ---
@@ -11,6 +11,8 @@
 - **Aggregation**: Picking archetypes and placing them in slots.
 - **Narrowing**: Tightening constraints (occurrences, values, types) on the underlying archetypes.
 - **OET** is for designers; **OPT** is for systems.
+
+> Per-element attribute table + worked snippets: openehr://guides/templates/oet-syntax (Attribute Reference). OET vs OPT vs `.t.json` vs web template: openehr://guides/templates/serialization-formats.
 
 ---
 

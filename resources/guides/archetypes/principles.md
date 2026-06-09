@@ -44,6 +44,8 @@ Changes must preserve data validity where possible. Incompatible changes require
 
 Reuse existing archetypes wherever possible. **Slots** enable controlled inclusion of other archetypes and should be **constrained explicitly** (avoid wildcards). Specialise only for true semantic subtypes, not convenience; maintain clear lineage to parent artefacts.
 
+**Reuse-survey heuristic — containers vs content:** group CKM candidates by **RM class**. Container-level siblings (COMPOSITION↔COMPOSITION, SECTION↔SECTION, CLUSTER↔CLUSTER) are direct substitutes for what you are designing; ENTRY-level archetypes (OBSERVATION/EVALUATION/INSTRUCTION/ACTION) are content **slotted into** it — a different reuse question.
+
 ---
 
 ## Archetypes Model Data, Not Process
