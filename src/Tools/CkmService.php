@@ -17,9 +17,12 @@ use Psr\Log\LoggerInterface;
 final readonly class CkmService
 {
     private const int DEFAULT_MAX_RESULTS = 20;
+    /** Caps the number of items *returned* to the caller after re-ranking. */
     private const int MAX_RESULTS_LIMIT = 50;
-    /** Multiplier for API fetch size so ranking/sorting has more candidates; then slice to maxResults. */
-    private const float FETCH_SIZE_MULTIPLIER = 1.5;
+    /** Fetch a wider candidate window than requested so re-ranking can surface concepts CKM ranked low. */
+    private const float FETCH_SIZE_MULTIPLIER = 3.0;
+    /** Hard cap on the API fetch window, decoupled from MAX_RESULTS_LIMIT (the returned-count cap). */
+    private const int FETCH_SIZE_LIMIT = 60;
 
     // Scoring weights (wider scale for clearer ranking)
     private const int SCORE_ARCHETYPE_ID_MATCH = 100;
@@ -27,6 +30,8 @@ final readonly class CkmService
     private const int SCORE_PROJECT_NAME_MATCH = 25;
     private const int SCORE_PROJECT_BUCKET = 10;
     private const int SCORE_ALL_KEYWORDS_BONUS = 80;
+    /** Bonus when the full normalized query equals the candidate's display name or its concept-from-id. */
+    private const int SCORE_EXACT_CONCEPT_BONUS = 120;
     private const int SCORE_STATUS_PUBLISHED = 75;
     private const int SCORE_STATUS_TEAMREVIEW = 25;
     private const int SCORE_STATUS_DRAFT = -25;
@@ -61,16 +66,23 @@ final readonly class CkmService
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
      *
+     * @param string $rmClass
+     *   Optional RM class filter on the archetype-id (e.g. `COMPOSITION`, `OBSERVATION`, `CLUSTER`); case-insensitive; empty (default) = no filter.
+     *
      * @return array<string,mixed>
      *   A list of CKM Archetype metadata entries.
      *   Entries usually include a CID identifier, archetypeId, display name, status, and other descriptive fields.
      *
      * @throws \RuntimeException
      *   If the CKM API request fails (network error, upstream outage, invalid response).
+     *
+     * @throws \InvalidArgumentException
+     *   If $rmClass is provided but is not a valid RM class token.
      */
     #[McpTool(
         name: 'ckm_archetype_search',
-        annotations: new ToolAnnotations(readOnlyHint: true),
+        title: 'Search CKM archetypes',
+        annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: true),
         outputSchema: [
             'type' => 'object',
             'properties' => [
@@ -96,11 +108,12 @@ final readonly class CkmService
             ],
         ]
     )]
-    public function archetypeSearch(string $keyword, int $maxResults = self::DEFAULT_MAX_RESULTS, bool $requireAllSearchWords = true): array
+    public function archetypeSearch(string $keyword, int $maxResults = self::DEFAULT_MAX_RESULTS, bool $requireAllSearchWords = true, string $rmClass = ''): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
-        $fetchSize = min(self::MAX_RESULTS_LIMIT, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER));
+        $fetchSize = min(self::FETCH_SIZE_LIMIT, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER));
+        $rmClass = $this->normalizeRmClassFilter($rmClass);
         try {
             $response = $this->apiClient->get('v1/archetypes', [
                 RequestOptions::QUERY => [
@@ -136,6 +149,14 @@ final readonly class CkmService
                 ];
                 return array_filter($new, fn($v) => $v !== null);
             }, $data);
+
+            // Optional RM-class filter: keep only items whose archetype-id RM-class segment matches.
+            if ($rmClass !== '') {
+                $data = array_values(array_filter(
+                    $data,
+                    fn(array $item): bool => $this->archetypeRmClass($item['archetypeId'] ?? null) === $rmClass
+                ));
+            }
 
             // Sort by score (highest first), then slice to requested maxResults
             usort($data, function ($a, $b) {
@@ -177,7 +198,7 @@ final readonly class CkmService
      *   Archetype CID identifier (e.g. "1013.1.7850") or archetype-id (e.g. "openEHR-EHR-OBSERVATION.blood_pressure.v1").
      *
      * @param string $format
-     *   Desired representation: "adl", "xml" or "mindmap" (case-insensitive); defaults to "adl".
+     *   Desired representation (case-insensitive); see the returned content/formats above for what each value means. Defaults to "adl".
      *
      * @return TextContent
      *   The Archetype definition in the chosen format in a text content code block.
@@ -187,7 +208,8 @@ final readonly class CkmService
      */
     #[McpTool(
         name: 'ckm_archetype_get',
-        annotations: new ToolAnnotations(readOnlyHint: true)
+        title: 'Get CKM archetype',
+        annotations: new ToolAnnotations(readOnlyHint: true, idempotentHint: true, openWorldHint: true)
     )]
     public function archetypeGet(
         string $identifier,
@@ -254,7 +276,8 @@ final readonly class CkmService
      */
     #[McpTool(
         name: 'ckm_template_search',
-        annotations: new ToolAnnotations(readOnlyHint: true),
+        title: 'Search CKM templates',
+        annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: true),
         outputSchema: [
             'type' => 'object',
             'properties' => [
@@ -283,7 +306,7 @@ final readonly class CkmService
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
-        $fetchSize = min(self::MAX_RESULTS_LIMIT, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER));
+        $fetchSize = min(self::FETCH_SIZE_LIMIT, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER));
         try {
             $response = $this->apiClient->get('v1/templates', [
                 RequestOptions::QUERY => [
@@ -358,7 +381,7 @@ final readonly class CkmService
      *   Template CID identifier (e.g. "1013.26.244").
      *
      * @param string $format
-     *   Desired representation: "oet" (design-time template source), "opt" (flattened operational template, containing all archetype constraints); defaults to "oet".
+     *   Desired representation; see the returned content/formats above for what each value means. Defaults to "oet".
      *
      * @return TextContent
      *   The Template definition in the chosen format in a text content code block.
@@ -368,7 +391,8 @@ final readonly class CkmService
      */
     #[McpTool(
         name: 'ckm_template_get',
-        annotations: new ToolAnnotations(readOnlyHint: true)
+        title: 'Get CKM template',
+        annotations: new ToolAnnotations(readOnlyHint: true, idempotentHint: true, openWorldHint: true)
     )]
     public function templateGet(
         string $identifier,
@@ -424,6 +448,10 @@ final readonly class CkmService
         if ($keywords !== [] && $keywordsMatched === count($keywords)) {
             $score += self::SCORE_ALL_KEYWORDS_BONUS;
         }
+        // Exact-concept boost: query equals the display name or the concept token derived from the archetype-id.
+        if ($this->matchesExactConcept($keyword, [$name, $this->conceptFromArchetypeId($archetypeId)])) {
+            $score += self::SCORE_EXACT_CONCEPT_BONUS;
+        }
         $score += $this->projectBucketBonus($projectName);
         $score += $this->scoreStatus($item['status'] ?? null);
         $score += $this->agePenalty(
@@ -457,6 +485,10 @@ final readonly class CkmService
         if ($keywords !== [] && $keywordsMatched === count($keywords)) {
             $score += self::SCORE_ALL_KEYWORDS_BONUS;
         }
+        // Exact-concept boost: templates have no archetype-id, so match the display name only.
+        if ($this->matchesExactConcept($keyword, [$name])) {
+            $score += self::SCORE_EXACT_CONCEPT_BONUS;
+        }
         $score += $this->projectBucketBonus($projectName);
         $score += $this->scoreStatus($item['status'] ?? null);
         $score += $this->agePenalty(
@@ -465,6 +497,98 @@ final readonly class CkmService
             $item['status'] ?? null
         );
         return $score;
+    }
+
+    /**
+     * True when the normalized keyword equals any candidate (with SOAP↔SOEP scoring aliases applied).
+     *
+     * @param array<int, mixed> $candidates Display name and/or concept-from-id values.
+     */
+    private function matchesExactConcept(string $keyword, array $candidates): bool
+    {
+        $needle = $this->normalizeConcept($keyword);
+        if ($needle === '') {
+            return false;
+        }
+        $needleAlias = $this->applyScoringAlias($needle);
+        foreach ($candidates as $candidate) {
+            if (!is_string($candidate) || $candidate === '') {
+                continue;
+            }
+            $value = $this->normalizeConcept($candidate);
+            if ($value === '') {
+                continue;
+            }
+            if ($value === $needle || $this->applyScoringAlias($value) === $needleAlias) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Concept token from an archetype-id: `…COMPOSITION.health_summary.v1` → `health summary`; null if not derivable. */
+    private function conceptFromArchetypeId(?string $archetypeId): ?string
+    {
+        if ($archetypeId === null || $archetypeId === '') {
+            return null;
+        }
+        $segments = explode('.', $archetypeId);
+        if (count($segments) < 3) {
+            return null;
+        }
+        $concept = $segments[1];
+        if ($concept === '') {
+            return null;
+        }
+        return str_replace('_', ' ', $concept);
+    }
+
+    /** Lowercase, trim, and collapse internal whitespace for concept/name comparison. */
+    private function normalizeConcept(string $value): string
+    {
+        $value = mb_strtolower(trim($value));
+        return (string) preg_replace('/\s+/', ' ', $value);
+    }
+
+    /** Minimal scoring aliases (SOAP↔SOEP) for matching only — never sent to the CKM API query. Extend as needed. */
+    private function applyScoringAlias(string $value): string
+    {
+        $aliases = [
+            'soap' => 'soap',
+            'soep' => 'soap',
+        ];
+        return $aliases[$value] ?? $value;
+    }
+
+    /** Validate/uppercase an RM-class filter token; throws \InvalidArgumentException on a malformed non-empty value. */
+    private function normalizeRmClassFilter(string $rmClass): string
+    {
+        $rmClass = strtoupper(trim($rmClass));
+        if ($rmClass === '') {
+            return '';
+        }
+        if (preg_match('/^[A-Z][A-Z_]*$/', $rmClass) !== 1) {
+            throw new \InvalidArgumentException(sprintf('Invalid RM class filter: "%s".', $rmClass));
+        }
+        return $rmClass;
+    }
+
+    /** RM-class segment of an archetype-id: `…-COMPOSITION.x.v1` → `COMPOSITION`; null if not parseable. */
+    private function archetypeRmClass(?string $archetypeId): ?string
+    {
+        if ($archetypeId === null || $archetypeId === '') {
+            return null;
+        }
+        $head = strstr($archetypeId, '.', true);
+        if ($head === false || $head === '') {
+            return null;
+        }
+        $lastDash = strrpos($head, '-');
+        $token = $lastDash === false ? $head : substr($head, $lastDash + 1);
+        if ($token === '' || preg_match('/^[A-Za-z][A-Za-z_]*$/', $token) !== 1) {
+            return null;
+        }
+        return strtoupper($token);
     }
 
     /**
