@@ -25,7 +25,7 @@
 ## C. Structural Modelling
 
 - **C1:** RM structures SHALL be used as intended; do not compensate for missing application features.
-- **C2:** Cardinalities SHALL be justified by clinical reality, not UI convenience. Container cardinality defaults to `1..*` (at least one child); empty containers are semantically invalid.
+- **C2:** Cardinalities SHALL be justified by clinical reality, not UI convenience. Container cardinality defaults to `1..*`; empty containers are invalid. **Exception:** `ITEM_TREE.items {0..*}` is idiomatic when a contained ELEMENT is mandatory (e.g. `ecg_result.v1`) — flag only genuinely empty/all-optional containers.
 - **C3:** Maximise optionality in archetypes; restriction belongs in templates.
 - **C4:** Leaf nodes SHALL use appropriate RM data types (DV_QUANTITY, DV_CODED_TEXT, etc.).
 - **C5:** Repeating structures SHALL use RM repetition, not duplicated nodes.
@@ -43,6 +43,7 @@
 - **D6:** Single inheritance only; no multiple specialisation parents.
 - **D7:** Specialised node identifiers use dot-extension notation (e.g., `at0001.1` at depth 1, `at0001.0.1` at depth 2).
 - **D8:** Use internal references (`use_node`) to reuse identical structures rather than duplicating.
+- **D9 — Prose↔slot consistency:** flag `use`/`misuse`/`comment` text naming archetype ids that no slot `include` regex admits (WARNING if a slot actually excludes it).
 
 ---
 
@@ -54,6 +55,7 @@
 - **E4:** Bindings SHALL reflect semantic equivalence, not approximate mappings.
 - **E5:** Translations SHALL NOT alter computable semantics, identifiers, or structure.
 - **E6:** Translations SHOULD use authoritative clinical language in the target locale.
+- **E7 — Translation accuracy:** flag `*(en)` placeholder stubs in non-English `term_definitions` and copy/paste-wrong labels (a rubric defect even when E5 semantics hold).
 
 ---
 

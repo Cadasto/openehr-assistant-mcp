@@ -279,6 +279,11 @@ Language-specific extension guides expand this base guide with conventions, term
   - Sourced from openEHR KLIM archetype resources and analysis of CKM Norwegian translations
   - Includes glossary maintenance procedures for evolving terminology
 
+- **Dutch** (nl): `openehr://guides/archetypes/language-standards-nl`
+  - Dutch case conventions, de/het gender and adjective inflection, metadata patterns, seed terminology glossary
+  - Sourced from Nictiz (zib's) and the Dutch SNOMED CT edition / Nationale Release; seed glossary from a real translation task
+  - Includes glossary maintenance procedures and flags unverified terms "(needs review)" to avoid fabricated preferred terms
+
 ### Future Language Guides
 
 Language-specific guides MAY be created following the pattern: `language-standards-<iso-639-1-code>.md`
