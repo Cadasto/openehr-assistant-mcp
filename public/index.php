@@ -63,9 +63,11 @@ try {
     $builder = Server::builder()
         ->setServerInfo(APP_TITLE, APP_VERSION, APP_DESCRIPTION, [new Icon(APP_ICON)])
         ->setDiscovery(APP_DIR, ['src/Prompts', 'src/Tools', 'src/Resources'], cache: $cache)
-        // mcp/sdk 0.7.0 makes element loading lazy by default, so a discovery /
-        // loader failure would surface on the first request instead of at build().
-        // Keep eager loading so a broken capability fails fast at startup.
+        // mcp/sdk 0.7.0 makes element loading lazy by default. Force eager
+        // loading so a broken capability fails at build() (on every request
+        // under php-fpm, and at startup under stdio) rather than on first use —
+        // and so the advertised capability set always matches what the registry
+        // can actually load (lazy mode can advertise tools it then fails to list).
         ->setLazyLoading(false)
         ->setSession(new FileSessionStore(APP_DATA_DIR . '/sessions', ttl: 10 * 60))
         ->setProtocolVersion(ProtocolVersion::V2025_03_26)
@@ -142,16 +144,18 @@ try {
     exit(0);
 
 } catch (\Throwable $e) {
+    // (string) $e carries the message, file:line, stack trace AND the chained
+    // getPrevious() cause. That chain matters now that eager discovery loading
+    // (setLazyLoading(false)) surfaces wrapped loader failures here, whose root
+    // cause (malformed attribute, reflection error) lives in the previous.
+    $message = sprintf("[MCP SERVER CRITICAL ERROR]\n%s\n", (string)$e);
     $stderr = fopen('php://stderr', 'w');
     if ($stderr !== false) {
-        $message = sprintf(
-            "[MCP SERVER CRITICAL ERROR]\nError: %s\nFile: %s:%d\n%s\n",
-            $e->getMessage(),
-            $e->getFile(),
-            $e->getLine(),
-            $e->getTraceAsString()
-        );
         fwrite($stderr, $message);
+        fclose($stderr);
+    } else {
+        // stderr unavailable — fall back so the crash is never fully silenced.
+        error_log($message);
     }
     exit(1);
 }
