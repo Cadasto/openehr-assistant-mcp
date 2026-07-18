@@ -5,6 +5,7 @@ Interpret and explain a given Flat or Structured format instance.
 
 Task-specific guidance:
 - Explain payload semantics using `openehr://guides/simplified_formats/principles`, `openehr://guides/simplified_formats/rules`, `openehr://guides/simplified_formats/checklist`. For the normative REST-level spec consult `openehr://guides/specs/its-rest-simplified_formats`.
+- The FLAT/STRUCTURED path segments are the web-template node ids derived from the OPT; consult `openehr://guides/templates/web-template` for the `id` vs `aqlPath` distinction and the leaf-input suffixes.
 - Clarify how JSON fields map to template constraints and RM meaning.
 - Identify **context** (ctx/ or ctx object): language, territory, composer, time, setting, etc.
 - Explain **path structure**: template/root id, node ids, instance indices (:0, :1), pipe suffixes (|magnitude, |code), underscore-prefixed RM attributes.
