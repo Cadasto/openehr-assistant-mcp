@@ -8,9 +8,9 @@
 
 ## What Simplified Formats Are
 
-Simplified Formats are **JSON serializations** of openEHR data that use **human-readable field identifiers** derived from the Operational Template (OPT) instead of canonical archetype paths and full RM structure. They are not a query or modelling language—they are a **serialization format** for composition data.
+Simplified Formats are **JSON serializations** of openEHR data that use **human-readable field identifiers** derived from the Operational Template (OPT) instead of canonical archetype paths and full RM structure. They are not a query or modelling language—they are a **serialization format** for composition data. The format originated as the Better (Marand) *Web Template* serialization, was adopted and extended by EHRbase as *Simplified Data Template (SDT)*, and is now standardised in the openEHR ITS-REST *Simplified Formats* specification (STABLE).
 
-- **Flat format**: key–value pairs at a single level; keys are full paths (template_id + node path + suffixes).
+- **Flat format**: key–value pairs at a single level; keys are full paths (root node id derived from the template id + node path + suffixes).
 - **Structured format**: nested JSON preserving hierarchy; same semantics, different structure.
 - **MIME types**: Flat `application/openehr.wt.flat+json`; Structured `application/openehr.wt.structured+json`.
 
@@ -41,7 +41,7 @@ Bidirectional conversion between simplified and canonical is **machine-generated
 2. **Paths, not columns**: Keys are paths (template_id/node_id/... with instance indices and attribute suffixes), not arbitrary names.
 3. **Context first**: Mandatory context (e.g. language, territory) and optional context (composer, time, setting) are separated; use `ctx/` prefix in Flat.
 4. **RM attributes**: Optional RM attributes use underscore prefix (`_uid`, `_end_time`, `_normal_range`); pipe suffix (`|magnitude`, `|code`) for DV and party attributes.
-5. **Instance indices**: Repeating nodes use zero-based colon notation (`any_event:0`, `any_event:1`).
+5. **Instance indices**: Repeating nodes (max occurrences > 1 or unbounded) use zero-based colon notation (`any_event:0`, `any_event:1`).
 
 ---
 

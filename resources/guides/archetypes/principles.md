@@ -1,8 +1,8 @@
 # openEHR Archetype Design Principles
 
 **Scope:** Foundational principles for openEHR archetype modelling, community modelling practices
-**Related:** openehr://guides/archetypes/rules, openehr://guides/archetypes/adl-idioms-cheatsheet, openehr://guides/archetypes/checklist, openehr://guides/specs/am-Overview, openehr://guides/specs/am2-ADL2, openehr://guides/specs/am2-AOM2, openehr://guides/specs/am-Identification
-**Keywords:** archetype, design, principles, modelling, foundation
+**Related:** openehr://guides/archetypes/rules, openehr://guides/archetypes/adl-idioms-cheatsheet, openehr://guides/archetypes/checklist, openehr://guides/templates/cgem-framework, openehr://guides/specs/am-Overview, openehr://guides/specs/am2-ADL2, openehr://guides/specs/am2-AOM2, openehr://guides/specs/am-Identification
+**Keywords:** archetype, design, principles, modelling, foundation, CGEM, Instruction, Action, Observation
 
 ---
 
@@ -57,6 +57,8 @@ Archetypes describe what data means, not when or how it is collected. Workflow a
 ## Instruction, Action, and Observation
 
 Match the archetype’s root to the concept: **order/request with fulfilment tracking** → use or reuse **Instruction** (and **Action**) archetypes; **one-off assessment or simple record** → use **Observation** or other entry types. Do not combine orders and observations in a single archetype.
+
+This choice aligns with the CGEM framework's distinction between **Managed Response** (a tracked order cycle → Instruction/Action + the Instruction State Machine) and **Event Assessment** (a discrete recording → Observation/Evaluation). Reserve Instruction/Action for genuine order lifecycles; model simple records as plain entries. See **openehr://guides/templates/cgem-framework**.
 
 ---
 

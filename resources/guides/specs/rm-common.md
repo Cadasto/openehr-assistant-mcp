@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/RM/development/common.html
 **Markdown URL:** https://specifications.openehr.org/releases/RM/development/common.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-data_types, openehr://guides/specs/rm-support
 **Keywords:** LOCATABLE, PATHABLE, PARTY_PROXY, VERSIONED_OBJECT, CONTRIBUTION, AUDIT_DETAILS, ATTESTATION, FEEDER_AUDIT, change control, authored resource
 
@@ -18,7 +18,7 @@ Defines the abstract patterns reused across every higher-level openEHR Reference
 
 ## Scope
 
-- In: root locatability types (`LOCATABLE`, `PATHABLE`), archetype identity (`ARCHETYPED`), inter-object links (`LINK`), party reference proxies (`PARTY_PROXY` hierarchy), feeder-system audit (`FEEDER_AUDIT`), change-control container/version model (`VERSIONED_OBJECT`, `VERSION`, `ORIGINAL_VERSION`, `IMPORTED_VERSION`), commit metadata (`CONTRIBUTION`, `AUDIT_DETAILS`, `ATTESTATION`), and the legacy ADL 1.4 authored-resource descriptors.
+- In: root locatability types (`LOCATABLE`, `PATHABLE`), archetype identity (`ARCHETYPED`), inter-object links (`LINK`), party reference proxies (`PARTY_PROXY` hierarchy) and `PARTICIPATION`, feeder-system audit (`FEEDER_AUDIT`), the directory package (versioned `FOLDER` structures), change-control container/version model (`VERSIONED_OBJECT`, `VERSION`, `ORIGINAL_VERSION`, `IMPORTED_VERSION`), commit metadata (`CONTRIBUTION`, `AUDIT_DETAILS`, `ATTESTATION`, `REVISION_HISTORY`), the tags package (lightweight key/value annotations on committed items), and the legacy ADL 1.4 authored-resource descriptors.
 - Out: concrete clinical containers (see `RM/ehr`), party detail modelling (see `RM/demographic`), data value types (see `RM/data_types`), identifiers and terminology interface (see `RM/support`), archetype/template formalisms (`AM`), query (`QUERY`), service APIs (`SM`), and the ADL 2 / BASE replacement of authored-resource descriptors (retained here only for ADL 1.4 compatibility). The design of any "openEHR converter" for feeder-system transformation is explicitly out of scope.
 
 ## Key Classes / Constructs
@@ -32,6 +32,9 @@ Defines the abstract patterns reused across every higher-level openEHR Reference
 - `PARTY_IDENTIFIED` — proxy with a human-readable `name` and a list of formal `identifiers` for non-subject parties.
 - `PARTY_SELF` — proxy denoting the record subject; identity is normally carried only via `EHR_STATUS`.
 - `PARTY_RELATED` — `PARTY_IDENTIFIED` extended with a coded `relationship` to the subject of care.
+- `PARTICIPATION` — generic model of a party's involvement in an activity (function, mode, time) where the participation kind is not fixed at design time.
+- `FOLDER` / `VERSIONED_FOLDER` (directory package) — versioned, archetypable folder structures whose items are references to other versioned objects, enabling multiple classification (episodes, problem groups).
+- Tags package — lightweight key/optional-value annotations associated with previously committed items to support tag-based search and AQL querying.
 - `VERSIONED_OBJECT` — top-level change-control container owning an ordered history of `VERSION` instances for one logical item.
 - `ORIGINAL_VERSION` / `IMPORTED_VERSION` — concrete `VERSION` subtypes for locally authored versus copied-in content; `ORIGINAL_VERSION` owns optional `attestations` and a `lifecycle_state`.
 - `CONTRIBUTION` — atomic commit bundle grouping the `VERSION` references created in a single change act, with its own `audit`.
@@ -41,7 +44,7 @@ Defines the abstract patterns reused across every higher-level openEHR Reference
 
 ## Relations to Other Specs
 
-- Depends on: `RM/support` (identifiers such as `HIER_OBJECT_ID`, `OBJECT_VERSION_ID`, `OBJECT_REF`, and terminology access), `RM/data_types` (`DV_TEXT`, `DV_CODED_TEXT`, `DV_DATE_TIME`, `DV_EHR_URI` used in audits, links, and attestations), and `BASE` identification for object version ids.
+- Depends on: `BASE/base_types` (identifiers such as `HIER_OBJECT_ID`, `OBJECT_VERSION_ID`, `OBJECT_REF`), `RM/support` (terminology access), and `RM/data_types` (`DV_TEXT`, `DV_CODED_TEXT`, `DV_DATE_TIME`, `DV_EHR_URI` used in audits, links, and attestations).
 - Consumed by: `RM/ehr` (every versioned EHR part and committed composition), `RM/demographic` (versioned parties and roles), `RM/data_structures` and `RM/ehr_extract` (locatable content), `AM` (archetype identity propagated via `ARCHETYPED`), and `SM` / `ITS-*` (platform contribution and version-retrieval semantics).
 
 ## Architectural Placement

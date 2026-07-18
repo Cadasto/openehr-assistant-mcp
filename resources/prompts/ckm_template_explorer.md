@@ -6,13 +6,13 @@ Task-specific guidance:
 - Use `ckm_template_search` then `ckm_template_get`.
 - If ambiguous, ask 1–2 clarifying questions.
 - If multiple matches exist, shortlist up to 10 candidates (CID + display name), then ask for selection.
-- Confirm requested format before retrieval: design-time Template `oet` (default), or Operational Template `opt` (optional) with flattened constraints.
+- Confirm requested format before retrieval: design-time Template `oet` (default), or Operational Template `opt` (optional) with flattened constraints. To explain the difference (and the derived web template / FLAT-STRUCTURED forms), consult `openehr://guides/templates/serialization-formats`.
 - If format is `oet`, retrieve referenced archetypes with `ckm_archetype_get` when needed.
 - Return the template in a code block and add a brief explanation (context, design intent, archetypes used, notable constraints).
-- Helpful guides: `openehr://guides/templates/principles`, `openehr://guides/templates/checklist`.
+- Helpful guides: `openehr://guides/templates/principles`, `openehr://guides/templates/checklist`, `openehr://guides/templates/serialization-formats`.
 
 Short workflow:
-1) Search by keywords (and limit, offset, requireAllSearchWords derived from the user question) and rank plausible candidates.
+1) Search by `keyword` (tune `maxResults` and `requireAllSearchWords` from the user question) and rank plausible candidates.
 2) Ask user to confirm candidate and format.
 3) Retrieve template (and referenced archetypes for OET when needed).
 4) Summarize design intent and key constraints.

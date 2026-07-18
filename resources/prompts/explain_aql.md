@@ -19,7 +19,7 @@ Required output:
 5) Parameters: Meaning and impact on results.
 6) Summary: Brief doc/review-ready recap.
 
-Tools: `ckm_template_search`, `ckm_template_get`.
+Tools: `guide_get`, `ckm_template_search`, `ckm_template_get`, `type_specification_get`.
 
 
 ## Role: user

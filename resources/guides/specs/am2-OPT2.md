@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/AM/development/OPT2.html
 **Markdown URL:** https://specifications.openehr.org/releases/AM/development/OPT2.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/am2-ADL2, openehr://guides/specs/am2-AOM2
 **Keywords:** OPT, OPT 2, operational template, flattening, compiled artefact, AOM 2, ADL 2, template overlay, component terminologies, slot filler
 
@@ -32,7 +32,7 @@ Defines the Operational Template 2 (OPT 2) — the single, inheritance-flattened
 
 ## Relations to Other Specs
 
-- Depends on: `AM/AOM2` (object-model classes the OPT is an instance of), `AM/ADL2` (source syntax of templates, overlays and archetypes being compiled), `AM/aom2_profile` for constraint semantics, and `RM/common` plus the domain RM packages whose classes are constrained by the contained archetype nodes.
+- Depends on: `AM/AOM2` (object-model classes the OPT is an instance of), `AM/ADL2` (source syntax of templates, overlays and archetypes being compiled), the AOM profile configuration defined within `AM/AOM2` (RM type substitutions and primitive equivalences), and `RM/common` plus the domain RM packages whose classes are constrained by the contained archetype nodes.
 - Consumed by: `ITS-*` implementation technology specifications that serialise OPTs (`.optx` XML, `.optj` JSON), `SM` platform services that validate and store committed content against a deployed OPT, `QUERY/AQL` tooling that resolves paths and archetype ids against the operational set, and downstream generators producing schemas, UI forms, and data-binding classes.
 
 ## Architectural Placement

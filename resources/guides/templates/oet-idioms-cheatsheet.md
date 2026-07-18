@@ -1,7 +1,7 @@
 # OET Idioms Cheat Sheet
 
 **Purpose:** Fast grounding for writing and reviewing openEHR templates (OET)
-**Related:** openehr://guides/templates/oet-syntax, openehr://guides/templates/serialization-formats, openehr://guides/templates/rules
+**Related:** openehr://guides/templates/oet-syntax, openehr://guides/templates/serialization-formats, openehr://guides/templates/opt-structure, openehr://guides/templates/web-template, openehr://guides/templates/rules
 **Keywords:** OET, OPT, constraint, syntax, idioms, cheat sheet, minimal, fast, QA, CGEM, event, persistent
 
 ---
@@ -78,6 +78,13 @@
 **Idiom:** Choose composition semantics when designing templates. 
 - **Event:** many submissions over time, each a new composition (e.g. lab results, clinic visits). 
 - **Persistent:** single “current version”; longitudinal = lifetime (e.g. allergies), episodic = per journey (e.g. cancer care plan). Align with CGEM (Global Background → longitudinal; Contextual Situation → episodic; Event Assessment → event).
+
+---
+
+## Defaults for Fixed Context
+**Idiom:** When the use case fixes or strongly implies a value, set it as a default (`default="..."` on the `<Rule>`).
+- Example: `<Rule path=".../items[at0005]" default="Phadiatop"/>` pre-fills the test name in a single-assay template.
+- Defaults appear in the recorded data; archetype *assumed values* do not — don't confuse the two.
 
 ---
 

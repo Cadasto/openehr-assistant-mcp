@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/AM/development/ADL1.4.html
 **Markdown URL:** https://specifications.openehr.org/releases/AM/development/ADL1.4.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/am-AOM1.4, openehr://guides/specs/am2-ADL2
 **Keywords:** ADL, ADL 1.4, archetype syntax, legacy, cADL, dADL, slot, specialisation
 
@@ -18,7 +18,7 @@ Defines the concrete, human-readable textual syntax used to serialise openEHR (a
 
 ## Scope
 
-- In: outer archetype structure (header, identifier, `specialise`, language, description, definition, ontology, revision history); cADL constraint syntax (`matches`/`∈`, `occurrences`, `existence`, `cardinality`, interval and regex primitives, leaf C_PRIMITIVE constraints, `use_node` internal references, `archetype_slot` including/excluding expressions); dADL serialisation of primitive, interval, container, coded-term, and typed-object values; path syntax compatible with XPath; term and constraint code conventions; ontology section layout (`term_definitions`, `constraint_definitions`, `term_bindings`, `constraint_bindings`).
+- In: outer archetype structure (header, identifier, `specialise`, language, description, definition, ontology, revision history); cADL constraint syntax (`matches`/`∈`, `occurrences`, `existence`, `cardinality`, interval and regex primitives, leaf primitive constraints, `use_node` internal references, `allow_archetype` slot include/exclude expressions); dADL serialisation of primitive, interval, container, coded-term, and typed-object values; path syntax compatible with XPath; term and constraint code conventions; ontology section layout (`term_definitions`, `constraint_definitions`, `term_bindings`, `constraint_bindings`).
 - Out: the abstract Archetype Object Model (see `AM/AOM1.4`); the later ADL 2 / AOM 2 family (see `AM2/ADL2`); operational template and OPT formats; runtime archetype validation rules beyond syntactic well-formedness; reference-model class definitions being constrained (see `RM/*`); archetype governance, identification, and lifecycle policy.
 
 ## Key Classes / Constructs
@@ -27,9 +27,9 @@ Defines the concrete, human-readable textual syntax used to serialise openEHR (a
 - `definition` section (cADL block) — root `C_COMPLEX_OBJECT` tree constraining an RM class, using `matches { … }` nesting over attributes and child objects.
 - `ontology` section (dADL block) — language-indexed `term_definitions`, `constraint_definitions`, and external `term_bindings` / `constraint_bindings` carrying the natural-language and terminology layer.
 - `description` and `language` sections (dADL blocks) — authored-resource metadata, original language, translations, and lifecycle state.
-- `ARCHETYPE_SLOT` — named extension point whose `include`/`exclude` assertions match archetype identifiers by regex, enabling template composition and reuse.
+- `allow_archetype` slot — extension point whose `include`/`exclude` assertions match archetype identifiers by regex, enabling template composition and reuse (AOM class `ARCHETYPE_SLOT`).
 - Specialisation path — `specialise` clause plus dotted node codes (e.g. `at0001.1.2`) expressing child archetypes that refine a parent's constraints.
-- `cADL` primitive constraints — `C_STRING`, `C_INTEGER`, `C_REAL`, `C_DATE_TIME`, `C_BOOLEAN`, `C_DV_*` wrappers, intervals (`|0..5|`), assumed values, and regex literals.
+- `cADL` primitive constraints — string, integer, real, boolean, date/time and duration patterns, intervals (`|0..5|`), assumed values, and regex literals; domain-type constraints (e.g. `C_CODE_PHRASE` from the openEHR Archetype Profile) expressed via inline dADL sections.
 - `dADL` value syntax — attribute/value pairs in `<…>` with containers keyed by `[key]`, coded terms (`[terminology::code]`), and optional type tags `(TypeName)`, consumed by both the ontology section and instance serialisation.
 
 ## Relations to Other Specs

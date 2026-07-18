@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/LANG/development/EL.html
 **Markdown URL:** https://specifications.openehr.org/releases/LANG/development/EL.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/lang-BEL, openehr://guides/specs/cds-GDL2
 **Keywords:** EL, expression language, rules, task planning, guidelines, advanced, BMM, decision tables, agents, quantifiers, pattern matching, path expressions, temporal operators
 
@@ -19,7 +19,7 @@ The openEHR Expression Language (EL) defines a textual, strongly typed, void-saf
 ## Scope
 
 - In: terminal entities (literals, variables, feature references, function calls, container access, object matching, predicates, agents); arithmetic, relational, logical, string, and temporal operators; higher-order constructs (`there_exists`, `for_all`, if/then/else chains, case tables, multi-dimensional decision tables); type-promotion rules; path expressions over compositional trees; container literals for arrays, lists, sets, and maps; integration contract with the BMM `expression` package and Foundation Types.
-- Out: the BMM meta-model itself (defined normatively in `BASE/bmm`), evaluator implementation choices, concrete semantics of embedding hosts (archetype rules runtime, GDL2 engine, Task Planning DLM executor), terminology-service behaviour behind `Terminology_code` literals, and the retired BEL syntax/meta-model (retained separately for legacy rule bases).
+- Out: the BMM `expression` meta-model itself (defined normatively in the BMM — see `LANG/bmm3`), evaluator implementation choices, concrete semantics of embedding hosts (archetype rules runtime, GDL2 engine, Task Planning DLM executor), terminology-service behaviour behind `Terminology_code` literals, and the retired BEL syntax/meta-model (retained separately for legacy rule bases).
 
 ## Key Classes / Constructs
 
@@ -34,12 +34,13 @@ The openEHR Expression Language (EL) defines a textual, strongly typed, void-saf
 
 ## Relations to Other Specs
 
-- Depends on: `BASE/bmm` (normative `expression` meta-model that EL serialises), `BASE/foundation_types` (primitive, container, and interval types plus operator functions), and `RM/data_types` / `RM/support` (for `DV_*` coded values, `TERMINOLOGY_CODE`, and URI literals referenced from EL programs).
-- Consumed by: `LANG/BEL` (as the successor formalism), `AM/ADL2` (archetype `rules` section assertions), `CDS/GDL2` (guideline rule bodies), `PROC/task_planning` (Decision Logic Modules and plan guards), and any BMM-hosted model importing `expression` for derived attributes or invariants.
+- Depends on: the BMM `expression` meta-model that EL serialises (see `LANG/bmm3`), `BASE/foundation_types` (primitive, container, and interval types plus operator functions), and `RM/data_types` / `RM/support` (for `DV_*` coded values, `TERMINOLOGY_CODE`, and URI literals referenced from EL programs).
+- Supersedes: `LANG/BEL` — EL is a major evolution on BEL syntax and does not use the BEL meta-model; BEL remains in use for AOM2 archetype rules.
+- Consumed by: `AM/ADL2` (archetype `rules` section assertions in newer tooling), `CDS/GDL2` (guideline rule bodies), `PROC/task_planning` and `PROC/decision_language` (Decision Logic Modules and plan guards), and any BMM-hosted model importing `expression` for pre/post-conditions and invariants.
 
 ## Architectural Placement
 
-EL sits in the LANG component as the default concrete syntax over the BMM `expression` package, one layer above Foundation Types and beneath every domain formalism (AM rules, GDL2, Task Planning DLMs) that needs computable logic. It is intentionally host-agnostic: a conforming parser emits BMM EL meta-type instances that downstream engines can evaluate, round-trip to XML/JSON/YAML, or compile to native code.
+EL sits in the LANG component as the default concrete syntax over the BMM `expression` package (`LANG/bmm3`), one layer above Foundation Types and beneath every domain formalism (AM rules, GDL2, Task Planning DLMs) that needs computable logic. It is intentionally host-agnostic: a conforming parser emits BMM EL meta-type instances that downstream engines can evaluate, round-trip to XML/JSON/YAML, or compile to native code.
 
 ## When to Read the Full Spec
 

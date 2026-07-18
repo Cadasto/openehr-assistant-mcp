@@ -12,7 +12,7 @@ Task-specific guidance:
 - Helpful guides: `openehr://guides/archetypes/principles`, `openehr://guides/archetypes/adl-idioms-cheatsheet`.
 
 Short workflow:
-1) Search by keywords (and limit, offset, requireAllSearchWords derived from the user question), or skip to get when CID/archetype-id is already known.
+1) Search by `keyword` (tune `maxResults`, `requireAllSearchWords`, and the optional `rmClass` filter from the user question), or skip to get when CID/archetype-id is already known.
 2) Inspect the returned metadata, present the best matches with rationale and request selection.
 3) Retrieve in confirmed format.
 4) Summarize design intent and modelling implications.

@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/QUERY/development/AQL.html
 **Markdown URL:** https://specifications.openehr.org/releases/QUERY/development/AQL.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/am2-ADL2, openehr://guides/specs/sm-openehr_platform
 **Keywords:** AQL, query, archetype path, containment, WHERE, SELECT, CONTAINS, stored query
 
@@ -18,19 +18,19 @@ Defines a declarative query language for openEHR data that is independent of any
 
 ## Scope
 
-- In: query syntax (SELECT, FROM, WHERE, ORDER BY, LIMIT/OFFSET), containment via `CONTAINS`, archetype-path addressing, RM type variables, predicates (archetype, standard, node), comparison and logical operators, `EXISTS` and `MATCHES`, terminology value-set matching, aggregation functions, parameterised and stored queries, query against EHR, composition, versioned-object, folder, and demographic targets.
+- In: query syntax (SELECT, FROM, WHERE, ORDER BY, LIMIT/OFFSET), containment via `CONTAINS`, archetype-path addressing, RM type variables, predicates (archetype, standard, node), comparison and logical operators, `EXISTS`, `LIKE` and `MATCHES`, terminology value-set matching via the `TERMINOLOGY()` function, aggregation and other built-in functions, query parameters (`$var`), and `VERSION`-class expressions (`LATEST_VERSION`, `ALL_VERSIONS`) for historical data.
 - Out: REST/HTTP transport and result envelopes (see `ITS-REST`), execution-plan optimisation, storage layout, server-side state management, archetype constraint semantics (see `AM`), RM class definitions (see `RM`), terminology content (see `TERM`).
 
 ## Key Classes / Constructs
 
 - `SELECT` — projection list of paths, RM variables, literals, or aggregates; supports `DISTINCT` and column aliases.
-- `FROM` / `CONTAINS` — declares the root class (typically `EHR`, `COMPOSITION`, `FOLDER`, or a demographic `PARTY` subtype) and hierarchical containment between variables.
+- `FROM` / `CONTAINS` — declares the root class expression (typically `EHR` or `COMPOSITION`; any RM class or a `VERSION` expression is permitted) and hierarchical containment between variables.
 - Archetype paths — locate nodes using `/data[at0001]/items[at0004]/value` plus archetype predicates like `[openEHR-EHR-OBSERVATION.blood_pressure.v2]`.
 - RM type variables — single-letter bindings (e.g., `e`, `c`, `o`) that anchor paths and appear in SELECT/WHERE.
 - Predicates — archetype (`[archetype_id=...]`), standard (`[name/value='Systolic']`), and node (`[at-code]`) filters applied inline.
 - `WHERE` — boolean expression using comparison operators, `LIKE`, `MATCHES {...}` for value sets, `EXISTS`, `NOT`, `AND`/`OR`.
 - Aggregation — `COUNT`, `MIN`, `MAX`, `SUM`, `AVG` over projected paths.
-- `ORDER BY` / `LIMIT` / `OFFSET` — deterministic ordering and result windowing; parameters (`$var`) enable stored, reusable queries.
+- `ORDER BY` / `LIMIT` / `OFFSET` — deterministic ordering and result windowing; parameters (`$var`) enable reusable queries, shareable as registered queries via the platform Definition service (`SM`).
 
 ## Relations to Other Specs
 
@@ -44,7 +44,7 @@ AQL is the query-layer counterpart to the ADL archetype formalism: where ADL con
 
 ## When to Read the Full Spec
 
-Consult the full specification for the authoritative ANTLR4 grammar, precedence and associativity of operators, exact semantics of path shortening and name-predicate disambiguation, rules for null handling and three-valued logic, the complete list of reserved words and functions, parameter binding and stored-query registration semantics, temporal-version query forms (e.g., `VERSIONED_COMPOSITION`, time-based selection), and conformance requirements for query engines.
+Consult the full specification for the authoritative ANTLR4 grammar, precedence and associativity of operators, exact semantics of path shortening and name-predicate disambiguation, rules for null handling and three-valued logic, the complete list of reserved words and functions, parameter binding semantics, temporal-version query forms (`VERSION` class expressions with `LATEST_VERSION` / `ALL_VERSIONS` predicates), and conformance requirements for query engines.
 
 ## References
 

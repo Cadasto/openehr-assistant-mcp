@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/AM/development/AOM2.html
 **Markdown URL:** https://specifications.openehr.org/releases/AM/development/AOM2.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/am2-ADL2, openehr://guides/specs/am2-OPT2, openehr://guides/specs/am-AOM1.4
 **Keywords:** AOM, AOM 2, archetype object model, C_OBJECT, constraint, differential, validity
 
@@ -39,13 +39,14 @@ persistence/versioning (see CM/SM), and CKM governance workflows.
 
 - `ARCHETYPE`, `AUTHORED_ARCHETYPE`, `DIFFERENTIAL_ARCHETYPE`, `FLAT_ARCHETYPE` — root artifact variants; differential carries only specialization deltas, flat is the fully-expanded inherited form used for validation.
 - `TEMPLATE`, `TEMPLATE_OVERLAY`, `OPERATIONAL_TEMPLATE` — slot-filling composition; OPT is the self-contained, fully flattened artifact for runtime use.
-- `ARCHETYPE_ID`, `ARCHETYPE_HRID` — structured and human-readable identifiers (namespace, RM publisher, package, class, concept, version).
+- `ARCHETYPE_HRID` — structured human-readable identifier (namespace, RM publisher/package/class, concept, version), with computed `semantic_id` / `physical_id` forms; machine identification via `ARCHETYPE.uid`.
 - `C_OBJECT`, `C_DEFINED_OBJECT`, `C_COMPLEX_OBJECT`, `C_COMPLEX_OBJECT_PROXY`, `C_ARCHETYPE_ROOT` — object-level constraint hierarchy; proxies and roots support internal references and external archetype embedding.
-- `C_ATTRIBUTE`, `MULTIPLICITY_INTERVAL` — attribute constraints with existence, cardinality, and ordering.
+- `C_ATTRIBUTE` — attribute constraints with existence, cardinality, and sibling ordering (`sibling_order` on child `C_OBJECT`s).
 - `C_PRIMITIVE_OBJECT` family (`C_BOOLEAN`, `C_STRING`, `C_INTEGER`, `C_REAL`, `C_DATE`, `C_TIME`, `C_DATE_TIME`, `C_DURATION`, `C_TERMINOLOGY_CODE`) — leaf constraints on primitive RM types.
 - `ARCHETYPE_SLOT`, `ARCHETYPE_ID_CONSTRAINT`, `ASSERTION` — slot inclusion/exclusion rules expressed as assertion trees.
-- `ARCHETYPE_TERMINOLOGY`, `ARCHETYPE_TERM_DEFINITION`, `ARCHETYPE_TERM`, `VALUE_SET`, `TERM_BINDING`, `CONSTRAINT_BINDING`, `TERMINOLOGY_CODE` — local term/ac-code definitions and external URI bindings.
-- `C_ATTRIBUTE_TUPLE`, `C_PRIMITIVE_TUPLE`, `ARCHETYPE_RULE` — second-order constraints covering co-varying attributes (e.g. `DV_QUANTITY.magnitude`/`units`) and cross-path predicate rules.
+- `ARCHETYPE_TERMINOLOGY`, `ARCHETYPE_TERM`, `VALUE_SET` — local id/at/ac-code term definitions, explicit value sets, and external URI-based term bindings.
+- `C_ATTRIBUTE_TUPLE`, `C_PRIMITIVE_TUPLE` — second-order (tuple) constraints covering co-varying attributes (e.g. `DV_QUANTITY.magnitude`/`units`).
+- Rules package — archetype `rules` statements (declarations, assignments, assertions) built on the Basic Expression Language (`lang.beom` package), plus `EXPR_ARCHETYPE_REF` (archetype-path variables) and `EXPR_ARCHETYPE_ID_CONSTRAINT` (slot archetype-id matchers).
 
 ## Relations to Other Specs
 
@@ -73,9 +74,9 @@ treat AOM 2 as the canonical object graph; runtime data validation walks the
 
 Read the full AOM 2 specification when implementing a parser, flattener,
 validator, or editor; when resolving differential-vs-flat semantic questions;
-when working with tuple constraints, slot assertions, or `ARCHETYPE_RULE`
-predicates; or when debugging terminology binding (URI format, constraint
-bindings, value-set resolution). This digest is orientation only — it lists
+when working with tuple constraints, slot assertions, or `rules`-section
+statements; or when debugging terminology binding (URI format, value-set
+resolution via `value_set_expanded` / `value_set_resolved`). This digest is orientation only — it lists
 class names but omits attributes, invariants, and function signatures. For
 per-class detail (attributes, types, multiplicities, inherited members,
 invariants), use the BMM-backed `type_specification_get` tool, which returns

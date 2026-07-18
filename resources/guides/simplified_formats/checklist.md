@@ -19,6 +19,7 @@
 - [ ] **Mandatory context** present: at least language and territory (per spec and template).
 - [ ] **Optional context** (composer, time, setting, etc.) correctly prefixed (`ctx/` in Flat, `ctx` object in Structured).
 - [ ] **Time**: `ctx/time` or equivalent set or understood to default to server time where applicable.
+- [ ] **Defaults** understood where fields are omitted: `ctx/setting` → "other care", ENTRY `subject` → PARTY_SELF, `history.origin` → earliest event time.
 
 ---
 
@@ -27,13 +28,13 @@
 - [ ] **Paths** built from template node IDs (normalised names); no ad-hoc keys.
 - [ ] **Separators**: `/` between segments; `|` before attribute suffixes; `_` prefix for optional RM attributes only.
 - [ ] **Instance indices** zero-based (`:0`, `:1`) for repeating nodes; cardinality respected.
-- [ ] **Suffixes** match RM type (e.g. DV_QUANTITY: `|magnitude`, `|unit`; DV_CODED_TEXT: `|code`, `|value`, `|terminology`).
+- [ ] **Suffixes** match RM type (e.g. DV_QUANTITY: `|magnitude`, `|unit`; DV_CODED_TEXT: `|code`, `|value`, `|terminology`; DV_ORDINAL: `|code`, `|value`, `|ordinal`; DV_PROPORTION: `|numerator`, `|denominator`, `|type`).
 
 ---
 
 ## 4. Flat-Specific
 
-- [ ] All keys **fully qualified** from root (template_id or root id + path).
+- [ ] All keys **fully qualified** from root (root node id generated from the template id, e.g. `blood_pressure_demo.v0`).
 - [ ] No ELEMENT/value distinction; key points to value attributes directly.
 - [ ] Context keys use `ctx/` prefix consistently.
 
@@ -53,6 +54,7 @@
 - [ ] **Cardinality** of repeated nodes not exceeded; mandatory nodes present where required.
 - [ ] **Terminology** codes and terminology ids valid where applicable.
 - [ ] **Data types** match template (number, string, ISO datetime as appropriate).
+- [ ] **`|other`** (free-text branch) only on open value-set (`listOpen: true`) coded leaves, never combined with `|code`/`|value`/`|terminology`.
 
 ---
 

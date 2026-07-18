@@ -6,9 +6,9 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/SM/development/openehr_platform.html
 **Markdown URL:** https://specifications.openehr.org/releases/SM/development/openehr_platform.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-demographic
-**Keywords:** SM, platform, service model, I_EHR_SERVICE, I_QUERY_SERVICE, I_DEFINITION_ADL2, UPDATE_VERSION, CALL_STATUS, REST
+**Keywords:** SM, platform, service model, I_EHR_SERVICE, I_DEFINITION_ADL2, I_SUBJECT_PROXY_SERVICE, UPDATE_VERSION, CALL_STATUS, RESULT_SET, REST
 
 ---
 
@@ -18,27 +18,22 @@ Defines the coarse-grained service interfaces that any openEHR platform implemen
 
 ## Scope
 
-- In: abstract interface specifications for the core platform services; shared call-status mechanism; cursor-style list handling; `UPDATE_VERSION<T>` update semantics for versioned resources; 5-tier deployment architecture; the minimal-implementation profile.
+- In: the logical platform architecture with standardised component naming (Definition, EHR, Demographic, EHR Index, Query, Message, Subject Proxy, Terminology, Admin services); abstract interface call specifications in a functional, nearly-stateless style; shared call-status mechanism (`CALL_STATUS` / `CALL_STATUS_TYPE`); list handling; `UPDATE_VERSION<T>` update semantics for versioned resources; registered-query naming and formalism conventions.
 - Out: wire formats and HTTP mappings (those live in `ITS-REST`, `ITS-XML`, `ITS-JSON`); the data models being served (`RM/*`, archetype formalism in `AM`); terminology content itself (`TERM`); conformance rules (`CNF`).
 
 ## Key Classes / Constructs
 
-- `I_EHR_SERVICE` — create / retrieve EHRs; existence checks by `ehr_id` or subject.
-- `I_EHR` — per-EHR access to `status`, `directory`, `compositions`, `contributions`.
-- `I_EHR_STATUS` — get/update `EHR_STATUS`; toggle `is_queryable` / `is_modifiable`.
-- `I_EHR_DIRECTORY` — versioned folder tree CRUD.
-- `I_EHR_COMPOSITION` — versioned `COMPOSITION` CRUD, including get-at-time and get-at-version.
-- `I_EHR_CONTRIBUTION` — commit a batch of updates as a single `CONTRIBUTION`.
-- `I_DEMOGRAPHIC_SERVICE` — CRUD for parties and relationships; uses `UV_PARTY`, `UV_PARTY_RELATIONSHIP`.
-- `I_EHR_INDEX` — cross-reference between `ehr_id` and demographic subject identifier(s).
-- `I_QUERY_SERVICE` — execute registered or ad-hoc AQL queries; returns `RESULT_SET`.
-- `I_DEFINITION_ADL2` / `I_DEFINITION_ADL14` / `I_DEFINITION_QUERY` — upload, retrieve, validate, list, and delete archetypes, templates, OPTs, and stored queries.
-- `I_TERMINOLOGY_SERVICE` — terminology lookup, subsumption, value-set validation.
-- `I_EHR_EXTRACT_SERVICE` / `I_TDD_SERVICE` — EHR Extract and Template Data Document import/export.
-- `I_SUBJECT_PROXY_SERVICE` — unified subject-focused view across heterogeneous back-ends (openEHR, FHIR, HL7v2).
-- `I_ADMIN_SERVICE` / `I_ADMIN_ARCHIVE` / `I_ADMIN_DUMP_LOAD` — counts, physical delete, archive, export/load.
-- `UPDATE_VERSION<T>` — carries `preceding_version_uid`, `lifecycle_state`, optional `attestations`, payload `data`, and `UPDATE_AUDIT`; concrete subtypes `UV_COMPOSITION`, `UV_FOLDER`, `UV_PARTY`.
-- `CALL_STATUS` — cross-interface status type with codes such as `success`, `auth_failure`, `precondition_violation`, `version_mismatch`, `ehr_id_does_not_exist`.
+- EHR Service (`I_EHR_SERVICE`) — versioned persistence of EHRs: creation, retrieval, and committal of EHR content.
+- Definition Service (`I_DEFINITION_ADL2` / `I_DEFINITION_ADL14`) — upload, retrieve, validate, and list archetypes, templates, and OPTs for both ADL generations, plus registered (stored) AQL queries with reverse-domain qualified names.
+- Demographic Service — versioned persistence for demographic data (`DEMOGRAPHIC_SERVICE` component).
+- EHR Index Service — records associations of subject identifiers with EHR ids (`EHR_INDEX` component), enabling privacy-preserving EHR persistence keyed only by `ehr_id`.
+- Query Service — executes registered or ad-hoc AQL queries; successful execution returns a `RESULT_SET` with column metadata and `RESULT_SET_ROW` rows, windowed via `item_offset` / `items_to_fetch`.
+- Message Service — message import/export supporting multiple formats, including EHR Extracts and documents.
+- Subject Proxy Service (`I_SUBJECT_PROXY_SERVICE`) — unified subject-focused data access across heterogeneous back-ends, with subject variable naming, data-set and binding specification (`I_DATA_BINDING`).
+- Terminology Service — terminology and code-set access for the platform.
+- Admin Service — administrative facilities (e.g. back-up) across all installed services.
+- `UPDATE_VERSION<T>` — client-side commit structure carrying caller-supplied metadata and an `UPDATE_AUDIT` (a partial `AUDIT_DETAILS` whose `time_committed` and `system_id` are server-generated); concrete subtypes per storable type, e.g. `UV_COMPOSITION` for `COMPOSITION`.
+- `CALL_STATUS` — cross-interface status object whose `code` comes from the `CALL_STATUS_TYPE` enumeration (extensible per service); failures are inspected via `last_call_failed()` / `last_call_status()`.
 
 ## Relations to Other Specs
 
@@ -47,11 +42,11 @@ Defines the coarse-grained service interfaces that any openEHR platform implemen
 
 ## Architectural Placement
 
-The Platform Service Model sits between the Reference Model plus archetype formalism and the wire-level ITS specifications: it is the API contract of an openEHR system. The associated 5-tier deployment architecture (persistence → back-end services → virtual EHR → application logic → presentation) orients implementers, and the minimal-system profile (EHR repository + archetype repository + optional terminology + demographic/identity service) bounds what "openEHR compliant" means at the platform level.
+The Platform Service Model sits between the Reference Model plus archetype formalism and the wire-level ITS specifications: it is the API contract of an openEHR system. It deliberately defines a *formal equivalent* of any real product architecture — standardised component names and logical interface semantics — so that platform procurers, implementers, and conformance assessors can refer unambiguously to the "EHR service", "Admin service", etc., however a vendor actually organises its internals.
 
 ## When to Read the Full Spec
 
-Consult the full spec when implementing a platform adapter, when mapping REST (or other protocol) endpoints to the native operations, when handling non-`success` `CALL_STATUS` codes, when composing contributions from multiple `UPDATE_VERSION<T>` payloads, when implementing the `I_SUBJECT_PROXY_SERVICE` federation pattern across FHIR/HL7v2 back-ends, or when reconciling this model's abstract operations with the concrete binding in `ITS-REST`.
+Consult the full spec when implementing a platform adapter, when mapping REST (or other protocol) endpoints to the native operations, when handling failure semantics via `last_call_failed()` and `CALL_STATUS` codes, when composing commits from `UPDATE_VERSION<T>` payloads, when implementing the Subject Proxy Service federation pattern (subject variables, data sets, bindings) across heterogeneous back-ends, or when reconciling this model's abstract operations with the concrete binding in `ITS-REST`.
 
 ## References
 

@@ -19,7 +19,7 @@ Workflow:
 7) Return the raw BMM JSON, then explain it for implementers: what it’s for, key attributes + types, inheritance, and any constraints/invariants.
 
 Tools: `type_specification_search`, `type_specification_get`.
-Resource template: `openehr://spec/type/{COMPONENT}/{TYPE}`.
+Resource template: `openehr://spec/type/{component}/{name}` (component one of AM, AM2, BASE, LANG, RM, TERM).
 
 ## Role: user
 

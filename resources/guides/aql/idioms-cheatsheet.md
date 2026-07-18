@@ -67,7 +67,13 @@ WHERE c/context/start_time/value >= $from
 WHERE x/.../value/defining_code/code_string = $code
 ```
 
-Set variant (verify engine support): `IN $codes`.
+Set variant (spec-normative — list items are OR-ed, parameters allowed):
+
+```aql
+WHERE x/.../value/defining_code/code_string MATCHES {'code1', 'code2'}
+```
+
+`IN` is not in the spec (engine extension); prefer MATCHES.
 
 ---
 
@@ -113,6 +119,38 @@ Paths in AQL are **archetype paths**: grounded in the archetype definition and c
 
 ✅ `events[at0006]/data[at0003]/items[at0004]`  
 ⚠ `events/data/items`
+
+---
+
+## Sibling Disambiguation by Name (Node Predicate)
+
+When one archetype node repeats as multiple named runtime siblings, add the name to the node predicate (spec-defined shortcuts):
+
+```aql
+items[at0001, 'Systolic']                 -- name/value shortcut
+items[at0001 and name/value='Systolic']   -- explicit form
+items[at0001, $nameValue]                 -- parameterized
+```
+
+---
+
+## Version Audit and History (Verify Engine Support)
+
+Commit audit of current versions:
+
+```aql
+SELECT
+  c/uid/value AS uid,
+  v/commit_audit/time_committed/value AS committed,
+  v/commit_audit/change_type/value AS change_type
+FROM EHR e
+  CONTAINS VERSION v[LATEST_VERSION]
+    CONTAINS COMPOSITION c
+```
+
+Full history: `VERSION v[ALL_VERSIONS]`; add `v/preceding_version_uid/value` to chain revisions.
+
+Always state `[LATEST_VERSION]` / `[ALL_VERSIONS]` explicitly — the no-predicate default is not defined by the spec (implementations commonly return latest only). These constructs are grammar-level only (semantics not in spec prose); verify engine support. Lifecycle filtering via `v/lifecycle_state/defining_code/code_string` (openEHR terminology: 532 complete, 553 incomplete, 523 deleted) is likewise engine-dependent.
 
 ---
 

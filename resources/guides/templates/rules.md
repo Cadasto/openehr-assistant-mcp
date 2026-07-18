@@ -1,7 +1,7 @@
 # openEHR Template Design Rules
 
 **Scope:** Concrete modelling rules and best practices for openEHR templates
-**Related:** openehr://guides/templates/principles, openehr://guides/templates/oet-syntax, openehr://guides/specs/am2-OPT2
+**Related:** openehr://guides/templates/principles, openehr://guides/templates/cgem-framework, openehr://guides/templates/oet-syntax, openehr://guides/specs/am2-OPT2
 **Keywords:** template, OET, OPT, design, rules, modeling, guidance, structure, lint, checks, validation, CGEM, composition
 
 ---
@@ -19,6 +19,7 @@
 - **Rule B2:** Make optional elements mandatory (`min="1"`) only when they are clinically required for the specific workflow.
 - **Rule B3:** When an archetype allows a choice of data types (e.g., DV_TEXT or DV_CODED_TEXT), use the template to select the most appropriate one.
 - **Rule B4:** Use **Quantity Constraints** to limit units to those used in the local context and to set clinically sensible min/max ranges.
+- **Rule B5:** Set **default values** (OET: `default="..."` on a `<Rule>`) where the use case fixes or strongly implies a single value (e.g., setting, patient position). Defaults appear in the recorded data — unlike archetype-level *assumed values*, which do not.
 
 ## C. Naming and Labels
 
@@ -45,7 +46,7 @@
 
 ## G. Dataset Splitting and Composition Type (CGEM)
 
-- **Rule G1:** When splitting a complex dataset across templates, classify datapoints as Global Background, Contextual Situation, Event Assessment, or Managed Response so each template has a clear composition semantics (see openehr://guides/templates/principles).
+- **Rule G1:** When splitting a complex dataset across templates, classify datapoints as Global Background, Contextual Situation, Event Assessment, or Managed Response so each template has a clear composition semantics (full framework: openehr://guides/templates/cgem-framework; summary: openehr://guides/templates/principles).
 - **Rule G2:** Use **event** compositions for data submitted repeatedly (each submission is a new composition). Use **persistent** compositions (longitudinal or episodic) when a single “current version” is maintained; episodic when scoped to a care journey (e.g. cancer pathway), longitudinal for lifetime scope (e.g. allergies).
 - **Rule G3:** Use Instruction and Action archetypes only for datapoints that require order/fulfilment tracking. If a form field is merely a record (e.g. “Seen by Key worker Y/N”), model it as simple data in a Contextual or Event template, not as Managed Response.
 

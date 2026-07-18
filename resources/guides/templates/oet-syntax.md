@@ -1,7 +1,7 @@
 # openEHR OET Syntax Guide
 
 **Scope:** Technical specification of the OET (Ocean Template) XML format
-**Related:** openehr://guides/templates/oet-idioms-cheatsheet, openehr://guides/templates/serialization-formats, openehr://guides/templates/rules, openehr://guides/specs/am2-OPT2
+**Related:** openehr://guides/templates/oet-idioms-cheatsheet, openehr://guides/templates/serialization-formats, openehr://guides/templates/opt-structure, openehr://guides/templates/web-template, openehr://guides/templates/rules, openehr://guides/specs/am2-OPT2
 **Source:** Ocean Template Designer Documentation, CKM analysis
 **Keywords:** OET, OPT, XML, constraint, template, specification, syntax, validation, design, clinical, lint, validation, definition
 
@@ -19,10 +19,10 @@ The OET format is an XML-based representation used primarily by the Ocean Templa
   <id>...</id> <!-- UUID or unique string -->
   <name>...</name> <!-- Human-readable template name -->
   <description> ... </description> <!-- Metadata -->
+  <annotations path="..."> ... </annotations> <!-- Repeatable; key/value items per node path -->
   <definition> ... </definition> <!-- The tree of constraints -->
-  <annotations> ... </annotations> <!-- Key/Value pairs -->
-  <integrity_checks archetype_id="...">
-    <digest>...</digest>
+  <integrity_checks xsi:type="ArchetypeIntegrity" archetype_id="..."> <!-- One per referenced archetype -->
+    <digest id="MD5-CAM-1.0.1">...</digest>
   </integrity_checks>
 </template>
 ```
@@ -31,7 +31,7 @@ The OET format is an XML-based representation used primarily by the Ocean Templa
 The definition tree consists of structural elements (`Content`, `Items`) and constraint directives (`Rule`).
 
 ### Structural Elements
-- **`<Content>`**: Represents a top-level ENTRY or COMPOSITION.
+- **`<Content>`**: Represents an ENTRY or SECTION archetype placed under the root COMPOSITION's `/content` (the COMPOSITION itself is the `<definition>` element).
   - Attributes: `archetype_id`, `path` (usually `/content`), `xsi:type`.
 - **`<Items>`**: Represents a nested archetype (e.g., a CLUSTER inside a slot).
   - Attributes: `archetype_id`, `path` (relative to parent).
@@ -56,19 +56,32 @@ Used for `DV_TEXT` and `DV_CODED_TEXT`.
 
 ### `quantityConstraint`
 Used for `DV_QUANTITY`.
-- `<unitMagnitude>`: Defines permitted units and their ranges (`minMagnitude`, `maxMagnitude`).
-- `<excludedUnits>`: List of units to forbid.
+- `<unitMagnitude>`: Defines a permitted unit and its range. Children: `<unit>` (UCUM string), `<minMagnitude>`, `<maxMagnitude>`, `<includesMinimum>`, `<includesMaximum>` (booleans for bound inclusivity). Repeatable, one per unit.
+- `<includedUnits>` / `<excludedUnits>`: Lists of units to permit / forbid.
+
+### `countConstraint`
+Used for `DV_COUNT`. Magnitude bounds via `<minMagnitude>`/`<maxMagnitude>` with `<includesMinimum>`/`<includesMaximum>` flags (same bound elements as `unitMagnitude`).
 
 ### `multipleConstraint`
 Used for nodes that allow multiple RM types (choice).
-- `<includedTypes>`: List of permitted types (e.g., `Coded_text`).
+- `<includedTypes>`: List of permitted types. Values seen in real CKM OETs: `Text`, `Coded_text`, `Boolean`, `Count`, `Quantity`, `Interval`, `Date_Time`, `Duration`, `Identifier`, `URI`.
+
+### `<eventConstraint>` (not a `<constraint>` xsi:type)
+A direct child of `<Rule>` (alongside or instead of `<constraint>`) restricting the event type of an EVENT node:
+```xml
+<Rule path="/data[at0001]/events[at0002]">
+  <eventConstraint>
+    <allowedType>PointInTime</allowedType>
+  </eventConstraint>
+</Rule>
+```
 
 ## Metadata and Annotations
 - **`<description>`**: Contains `lifecycle_state`, `purpose`, `use`, `misuse`, and `other_details` (key/value items).
-- **`<annotations>`**: Stores free-form metadata, often used for mappings (e.g., `fhir_mapping`).
+- **`<annotations>`**: Stores free-form node-level metadata, often used for mappings (e.g., `fhir_mapping`, `source`). Each `<annotations>` element is a top-level sibling of `<definition>` (CKM exports place them between `<description>` and `<definition>`), carries a `path` XML attribute holding the fully-qualified template path (starting `[archetype_id]/...`, with `'name'` qualifiers for cloned/renamed nodes), and contains `<items><item><key>...</key><value>...</value></item></items>`.
 
 ## Implementation Note
-OET is a design-time format. For runtime systems, it should be compiled into an **Operational Template (OPT)**, which flattens the structure and resolves all archetype references. For how OET relates to OPT, ADL Designer `.t.json`, and web templates, see openehr://guides/templates/serialization-formats.
+OET is a design-time format. For runtime systems, it should be compiled into an **Operational Template (OPT)**, which flattens the structure and resolves all archetype references. For how OET relates to OPT, Archetype Designer `.t.json`, and web templates, see openehr://guides/templates/serialization-formats.
 
 ---
 
@@ -86,7 +99,8 @@ Grounded in real CKM OETs (CID `1013.26.1`, `1013.26.380`); do not invent attrib
 | `<Items>` | An archetype filling a slot (often nested CLUSTER). | `archetype_id`, `concept_name`, `name`, `path`, `min`, `max`, `xsi:type` |
 | `<Rule>` | Constrains an existing node located by `path`. | `path`, `name`, `min`, `max`, `hide_on_form`, `default`, `clone` |
 | `<constraint>` | Child of `<Rule>` carrying a typed value constraint. | `xsi:type` (`textConstraint`, `quantityConstraint`, `multipleConstraint`, `countConstraint`), `limitToList` (on `textConstraint`) |
-| `<Context>` | Trailing container for `EVENT_CONTEXT` constraints. | (children only: `<Items>`, `<Rule>`, `<hide_on_form>`) |
+| `<eventConstraint>` | Child of `<Rule>` restricting an EVENT node's type. | (child only: `<allowedType>`, e.g. `PointInTime`) |
+| `<Context>` | Optional trailing container for `EVENT_CONTEXT` constraints. | (children only: `<Items>`, `<Rule>`, `<hide_on_form>`) |
 
 Notes:
 - `archetype_id` / `template_id` and `xsi:type` appear on the *placement* elements (`Content`/`Item`/`Items`), never on `<Rule>` — a `<Rule>` only re-points at an already-placed node via `path`.
@@ -133,7 +147,7 @@ Notes:
 </Context>
 ```
 
-**The trailing `<Context/>` element** — every `<definition>` ends with a `<Context>` block holding `EVENT_CONTEXT` constraints (other-context CLUSTERs, setting, `hide_on_form`). When no context constraints are needed it is present but empty:
+**The trailing `<Context/>` element** — `<Context>` is an *optional* last child of `<definition>`, holding `EVENT_CONTEXT` constraints: `<Items>` filling other-context CLUSTER slots, `<Rule>`s (e.g. on `/context/other_context[at0001]/...` paths or `/context/setting`), and an optional `<hide_on_form>true</hide_on_form>` child element. In real CKM OETs roughly half the templates omit it entirely; several tools emit it empty when no context constraints are needed:
 ```xml
 <Context />
 ```

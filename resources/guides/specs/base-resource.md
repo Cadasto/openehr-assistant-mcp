@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/BASE/development/resource.html
 **Markdown URL:** https://specifications.openehr.org/releases/BASE/development/resource.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/base-foundation_types, openehr://guides/specs/am-Identification
 **Keywords:** AUTHORED_RESOURCE, RESOURCE_DESCRIPTION, RESOURCE_DESCRIPTION_ITEM, TRANSLATION_DETAILS, RESOURCE_ANNOTATIONS, original_language, translations, copyright, licence, ip_acknowledgements, annotations, authored resource
 
@@ -27,7 +27,7 @@ Defines the abstract structure and metadata contract for any openEHR "authored r
 - `RESOURCE_DESCRIPTION` — metadata block holding author/organisation/contact, `lifecycle_state`, `copyright`, `licence`, `ip_acknowledgements`, `other_contributors`, and per-language `details`.
 - `RESOURCE_DESCRIPTION_ITEM` — per-language narrative: `purpose`, `use`, `misuse`, `keywords`, `original_resource_uri`, plus free `other_details`.
 - `TRANSLATION_DETAILS` — provenance of a translation: translator, accreditation, organisation, version-last-translated, and `other_details` QA hooks.
-- `RESOURCE_ANNOTATIONS` — path-addressed remark overlay (`items: Hash<String, Hash<String, String>>`) attaching non-normative notes to nodes of the host artefact, per language.
+- `RESOURCE_ANNOTATIONS` — path-addressed remark overlay (`documentation: Hash<String, Hash<String, Hash<String, String>>>`, keyed language → path → key) attaching non-normative notes to nodes of the host artefact.
 
 ## Relations to Other Specs
 

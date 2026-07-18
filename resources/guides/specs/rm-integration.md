@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/RM/development/integration.html
 **Markdown URL:** https://specifications.openehr.org/releases/RM/development/integration.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-common, openehr://guides/specs/rm-data_structures
 **Keywords:** integration, GENERIC_ENTRY, legacy data, FEEDER_AUDIT, import, HL7v2, CDA
 
@@ -22,7 +22,7 @@ The Integration Information Model is the RM's dedicated boundary for migrating l
 ## Key Classes / Constructs
 - `GENERIC_ENTRY` — the sole class defined by the package; an archetypable entry whose only hard-wired attribute is `data` (an `ITEM_TREE` or comparable generic structure), intended to hold externally sourced content while its shape is governed by integration-specific archetypes.
 
-Note: this package is deliberately minimal. development specifies exactly one class; all additional behaviour is inherited from `ENTRY`, `CONTENT_ITEM`, and `LOCATABLE` in other RM packages.
+Note: this package is deliberately minimal. The specification defines exactly one class; all additional behaviour is inherited from `ENTRY`, `CONTENT_ITEM`, and `LOCATABLE` in other RM packages.
 
 ## Relations to Other Specs
 - Depends on: the EHR RM (`openehr://guides/specs/rm-ehr`) — `GENERIC_ENTRY` is a sibling of `SECTION` and the archetyped `ENTRY` subtypes, and is a legal value for `COMPOSITION.content`.
