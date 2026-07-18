@@ -1,7 +1,7 @@
 # openEHR Template Design Principles
 
 **Scope:** Foundational principles for openEHR templates (OET/OPT)
-**Related:** openehr://guides/templates/rules, openehr://guides/templates/oet-idioms-cheatsheet, openehr://guides/templates/checklist, openehr://guides/specs/am-Overview, openehr://guides/specs/am2-OPT2, openehr://guides/specs/am2-AOM2, openehr://guides/specs/am-Identification
+**Related:** openehr://guides/templates/rules, openehr://guides/templates/cgem-framework, openehr://guides/templates/oet-idioms-cheatsheet, openehr://guides/templates/checklist, openehr://guides/specs/am-Overview, openehr://guides/specs/am2-OPT2, openehr://guides/specs/am2-AOM2, openehr://guides/specs/am-Identification
 **Keywords:** templates, OET, OPT, design, principles, CGEM, composition, event, persistent
 
 ---
@@ -70,7 +70,7 @@ Templates can embed other templates for modularity and consistency across docume
 
 ## Splitting Datasets and Composition Semantics (CGEM)
 
-When one form or use case touches many datapoints, split the dataset across templates so data is **strategic** (patient-centric, reusable) while forms stay **tactical** (good UX). The CGEM framework categorises data to guide this split:
+When one form or use case touches many datapoints, split the dataset across templates so data is **strategic** (patient-centric, reusable) while forms stay **tactical** (good UX). The CGEM framework (freshEHR) categorises data to guide this split — see the full guide at **openehr://guides/templates/cgem-framework** for definitions, the openEHR mapping table, and caveats. In summary:
 
 - **Global Background:** True regardless of care context (e.g. allergies, CPR decision). One current version per patient → composition `category = persistent`.
 - **Contextual Situation:** Single source of truth for a care journey or episode (e.g. cancer staging, care plan). One current version per journey → composition `category = episodic` (a standalone RM category with persistent-like semantics but bounded to an episode; not a subtype of `persistent`).
