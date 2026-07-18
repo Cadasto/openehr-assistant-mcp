@@ -18,7 +18,7 @@
 
 ## B. Header & Metadata
 
-- [ ] Archetype ID follows naming and versioning conventions (e.g. `openEHR-EHR-OBSERVATION.<concept>.v1.0.0`).
+- [ ] Archetype ID follows naming and versioning conventions (ADL 1.4 source: major version only, e.g. `openEHR-EHR-OBSERVATION.<concept>.v1`; full semver `v1.0.0` appears as the physical HRID per the AM Identification spec / CKM revision metadata).
 - [ ] Correct RM type is used (e.g. OBSERVATION, EVALUATION, INSTRUCTION, ACTION, ADMIN_ENTRY).
 - [ ] Original language set (ISO 639-1, typically `en`)
 - [ ] Purpose and usage fields complete
@@ -82,7 +82,7 @@
 - [ ] All ac-codes defined in `constraint_definitions`
 - [ ] Identifiers unchanged from compatible versions
 - [ ] Paths stable for long-term AQL use
-- [ ] ADL 1.4 validity rules pass (VARID, VARCN, VARDF, VARON, VARDT, VATDF, VACDF)
+- [ ] ADL 1.4 validity rules pass (VARID, VARCN, VARDF, VARON, VARDT, VATDF, VACDF, VDFAI, VDFPT, VCOC)
 
 ---
 

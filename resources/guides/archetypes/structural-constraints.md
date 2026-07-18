@@ -1,7 +1,7 @@
 # openEHR Archetype Structural Constraint Guide
 
 **URI:** `openehr://guides/archetypes/structural-constraints`  
-**Version:** 1.1.0  
+**Version:** 1.2.0  
 **Scope:** Normative guidance for existence, cardinality, occurrences, and slots
 **Related:** openehr://guides/archetypes/adl-syntax, openehr://guides/archetypes/adl-idioms-cheatsheet, openehr://guides/specs/am2-AOM2, openehr://guides/specs/rm-data_types
 **Keywords:** cardinality, existence, occurrences, slots, constraints
@@ -20,6 +20,7 @@ Archetypes optimise for reuse and safety, not local workflows.
 
 **Existence** constrains `C_ATTRIBUTE` — whether an attribute value must be present. (Present in both AOM 1.4 and AOM 2.)
 
+- Allowed values (ADL 1.4): `{0}`/`{0..0}` (attribute prohibited), `{0..1}` (optional), `{1}`/`{1..1}` (mandatory); default when unstated is `{1..1}`
 - Mandatory only when intrinsic to the concept
 - Optional by default
 
@@ -36,7 +37,9 @@ Archetypes optimise for reuse and safety, not local workflows.
 - Avoid `0..*` defaults (an empty container has no meaning)
 - Upper bounds must be clinically justified
 
-**Occurrences** (on object nodes) defines how many times an object may appear in its parent; separate from cardinality.
+**Occurrences** (on object nodes) defines how many times an object may appear in its parent; separate from cardinality. Default when unstated (ADL 1.4) is `{1..1}`; `{0}`/`{0..0}` prohibits the node.
+
+**Consistency (VCOC):** the interval (sum of sibling occurrences minima)..(sum of sibling occurrences maxima) must lie inside the container's cardinality interval.
 
 ---
 

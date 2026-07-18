@@ -40,6 +40,10 @@ Never substitute a more "convenient" RM type.
 
 **Rule:** Never interchange them.
 
+**ADL 1.4 defaults:** unstated `occurrences` = `{1..1}`; unstated `existence` = `{1..1}`.
+
+**Consistency rule (VCOC):** the sum of sibling occurrences ranges must fit inside the container's cardinality interval.
+
 **Container Cardinality Default:** Containers (CLUSTER, ITEM_LIST, items/events) should default to `1..*` (at least one child) — empty containers have no semantic meaning. Constrain only when clinically justified.
 
 ---

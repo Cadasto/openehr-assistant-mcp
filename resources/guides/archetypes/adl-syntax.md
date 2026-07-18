@@ -44,6 +44,11 @@ An ADL 1.4 archetype has these top-level sections in this order:
 ### `archetype` (header)
 - `adl_version` declaration and archetype identifier
 - ID must follow naming conventions; version reflects semantic compatibility
+- May carry a `controlled` / `uncontrolled` flag after the version; `controlled` archetypes should include a `revision_history` section
+
+### `specialise` (optional)
+- Identifier of the single specialisation parent (no multiple inheritance; both spellings `specialise`/`specialize` are valid)
+- Legacy ADL 1.4 practice derives the child ID by appending a hyphenated segment to the parent concept (e.g. `openEHR-EHR-OBSERVATION.haematology-cbc.v1`); in the current Identification spec the hyphen no longer carries specialisation semantics
 
 ### `concept`
 - Single at-code pointing at the root concept term in `ontology` / `term_definitions`
@@ -58,14 +63,16 @@ An ADL 1.4 archetype has these top-level sections in this order:
 - Formal constraint tree
 - Root node matches declared RM type
 - All constraints follow RM attribute semantics
-- May contain an `invariant` clause within a `C_COMPLEX_OBJECT` for first-order predicate logic assertions (cross-node relationships, formulae, conditional constraints):
+
+### `invariant` (optional)
+- Top-level archetype section between `definition` and `ontology`, containing first-order predicate logic assertions (cross-node relationships, formulae, conditional constraints):
 
 ```adl
 invariant
-    speed_validity: /speed[at0002]/km/magnitude = /speed[at0004]/miles/magnitude * 1.6
+    validity: /speed[at0002]/kilometres/magnitude = /speed[at0004]/miles/magnitude * 1.6
 ```
 
-> `invariant` is a cADL block-level clause within `C_COMPLEX_OBJECT`, not a top-level archetype section.
+> In ADL 1.4, invariants can only be defined in this top-level section (in AOM terms they attach to a `C_COMPLEX_OBJECT`, serialized only at archetype level). ADL 2 replaces `invariant` with the `rules` section.
 
 ### `ontology` / terminology
 - `term_definitions`: at-codes with text and description (per language)
@@ -74,7 +81,8 @@ invariant
 - `constraint_bindings`: ac-codes → terminology queries
 
 ### `revision_history` (optional)
-- Monotonically-growing audit of revisions; preserved across specialisations
+- Monotonically-growing audit of revisions, placed at the end of the archetype
+- Expected when the header carries the `controlled` flag; may be omitted for `uncontrolled` archetypes
 
 ---
 
@@ -95,11 +103,11 @@ value matches { DV_TEXT matches {*} }
 
 ### Existence vs Occurrences vs Cardinality
 
-- **existence** — attributes; mandatory (`1..1`) or optional (`0..1`)
-- **occurrences** — object nodes; how many times object may appear
+- **existence** — attributes; allowed values `{0}`/`{0..0}` (prohibited), `{0..1}` (optional), `{1}`/`{1..1}` (mandatory); default when unstated is `{1..1}`
+- **occurrences** — object nodes; how many times object may appear; default when unstated is `{1..1}`
 - **cardinality** — container attributes; how many children allowed
 
-> Never confuse occurrences with cardinality.
+> Never confuse occurrences with cardinality. They must be mutually consistent: the sum of sibling occurrences ranges must fit inside the container cardinality (validity rule VCOC).
 
 ### Internal References (use_node)
 
@@ -107,6 +115,9 @@ Reuse constraints from elsewhere in same archetype:
 ```adl
 use_node CLUSTER[at0010] /items[at0005]
 ```
+
+- The stated RM type must be the same as, or a supertype of, the target node's type (VUNT)
+- An `occurrences` constraint on the reference overrides the target node's occurrences; if absent, the target's occurrences apply
 
 ### Leaf Nodes
 Constrain RM type and optionally internal attributes (units, magnitude, code). Avoid unconstrained leaves.

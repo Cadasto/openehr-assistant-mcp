@@ -67,6 +67,7 @@ Supported systems: openEHR terminology, SNOMED CT, LOINC, ICD, etc.
 - Match exact semantic intent
 - Avoid generic or loosely related bindings
 - Don't mix code systems in one value set without justification
+- Partial coverage is valid — a binding need not cover every internal code (ADL 1.4, Term_bindings section)
 
 ### Constraint Bindings (`constraint_bindings`)
 

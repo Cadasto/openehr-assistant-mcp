@@ -17,7 +17,7 @@
 
 ## B. Metadata
 
-- **B1:** Archetype IDs SHALL follow the standard pattern: `openEHR-<DOMAIN>-<RM_TYPE>.<concept>.v<MAJOR>.<MINOR>.<PATCH>`.
+- **B1:** Archetype IDs SHALL follow the standard pattern: `<rm_publisher>-<rm_closure>-<rm_class>.<concept>.v<version>`, e.g. `openEHR-EHR-OBSERVATION.blood_pressure.v2`. In ADL 1.4 source the identifier carries the **major version only** (`.v1`); the full 3-part semver form (`.v1.0.0`) is the *physical* HRID defined in the AM Identification spec, used in ADL 2 and in CKM revision metadata.
 - **B2:** Provide a clear, clinician-friendly purpose description.
 
 ---
@@ -96,10 +96,10 @@
 
 ## J. Archetype Validity Codes (Tooling)
 
-These codes are emitted by the **openEHR archetype validator tooling** (ADL
-Workbench, `adl-lt`, `archie`, etc.) — not defined in the ADL 1.4 or AOM 1.4
-spec text itself. They are the de facto convention used by linters and CKM
-validation and are useful to recognise in tool output:
+These codes are defined normatively in the **ADL 1.4 specification** (§
+Validity Rules); AOM2/ADL2 define a larger superset for ADL 2 tooling. They
+are emitted by archetype validators (ADL Workbench, `archie`, etc.) and CKM
+validation, and are useful to recognise in tool output:
 
 - **VARID:** Valid `archetype_id` per openEHR specification
 - **VARCN:** `concept` references a term in ontology
@@ -110,6 +110,8 @@ validation and are useful to recognise in tool output:
 - **VACDF:** Every ac-code in `definition` defined in `constraint_definitions`
 - **VDFAI:** Slot archetype IDs conform to identifier specification
 - **VDFPT:** All paths syntactically valid and structurally correct
+- **VCOC:** Sum of sibling occurrences ranges fits inside container cardinality
+- **VUNT:** `use_node` RM type is same as, or supertype of, the target node's type
 
 ---
 
