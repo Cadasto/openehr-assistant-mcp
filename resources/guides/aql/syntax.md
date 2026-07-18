@@ -68,7 +68,7 @@ FROM EHR e
     CONTAINS COMPOSITION c
 ```
 
-**Spec status:** these constructs exist **in the grammar only** — the specification prose does not define their semantics, nor the default when the predicate is omitted (open spec issue SPECPR-481; implementations commonly default to latest-version-only). For portability: always state `[LATEST_VERSION]` or `[ALL_VERSIONS]` explicitly, and verify engine support before use. `VERSIONED_OBJECT` (and other RM version-container classes) parse as ordinary class expressions; only reference them when projecting container-level attributes (e.g. `vo/trunk_lifecycle_state`). Common VERSION projections: `v/uid/value`, `v/preceding_version_uid/value`, `v/commit_audit/time_committed/value`, `v/commit_audit/change_type`, `v/lifecycle_state/defining_code/code_string`.
+**Spec status:** these constructs exist **in the grammar only** — the specification prose does not define their semantics, nor the default when the predicate is omitted (the grammar makes the predicate optional but no default is specified; implementations commonly default to latest-version-only). For portability: always state `[LATEST_VERSION]` or `[ALL_VERSIONS]` explicitly, and verify engine support before use. `VERSIONED_OBJECT` (and other RM version-container classes) parse as ordinary class expressions; only reference them when projecting container-level attributes (e.g. `vo/trunk_lifecycle_state`). Common VERSION projections: `v/uid/value`, `v/preceding_version_uid/value`, `v/commit_audit/time_committed/value`, `v/commit_audit/change_type`, `v/lifecycle_state/defining_code/code_string`.
 
 ---
 

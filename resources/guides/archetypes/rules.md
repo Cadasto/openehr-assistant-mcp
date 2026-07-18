@@ -96,10 +96,13 @@
 
 ## J. Archetype Validity Codes (Tooling)
 
-These codes are defined normatively in the **ADL 1.4 specification** (§
-Validity Rules); AOM2/ADL2 define a larger superset for ADL 2 tooling. They
-are emitted by archetype validators (ADL Workbench, `archie`, etc.) and CKM
-validation, and are useful to recognise in tool output:
+These codes are emitted by archetype **validator tooling** (ADL Workbench,
+`archie`, CKM) — they are **not** defined in the ADL 1.4 or AOM 1.4
+specification text. The formal mnemonic validity-code framework is an **AOM2**
+construct (AOM2 defines the normative superset, e.g. `VARID`, `VARCN`,
+`VARDT`, `VATDF`, `VACDF`); tooling adds further codes beyond it (e.g. `VUNT`
+in `archie`, `VCOC` in ADL Workbench). They are useful to recognise in tool
+output:
 
 - **VARID:** Valid `archetype_id` per openEHR specification
 - **VARCN:** `concept` references a term in ontology

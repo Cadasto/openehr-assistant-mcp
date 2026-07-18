@@ -39,7 +39,7 @@ Archetypes optimise for reuse and safety, not local workflows.
 
 **Occurrences** (on object nodes) defines how many times an object may appear in its parent; separate from cardinality. Default when unstated (ADL 1.4) is `{1..1}`; `{0}`/`{0..0}` prohibits the node.
 
-**Consistency (VCOC):** the interval (sum of sibling occurrences minima)..(sum of sibling occurrences maxima) must lie inside the container's cardinality interval.
+**Consistency:** the interval (sum of sibling occurrences minima)..(sum of sibling occurrences maxima) must lie inside the container's cardinality interval (validator-tooling check `VCOC`).
 
 ---
 

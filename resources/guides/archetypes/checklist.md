@@ -82,7 +82,7 @@
 - [ ] All ac-codes defined in `constraint_definitions`
 - [ ] Identifiers unchanged from compatible versions
 - [ ] Paths stable for long-term AQL use
-- [ ] ADL 1.4 validity rules pass (VARID, VARCN, VARDF, VARON, VARDT, VATDF, VACDF, VDFAI, VDFPT, VCOC)
+- [ ] Archetype validator checks pass (VARID, VARCN, VARDF, VARON, VARDT, VATDF, VACDF, VDFAI, VDFPT, VCOC — validator-tooling codes, not ADL 1.4 spec text; see rules.md §J)
 
 ---
 

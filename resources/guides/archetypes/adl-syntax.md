@@ -107,7 +107,7 @@ value matches { DV_TEXT matches {*} }
 - **occurrences** — object nodes; how many times object may appear; default when unstated is `{1..1}`
 - **cardinality** — container attributes; how many children allowed
 
-> Never confuse occurrences with cardinality. They must be mutually consistent: the sum of sibling occurrences ranges must fit inside the container cardinality (validity rule VCOC).
+> Never confuse occurrences with cardinality. They must be mutually consistent: the sum of sibling occurrences ranges must fit inside the container cardinality (validator-tooling check `VCOC`).
 
 ### Internal References (use_node)
 
@@ -116,7 +116,7 @@ Reuse constraints from elsewhere in same archetype:
 use_node CLUSTER[at0010] /items[at0005]
 ```
 
-- The stated RM type must be the same as, or a supertype of, the target node's type (VUNT)
+- The stated RM type must be the same as, or a supertype of, the target node's type (validator-tooling check `VUNT`)
 - An `occurrences` constraint on the reference overrides the target node's occurrences; if absent, the target's occurrences apply
 
 ### Leaf Nodes
