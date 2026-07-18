@@ -32,7 +32,7 @@ Specifies the openEHR Task Planning facility for clinical process automation whe
 - Plan data context — `PLAN_DATA_CONTEXT` with `CONTEXT_VARIABLE<T>`, `CONTEXT_CONSTANT<T>`, `CONTEXT_EXPRESSION<T>`; external vs local variables (`EXTERNAL_VARIABLE`, `LOCAL_VARIABLE`, `CONTINUOUS_EVENT_VARIABLE`) populated via queries or API calls; expression syntax from the openEHR Expression Language.
 - Events and waits — `TASK_WAIT`, `EVENT_WAIT<T>`, `TIMER_EVENT`, `TIMER_WAIT`, `TIMELINE_MOMENT`, `REMINDER`; callback machinery (`CALLBACK_NOTIFICATION`, `RESUME_ACTION`, `MANUAL_NOTIFICATION`) with time-outs and lifecycle-transition overrides.
 - Order tracking — `ORDER_REF` links plan tasks to openEHR orders, supporting both tracking an existing order and creating-then-tracking (e.g. `PERFORMABLE_TASK<DEFINED_ACTION>` committing an Instruction, then `DISPATCHABLE_TASK<SYSTEM_REQUEST>` dispatching it).
-- Lifecycle — `TASK_LIFECYCLE` enumeration (definitions package); aggregate process state computed over sequential and parallel groups.
+- Lifecycle — `TASK_LIFECYCLE` enumeration (definition package); aggregate process state computed over sequential and parallel groups.
 - `EXECUTION_HISTORY` / `TASK_EVENT_RECORD` (history package) — audit record of everything that happened during plan execution.
 
 ## Relations to Other Specs

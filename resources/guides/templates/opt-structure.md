@@ -2,7 +2,7 @@
 
 **Scope:** The operational template (OPT) — the flattened, compiled form of a template that a CDR validates data against. Complements the source-form guide openehr://guides/templates/oet-syntax.
 **Related:** openehr://guides/templates/serialization-formats, openehr://guides/templates/oet-syntax, openehr://guides/templates/web-template, openehr://guides/templates/principles, openehr://guides/specs/am2-OPT2, openehr://guides/specs/am2-AOM2
-**Keywords:** OPT, operational template, flattening, .opt, .optx, .optj, .opt2, OPERATIONALTEMPLATE, raw, profiled, CDR validation, ADL2
+**Keywords:** OPT, operational template, flattening, .opt, .optx, .optj, OPT2, OPERATIONALTEMPLATE, raw, profiled, CDR validation, ADL2
 
 ---
 
@@ -24,7 +24,7 @@ Flattening resolves **filled** slots (the chosen archetype is inlined) and appli
 ## Serialisations
 
 - **ADL 1.4 OPT (`.opt`)** — the dominant form in practice. XML, root `<template xmlns="http://schemas.openehr.org/v1">` (the `OPERATIONALTEMPLATE` / AOM XmlBeans model). This is what most current tooling and CDRs consume. EHRbase, for example, ingests it via `POST .../definition/template/adl1.4` with `Content-Type: application/xml` (vendor/de-facto endpoint, not the abstract spec).
-- **ADL2 operational template (`.opt2`)** — the ADL2 successor, per the OPT2 specification. Can be serialised as **ADL text (`.opt`)**, **XML (`.optx`)** or **JSON (`.optj`)** (OPT2 spec, *Types of OPT*). Archetype Designer can produce ADL2 but has historically exported ADL 1.4 OPT by default.
+- **ADL2 operational template (OPT2)** — the ADL2 successor, per the OPT2 specification. Serialised as **ADL text (`.opt`)**, **XML (`.optx`)** or **JSON (`.optj`)** — the spec defines no `.opt2` extension (OPT2 spec, *Types of OPT*). Archetype Designer can produce ADL2 but has historically exported ADL 1.4 OPT by default.
 
 > Terminology trap: in ADL 1.4 practice "the OPT" is one XML file named `.opt`. The `.opt`/`.optx`/`.optj` triple is the **OPT2 (ADL2)** convention, where `.opt` means ADL *text* (not XML). Always confirm which generation you are handling.
 
