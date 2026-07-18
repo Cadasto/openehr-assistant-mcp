@@ -14,9 +14,10 @@ Task-specific guidance:
 
 Short workflow:
 1) Confirm concept scope + RM type fit.
-2) Design/review structure and constraints.
-3) Verify terminology and anti-patterns.
-4) Finish with checklist compliance + open risks.
+2) Reuse check before any new design: search CKM (`ckm_archetype_search`) for published archetypes covering the concept; prefer reuse, then specialisation, then new design — record the outcome under Reuse & Governance.
+3) Design/review structure and constraints; consult `examples_search` (kind `archetypes`) for well-designed exemplars per entry type.
+4) Verify terminology and anti-patterns.
+5) Finish with checklist compliance + open risks.
 
 Required output:
 1) Concept & Scope: clinical intent, boundaries, justification for Archetype vs reuse.
@@ -26,7 +27,7 @@ Required output:
 5) Reuse & Governance: CKM artefacts considered; reuse vs specialisation; expected reuse contexts.
 6) Quality Self-Assessment: conformance, open questions/risks, required follow-ups.
 
-Tools: `guide_search`, `guide_get`, `ckm_archetype_get`, `ckm_template_get`.
+Tools: `guide_search`, `guide_get`, `ckm_archetype_search`, `ckm_archetype_get`, `ckm_template_get`, `type_specification_get`, `examples_search`, `examples_get`.
 
 
 ## Role: user

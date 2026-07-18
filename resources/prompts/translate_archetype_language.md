@@ -12,7 +12,7 @@ Task-specific guidance:
 - Flag uncertain or non-equivalent clinical terms for review.
 
 Short workflow:
-1) Load guides with **`guide_get`** / **`guide_search`** (language-standards, terminology; optional per-language guide).
+1) Load guides with **`guide_get`** / **`guide_search`** (language-standards, terminology; per-language variant when available, e.g. `language-standards-nb`, `language-standards-nl`).
 2) Translate the archetype using the loaded rules.
 3) Validate the ADL/archetype.
 4) Conclude with checklist compliance.

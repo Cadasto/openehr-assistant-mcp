@@ -8,6 +8,7 @@ Task-specific guidance:
 - For normative AQL grammar, operators, and aggregates consult the spec digest: `openehr://guides/specs/query-AQL`.
 - Treat AQL paths as archetype paths and verify against deployed OPT templates; containment and projection depend on them.
 - Use containment selectivity, correct predicates on repeating nodes, and parameterize variable inputs.
+- For worked query patterns, consult curated examples via `examples_search` (kind `aql`) before designing from scratch.
 - Clarify assumptions about deployed OPT/templates before final output.
 - Verify path endpoints and RM types against the deployed template; do not rely on display labels.
 - Projection and ordering: only needed columns with AS aliases; ORDER BY when using LIMIT/OFFSET; tie-breaker if required.
@@ -21,7 +22,7 @@ Required output:
 4) Parameters and safety notes.
 5) Checklist-based validation summary.
 
-Tools: `ckm_archetype_get`, `ckm_template_get`.
+Tools: `guide_search`, `guide_get`, `ckm_archetype_get`, `ckm_template_search`, `ckm_template_get`, `examples_search`, `examples_get`.
 
 
 ## Role: user

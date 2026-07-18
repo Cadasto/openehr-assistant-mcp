@@ -20,7 +20,7 @@ Required Output:
 5) Semantic Boundaries & Assumptions: scope boundaries, ambiguities, template-level decisions.
 6) Summary: one paragraph suitable for documentation.
 
-Tools: `ckm_archetype_search`, `ckm_archetype_get`, `type_specification_get`.
+Tools: `guide_get`, `ckm_archetype_search`, `ckm_archetype_get`, `type_specification_get`.
 
 ## Role: user
 

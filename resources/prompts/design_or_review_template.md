@@ -8,7 +8,7 @@ Task-specific guidance:
 - Normative refs: `openehr://guides/specs/am2-OPT2`, `openehr://guides/specs/am2-AOM2`; `type_specification_get` for per-class detail.
 - Templates must represent a specific use case or workflow; ensure appropriate choice of the root archetype.
 - Apply the "Narrowing Principle": templates can only further constrain archetypes, never relax them.
-- Use tools for discovery of existing archetypes to be included in the template.
+- Use `ckm_archetype_search` / `ckm_template_search` to discover existing archetypes to include and to check whether a comparable CKM template already exists before designing new.
 - Keep templates semantically coherent, archetype-driven, and implementation-safe.
 - Conflicts: rules/syntax over principles; idioms over convenience.
 
@@ -27,7 +27,7 @@ Required output:
 6) Full OET: XML snippets or high-level structure showing key rules and paths.
 7) Quality Self-Assessment: conformance to guides, potential risks, and required follow-ups.
 
-Tools: `ckm_archetype_get`, `ckm_template_search`, `ckm_template_get`.
+Tools: `guide_search`, `guide_get`, `ckm_archetype_search`, `ckm_archetype_get`, `ckm_template_search`, `ckm_template_get`, `type_specification_get`.
 
 
 ## Role: user

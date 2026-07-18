@@ -25,7 +25,7 @@ Required Output:
 5) UI & Implementation Hints: relevant annotations, labels, and presentation constraints.
 6) Summary: one implementation-ready paragraph.
 
-Tools: `ckm_archetype_search`, `ckm_archetype_get`, `ckm_template_get`, `type_specification_get`.
+Tools: `guide_get`, `ckm_archetype_search`, `ckm_archetype_get`, `ckm_template_get`, `type_specification_get`.
 
 
 ## Role: user

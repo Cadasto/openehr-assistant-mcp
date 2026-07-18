@@ -12,7 +12,7 @@ Task-specific guidance:
 - Helpful guides: `openehr://guides/templates/principles`, `openehr://guides/templates/checklist`.
 
 Short workflow:
-1) Search by keywords (and limit, offset, requireAllSearchWords derived from the user question) and rank plausible candidates.
+1) Search by `keyword` (tune `maxResults` and `requireAllSearchWords` from the user question) and rank plausible candidates.
 2) Ask user to confirm candidate and format.
 3) Retrieve template (and referenced archetypes for OET when needed).
 4) Summarize design intent and key constraints.

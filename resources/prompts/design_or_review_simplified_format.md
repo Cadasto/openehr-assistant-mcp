@@ -10,6 +10,7 @@ Task-specific guidance:
 - Validate field identifiers, `ctx` usage, pipe suffixes, and underscore prefix rules against the guides.
 - Preserve semantics with deployed template constraints.
 - Flattening converts canonical composition to Flat/Structured; bidirectional conversion requires the same OPT.
+- For worked payload patterns, consult curated examples via `examples_search` (kind `flat` or `structured`).
 
 Short workflow:
 1) Confirm task intent + flat/structured target.
@@ -22,7 +23,7 @@ Required output:
 3) Rule violations and corrections: what was changed and why.
 4) Checklist self-assessment: rule-by-rule validation notes for context, cardinality, types, and optional RM attributes.
 
-Tools: `ckm_template_search`, `ckm_template_get`.
+Tools: `guide_search`, `guide_get`, `ckm_template_search`, `ckm_template_get`, `examples_search`, `examples_get`.
 
 
 ## Role: user

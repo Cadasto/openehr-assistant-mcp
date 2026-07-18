@@ -21,7 +21,7 @@ Required output:
 3) Remaining ambiguities.
 4) Detected Semantic Issues (do not fix): modelling quality, terminology meaning, scope, over/under-constraint.
 
-Tools: `guide_adl_idiom_lookup`, `ckm_archetype_search`, `ckm_archetype_get`, `type_specification_search`, `type_specification_get`.
+Tools: `guide_get`, `guide_adl_idiom_lookup`, `ckm_archetype_search`, `ckm_archetype_get`, `type_specification_search`, `type_specification_get`.
 
 
 ## Role: user
