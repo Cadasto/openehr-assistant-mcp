@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/RM/development/data_types.html
 **Markdown URL:** https://specifications.openehr.org/releases/RM/development/data_types.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-data_structures, openehr://guides/specs/rm-support
 **Keywords:** data types, DV_QUANTITY, DV_CODED_TEXT, DV_INTERVAL, DV_DATE_TIME, DV_MULTIMEDIA, CODE_PHRASE, ordinal, proportion, terminology, ISO 8601
 
@@ -24,10 +24,11 @@ The `data_types` package defines the clinical and scientific data value classes 
 - `DV_TEXT` — plain narrative text, optionally formatted or hyperlinked.
 - `DV_CODED_TEXT` — terminology-bound text carrying a `CODE_PHRASE` plus human-readable rubric.
 - `CODE_PHRASE` — `(terminology_id, code_string)` tuple underpinning every coded reference.
-- `DV_ORDINAL` — ordered symbolic value (e.g. pain 0/+/++/+++) with integer magnitude and coded symbol.
+- `DV_ORDINAL` — ordered symbolic value (e.g. pain 0/+/++/+++) with integer value and coded symbol.
+- `DV_SCALE` — like `DV_ORDINAL` but allowing Real values, for scales/scores with non-integer steps.
 - `DV_QUANTITY` — measured dimensioned value with `magnitude`, `units` (UCUM), `precision`, and optional accuracy.
 - `DV_COUNT` — integral countable quantity with no physical units.
-- `DV_PROPORTION` — numerator/denominator pair typed by `ProportionKind` (ratio, percent, fraction, unitary).
+- `DV_PROPORTION` — numerator/denominator pair typed by `PROPORTION_KIND` (ratio, percent, fraction, unitary).
 - `DV_DURATION` — ISO 8601 relative elapsed time, signed, supporting the full P[n]Y[n]M[n]DT... syntax.
 - `DV_DATE`, `DV_TIME`, `DV_DATE_TIME` — ISO 8601 absolute temporal values with partial-precision support and timezone handling.
 - `DV_INTERVAL<T>` — generic closed/open range over any `DV_ORDERED`, enabling reference ranges and temporal windows.

@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/BASE/development/foundation_types.html
 **Markdown URL:** https://specifications.openehr.org/releases/BASE/development/foundation_types.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/base-base_types
 **Keywords:** foundation types, primitive types, Any, Ordered, Interval, List, Set, Hash, Iso8601, Terminology_code, Cardinality, BASE
 
@@ -19,7 +19,7 @@ Fixes the names and minimal semantics of the built-in and library types every ot
 ## Scope
 
 - In: root type `Any`; ordering mix-ins `Ordered` and `Ordered_numeric`; primitive types `Octet`, `Character`, `Boolean`, `Integer`, `Integer64`, `Real`, `Double`, `String`; structural generics `Array`, `List`, `Set`, `Hash`; interval family `Interval`, `Point_interval`, `Proper_interval`, `Multiplicity_interval`, `Cardinality`; ISO 8601 temporal types `Iso8601_date`, `Iso8601_time`, `Iso8601_date_time`, `Iso8601_duration`; terminology value types `Terminology_code`, `Terminology_term`.
-- Out: concrete implementation bindings for any target language, schema, or wire format; RM identifier and reference types (`OBJECT_ID`, `OBJECT_REF`, see `RM/support`); data-type value classes such as `CODE_PHRASE`, `DV_CODED_TEXT`, `DV_QUANTITY` (in `RM/data_types`); terminology-service contracts and code-set registries; archetype-specific constraint constructs such as C_OBJECT.
+- Out: concrete implementation bindings for any target language, schema, or wire format; identifier and reference types (`OBJECT_ID`, `OBJECT_REF`, see `BASE/base_types`); data-type value classes such as `CODE_PHRASE`, `DV_CODED_TEXT`, `DV_QUANTITY` (in `RM/data_types`); terminology-service contracts and code-set registries; archetype-specific constraint constructs such as C_OBJECT.
 
 ## Key Classes / Constructs
 

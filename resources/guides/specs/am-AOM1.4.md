@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/AM/development/AOM1.4.html
 **Markdown URL:** https://specifications.openehr.org/releases/AM/development/AOM1.4.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/am-ADL1.4, openehr://guides/specs/am2-AOM2
 **Keywords:** AOM, AOM 1.4, archetype object model, C_OBJECT, constraint, legacy
 
@@ -18,7 +18,7 @@ Defines the normative, syntax-independent object model for archetypes as authore
 
 ## Scope
 
-- In: the archetype root (`ARCHETYPE`), the constraint-tree classes (`C_OBJECT` hierarchy, `C_ATTRIBUTE` hierarchy), primitive and domain-typed constraint leaves (`C_PRIMITIVE`, `C_DOMAIN_TYPE`), slot and reference constraints (`ARCHETYPE_SLOT`, `ARCHETYPE_INTERNAL_REF`, `CONSTRAINT_REF`), cardinality/occurrences qualifiers, assertion/expression model (`ASSERTION`, `EXPRESSION`, `BINARY_OPERATOR`, etc.), the ADL 1.4 ontology section (`ARCHETYPE_ONTOLOGY`, `ARCHETYPE_TERM`, bindings), path semantics, specialisation depth, validity/subset predicates, and default-value generation.
+- In: the archetype root (`ARCHETYPE`), the constraint-tree classes (`C_OBJECT` hierarchy, `C_ATTRIBUTE` hierarchy), primitive and domain-typed constraint leaves (`C_PRIMITIVE`, `C_DOMAIN_TYPE`), slot and reference constraints (`ARCHETYPE_SLOT`, `ARCHETYPE_INTERNAL_REF`, `CONSTRAINT_REF`), cardinality/occurrences qualifiers, assertion/expression model (`ASSERTION`, `EXPR_ITEM`, `EXPR_BINARY_OPERATOR`, etc.), the ADL 1.4 ontology section (`ARCHETYPE_ONTOLOGY`, `ARCHETYPE_TERM`, bindings), path semantics, specialisation depth, validity/subset predicates, and default-value generation.
 - Out: ADL 1.4 lexical/grammar rules (see `AM/ADL1.4`); ADL 2 / AOM 2 structures such as differential archetypes, flat-vs-differential semantics, operational templates, and the revised terminology/tuple model (see `AM/AOM2`); Reference Model type definitions (constrained here but defined in `RM/*`); archetype profile rules; the Template Object Model (TOM); and per-class attribute-level detail, which is supplied at runtime by the BMM-backed type lookup.
 
 ## Key Classes / Constructs
@@ -31,7 +31,7 @@ Defines the normative, syntax-independent object model for archetypes as authore
 - `ARCHETYPE_SLOT` — reference constraint allowing other archetypes matching include/exclude assertions to fill a slot at runtime.
 - `ARCHETYPE_ONTOLOGY` — terminology section: `at`/`ac` term definitions, translations, term/constraint bindings to external terminologies.
 
-Domain and assertion classes (`C_DOMAIN_TYPE`, `C_ORDINAL`, `C_CODED_TEXT`, `C_QUANTITY`, `ASSERTION`, `EXPRESSION`, `ARCHETYPE_INTERNAL_REF`, `CONSTRAINT_REF`, `CARDINALITY`, `OCCURRENCES`) are defined in the spec. Per-class attribute, invariant, and function detail is best retrieved via `type_specification_get` (BMM-backed) rather than duplicated here.
+Domain and assertion classes (`C_DOMAIN_TYPE`, `C_ORDINAL`, `C_CODED_TEXT`, `C_QUANTITY`, `ASSERTION`, `ARCHETYPE_INTERNAL_REF`, `CONSTRAINT_REF`, `CARDINALITY`) are defined in the spec. Per-class attribute, invariant, and function detail is best retrieved via `type_specification_get` (BMM-backed) rather than duplicated here.
 
 ## Relations to Other Specs
 

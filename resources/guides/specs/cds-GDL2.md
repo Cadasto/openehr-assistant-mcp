@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/CDS/development/GDL2.html
 **Markdown URL:** https://specifications.openehr.org/releases/CDS/development/GDL2.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/lang-EL, openehr://guides/specs/am2-ADL2
 **Keywords:** GDL, GDL 2, guideline, CDS, decision support, archetype path, rules
 
@@ -23,14 +23,15 @@ GDL 2 (Guideline Definition Language 2) defines a formal, platform- and terminol
 
 ## Key Classes / Constructs
 
-- `Guideline` — top-level artefact carrying metadata, `definition`, and the local terminology block with gt-codes.
-- `Definition` — container holding `pre_conditions`, `data_bindings`, ordered `rules`, and optional output `templates`.
-- `Rule` — a `when` assertion list and `then` statement list with a numeric priority controlling firing order (higher first).
-- `Binding` / `Data-binding` — maps a model path (archetype or template path) to a gt-code variable used throughout the definition.
-- `Precondition` — guideline-level boolean assertion gating whether any rules apply to the current input set.
-- `Predicate` — filter expression attached to a data-binding to select matching instances (e.g. latest, coded value).
-- `Action` — `then`-clause statement assigning a value to a variable, setting result fields, or instantiating a template.
-- `Template` — output shape used by actions to emit structured decision results (alerts, orders, assessments).
+- Guideline artefact — top-level structure carrying `gdl_version`, `id`, `concept`, authored-resource `description` metadata, the `definition`, and the local terminology with gt-codes (`term_definitions`).
+- `definition` section — container holding `pre_conditions`, `data_bindings`, ordered `rules`, and optional reporting `templates`.
+- Rule — a `when` condition list and `then` action list with a numeric `priority` controlling firing order (higher first).
+- `data_bindings` — map archetype/template paths (optionally scoped by `template_id`) to gt-code variables used throughout the definition.
+- `pre_conditions` — guideline-wide boolean assertions gating whether any rules apply to the current input set.
+- `predicates` — filter expressions attached to a data-binding to select matching instances (e.g. latest, coded value).
+- `then` actions — assign values to variables, set output fields, or invoke a reporting template via `use_template`.
+- `templates` — output shapes (keyed by `model_id` / `template_id`, with `{}` variable substitution) used to emit structured decision results such as CDS-Hooks cards.
+- GDL2 Object Model — three packages, `guideline`, `expression`, and `terminology`; a GDL source is a serialised instance of this model in ODIN or JSON.
 
 ## Relations to Other Specs
 

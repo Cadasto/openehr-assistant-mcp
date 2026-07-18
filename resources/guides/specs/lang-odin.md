@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/LANG/development/odin.html
 **Markdown URL:** https://specifications.openehr.org/releases/LANG/development/odin.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/am2-ADL2, openehr://guides/specs/lang-bmm
 **Keywords:** ODIN, notation, JSON-like, dADL, BMM, ADL sections
 
@@ -34,8 +34,8 @@ ODIN (Object Data Instance Notation) defines a compact, human-readable serialisa
 
 ## Relations to Other Specs
 
-- Depends on: `LANG/basic_meta_model` (primitive type space reused by ODIN literals), `RM/support` (`TERMINOLOGY_ID`, identifier semantics underpinning coded term literals), and ISO 8601 for date/time/duration lexical rules.
-- Consumed by: `AM/ADL2` (all non-constraint archetype sections — `language`, `description`, `terminology`, `annotations` — are ODIN), `LANG/bmm` (entire BMM schema files are ODIN), `LANG/aom2` serialised form, and any openEHR tooling exchanging typed object graphs outside XML/JSON.
+- Depends on: `BASE/foundation_types` (primitive type space reused by ODIN literals), terminology identifier semantics underpinning coded term literals (`[terminology_id::code]`), and ISO 8601 for date/time/duration lexical rules.
+- Consumed by: `AM/ADL2` (all non-constraint archetype sections — `language`, `description`, `terminology`, `annotations` — are ODIN), `LANG/bmm` / `LANG/bmm_persistence` (BMM schema files are conventionally ODIN), `AM/AOM2` ODIN-serialised archetype form, and any openEHR tooling exchanging typed object graphs outside XML/JSON.
 
 ## Architectural Placement
 

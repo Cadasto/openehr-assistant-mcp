@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/TERM/development/SupportTerminology.html
 **Markdown URL:** https://specifications.openehr.org/releases/TERM/development/SupportTerminology.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/rm-common, openehr://guides/specs/rm-ehr
 **Keywords:** terminology, vocabulary, code set, lifecycle state, ISM, attestation, external terminology, ISO
 
@@ -18,7 +18,7 @@ Defines the non-clinical, informational vocabulary that openEHR models assume ex
 
 ## Scope
 
-- In: openEHR-internal terminology groups (each with numeric concept IDs and multilingual rubrics); external code-set bindings (ISO 639-1 languages per RFC 5646, ISO 3166-1 alpha-2 countries, IANA character sets, IANA media types, compression and integrity-check algorithms, HL7 abnormal flags); the two-file XML representation (`codesets`, `terminology` with per-language `group`/`concept` entries); and the governance / translation process via the specifications-TERM repository.
+- In: openEHR-internal terminology groups (each with numeric concept IDs and multilingual rubrics); external code-set bindings (ISO 639-1 languages per RFC 5646, ISO 3166-1 alpha-2 countries, IANA character sets, IANA media types, compression and integrity-check algorithms, normal statuses mapping to HL7v2 abnormal flags); the computable XML representation with per-language terminology files; FHIR CodeSystem/ValueSet renderings of each vocabulary; and the governance / translation process via the specifications-TERM repository.
 - Out: Clinical terminologies (SNOMED CT, LOINC, ICD); concrete terminology-service wire protocols (defined by `TERMINOLOGY_SERVICE` in RM/support); measurement units (see UCUM binding via `MEASUREMENT_SERVICE`); archetype-internal `ac`/`at` codes (owned by the archetype, not by TERM).
 
 ## Key Classes / Constructs
@@ -30,7 +30,7 @@ Defines the non-clinical, informational vocabulary that openEHR models assume ex
 - `openehr/null_flavours`, `openehr/subject_relationship`, `openehr/participation_function` / `participation_mode`, `openehr/setting` — classifier vocabularies used across `ENTRY`, `PARTICIPATION` and care-context attributes.
 - `openehr/property`, `openehr/event_math_function`, `openehr/term_mapping_purpose` — physical property vocabulary for `DV_QUANTITY` constraints, statistical function labels, and term-mapping provenance.
 - External bindings (code sets, not translated): `languages` (ISO 639-1), `countries` (ISO 3166-1), `character_sets` and `media_types` (IANA), `compression_algorithms`, `integrity_check_algorithms`, `normal_statuses` (HL7).
-- XML artefacts: a single `openehr_code_sets.xml` plus one `openehr_terminology.xml` per language under `computable/XML/<lang>/`, validated against an XSD.
+- XML artefacts: one `openehr_terminology.xml` per language under `computable/XML/<lang>/` in the specifications-TERM repository; new translations are added by copying and translating an existing language file.
 
 For concrete code-to-rubric lookup do not paste content here — call the server's `terminology_resolve` MCP tool (groups + codes + language), and consult the XML files in the specifications-TERM repository for full content and translations.
 

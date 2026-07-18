@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/LANG/development/bmm_persistence.html
 **Markdown URL:** https://specifications.openehr.org/releases/LANG/development/bmm_persistence.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-07-18
 **Related:** openehr://guides/specs/lang-bmm, openehr://guides/specs/lang-odin
 **Keywords:** BMM, persistence, serialisation, .bmm, ODIN, file format, P_BMM, schema
 
@@ -30,7 +30,7 @@ Defines the on-disk persistence model `P_BMM` used to serialise Basic Meta-Model
 - `packages` — recursive `P_BMM_PACKAGE` tree grouping classes under dotted package paths; carries `name` and nested `classes` references.
 - `primitive_types` — keyed table of `P_BMM_CLASS` entries for built-in primitive types (Integer, String, Boolean, etc.) referenced by properties.
 - `class_definitions` — keyed table of `P_BMM_CLASS` entries defining the domain classes, each with `name`, `ancestors`/`ancestor_defs`, `is_abstract`, `generic_parameter_defs`, and `properties` (`P_BMM_SINGLE_PROPERTY`, `P_BMM_CONTAINER_PROPERTY`, `P_BMM_GENERIC_PROPERTY`, and enumeration variants).
-- `archetype_parent_class` / `archetype_data_value_parent_class` / `archetype_rm_closure_packages` — AOM-facing hints that tell archetype tooling which RM classes are archetypeable roots and which packages form the archetyping closure.
+- Note: archetype-facing hints such as `archetype_parent_class` and `archetype_data_value_parent_class` seen in openEHR RM schema files are not part of this spec — they belong to the AOM profile configuration defined in `AM/AOM2` (Reference Model Adaptation).
 
 ## Relations to Other Specs
 
@@ -43,7 +43,7 @@ Sits alongside `LANG/odin` within the language layer: `bmm_persistence` is the f
 
 ## When to Read the Full Spec
 
-Consult the full document when implementing a `.bmm` parser or writer, when authoring or editing a schema by hand and needing exact attribute names and cardinality rules for `P_BMM_*` constructs, when resolving generic or open-type property definitions, when wiring schema `includes` and lifecycle state transitions, or when debugging how archetype tooling resolves `archetype_parent_class` and RM closure packages for a new reference model.
+Consult the full document when implementing a `.bmm` parser or writer, when authoring or editing a schema by hand and needing exact attribute names and cardinality rules for `P_BMM_*` constructs, when resolving generic or open-type property definitions, when wiring schema `includes` and lifecycle state transitions, or when debugging schema merge and validation state transitions during the two-stage load pipeline.
 
 ## References
 
