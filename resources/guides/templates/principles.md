@@ -1,7 +1,7 @@
 # openEHR Template Design Principles
 
 **Scope:** Foundational principles for openEHR templates (OET/OPT)
-**Related:** openehr://guides/templates/rules, openehr://guides/templates/cgem-framework, openehr://guides/templates/oet-idioms-cheatsheet, openehr://guides/templates/checklist, openehr://guides/specs/am-Overview, openehr://guides/specs/am2-OPT2, openehr://guides/specs/am2-AOM2, openehr://guides/specs/am-Identification
+**Related:** openehr://guides/templates/rules, openehr://guides/templates/cgem-framework, openehr://guides/templates/serialization-formats, openehr://guides/templates/opt-structure, openehr://guides/templates/web-template, openehr://guides/templates/oet-idioms-cheatsheet, openehr://guides/templates/checklist, openehr://guides/specs/am-Overview, openehr://guides/specs/am2-OPT2, openehr://guides/specs/am2-AOM2, openehr://guides/specs/am-Identification
 **Keywords:** templates, OET, OPT, design, principles, CGEM, composition, event, persistent
 
 ---
@@ -50,6 +50,9 @@ Templates may set **default values** where the use case fixes or strongly implie
 
 - **OET (Source Template):** For authoring, references archetypes, used in editors
 - **OPT (Operational Template):** Flattened, self-contained artefact for runtime systems (XML in ADL 1.4 practice; OPT2 allows ADL, XML, JSON, YAML serialisations)
+- **Web template (JSON):** vendor runtime projection of the OPT for UI and FLAT/STRUCTURED data entry
+
+A template exists in several serialisations for different lifecycle stages — see openehr://guides/templates/serialization-formats (map), openehr://guides/templates/opt-structure (OPT), and openehr://guides/templates/web-template (web template).
 
 ---
 

@@ -1,7 +1,7 @@
 # openEHR Template Serialization Formats
 
 **Scope:** The four serialisations a template takes — OET, OPT, Archetype Designer `.t.json`, web template — and which are hand-authorable.
-**Related:** openehr://guides/templates/oet-syntax, openehr://guides/templates/oet-idioms-cheatsheet, openehr://guides/templates/principles, openehr://guides/specs/am2-OPT2, openehr://guides/specs/am2-AOM2, openehr://guides/specs/its-rest-simplified_formats
+**Related:** openehr://guides/templates/oet-syntax, openehr://guides/templates/opt-structure, openehr://guides/templates/web-template, openehr://guides/templates/oet-idioms-cheatsheet, openehr://guides/templates/principles, openehr://guides/specs/am2-OPT2, openehr://guides/specs/am2-AOM2, openehr://guides/specs/its-rest-simplified_formats
 **Keywords:** OET, OPT, t.json, web template, Archetype Designer, template overlay, serialization, FLAT, STRUCTURED, MD5-CAM, checksum
 
 ---
@@ -57,3 +57,15 @@ An OET `<integrity_checks>` block holds one `<digest id="MD5-CAM-1.0.1">` per re
 - Deploying to a runtime / generating schemas, forms → **OPT**.
 - Building FLAT/STRUCTURED payloads or UIs → **web template** (from OPT).
 - Working inside Archetype Designer → **`.t.json`**.
+
+---
+
+## Deep-dive guides per format
+
+This guide is the map; for the structure and particularities of each non-OET runtime format see:
+
+- **OET** (source, hand-authored): openehr://guides/templates/oet-syntax
+- **OPT** (compiled runtime contract): openehr://guides/templates/opt-structure
+- **Web template** (UI / FLAT-STRUCTURED path schema): openehr://guides/templates/web-template
+
+`.t.json` (Archetype Designer source JSON) has no separate guide — it is the AOM2/JSON analogue of OET, covered by the table above and openehr://guides/specs/am2-AOM2.

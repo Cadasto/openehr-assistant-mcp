@@ -1,7 +1,7 @@
 # OET Idioms Cheat Sheet
 
 **Purpose:** Fast grounding for writing and reviewing openEHR templates (OET)
-**Related:** openehr://guides/templates/oet-syntax, openehr://guides/templates/serialization-formats, openehr://guides/templates/rules
+**Related:** openehr://guides/templates/oet-syntax, openehr://guides/templates/serialization-formats, openehr://guides/templates/opt-structure, openehr://guides/templates/web-template, openehr://guides/templates/rules
 **Keywords:** OET, OPT, constraint, syntax, idioms, cheat sheet, minimal, fast, QA, CGEM, event, persistent
 
 ---
