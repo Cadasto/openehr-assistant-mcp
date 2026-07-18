@@ -69,7 +69,7 @@ The spec defines AQL; engines implement subsets and extensions. Treat “support
 Portability cautions:
 
 - **Template disambiguation:** When the same archetype is reused across templates, add `template_id` conditions in WHERE for contextual disambiguation.
-- **VERSION queries:** `CONTAINS VERSION` semantics are not fully settled across engines; treat as a portability risk area unless engine behaviour is explicitly documented and tested.
+- **VERSION queries:** the grammar defines `VERSION` class expressions with `LATEST_VERSION`/`ALL_VERSIONS` predicates, but the spec prose does not define their semantics or the no-predicate default (open spec issue SPECPR-481; implementations commonly default to latest-only). Always state the predicate explicitly and verify engine behaviour before use.
 - **Repeating structures:** Projecting multiple paths from different repeating scopes can cause row explosion (Cartesian-like combinations). Validate result shape against concrete sample data when querying repeated clinical structures.
 - **Deep path predicates:** Prefer WHERE for non-structural value criteria over exotic path predicates in class expressions; engine support varies.
 

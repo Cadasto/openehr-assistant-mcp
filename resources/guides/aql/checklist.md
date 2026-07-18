@@ -72,7 +72,7 @@ Paths in AQL are **archetype paths** (or RM class attribute paths), grounded in 
 ## 8. Engine Compatibility
 
 - [ ] Query uses only features supported by the target engine (docs/tests).
-- [ ] Functions/aggregates verified — COUNT, MIN, MAX, SUM, AVG are spec-normative, but SUM and AVG are not always implemented; scalar functions (CONCAT, LENGTH, etc.) are engine-dependent.
+- [ ] Functions/aggregates verified — aggregates (COUNT, MIN, MAX, SUM, AVG) and core single-row functions (LENGTH, CONTAINS, POSITION, SUBSTRING, CONCAT, CONCAT_WS; ABS, MOD, CEIL, FLOOR, ROUND; CURRENT_DATE, CURRENT_TIME, CURRENT_DATE_TIME/NOW, CURRENT_TIMEZONE; TERMINOLOGY) are spec-defined, but engine coverage varies (COUNT, MIN, MAX are safest); any other function is an engine extension.
 - [ ] Text/pattern operators — MATCHES and LIKE are spec-normative; IN is engine-dependent.
 - [ ] Tested with representative data and edge cases.
 
@@ -98,5 +98,14 @@ Paths in AQL are **archetype paths** (or RM class attribute paths), grounded in 
 
 - [ ] Query timeout thresholds and result row limits configured.
 - [ ] Regression and conformance test packs cover syntax, semantics, results, performance, and engine compatibility.
+
+---
+
+## 12. Versioning Queries (if applicable)
+
+- [ ] `CONTAINS VERSION` predicate stated explicitly (`[LATEST_VERSION]` / `[ALL_VERSIONS]`); no reliance on the unspecified no-predicate default.
+- [ ] Engine support for VERSION/VERSIONED_OBJECT containment verified (grammar-level constructs; semantics not defined in spec prose).
+- [ ] VERSIONED_OBJECT included only when container-level attributes (e.g. trunk_lifecycle_state) are projected or filtered.
+- [ ] Audit projections use canonical paths (v/uid/value, v/preceding_version_uid/value, v/commit_audit/time_committed/value, v/commit_audit/change_type, v/lifecycle_state/defining_code/code_string).
 
 ---
