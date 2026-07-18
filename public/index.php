@@ -63,6 +63,10 @@ try {
     $builder = Server::builder()
         ->setServerInfo(APP_TITLE, APP_VERSION, APP_DESCRIPTION, [new Icon(APP_ICON)])
         ->setDiscovery(APP_DIR, ['src/Prompts', 'src/Tools', 'src/Resources'], cache: $cache)
+        // mcp/sdk 0.7.0 makes element loading lazy by default, so a discovery /
+        // loader failure would surface on the first request instead of at build().
+        // Keep eager loading so a broken capability fails fast at startup.
+        ->setLazyLoading(false)
         ->setSession(new FileSessionStore(APP_DATA_DIR . '/sessions', ttl: 10 * 60))
         ->setProtocolVersion(ProtocolVersion::V2025_03_26)
         ->setContainer($container)
