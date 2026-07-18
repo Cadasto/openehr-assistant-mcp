@@ -25,6 +25,7 @@
 - [ ] For coded elements, is `limitToList="true"` set if the list is intended to be exhaustive?
 - [ ] Are Quantity constraints (units and ranges) defined for all `DV_QUANTITY` elements?
 - [ ] Are the units consistent with local or international standards (e.g., UCUM)?
+- [ ] Are default values set where the use case fixes a single value (e.g., setting, patient position)?
 
 ## 4. Presentation and Labels
 - [ ] Have elements been renamed only when the archetype label was ambiguous?

@@ -19,6 +19,7 @@
 - **Rule B2:** Make optional elements mandatory (`min="1"`) only when they are clinically required for the specific workflow.
 - **Rule B3:** When an archetype allows a choice of data types (e.g., DV_TEXT or DV_CODED_TEXT), use the template to select the most appropriate one.
 - **Rule B4:** Use **Quantity Constraints** to limit units to those used in the local context and to set clinically sensible min/max ranges.
+- **Rule B5:** Set **default values** (OET: `default="..."` on a `<Rule>`) where the use case fixes or strongly implies a single value (e.g., setting, patient position). Defaults appear in the recorded data — unlike archetype-level *assumed values*, which do not.
 
 ## C. Naming and Labels
 

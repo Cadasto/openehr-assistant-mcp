@@ -81,6 +81,13 @@
 
 ---
 
+## Defaults for Fixed Context
+**Idiom:** When the use case fixes or strongly implies a value, set it as a default (`default="..."` on the `<Rule>`).
+- Example: `<Rule path=".../items[at0005]" default="Phadiatop"/>` pre-fills the test name in a single-assay template.
+- Defaults appear in the recorded data; archetype *assumed values* do not — don't confuse the two.
+
+---
+
 ## Micro Check before OPT Generation
 - Is the root COMPOSITION appropriate?
 - Are all paths valid against the referenced archetypes?

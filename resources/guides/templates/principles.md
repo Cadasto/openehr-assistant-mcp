@@ -31,13 +31,25 @@ Templates can only **further constrain** archetypes — never relax or add unsup
 - Mandatory archetype elements remain mandatory
 - Optional elements can be made mandatory or excluded (`max=0`)
 - Value sets can be reduced but not expanded
+- Constraints may also be tightened on RM attributes not yet constrained by the referenced archetypes (still "narrowing")
+
+Per the Archetype Technology Overview, a template's job is: **composition** (fill slots with archetypes), **element choice** (removal / mandation / leave optional), **narrowing** of remaining constraints, and **setting defaults**.
+
+---
+
+## Defaults vs Assumed Values
+
+Templates may set **default values** where the use case fixes or strongly implies a value (e.g. patient position "lying" in a hospital bed template).
+
+- Default values are a *local* (template-level) concern and **appear in the data**
+- Archetype-level *assumed values* are semantic fallbacks for omitted optional items and **do not appear in the data**
 
 ---
 
 ## Design-time vs Run-time
 
 - **OET (Source Template):** For authoring, references archetypes, used in editors
-- **OPT (Operational Template):** Flattened, self-contained XML for runtime systems
+- **OPT (Operational Template):** Flattened, self-contained artefact for runtime systems (XML in ADL 1.4 practice; OPT2 allows ADL, XML, JSON, YAML serialisations)
 
 ---
 
