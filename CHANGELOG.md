@@ -7,6 +7,20 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: [https://keepachangelog.com/en/1.1.0/](https://keepachangelog.com/en/1.1.0/)
 - Semantic Versioning: [https://semver.org/spec/v2.0.0.html](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased]
+
+### Added
+
+- Guides: new template-design guide `templates/cgem-framework` (CGEM clinical-data categorisation, freshEHR) and serialisation guides `templates/opt-structure` and `templates/web-template` for the runtime OPT / web-template forms.
+- Guides: new spec digests `specs/lang-bmm3`, `specs/proc-overview`, `specs/proc-task_planning`, `specs/proc-decision_language`, and `specs/cnf-guide`.
+
+### Changed
+
+- Guides: broadened AQL versioning coverage (`VERSION` / `LATEST_VERSION` / `ALL_VERSIONS`, node/name predicates, spec-vs-engine function split) and tightened ADL 1.4 archetype alignment (existence/occurrences defaults, HRID/versioning, `controlled`/`specialise`/`invariant` sections).
+- Guides: extended the Simplified Formats guides (`DV_ORDINAL`/`DV_PROPORTION` suffixes, open value-set `|other`, participations, ACTIVITY timing, `ctx` defaults, level-removal rules) and template guidance (defaults vs assumed values, OET syntax reference, Archetype Designer naming, OPT2 serialisation variants).
+- Guides: refreshed the `specs/` digests to development-branch class names and relations (e.g. `rm-support` identifier relocation to BASE, `lang-bmm`/`bmm3`, `sm-openehr_platform` service naming).
+- Prompts: aligned tool lists and workflows with current tool names and arguments, added a CKM reuse-check step to archetype design, and corrected the `type_specification_explorer` resource URI.
+
 ## [0.19.0] - 2026-06-09
 
 ### Added
