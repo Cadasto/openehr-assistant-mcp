@@ -59,6 +59,16 @@ try {
     }
     $cache = new Psr16Cache(new PhpFilesAdapter('mcp-server', 0, $cacheDir));
 
+    // Load server instructions. Optional at the protocol level, but this server
+    // ships a canonical resources/server-instructions.md — a missing/unreadable
+    // file is a packaging error, so warn rather than silently advertise none.
+    $instructionsPath = APP_DIR . '/resources/server-instructions.md';
+    $instructions = is_readable($instructionsPath) ? file_get_contents($instructionsPath) : false;
+    if ($instructions === false) {
+        $logger->warning('Server instructions unavailable; starting without them.', ['path' => $instructionsPath]);
+        $instructions = null;
+    }
+
     // Build the server
     $builder = Server::builder()
         ->setServerInfo(APP_TITLE, APP_VERSION, APP_DESCRIPTION, [new Icon(APP_ICON)])
@@ -72,7 +82,7 @@ try {
         ->setSession(new FileSessionStore(APP_DATA_DIR . '/sessions', ttl: 10 * 60))
         ->setProtocolVersion(ProtocolVersion::V2025_03_26)
         ->setContainer($container)
-        ->setInstructions(file_get_contents(APP_DIR . '/resources/server-instructions.md') ?: null)
+        ->setInstructions($instructions)
         ->setLogger($logger);
     // add resources
     Guides::addResources($builder);
