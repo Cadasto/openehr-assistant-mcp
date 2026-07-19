@@ -50,7 +50,7 @@ concise conventions layer that links into it.
 Coding standard (PSR-12), namespaces, and MCP capability authoring (tools, prompts, resources, completion providers — including the prompt policy split and the discovery-cache gotcha) are canonical in [`docs/conventions.md`](docs/conventions.md). Process rules when working here:
 
 - **Commits:** [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) with a scope, e.g. `feat(tools):`, `fix(resources):`, `docs:`.
-- **CHANGELOG.md:** keep `## [Unreleased]` entries **short and high-level** — one-line bullets naming the artefact class and scope; do not enumerate individual files, classes, or audit details (those belong in commit messages / PR bodies).
+- **CHANGELOG.md:** keep `## [Unreleased]` entries **short and high-level** — one-line bullets naming the artefact class and scope; do not enumerate individual files, classes, or audit details (those belong in commit messages / PR bodies). Aim for one sentence with at most one short parenthetical example list — match the terseness of the `0.19.0`-and-earlier entries; no stacked enumerations or multi-clause bullets.
 - **Branching:** feature branches + pull requests; PR validation runs on every push.
 - **Before pushing:** run `make ci` (spec-check + PHPStan + tests). When you add or move a `REQ-*`, a capability class, or its test, update [`docs/traceability.yaml`](docs/traceability.yaml) in the same change or `spec-check` will fail.
 

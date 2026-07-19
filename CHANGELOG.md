@@ -11,18 +11,18 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ### Added
 
-- Guides: new template-design guide `templates/cgem-framework` (CGEM clinical-data categorisation, freshEHR) and serialisation guides `templates/opt-structure` and `templates/web-template` for the runtime OPT / web-template forms.
-- Guides: new spec digests `specs/lang-bmm3`, `specs/proc-overview`, `specs/proc-task_planning`, `specs/proc-decision_language`, and `specs/cnf-guide`.
-- SDD: machine-checked traceability — `docs/.sdd.yaml` descriptor, `docs/traceability.yaml` map, and a `spec-check` drift gate (`make spec-check`, wired into `make ci` and PR validation); REQ-N8, ADR-0006.
+- Guides: new template-design guide `templates/cgem-framework` and runtime-serialisation guides `templates/opt-structure` and `templates/web-template`.
+- Guides: new spec digests — PROC (overview, task-planning, decision-language), CNF, and `lang-bmm3`.
+- SDD: machine-checked traceability — a `.sdd.yaml` descriptor, a `traceability.yaml` map, and a `spec-check` CI drift gate.
 
 ### Changed
 
-- Guides: broadened AQL versioning coverage (`VERSION` / `LATEST_VERSION` / `ALL_VERSIONS`, node/name predicates, spec-vs-engine function split) and tightened ADL 1.4 archetype alignment (existence/occurrences defaults, HRID/versioning, `controlled`/`specialise`/`invariant` sections).
-- Guides: extended the Simplified Formats guides (`DV_ORDINAL`/`DV_PROPORTION` suffixes, open value-set `|other`, participations, ACTIVITY timing, `ctx` defaults, level-removal rules) and template guidance (defaults vs assumed values, OET syntax reference, Archetype Designer naming, OPT2 serialisation variants).
-- Guides: refreshed the `specs/` digests to development-branch class names and relations (e.g. `rm-support` identifier relocation to BASE, `lang-bmm`/`bmm3`, `sm-openehr_platform` service naming).
-- Prompts: aligned tool lists and workflows with current tool names and arguments, added a CKM reuse-check step to archetype design, added explain-only scope guardrails to the AQL/simplified-format explain prompts, and corrected the `type_specification_explorer` resource URI and component coverage.
-- Prompts: consolidated the two CKM explorer prompts into a single `ckm_explorer` covering both archetypes and templates.
-- Dependencies: upgrade `mcp/sdk` to 0.7.0 — keep element loading eager via `setLazyLoading(false)` (0.7.0 defaults to lazy, surfacing loader errors on first request); refresh Guzzle, PHPUnit, PHPStan, and Symfony components.
+- Guides: broadened AQL versioning coverage (`VERSION` / `LATEST_VERSION` / `ALL_VERSIONS`, node/name predicates) and tightened ADL 1.4 archetype alignment.
+- Guides: extended the Simplified Formats guides (ordinal/proportion suffixes, participations, `ctx` defaults) and template serialisation guidance.
+- Guides: refreshed the `specs/` digests to development-branch class names and relations.
+- Prompts: aligned tool lists and workflows with current tools; added a CKM reuse-check, explain-only guardrails, and a `type_specification_explorer` coverage fix.
+- Prompts: consolidated the two CKM explorer prompts into a single `ckm_explorer`.
+- Dependencies: upgrade `mcp/sdk` to `^0.7` (eager element loading retained); refresh Guzzle, PHPUnit, PHPStan, and Symfony.
 
 ## [0.19.0] - 2026-06-09
 
