@@ -42,6 +42,7 @@ repository and stores no patient data.
 | **REQ-N5** | The runtime is Docker-only and reproducible; no host PHP/Composer is assumed. | Consistent environment across maintainers (WSL2 on Windows). → [ADR-0004](decisions/0004-docker-only-runtime.md) |
 | **REQ-N6** | The server passes the official MCP conformance suite over HTTP. | Interoperability with arbitrary MCP clients. |
 | **REQ-N7** | Guide and prompt content is concise and scannable, optimised for AI context economy. | Content is consumed by agents under token budgets. → [ADR-0003](decisions/0003-prompt-policy-split.md) |
+| **REQ-N8** | The requirement↔code↔test↔decision traceability map is machine-validated in CI; a missing artefact, dangling path, or index/map disagreement fails the build. | Keeps the SDD chain from silently rotting. → [ADR-0006](decisions/0006-machine-checked-traceability.md) |
 
 ## Out of scope
 

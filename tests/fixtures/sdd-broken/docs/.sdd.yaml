@@ -1,0 +1,8 @@
+# Minimal descriptor for SpecCheckTest — a deliberately broken fixture repo.
+sdd:
+  req_style: area-prefixed
+  req_areas: [F]
+  paths:
+    requirements: docs/requirements.md
+    adr: docs/decisions
+  traceability: docs/traceability.yaml

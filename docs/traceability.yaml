@@ -1,0 +1,167 @@
+# traceability.yaml — machine-readable REQ → code → test → decision map.
+# One record per requirement; this is an INDEX and carries NO normative prose
+# (that lives in docs/requirements.md). Validated against the working tree by
+# `make spec-check` (src/Sdd/SpecCheck.php). The human-readable rendering is
+# docs/traceability.md; the id set here MUST match it and requirements.md.
+#
+# Fields: id, title, canonical (owning doc), status (draft|stable|deprecated),
+# implementation (planned|partial|landed|deferred), packages[], tests[],
+# adr[] (ADR numbers under docs/decisions/), plans[], verification (free text).
+# Paths may be globs; a glob must match at least one file. status `draft` is
+# binding now — pre-1.0 wording may still change (see sdd-methodology §6).
+requirements:
+  - id: REQ-F1
+    title: CKM archetype/template search & get
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [src/Tools/CkmService.php, src/Apis/CkmClient.php]
+    tests: [tests/Tools/CkmServiceTest.php, tests/Clients/CkmClientTest.php]
+    adr: ["0002"]
+
+  - id: REQ-F2
+    title: Guide discovery / retrieval / ADL idioms
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [src/Tools/GuideService.php, src/Resources/Guides.php]
+    tests: [tests/Tools/GuideServiceTest.php, tests/Resources/GuidesTest.php]
+
+  - id: REQ-F3
+    title: Curated examples search & get
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [src/Tools/ExamplesService.php, src/Resources/Examples.php]
+    tests: [tests/Tools/ExamplesServiceTest.php, tests/Resources/ExamplesTest.php]
+
+  - id: REQ-F4
+    title: Terminology resolution
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [src/Tools/TerminologyService.php, src/Resources/Terminologies.php, src/Helpers/TerminologyXmlLoader.php]
+    tests: [tests/Tools/TerminologyServiceTest.php, tests/Resources/TerminologiesTest.php]
+
+  - id: REQ-F5
+    title: Type specification lookup (BMM)
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [src/Tools/TypeSpecificationService.php, src/Resources/TypeSpecifications.php]
+    tests: [tests/Tools/TypeSpecificationServiceTest.php, tests/Resources/TypeSpecificationsTest.php, tests/Resources/SpecDigestsTest.php]
+    adr: ["0005"]
+
+  - id: REQ-F6
+    title: Guided MCP prompts
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [src/Prompts/*.php]
+    tests: [tests/Prompts/*Test.php]
+    adr: ["0003"]
+
+  - id: REQ-F7
+    title: Resource exposure via openehr:// URIs
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [src/Resources/*.php]
+    tests: [tests/Resources/*Test.php]
+
+  - id: REQ-F8
+    title: Argument auto-completion
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [src/CompletionProviders/*.php]
+    tests: [tests/CompletionProviders/*Test.php]
+
+  - id: REQ-F9
+    title: Dual transport (streamable-http / stdio)
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [public/index.php, src/Helpers/CliOptions.php]
+    verification: startup + MCP conformance (tests/conformance-baseline.yml)
+    adr: ["0001"]
+
+  - id: REQ-F10
+    title: Global server instructions
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [resources/server-instructions.md]
+    tests: [tests/Prompts/PromptPolicySeparationTest.php]
+    adr: ["0003"]
+
+  - id: REQ-N1
+    title: Authoritative spec grounding (no guessing)
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [resources/guides/howto/spec-lookup.md]
+    verification: content review against ground_truth (see .sdd.yaml)
+    adr: ["0005"]
+
+  - id: REQ-N2
+    title: Mirrored tests + mocked external HTTP
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [src/Apis/CkmClient.php]
+    tests: [tests/Tools/CkmServiceTest.php]
+    verification: whole suite — composer test
+    adr: ["0002"]
+
+  - id: REQ-N3
+    title: PSR-12 + PHPStan clean before merge
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [tests/phpstan.neon]
+    verification: composer check:phpstan
+
+  - id: REQ-N4
+    title: Cached discovery / fast startup
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [public/index.php]
+    verification: server startup (cache warm path)
+    adr: ["0001"]
+
+  - id: REQ-N5
+    title: Docker-only, reproducible runtime
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [.docker, Makefile]
+    verification: make / CI targets
+    adr: ["0004"]
+
+  - id: REQ-N6
+    title: MCP conformance over HTTP
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [tests/conformance-baseline.yml, Makefile]
+    verification: make conformance
+
+  - id: REQ-N7
+    title: Concise, AI-facing content economy
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [resources/server-instructions.md]
+    tests: [tests/Prompts/PromptCompositionTest.php]
+    adr: ["0003"]
+
+  - id: REQ-N8
+    title: Machine-checked traceability drift gate
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [src/Sdd/SpecCheck.php, scripts/spec-check.php]
+    tests: [tests/Sdd/SpecCheckTest.php]
+    adr: ["0006"]

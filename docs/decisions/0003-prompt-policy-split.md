@@ -8,7 +8,7 @@
 
 Every prompt needs the same global guidance (use the right tools, never guess,
 follow Guide-First / Spec-Lookup-First / Digest-First / Examples-First). Repeating
-that policy inside each of the 15 prompt bodies would duplicate text, drift out of
+that policy inside every prompt body would duplicate text, drift out of
 sync, and waste the agent's context budget every time a prompt is invoked.
 
 ## Decision

@@ -22,6 +22,7 @@ referenced from [requirements.md](../requirements.md),
 | [0003](0003-prompt-policy-split.md) | Split global policy from task-specific prompt content | Accepted | REQ-F6, REQ-F10, REQ-N7 |
 | [0004](0004-docker-only-runtime.md) | Docker-only runtime; no host PHP/Composer | Accepted | REQ-N5 |
 | [0005](0005-spec-aligned-content-retrieval.md) | Authoritative, cheapest-first specification retrieval | Accepted | REQ-N1 |
+| [0006](0006-machine-checked-traceability.md) | Machine-checked traceability with a `spec-check` drift gate | Accepted | REQ-N8 |
 
 ## Writing a new ADR
 

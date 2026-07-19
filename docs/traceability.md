@@ -3,8 +3,14 @@
 > Part of the [Specification-Driven Development docs](README.md). This is the
 > backbone of the SDD chain: every requirement traces forward to the code that
 > implements it, the test that verifies it, and the decision that shaped it —
-> and every component traces back to a requirement. No tooling: the matrix is
-> kept current by hand as part of normal change review.
+> and every component traces back to a requirement.
+>
+> **This table is the human-readable rendering.** The machine-checked source of
+> truth for REQ→artefact links is [traceability.yaml](traceability.yaml),
+> validated against the tree by `make spec-check` on every PR
+> ([ADR-0006](decisions/0006-machine-checked-traceability.md)). Keep the two in
+> step: the requirement id set here, in `traceability.yaml`, and in
+> [requirements.md](requirements.md) must match, or the gate fails.
 
 ## How to keep this current
 
@@ -29,7 +35,7 @@ the Implementation column is either dead code or an undocumented requirement.
 | **REQ-F3** | Curated examples search & get | `src/Tools/ExamplesService.php`, `src/Resources/Examples.php` | `tests/Tools/ExamplesServiceTest.php`, `tests/Resources/ExamplesTest.php` | — |
 | **REQ-F4** | Terminology resolution | `src/Tools/TerminologyService.php`, `src/Resources/Terminologies.php`, `src/Helpers/TerminologyXmlLoader.php` | `tests/Tools/TerminologyServiceTest.php`, `tests/Resources/TerminologiesTest.php` | — |
 | **REQ-F5** | Type specification lookup (BMM) | `src/Tools/TypeSpecificationService.php`, `src/Resources/TypeSpecifications.php` | `tests/Tools/TypeSpecificationServiceTest.php`, `tests/Resources/TypeSpecificationsTest.php`, `tests/Resources/SpecDigestsTest.php` | 0005 |
-| **REQ-F6** | Guided MCP prompts (15) | `src/Prompts/*.php` (extend `AbstractPrompt`) | `tests/Prompts/*Test.php`, `tests/Prompts/AbstractPromptTest.php` | 0003 |
+| **REQ-F6** | Guided MCP prompts (14) | `src/Prompts/*.php` (extend `AbstractPrompt`) | `tests/Prompts/*Test.php`, `tests/Prompts/AbstractPromptTest.php` | 0003 |
 | **REQ-F7** | Resource exposure via `openehr://` URIs | `src/Resources/*.php` | `tests/Resources/*Test.php` | — |
 | **REQ-F8** | Argument auto-completion | `src/CompletionProviders/{Examples,Guides,SpecificationComponents}.php` | `tests/CompletionProviders/{GuidesTest,SpecificationComponentsTest}.php` | — |
 | **REQ-F9** | Dual transport (http / stdio) | `public/index.php`, `src/Helpers/CliOptions.php` | (covered via startup / conformance) | 0001 |
@@ -41,6 +47,7 @@ the Implementation column is either dead code or an undocumented requirement.
 | **REQ-N5** | Docker-only runtime | `.docker/`, `Makefile` | CI / `make` targets | 0004 |
 | **REQ-N6** | MCP conformance | `make conformance`, `node` service | `tests/conformance-baseline.yml` | — |
 | **REQ-N7** | Concise AI-facing content | guide/prompt bodies, policy split | `tests/Prompts/PromptCompositionTest.php` | 0003 |
+| **REQ-N8** | Machine-checked traceability drift gate | `src/Sdd/SpecCheck.php`, `scripts/spec-check.php` | `tests/Sdd/SpecCheckTest.php` | 0006 |
 
 ## Guard tests (cross-cutting invariants)
 
