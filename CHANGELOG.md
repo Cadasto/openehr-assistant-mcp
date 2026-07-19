@@ -20,6 +20,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Guides: extended the Simplified Formats guides (`DV_ORDINAL`/`DV_PROPORTION` suffixes, open value-set `|other`, participations, ACTIVITY timing, `ctx` defaults, level-removal rules) and template guidance (defaults vs assumed values, OET syntax reference, Archetype Designer naming, OPT2 serialisation variants).
 - Guides: refreshed the `specs/` digests to development-branch class names and relations (e.g. `rm-support` identifier relocation to BASE, `lang-bmm`/`bmm3`, `sm-openehr_platform` service naming).
 - Prompts: aligned tool lists and workflows with current tool names and arguments, added a CKM reuse-check step to archetype design, added explain-only scope guardrails to the AQL/simplified-format explain prompts, and corrected the `type_specification_explorer` resource URI and component coverage.
+- Prompts: consolidated the two CKM explorer prompts into a single `ckm_explorer` covering both archetypes and templates.
 - Dependencies: upgrade `mcp/sdk` to 0.7.0 — keep element loading eager via `setLazyLoading(false)` (0.7.0 defaults to lazy, surfacing loader errors on first request); refresh Guzzle, PHPUnit, PHPStan, and Symfony components.
 
 ## [0.19.0] - 2026-06-09

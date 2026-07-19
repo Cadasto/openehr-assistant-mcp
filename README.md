@@ -87,8 +87,7 @@ openEHR Type specification
 ### Prompts
 
 Optional prompts that guide AI assistants through common openEHR and CKM workflows using the tools above.
-- `ckm_archetype_explorer` — Discover and fetch CKM Archetype definitions (ADL/XML/Mindmap)
-- `ckm_template_explorer` — Discover and fetch CKM Template definitions (OET/OPT)
+- `ckm_explorer` — Discover and fetch CKM Archetype (ADL/XML/Mindmap) or Template (OET/OPT) definitions
 - `type_specification_explorer` — Discover and fetch openEHR Type specifications (BMM JSON)
 - `terminology_explorer` — Discover and retrieve openEHR terminology (groups and codesets)
 - `guide_explorer` — Discover and retrieve openEHR implementation guides
