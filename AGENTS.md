@@ -11,7 +11,7 @@ concise conventions layer that links into it.
 - [`docs/requirements.md`](docs/requirements.md) — `REQ-#` functional + non-functional requirements (the *what*).
 - [`docs/architecture.md`](docs/architecture.md) — components mapped to requirements (the *how*).
 - [`docs/decisions/`](docs/decisions/README.md) — Architecture Decision Records (the *why*).
-- [`docs/traceability.md`](docs/traceability.md) — REQ ↔ code ↔ test ↔ ADR matrix.
+- [`docs/traceability.md`](docs/traceability.md) — REQ ↔ code ↔ test ↔ ADR matrix (human-readable); the machine-checked source is [`docs/traceability.yaml`](docs/traceability.yaml), validated by `make spec-check` ([ADR-0006](docs/decisions/0006-machine-checked-traceability.md)). Repo SDD conventions live in [`docs/.sdd.yaml`](docs/.sdd.yaml).
 - [`docs/development.md`](docs/development.md) · [`docs/testing.md`](docs/testing.md) — Docker dev environment and the test/validation workflow.
 - [`docs/install.md`](docs/install.md) — hosted & local setup and MCP client configurations (user-facing).
 
@@ -52,7 +52,7 @@ Coding standard (PSR-12), namespaces, and MCP capability authoring (tools, promp
 - **Commits:** [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) with a scope, e.g. `feat(tools):`, `fix(resources):`, `docs:`.
 - **CHANGELOG.md:** keep `## [Unreleased]` entries **short and high-level** — one-line bullets naming the artefact class and scope; do not enumerate individual files, classes, or audit details (those belong in commit messages / PR bodies).
 - **Branching:** feature branches + pull requests; PR validation runs on every push.
-- **Before pushing:** run `make ci` (PHPStan + tests).
+- **Before pushing:** run `make ci` (spec-check + PHPStan + tests). When you add or move a `REQ-*`, a capability class, or its test, update [`docs/traceability.yaml`](docs/traceability.yaml) in the same change or `spec-check` will fail.
 
 ## Discovering and running developer tools
 

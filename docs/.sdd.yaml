@@ -1,0 +1,34 @@
+# docs/.sdd.yaml — the project descriptor for Specification-Driven Development.
+# Declares this repo's SDD conventions so tooling (and the sdd-* skills) stay
+# repo-agnostic. Schema: cadasto/sdd references/traceability-schema.md.
+#
+# This repo runs a deliberately *lightweight* rung-2 (spec-anchored) SDD: the
+# requirements index and the design narrative carry the normative prose; the
+# machine-readable map below is validated against the tree by `make spec-check`.
+sdd:
+  # Requirement identifiers are area-prefixed: REQ-F# (functional) and
+  # REQ-N# (non-functional). Never switch styles — it would renumber published IDs.
+  req_style: area-prefixed
+  req_areas: [F, N]
+  req_gap: 1
+
+  paths:
+    requirements: docs/requirements.md   # single-file index (not a per-REQ directory)
+    specifications: docs/architecture.md # design narrative; requirements.md owns the normative one-liners
+    adr: docs/decisions                  # ADRs live under decisions/, MADR-lite
+    plans: docs/plans
+    plans_archive: docs/plans/archive
+
+  traceability: docs/traceability.yaml   # machine-readable map, beside the human docs/traceability.md
+
+  build_entrypoint: make
+  ci_target: ci                          # `make ci` — the full PR gate
+  spec_check_target: spec-check          # `make spec-check` — the traceability drift gate
+
+  use_probes: false                      # MCP conformance is covered by `make conformance`, not PROBE-* ids
+  use_strands: false
+
+  upstream: ""                           # no sibling SDD repo consumed
+
+  # Domain facts MUST be looked up here, never guessed (see ADR-0005 and REQ-N1).
+  ground_truth: "specifications.openehr.org (development branch), CKM, and bundled BMM/terminology — via resources/guides/howto/spec-lookup.md"

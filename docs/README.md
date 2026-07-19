@@ -19,7 +19,9 @@ requirements.md  →  architecture.md  →  src/  →  tests/        (forward)
 | [requirements.md](requirements.md) | The **what** — `REQ-F#` functional + `REQ-N#` non-functional requirements | "What must the server do?" |
 | [architecture.md](architecture.md) | The **how** — components mapped to the requirements they satisfy | "How is it built?" |
 | [decisions/](decisions/) | **Why** — Architecture Decision Records (MADR-lite) | "Why was it built this way?" |
-| [traceability.md](traceability.md) | The **links** — REQ ↔ code ↔ test ↔ ADR matrix | "Where is REQ-X implemented and tested?" |
+| [traceability.md](traceability.md) | The **links** (human-readable) — REQ ↔ code ↔ test ↔ ADR matrix | "Where is REQ-X implemented and tested?" |
+| [traceability.yaml](traceability.yaml) | The **links** (machine-checked) — validated against the tree by `make spec-check` | "Has the chain drifted?" |
+| [.sdd.yaml](.sdd.yaml) | The **descriptor** — this repo's SDD conventions (id style, paths, ground-truth source) | "How is SDD configured here?" |
 
 ## Operational docs
 
@@ -37,7 +39,9 @@ requirements.md  →  architecture.md  →  src/  →  tests/        (forward)
    architecturally significant, write an [ADR](decisions/).
 3. **Implement** — code under `src/`.
 4. **Verify** — add/extend the mirrored `tests/…/*Test`.
-5. **Trace** — update the [traceability matrix](traceability.md).
+5. **Trace** — update the [traceability matrix](traceability.md) **and** the
+   machine map [traceability.yaml](traceability.yaml); run `make spec-check` (part
+   of `make ci`) to confirm the chain still resolves.
 
 ## Related
 

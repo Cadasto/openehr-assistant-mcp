@@ -1,0 +1,11 @@
+# Deliberately broken map for SpecCheckTest: REQ-F1 cites a package that does
+# not exist, which spec-check must report. All other fields resolve cleanly so
+# the missing package is the single expected finding.
+requirements:
+  - id: REQ-F1
+    title: Broken fixture requirement
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [does/not/exist.php]
+    tests: [docs/traceability.md]

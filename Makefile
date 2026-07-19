@@ -1,4 +1,4 @@
-.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio conformance ci inspector inspector-stop
+.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio conformance spec-check ci inspector inspector-stop
 
 # Default target
 .DEFAULT_GOAL := help
@@ -68,8 +68,11 @@ conformance: ## Run MCP conformance tests against server (requires make up-dev; 
 
 ##@ Quality & CI
 
-ci: ## Run CI checks in dev container (PHPStan + tests)
-	$(DOCKER_COMPOSE_DEV) run --rm -u 1000:1000 app sh -c "composer check:phpstan && composer test"
+spec-check: ## Validate the SDD traceability map against the tree (drift gate)
+	$(DOCKER_COMPOSE_DEV) run --rm -u 1000:1000 app composer check:spec
+
+ci: ## Run CI checks in dev container (spec-check + PHPStan + tests)
+	$(DOCKER_COMPOSE_DEV) run --rm -u 1000:1000 app sh -c "composer check:spec && composer check:phpstan && composer test"
 
 ##@ MCP inspector UI
 

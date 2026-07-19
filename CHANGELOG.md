@@ -13,6 +13,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 - Guides: new template-design guide `templates/cgem-framework` (CGEM clinical-data categorisation, freshEHR) and serialisation guides `templates/opt-structure` and `templates/web-template` for the runtime OPT / web-template forms.
 - Guides: new spec digests `specs/lang-bmm3`, `specs/proc-overview`, `specs/proc-task_planning`, `specs/proc-decision_language`, and `specs/cnf-guide`.
+- SDD: machine-checked traceability — `docs/.sdd.yaml` descriptor, `docs/traceability.yaml` map, and a `spec-check` drift gate (`make spec-check`, wired into `make ci` and PR validation); REQ-N8, ADR-0006.
 
 ### Changed
 
