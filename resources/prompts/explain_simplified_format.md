@@ -10,6 +10,7 @@ Task-specific guidance:
 - Identify **context** (ctx/ or ctx object): language, territory, composer, time, setting, etc.
 - Explain **path structure**: template/root id, node ids, instance indices (:0, :1), pipe suffixes (|magnitude, |code), underscore-prefixed RM attributes.
 - Relate keys to **RM types** where obvious (DV_QUANTITY, DV_CODED_TEXT, PARTY_PROXY).
+- Explain only — do not redesign the payload or suggest modelling changes; route design/review to the `design_or_review_simplified_format` prompt.
 
 Focus points:
 - Field identifier meaning and template path mapping.
