@@ -25,7 +25,7 @@ repository and stores no patient data.
 | **REQ-F3** | Discover and retrieve curated worked examples (AQL, FLAT, STRUCTURED payloads, gold-standard ADL archetypes). | Tools `examples_search`, `examples_get`; resource `openehr://examples/{kind}/{name}` |
 | **REQ-F4** | Resolve openEHR terminology IDs, codes, and rubrics. | Tool `terminology_resolve`; resource `openehr://terminology` |
 | **REQ-F5** | Look up Reference Model, Archetype Model, and BASE type specifications, including per-class attribute/function/invariant detail (BMM-backed). | Tools `type_specification_search`, `type_specification_get`; resource `openehr://spec/type/{component}/{name}` |
-| **REQ-F6** | Provide guided MCP prompts for explaining, designing/reviewing, and exploring openEHR artefacts (archetypes, templates, AQL, simplified formats, terminology, type specs), plus ADL syntax fixing and translation. | `src/Prompts/*` (15 prompts) |
+| **REQ-F6** | Provide guided MCP prompts for explaining, designing/reviewing, and exploring openEHR artefacts (archetypes, templates, AQL, simplified formats, terminology, type specs), plus ADL syntax fixing and translation. | `src/Prompts/*` (14 prompts) |
 | **REQ-F7** | Expose retrievable resources for guides, examples, type specifications, and terminology via stable `openehr://` URIs. | `src/Resources/*` |
 | **REQ-F8** | Offer argument auto-completion for guide names, example names, and specification components. | `src/CompletionProviders/*` |
 | **REQ-F9** | Serve over two transports: `streamable-http` (default) and `stdio` (CLI/desktop clients). | `public/index.php`, `Helpers/CliOptions` |

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Prompts;
 
-use Cadasto\OpenEHR\MCP\Assistant\Prompts\CkmArchetypeExplorer;
+use Cadasto\OpenEHR\MCP\Assistant\Prompts\CkmExplorer;
 use Cadasto\OpenEHR\MCP\Assistant\Prompts\DesignOrReviewAql;
 use Cadasto\OpenEHR\MCP\Assistant\Prompts\ExplainAql;
 use Cadasto\OpenEHR\MCP\Assistant\Prompts\GuideExplorer;
@@ -39,7 +39,7 @@ final class PromptCompositionTest extends TestCase
             'terminology explorer' => [new TerminologyExplorer(), ['openEHR Terminology definitions', 'openehr://terminology']],
             'explain aql' => [new ExplainAql(), ['openehr://guides/aql/principles', 'archetype path']],
             'design/review aql' => [new DesignOrReviewAql(), ['openehr://guides/aql/checklist', '{{task_type}}']],
-            'ckm archetype' => [new CkmArchetypeExplorer(), ['ckm_archetype_search', 'ckm_archetype_get']],
+            'ckm explorer' => [new CkmExplorer(), ['ckm_archetype_search', 'ckm_archetype_get', 'ckm_template_search', 'ckm_template_get']],
         ];
     }
 

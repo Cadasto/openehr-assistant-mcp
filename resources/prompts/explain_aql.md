@@ -10,6 +10,7 @@ Task-specific guidance:
 - State assumptions about deployed templates/archetypes and avoid speculative engine behavior.
 - Explain containment hierarchy (EHR → COMPOSITION → SECTION or ENTRY types, etc.); note use of AND/OR/NOT CONTAINS if present.
 - Explain clinical question and expected result shape, filters, ordering, and parameter impact.
+- Explain only — do not rewrite, optimise, or redesign the query; route changes to the `design_or_review_aql` prompt.
 
 Required output:
 1) Intent: Clinical/data question answered; expected result shape.

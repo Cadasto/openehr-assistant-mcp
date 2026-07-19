@@ -27,8 +27,7 @@ final class PromptPolicySeparationTest extends TestCase
             'guide_explorer.md',
             'terminology_explorer.md',
             'type_specification_explorer.md',
-            'ckm_archetype_explorer.md',
-            'ckm_template_explorer.md',
+            'ckm_explorer.md',
         ];
 
         foreach ($promptFiles as $promptFile) {
