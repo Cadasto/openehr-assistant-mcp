@@ -37,7 +37,7 @@ final readonly class ExamplesService
     }
 
     /**
-     * Search openEHR example artefacts (AQL queries, FLAT/STRUCTURED JSON payloads) and return short snippets plus canonical openehr://examples URIs.
+     * Search openEHR example artefacts (AQL queries, FLAT/STRUCTURED JSON payloads, native ADL archetypes) and return short snippets plus canonical openehr://examples URIs.
      *
      * Use this tool to discover curated, ready-to-reference examples that illustrate specific patterns
      * (e.g. "latest per patient", "time-window", "aggregation", "FLAT vs STRUCTURED pair").
@@ -135,8 +135,10 @@ final readonly class ExamplesService
     /**
      * Fetch the full content of an openEHR example artefact by canonical URI or by specifying kind and name.
      *
-     * Use this tool to retrieve a curated example — the example file wraps the AQL query or FLAT/STRUCTURED JSON payload
-     * in a Markdown file with a short metadata header (what pattern it demonstrates, related specs/guides) and a fenced code block.
+     * Use this tool to retrieve a curated example. The payload is one of two shapes: for the `aql`, `flat` and
+     * `structured` kinds a Markdown wrapper (`text/markdown`) with a short metadata header — what pattern it
+     * demonstrates, related specs/guides — around a fenced code block; for the `archetypes` kind a native
+     * CKM-published `.adl` file (`text/plain`), with no metadata header and no fence.
      *
      * @param string $uri
      *   Canonical example URI (openehr://examples/{kind}/{name}). Optional when kind and name are provided.
@@ -148,7 +150,7 @@ final readonly class ExamplesService
      *   Example filename without extension. Optional when URI is provided.
      *
      * @return EmbeddedResource
-     *   The selected example markdown content.
+     *   The selected example content: Markdown for `aql`/`flat`/`structured`, native ADL for `archetypes`.
      */
     #[Schema(additionalProperties: false)]
     #[McpTool(

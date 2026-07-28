@@ -110,7 +110,7 @@ readonly final class TypeSpecificationService
                         ],
                     ],
                 ],
-                'total' => ['type' => 'integer', 'minimum' => 0, 'description' => 'Number of items in `items`'],
+                'total' => ['type' => 'integer', 'minimum' => 0, 'description' => 'Number of matching types. Unlike the other search tools, this one neither caps nor paginates, so `total` always equals items.length.'],
             ],
         ],
     )]
