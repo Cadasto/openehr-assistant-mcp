@@ -16,7 +16,7 @@ requirements:
     status: draft
     implementation: landed
     packages: [src/Tools/CkmService.php, src/Apis/CkmClient.php]
-    tests: [tests/Tools/CkmServiceTest.php, tests/Clients/CkmClientTest.php]
+    tests: [tests/Tools/CkmServiceTest.php, tests/Clients/CkmClientTest.php, tests/Tools/CkmServiceUpstreamShapeTest.php]
     adr: ["0002"]
 
   - id: REQ-F2
@@ -25,7 +25,7 @@ requirements:
     status: draft
     implementation: landed
     packages: [src/Tools/GuideService.php, src/Resources/Guides.php]
-    tests: [tests/Tools/GuideServiceTest.php, tests/Resources/GuidesTest.php]
+    tests: [tests/Tools/GuideServiceTest.php, tests/Resources/GuidesTest.php, tests/Tools/SearchEnvelopeTotalTest.php]
 
   - id: REQ-F3
     title: Curated examples search & get
@@ -33,7 +33,7 @@ requirements:
     status: draft
     implementation: landed
     packages: [src/Tools/ExamplesService.php, src/Resources/Examples.php]
-    tests: [tests/Tools/ExamplesServiceTest.php, tests/Resources/ExamplesTest.php]
+    tests: [tests/Tools/ExamplesServiceTest.php, tests/Resources/ExamplesTest.php, tests/Tools/SearchEnvelopeTotalTest.php]
 
   - id: REQ-F4
     title: Terminology resolution
@@ -92,7 +92,7 @@ requirements:
     status: draft
     implementation: landed
     packages: [resources/server-instructions.md]
-    tests: [tests/Prompts/PromptPolicySeparationTest.php]
+    tests: [tests/Prompts/PromptPolicySeparationTest.php, tests/Prompts/PromptArgumentSubstitutionTest.php]
     adr: ["0003"]
 
   - id: REQ-N1
@@ -101,6 +101,7 @@ requirements:
     status: draft
     implementation: landed
     packages: [resources/guides/howto/spec-lookup.md]
+    tests: [tests/Content/SpecLookupAndReadmeClaimsTest.php]
     verification: content review against ground_truth (see .sdd.yaml)
     adr: ["0005"]
 
@@ -120,6 +121,7 @@ requirements:
     status: draft
     implementation: landed
     packages: [tests/phpstan.neon]
+    tests: [tests/Tools/InputSchemaGuardTest.php, tests/Tools/InputSchemaValidationTest.php, tests/Tools/OutputSchemaConformanceTest.php, tests/Helpers/OutputSchemaValidatorTest.php]
     verification: composer check:phpstan
 
   - id: REQ-N4

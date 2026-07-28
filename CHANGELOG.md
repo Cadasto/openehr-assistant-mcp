@@ -9,6 +9,13 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+### Fixed
+
+- Tools: multibyte-safe snippet slicing in `guide_search`, `guide_adl_idiom_lookup`, and `examples_search`; malformed UTF-8 previously broke the whole JSON-RPC response.
+- Tools: CKM results survive unexpected upstream field types, and `cid` is always present as the output schema declares.
+- Tools: `type_specification_get` rejects a malformed BMM document instead of returning a payload missing its required keys.
+- Prompts: a non-string argument is rejected by name rather than silently substituted as the literal `Array`, and an omitted required argument now names itself.
+
 ### Added
 
 - Guides: new template-design guide `templates/cgem-framework` and runtime-serialisation guides `templates/opt-structure` and `templates/web-template`.
@@ -23,6 +30,13 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Prompts: aligned tool lists and workflows with current tools; added a CKM reuse-check, explain-only guardrails, and a `type_specification_explorer` coverage fix.
 - Prompts: consolidated the two CKM explorer prompts into a single `ckm_explorer`.
 - Dependencies: upgrade `mcp/sdk` to `^0.7` (eager element loading retained); refresh Guzzle, PHPUnit, PHPStan, and Symfony.
+- Tools: `guide_search` scoring is case-insensitive, Unicode-aware, and drops zero-score hits; `taskType` only re-ranks.
+- Tools: stricter input/output schemas (`additionalProperties: false`, nullable optional enums, required envelopes) — **breaking** for strict MCP clients.
+- Tools: search envelopes gained a `total` companion, counted before the result cap.
+- Prompts: real prompt arguments with safe `{{name}}` substitution — **breaking** for clients relying on parameterless `prompts/get`.
+- Prompts/docs: shared policy documented as a resilience layer, conditional full-rewrite output, and retrieved content treated as data.
+- Docs/guides: aligned `spec-lookup` wording on the `development` spec stream and dropped a false `guide_get` chunking claim.
+- Resources: Examples resource template no longer advertises an incorrect shared MIME type.
 
 ## [0.19.0] - 2026-06-09
 

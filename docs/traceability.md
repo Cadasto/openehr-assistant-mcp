@@ -54,7 +54,7 @@ the Implementation column is either dead code or an undocumented requirement.
 | Test | Invariant guarded | REQ |
 |------|-------------------|-----|
 | `tests/Prompts/PromptCompositionTest.php` | Prompt size stays within baselines (`tests/fixtures/prompt_lengths_before_shared.json`) | REQ-N7 |
-| `tests/Prompts/PromptPolicySeparationTest.php` | Global policy lives only in `server-instructions.md`, not in prompt files | REQ-F10, REQ-N7 |
+| `tests/Prompts/PromptPolicySeparationTest.php` | Full global policy lives only in `server-instructions.md`, not duplicated in individual task-specific prompt files (see the `shared/policy.md` resilience exception in [ADR-0003](decisions/0003-prompt-policy-split.md)) | REQ-F10, REQ-N7 |
 
 > The near 1:1 `src/` ↔ `tests/` mirror means most traceability links already
 > exist in the tree; this matrix makes the requirement layer explicit on top of
