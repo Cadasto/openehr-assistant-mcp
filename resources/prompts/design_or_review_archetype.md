@@ -22,7 +22,7 @@ Required output:
 1) Concept & Scope: clinical intent, boundaries, justification for Archetype vs reuse.
 2) Structural Design Decisions: entry type rationale; cardinality/existence; slot usage; cluster vs element choices.
 3) Terminology Strategy: coded elements, value set rationale, external bindings, explicit non-bindings.
-4) Full ADL in a code block; additionally the Archetype ID, key paths, high-level constraints.
+4) Full ADL in a code block plus Archetype ID, key paths, high-level constraints — conditional on task_type: design/specialise-existing only. For review-only, preserve the supplied Existing Archetype unchanged; give findings + a minimal patch (targeted ADL snippet) instead.
 5) Reuse & Governance: CKM artefacts considered; reuse vs specialisation; expected reuse contexts.
 6) Quality Self-Assessment: conformance, open questions/risks, required follow-ups.
 

@@ -23,7 +23,7 @@ Required Output:
 2) Composition: root archetype overview + brief rationale per included archetype.
 3) Narrowing & Constraints: key exclusions, mandations, reduced value sets vs base archetypes.
 4) Data & Terminology Semantics: meaning of coded items, units, and clinical ranges.
-5) UI & Implementation Hints: relevant annotations, labels, and presentation constraints.
+5) Declared annotations and evidence-based implementation implications: labels, presentation constraints, and other annotations actually present in the template — no speculative UI/behaviour beyond what is declared.
 6) Summary: one implementation-ready paragraph.
 
 Tools: `guide_get`, `ckm_archetype_search`, `ckm_archetype_get`, `ckm_template_get`, `type_specification_get`.
@@ -36,5 +36,5 @@ Explain the semantic meaning and design of this Template.
 Template (OET):
 {{template_text}}
 
-Intended audience (one of: clinician, developer, data-analyst, mixed):
+Intended audience (optional, one of: clinician, developer, data-analyst, mixed):
 {{audience}}

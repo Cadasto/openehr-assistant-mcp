@@ -18,7 +18,7 @@ Task-specific guidance:
 Required output:
 1) Clinical intent and target deployed templates/archetypes.
 2) Containment tree and constraints.
-3) Query or review findings with path rationale.
+3) Query output, conditional on task_type: for design-new, the full AQL with path rationale. For review-only (task_type = review-existing), preserve the supplied Existing AQL unchanged and give findings plus a minimal patch (targeted clause fix) per issue.
 4) Parameters and safety notes.
 5) Checklist-based validation summary.
 

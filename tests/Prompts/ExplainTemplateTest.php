@@ -15,10 +15,13 @@ use ReflectionClass;
 #[CoversClass(ExplainTemplate::class)]
 final class ExplainTemplateTest extends TestCase
 {
-    public function test_prompt_structure_placeholders_and_attribute(): void
+    public function test_prompt_structure_substitution_and_attribute(): void
     {
         $prompt = new ExplainTemplate();
-        $messages = $prompt->__invoke();
+        $messages = $prompt->__invoke(
+            template_text: '<template><id>vital_signs.v1</id></template>',
+            audience: 'developer',
+        );
 
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
@@ -32,12 +35,13 @@ final class ExplainTemplateTest extends TestCase
             $combined .= "\n" . $msg->content->text;
         }
 
-        // Guides references and placeholders
+        // Guides references and substituted values
         $this->assertStringContainsString('openehr://guides/templates/principles', $combined);
         $this->assertStringContainsString('openehr://guides/templates/rules', $combined);
         $this->assertStringContainsString('openehr://guides/templates/oet-syntax', $combined);
-        $this->assertStringContainsString('{{template_text}}', $combined);
-        $this->assertStringContainsString('{{audience}}', $combined);
+        $this->assertStringContainsString('<id>vital_signs.v1</id>', $combined);
+        $this->assertStringContainsString('developer', $combined);
+        $this->assertDoesNotMatchRegularExpression('/\{\{[a-z0-9_]+\}\}/', $combined);
 
         // Attribute presence and expected name
         $rc = new ReflectionClass(ExplainTemplate::class);
@@ -46,5 +50,11 @@ final class ExplainTemplateTest extends TestCase
         $args = $attrs[0]->getArguments();
         $this->assertArrayHasKey('name', $args);
         $this->assertSame('explain_template', $args['name']);
+    }
+
+    public function test_requires_template_text(): void
+    {
+        $this->expectException(\Mcp\Exception\PromptGetException::class);
+        (new ExplainTemplate())->__invoke(template_text: '');
     }
 }
