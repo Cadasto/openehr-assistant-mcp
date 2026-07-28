@@ -80,31 +80,37 @@ readonly final class TypeSpecificationService
      * @param string $keyword
      *   Optional raw substring filter applied to the JSON content (not normalized; case-insensitive); use this when you want to narrow results to Types containing a concept or attribute name.
      *
-     * @return array<string, array<int, array<string, string|null>>>
-     *   A list of metadata records (see fields above), or an empty array if nothing matches.
+     * @return array{items: list<array<string, string>>, total: int}
+     *   A list of metadata records (see fields above), or an empty items list if nothing matches. See the `total` note in the outputSchema.
      */
+    #[Schema(additionalProperties: false)]
     #[McpTool(
         name: 'type_specification_search',
         title: 'Search RM/AM type specifications',
         annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: false),
         outputSchema: [
             'type' => 'object',
+            'additionalProperties' => false,
+            'required' => ['items', 'total'],
             'properties' => [
                 'items' => [
                     'type' => 'array',
                     'description' => 'List of matching openEHR Type specifications',
                     'items' => [
                         'type' => 'object',
+                        'additionalProperties' => false,
+                        'required' => ['name', 'documentation', 'resourceUri', 'component', 'package', 'specUrl'],
                         'properties' => [
                             'name' => ['type' => 'string', 'description' => 'openEHR Type name (e.g. `DV_QUANTITY`)'],
                             'documentation' => ['type' => 'string', 'description' => 'Documentation or description of the type'],
-                            'resourceUri' => ['type' => 'string', 'description' => 'URI of corresponding resource in the `openehr://spec/type` namespace'],
+                            'resourceUri' => ['type' => 'string', 'format' => 'uri', 'description' => 'URI of corresponding resource in the `openehr://spec/type` namespace'],
                             'component' => ['type' => 'string', 'description' => 'openEHR Component name (e.g. `AM`, `RM`, etc.)'],
                             'package' => ['type' => 'string', 'description' => 'Package name (e.g. `org.openehr.rm.datatypes`)'],
                             'specUrl' => ['type' => 'string', 'description' => 'Link to the corresponding openEHR specification page and fragment with more narrative details'],
                         ],
                     ],
                 ],
+                'total' => ['type' => 'integer', 'minimum' => 0, 'description' => 'Number of items in `items`'],
             ],
         ],
     )]
@@ -114,38 +120,86 @@ readonly final class TypeSpecificationService
         $namePattern = trim($namePattern);
         $keyword = trim($keyword);
         if (!$namePattern || strlen($namePattern) < 3) {
-            return ['items' => []];
+            return ['items' => [], 'total' => 0];
         }
 
         $results = [];
+        $skipped = 0;
         foreach ($this->getCandidateFiles($namePattern) as $fileInfo) {
-            try {
-                $json = (string)file_get_contents($fileInfo->getPathname());
-                if ($json) {
-                    // keyword filter on content if provided
-                    if ($keyword && stripos($json, $keyword) === false) {
-                        continue;
-                    }
-                    $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-                    if (is_array($data)) {
-                        $name = (string)($data['name'] ?? $fileInfo->getFilename());
-                        $component = strtoupper(basename($fileInfo->getPath()));
-                        $results[] = [
-                            'name' => $name,
-                            'documentation' => $data['documentation'] ?? null,
-                            'resourceUri' => 'openehr://spec/type/' . $component . '/' . $name,
-                            'component' => $component,
-                            'package' => $data['package'] ?? null,
-                            'specUrl' => $data['specUrl'] ?? null,
-                        ];
-                    }
-                }
-            } catch (\Throwable $e) {
-                $this->logger->error('Failed to read/parse JSON', ['file' => $fileInfo->getPathname(), 'error' => $e->getMessage()]);
+            $json = file_get_contents($fileInfo->getPathname());
+            if ($json === false || trim($json) === '') {
+                // Distinguished from a decode failure: reporting a read/permissions
+                // problem as "invalid JSON" sends the reader to inspect a valid file.
+                ++$skipped;
+                $this->logger->error('Could not read BMM file', ['file' => $fileInfo->getPathname()]);
+                continue;
             }
+
+            // keyword filter on content if provided
+            if ($keyword && stripos($json, $keyword) === false) {
+                continue;
+            }
+
+            try {
+                $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                ++$skipped;
+                $this->logger->error('Failed to decode BMM JSON', ['file' => $fileInfo->getPathname(), 'error' => $e->getMessage()]);
+                continue;
+            }
+
+            $component = strtoupper(basename($fileInfo->getPath()));
+            $name = is_array($data) ? $this->bmmString($data['name'] ?? null) : '';
+            if ($name === '') {
+                ++$skipped;
+                $this->logger->error('BMM document has no usable `name`', [
+                    'file' => $fileInfo->getPathname(),
+                    'decoded' => get_debug_type($data),
+                ]);
+                continue;
+            }
+
+            $results[] = [
+                'name' => $name,
+                'documentation' => $this->bmmString($data['documentation'] ?? null),
+                'resourceUri' => $this->buildTypeUri($component, $name),
+                'component' => $component,
+                'package' => $this->bmmString($data['package'] ?? null),
+                'specUrl' => $this->bmmString($data['specUrl'] ?? null),
+            ];
         }
+
+        if ($skipped > 0) {
+            // `total` is documented as the item count, so an unreported skip would make
+            // a truncated result set look complete.
+            $this->logger->warning('Some BMM files were skipped; search results may be incomplete.', [
+                'skipped' => $skipped,
+                'namePattern' => $namePattern,
+            ]);
+        }
+
         $this->logger->info('BMM list results', ['count' => count($results), 'namePattern' => $namePattern, 'keyword' => $keyword]);
-        return ['items' => $results ?: []];
+        return ['items' => $results, 'total' => count($results)];
+    }
+
+    /**
+     * Narrow a value decoded from a BMM document to a string.
+     *
+     * A bare `(string)` cast would turn a nested object into the literal "Array" and
+     * publish it as, say, a type name — so non-scalars collapse to '' instead.
+     */
+    private function bmmString(mixed $value): string
+    {
+        if (is_string($value)) {
+            return trim($value);
+        }
+
+        return is_int($value) || is_float($value) || is_bool($value) ? (string) $value : '';
+    }
+
+    private function buildTypeUri(string $component, string $name): string
+    {
+        return 'openehr://spec/type/' . $component . '/' . $name;
     }
 
     /**
@@ -159,15 +213,19 @@ readonly final class TypeSpecificationService
      * @param string $name
      *   The openEHR Type name (e.g. `DV_QUANTITY`, `COMPOSITION`, etc.)
      *
-     * @param string $component
+     * @param string|null $component
      *   Optional openEHR Component name, for better matching or filtering; if omitted, the first matching openEHR Type specification is returned.
      *
      * @return array<string, mixed>
-     *   The openEHR Type as BMM JSON.
+     *   The openEHR Type as BMM JSON, plus a server-synthesised `resourceUri` that is not
+     *   part of the BMM source document. `additionalProperties` stays open because BMM
+     *   payloads legitimately carry model-specific keys beyond those described below.
      *
      * @throws ToolCallException
-     *   If the name is empty after normalization, or if no matching specification is found.
+     *   If the name is empty after normalization, if no matching specification is found,
+     *   or if the matched BMM document is unreadable or malformed.
      */
+    #[Schema(additionalProperties: false)]
     #[McpTool(
         name: 'type_specification_get',
         title: 'Get RM/AM type specification',
@@ -175,12 +233,13 @@ readonly final class TypeSpecificationService
         outputSchema: [
             'type' => 'object',
             'additionalProperties' => true,
+            'required' => ['name', 'resourceUri'],
             'properties' => [
                 'name' => ['type' => 'string', 'description' => 'openEHR Type name (e.g. `DV_QUANTITY`)'],
                 'documentation' => ['type' => 'string', 'description' => 'Documentation or description of the type'],
                 'is_abstract' => ['type' => 'boolean', 'description' => 'Whether the type is abstract (i.e. cannot be instantiated)'],
                 'ancestors' => ['type' => 'array', 'description' => 'List of ancestor types (super-types)'],
-                'resourceUri' => ['type' => 'string', 'description' => 'URI of corresponding resource in the `openehr://spec/type` namespace'],
+                'resourceUri' => ['type' => 'string', 'format' => 'uri', 'description' => 'URI of corresponding resource in the `openehr://spec/type` namespace'],
                 'constants' => ['type' => 'object', 'description' => 'List of constants/enum values'],
                 'properties' => ['type' => 'object', 'description' => 'List of attributes/properties'],
                 'functions' => ['type' => 'object', 'description' => 'List of functions'],
@@ -192,29 +251,55 @@ readonly final class TypeSpecificationService
     )]
     public function get(
         string $name,
-        #[Schema(enum: ['AM', 'AM2', 'BASE', 'LANG', 'RM', 'TERM'])]
-        string $component = '',
+        #[Schema(enum: ['AM', 'AM2', 'BASE', 'LANG', 'RM', 'TERM', null])]
+        ?string $component = null,
     ): array
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $name = trim((string)str_replace(['.', '*', '/', '\\'], '', $name));
-        $component = strtoupper(trim($component));
+        $component = strtoupper(trim((string)($component ?? '')));
         if (!$name) {
             throw new ToolCallException('Name cannot be empty');
         }
         foreach ($this->getCandidateFiles($name) as $fileInfo) {
             $this->logger->info('Found BMM', ['pattern' => $fileInfo->getFilename()]);
-            if ($component && $component !== basename($fileInfo->getPath())) {
+            // Upper-cased to match both `$component` and the casing `search()` publishes,
+            // so the same type yields an identical `resourceUri` from either tool.
+            $fileComponent = strtoupper(basename($fileInfo->getPath()));
+            if ($component && $component !== $fileComponent) {
                 $this->logger->info('Component not matching', ['pattern' => $fileInfo->getFilename()]);
                 continue;
             }
-            $json = (string)file_get_contents($fileInfo->getPathname());
+
+            $json = file_get_contents($fileInfo->getPathname());
+            if ($json === false) {
+                $this->logger->error('Could not read BMM file', ['file' => $fileInfo->getPathname()]);
+                throw new ToolCallException('Could not read BMM specification for type: ' . $name);
+            }
+
             try {
-                return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+                $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
             } catch (\JsonException $e) {
                 $this->logger->error('Failed to decode BMM JSON', ['file' => $fileInfo->getPathname(), 'error' => $e->getMessage()]);
                 throw new ToolCallException('Failed to decode BMM JSON for type: ' . $name, previous: $e);
             }
+
+            // A document that decodes to null/scalar would either auto-vivify into an
+            // array holding only `resourceUri` — breaking the declared `required` keys —
+            // or raise a TypeError on the offset write.
+            if (!is_array($data)) {
+                $this->logger->error('BMM document is not an object', [
+                    'file' => $fileInfo->getPathname(),
+                    'decoded' => get_debug_type($data),
+                ]);
+                throw new ToolCallException('Malformed BMM specification for type: ' . $name);
+            }
+
+            $resolvedName = $this->bmmString($data['name'] ?? null);
+            $data['name'] = $resolvedName !== '' ? $resolvedName : $name;
+            $data['resourceUri'] = $this->buildTypeUri($fileComponent, (string) $data['name']);
+
+            return $data;
         }
         $this->logger->info('BMM not found', ['name' => $name, 'component' => $component]);
         throw new ToolCallException("Type '$name' not found (in '$component' component).");
