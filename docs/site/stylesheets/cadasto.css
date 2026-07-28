@@ -1,0 +1,137 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500&family=Roboto:wght@400&display=swap");
+
+:root {
+  --cadasto-navy: #0a1a66;
+  --cadasto-blue: #5cb2ff;
+  --cadasto-blue-dark: #007bb6;
+  --cadasto-teal: #24e363;
+  --md-primary-fg-color: var(--cadasto-blue);
+  --md-primary-fg-color--light: var(--cadasto-blue);
+  --md-primary-fg-color--dark: var(--cadasto-blue-dark);
+  --md-accent-fg-color: var(--cadasto-teal);
+  --md-default-bg-color: var(--cadasto-navy);
+  --md-default-fg-color: rgba(255, 255, 255, 0.87);
+  --md-typeset-a-color: var(--cadasto-blue);
+}
+
+body,
+.md-typeset {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.home-hero h1 {
+  font-family: "Fira Sans", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+}
+
+.md-header {
+  background-color: var(--cadasto-navy);
+}
+
+.md-tabs {
+  background-color: #081452;
+}
+
+.home-hero {
+  text-align: center;
+  padding: 3rem 1rem 1.5rem;
+}
+
+.home-hero h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  background: linear-gradient(135deg, var(--cadasto-blue) 0%, var(--cadasto-teal) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.75rem;
+}
+
+.home-tagline {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1.2rem;
+  max-width: 42rem;
+  margin: 0 auto 1.75rem;
+  line-height: 1.5;
+}
+
+.home-cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0 3rem;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(92, 178, 255, 0.25);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.feature-card h3 {
+  color: var(--cadasto-teal);
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.feature-card:hover {
+  border-color: var(--cadasto-blue);
+  transform: translateY(-2px);
+}
+
+.feature-card p {
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 0;
+}
+
+.two-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0 3rem;
+}
+
+.product-card {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--cadasto-teal);
+}
+
+.product-card h3 {
+  margin-top: 0;
+  color: var(--cadasto-blue);
+}
+
+.quick-start {
+  max-width: 40rem;
+  margin: 0 auto 3rem;
+}
+
+.quick-start h2 {
+  text-align: center;
+}
+
+.quick-start pre {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(92, 178, 255, 0.3);
+}
+
+.section-title {
+  text-align: center;
+  margin: 2rem 0 0.5rem;
+}

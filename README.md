@@ -125,6 +125,7 @@ Exposed via `#[McpResource]` and fetchable by clients using `openehr://…` URIs
 
 ## Documentation
 
+- **[Product website](https://cadasto.github.io/openehr-assistant-mcp/)** — landing page, MCP server & plugin overview (built from [`docs/site/`](docs/site/))
 - **[docs/install.md](docs/install.md)** — hosted & local setup, client configurations
 - **[docs/development.md](docs/development.md)** — Docker dev environment, Makefile, configuration, MCP Inspector
 - **[docs/conventions.md](docs/conventions.md)** — coding standard and MCP authoring conventions

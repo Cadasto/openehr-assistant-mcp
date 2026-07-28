@@ -1,4 +1,4 @@
-.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio conformance spec-check ci inspector inspector-stop
+.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio conformance spec-check ci inspector inspector-stop docs-build docs-serve docs-clean
 
 # Default target
 .DEFAULT_GOAL := help
@@ -73,6 +73,21 @@ spec-check: ## Validate the SDD traceability map against the tree (drift gate)
 
 ci: ## Run CI checks in dev container (spec-check + PHPStan + tests)
 	$(DOCKER_COMPOSE_DEV) run --rm -u 1000:1000 app sh -c "composer check:spec && composer check:phpstan && composer test"
+
+##@ Documentation site
+
+MKDOCS_IMAGE ?= squidfunk/mkdocs-material:latest
+MKDOCS_DIR   := docs/site
+DOCS_BUILD   := docs-build
+
+docs-build: ## Build product website to docs-build/
+	docker run --rm -v "$(CURDIR):/docs" -w /docs/$(MKDOCS_DIR) $(MKDOCS_IMAGE) build -d /docs/$(DOCS_BUILD)
+
+docs-serve: ## Serve product website locally on :8000
+	docker run --rm -it -p 8000:8000 -v "$(CURDIR):/docs" -w /docs/$(MKDOCS_DIR) $(MKDOCS_IMAGE) serve -a 0.0.0.0:8000
+
+docs-clean: ## Remove docs-build/
+	docker run --rm -v "$(CURDIR):/docs" alpine:3.20 rm -rf /docs/$(DOCS_BUILD)
 
 ##@ MCP inspector UI
 

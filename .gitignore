@@ -43,6 +43,12 @@ Thumbs.db
 # Cursor local hook state (machine-specific paths)
 .cursor/hooks/state/
 
+# MkDocs product site build output
+/docs-build/
+
+# Python bytecode (MkDocs hooks)
+**/__pycache__/
+
 # Git worktrees
 .worktrees/
 worktrees/

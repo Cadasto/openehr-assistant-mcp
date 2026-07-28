@@ -1,0 +1,59 @@
+site_name: openEHR Assistant
+site_url: https://cadasto.github.io/openehr-assistant-mcp/
+site_description: MCP server and AI plugin for openEHR clinical modelling
+repo_url: https://github.com/cadasto/openehr-assistant-mcp
+repo_name: cadasto/openehr-assistant-mcp
+edit_uri: edit/main/docs/site/pages/
+
+docs_dir: pages
+
+theme:
+  name: material
+  custom_dir: overrides
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
+  palette:
+    - scheme: slate
+      primary: custom
+      accent: custom
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.tabs
+    - navigation.top
+    - content.code.copy
+
+extra_css:
+  - stylesheets/cadasto.css
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/cadasto/openehr-assistant-mcp
+    - icon: fontawesome/solid/globe
+      link: https://www.cadasto.com
+  generator: false
+
+copyright: Cadasto B.V. · MIT License
+
+nav:
+  - Home: index.md
+  - MCP Server: mcp-server.md
+  - Plugin: plugin.md
+  - Install: install.md
+
+plugins:
+  - search
+
+hooks:
+  - hooks/link_fix.py
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html

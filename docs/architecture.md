@@ -122,6 +122,14 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
 - **Docker-only runtime (REQ-N5).** See [development.md](development.md).
   → [ADR-0004](decisions/0004-docker-only-runtime.md)
 
+## Product website — `docs/site/` · REQ-N10
+
+Public-facing MkDocs Material site: landing page, MCP server and plugin
+overviews, and install (symlinked from `docs/install.md`). Built with
+`make docs-build` → `docs-build/`; published by GitHub Actions to GitHub Pages.
+Contributor SDD docs in `docs/` are excluded from the site nav.
+→ [ADR-0007](decisions/0007-product-website-mkdocs-github-pages.md)
+
 ## Versioning
 
 Application version is defined in `src/constants.php` (`APP_VERSION`) — the single

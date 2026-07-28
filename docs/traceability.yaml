@@ -176,3 +176,13 @@ requirements:
     packages: [src/Tools/CkmService.php, src/Tools/GuideService.php, src/Tools/ExamplesService.php, src/Tools/TerminologyService.php, src/Tools/TypeSpecificationService.php]
     tests: [tests/Tools/InputSchemaGuardTest.php, tests/Tools/InputSchemaValidationTest.php, tests/Tools/OutputSchemaConformanceTest.php, tests/Helpers/OutputSchemaValidatorTest.php, tests/Tools/SearchEnvelopeTotalTest.php]
     verification: composer test (the SDK validates tool input but never tool output)
+
+  - id: REQ-N10
+    title: Public product website (MkDocs + GitHub Pages)
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [docs/site, Makefile, .github/workflows/docs-site.yml]
+    verification: make docs-build; docs-site workflow on main
+    adr: ["0007"]
+    plans: [docs/plans/2026-07-28-product-website.md]

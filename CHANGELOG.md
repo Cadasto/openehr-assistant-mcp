@@ -7,6 +7,12 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: [https://keepachangelog.com/en/1.1.0/](https://keepachangelog.com/en/1.1.0/)
 - Semantic Versioning: [https://semver.org/spec/v2.0.0.html](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased]
+
+### Added
+
+- Product website: MkDocs site under `docs/site/`, `make docs-build`, GitHub Pages via Actions artifact deploy (REQ-N10, ADR-0007).
+
 ## [0.20.0] - 2026-07-30
 
 ### Added
