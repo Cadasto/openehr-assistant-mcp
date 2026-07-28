@@ -46,47 +46,57 @@ final readonly class ExamplesService
      *   The query string describing what you need (e.g. "blood pressure", "latest per patient", "DV_QUANTITY projection").
      *   Leave empty to list all examples in the optional kind filter.
      *
-     * @param string $kind
-     *   Optional artefact-kind filter (AQL query, FLAT/STRUCTURED JSON payload, or native archetype). Leave empty to search all kinds.
+     * @param string|null $kind
+     *   Optional artefact-kind filter (AQL query, FLAT/STRUCTURED JSON payload, or native archetype). Omit to search all kinds.
      *
-     * @return array<string, array<int, array<string, string|int>>>
-     *   A list of matching examples with short snippets and URIs.
+     * @return array{items: list<array<string, string|int>>, total: int}
+     *   A list of matching examples with short snippets and URIs, plus `total` — the number
+     *   of matches before the `maxResults` cap, which may exceed the number of returned
+     *   `items` (see the `total` note in the outputSchema).
      */
+    #[Schema(additionalProperties: false)]
     #[McpTool(
         name: 'examples_search',
         title: 'Search openEHR examples',
         annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: false),
         outputSchema: [
             'type' => 'object',
+            'additionalProperties' => false,
+            'required' => ['items', 'total'],
             'properties' => [
                 'items' => [
                     'type' => 'array',
                     'description' => 'List of matching example snippets and canonical example URIs',
                     'items' => [
                         'type' => 'object',
+                        'additionalProperties' => false,
+                        'required' => ['title', 'kind', 'name', 'resourceUri', 'snippet', 'score'],
                         'properties' => [
                             'title' => ['type' => 'string'],
                             'kind' => ['type' => 'string', 'description' => 'Example kind: aql | flat | structured | archetypes'],
                             'name' => ['type' => 'string'],
-                            'resourceUri' => ['type' => 'string', 'description' => 'Canonical example URI in openehr://examples namespace'],
+                            'resourceUri' => ['type' => 'string', 'format' => 'uri', 'description' => 'Canonical example URI in openehr://examples namespace'],
                             'snippet' => ['type' => 'string', 'description' => 'Short, task-relevant snippet'],
                             'score' => ['type' => 'integer', 'description' => 'Relative match score (higher is better)'],
                         ],
                     ],
                 ],
+                'total' => ['type' => 'integer', 'minimum' => 0, 'description' => 'Total matching examples before the maxResults cap is applied; may exceed items.length'],
             ],
         ],
     )]
     public function search(
         string $query = '',
-        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes'])]
-        string $kind = '',
+        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes', null])]
+        ?string $kind = null,
+        #[Schema(minimum: 1, maximum: self::MAX_RESULTS_LIMIT)]
         int $maxResults = self::DEFAULT_MAX_RESULTS,
+        #[Schema(minimum: 80, maximum: self::MAX_SNIPPET_CHARS)]
         int $snippetChars = self::DEFAULT_SNIPPET_CHARS,
     ): array {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $query = trim($query);
-        $kind = trim($kind);
+        $kind = trim((string)($kind ?? ''));
         $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
         $snippetChars = max(80, min($snippetChars, self::MAX_SNIPPET_CHARS));
 
@@ -114,7 +124,11 @@ final readonly class ExamplesService
         }
 
         usort($scored, static fn(array $a, array $b): int => $b['score'] <=> $a['score'] ?: strcmp($a['name'], $b['name']));
-        return ['items' => array_slice($scored, 0, $maxResults)];
+        // Count matches before the `maxResults` cap so `total` reflects how many
+        // examples matched, not merely how many were returned in `items`.
+        $totalMatches = count($scored);
+        $items = array_slice($scored, 0, $maxResults);
+        return ['items' => $items, 'total' => $totalMatches];
     }
 
     /**
@@ -126,7 +140,7 @@ final readonly class ExamplesService
      * @param string $uri
      *   Canonical example URI (openehr://examples/{kind}/{name}). Optional when kind and name are provided.
      *
-     * @param string $kind
+     * @param string|null $kind
      *   Artefact kind (AQL query, FLAT/STRUCTURED JSON payload, or native archetype). Optional when URI is provided.
      *
      * @param string $name
@@ -135,6 +149,7 @@ final readonly class ExamplesService
      * @return EmbeddedResource
      *   The selected example markdown content.
      */
+    #[Schema(additionalProperties: false)]
     #[McpTool(
         name: 'examples_get',
         title: 'Get openEHR example',
@@ -142,14 +157,14 @@ final readonly class ExamplesService
     )]
     public function get(
         string $uri = '',
-        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes'])]
-        string $kind = '',
+        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes', null])]
+        ?string $kind = null,
         string $name = '',
     ): EmbeddedResource
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $uri = trim($uri);
-        $kind = trim($kind);
+        $kind = trim((string)($kind ?? ''));
         $name = trim($name);
 
         if ($uri) {
@@ -276,28 +291,31 @@ final readonly class ExamplesService
         return $score;
     }
 
+    /**
+     * Build a snippet centred on the first occurrence of the query.
+     *
+     * Slicing is multibyte-aware throughout: byte offsets would cut UTF-8 sequences
+     * mid-character, and the malformed string then fails `json_encode` for the whole
+     * JSON-RPC envelope — the client gets no response at all rather than a bad snippet.
+     */
     private function buildSnippet(string $content, string $query, int $snippetChars = self::DEFAULT_SNIPPET_CHARS): string
     {
-        if ($query === '') {
-            return $this->limitText($content, $snippetChars);
-        }
-        $lower = strtolower($content);
-        $needle = strtolower($query);
-        $pos = strpos($lower, $needle);
+        $needle = trim($query);
+        $pos = $needle === '' ? false : mb_stripos($content, $needle, 0, 'UTF-8');
         if ($pos === false) {
             return $this->limitText($content, $snippetChars);
         }
-        $start = max(0, $pos - (int)($snippetChars / 2));
-        return trim(substr($content, $start, $snippetChars));
+        $start = max(0, $pos - intdiv($snippetChars, 2));
+        return trim(mb_substr($content, $start, $snippetChars, 'UTF-8'));
     }
 
     private function limitText(string $text, int $maxChars): string
     {
         $text = trim($text);
-        if (strlen($text) <= $maxChars) {
+        if (mb_strlen($text, 'UTF-8') <= $maxChars) {
             return $text;
         }
-        return rtrim(substr($text, 0, $maxChars - 1)) . '…';
+        return rtrim(mb_substr($text, 0, $maxChars - 1, 'UTF-8')) . '…';
     }
 
     /** @return array{string, string} */
