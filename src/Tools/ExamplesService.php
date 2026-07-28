@@ -204,8 +204,11 @@ final readonly class ExamplesService
     /** @return array<int, array{title: string, kind: string, name: string, resourceUri: string, metadata: string}> */
     private function loadExamplesIndex(): array
     {
-        if (!is_dir(self::EXAMPLES_DIR)) {
-            return [];
+        if (!is_dir(self::EXAMPLES_DIR) || !is_readable(self::EXAMPLES_DIR)) {
+            // The examples corpus ships with the server, so an unusable directory is a
+            // packaging/permissions fault, not "no examples matched". Returning an empty
+            // index made every search indistinguishable from a legitimate miss.
+            throw new ToolCallException(sprintf('Examples directory is missing or unreadable: %s', self::EXAMPLES_DIR));
         }
 
         $index = [];
@@ -227,7 +230,17 @@ final readonly class ExamplesService
                 continue;
             }
 
-            $content = (string)file_get_contents($fileInfo->getPathname()) ?: '';
+            $content = file_get_contents($fileInfo->getPathname());
+            if ($content === false) {
+                // Without this the entry still shipped: title degraded to the filename and
+                // metadata went empty, so `examples_search` advertised a hollow result whose
+                // `resourceUri` `examples_get` would then reject.
+                $this->logger->warning('Could not read example file while indexing; skipping.', [
+                    'path' => $fileInfo->getPathname(),
+                ]);
+                continue;
+            }
+
             $relative = str_replace(self::EXAMPLES_DIR . '/', '', $fileInfo->getPathname());
             $parts = explode('/', $relative);
             if (count($parts) < 2) {

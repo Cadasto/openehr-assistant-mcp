@@ -41,6 +41,9 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Tools: CKM search rejects a drifted response envelope and logs dropped fields instead of reporting zero matches.
 - Tools: `type_specification_get` rejects a malformed BMM document instead of returning an incomplete payload.
 - Prompts: malformed or non-string arguments and unsubstitutable `{{tokens}}` are rejected by name.
+- Tools: CKM and terminology failures surface as tool errors carrying their message instead of a generic protocol error.
+- Tools: `ckm_archetype_get` reports an unresolvable identifier instead of mangling it into a doomed request — **breaking** for callers passing neither a CID nor an archetype-id.
+- Resources: unreadable guide/example files are logged rather than silently dropped from `resources/list`.
 
 ## [0.19.0] - 2026-06-09
 

@@ -9,6 +9,7 @@ use Mcp\Capability\Attribute\CompletionProvider;
 use Mcp\Capability\Attribute\McpResourceTemplate;
 use Mcp\Exception\ResourceReadException;
 use Mcp\Server\Builder;
+use Psr\Log\LoggerInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -71,7 +72,7 @@ final class Guides
      * @param Builder $builder The resource builder instance used to register the guides.
      * @return void This method does not return a value.
      */
-    public static function addResources(Builder $builder): void
+    public static function addResources(Builder $builder, ?LoggerInterface $logger = null): void
     {
         if (is_dir(self::DIR) && is_readable(self::DIR)) {
             $iterator = new RecursiveIteratorIterator(
@@ -102,8 +103,16 @@ final class Guides
                     continue;
                 }
 
-                $content = @file_get_contents($fileInfo->getPathname());
-                if (empty($content)) {
+                // `@` used to suppress the warning and `empty()` conflated an unreadable
+                // file with an empty one, so a bad file silently vanished from
+                // `resources/list` while the search index still advertised its URI —
+                // leaving a 404 with nothing logged anywhere to explain it.
+                $content = file_get_contents($fileInfo->getPathname());
+                if ($content === false || trim($content) === '') {
+                    $logger?->warning('Skipping unreadable or empty guide file; it will not be listed as a resource.', [
+                        'path' => $fileInfo->getPathname(),
+                        'readable' => $content !== false,
+                    ]);
                     continue;
                 }
 

@@ -9,6 +9,7 @@ use Cadasto\OpenEHR\MCP\Assistant\Helpers\Map;
 use GuzzleHttp\RequestOptions;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Capability\Attribute\Schema;
+use Mcp\Exception\ToolCallException;
 use Mcp\Schema\Content\TextContent;
 use Mcp\Schema\ToolAnnotations;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -74,12 +75,12 @@ final readonly class CkmService
      *   archetypeId, display name, status and other descriptive fields — plus `total` (see
      *   the `total` note in the outputSchema).
      *
-     * @throws \RuntimeException
-     *   If the CKM API request fails (network error, upstream outage, invalid response).
-     *
-     * @throws \InvalidArgumentException
-     *   If $rmClass is provided but is malformed (it is shape-checked, not validated against
-     *   the RM class list).
+     * @throws ToolCallException
+     *   If the CKM API request fails (network error, upstream outage, invalid response), or
+     *   if $rmClass is provided but is malformed (it is shape-checked, not validated against
+     *   the RM class list). `ToolCallException` specifically: `CallToolHandler` preserves its
+     *   message as a tool-level error result the model can act on, and replaces every other
+     *   throwable with a generic protocol error most clients never surface.
      */
     #[Schema(additionalProperties: false)]
     #[McpTool(
@@ -188,10 +189,10 @@ final readonly class CkmService
             ];
         } catch (\JsonException $e) {
             $this->logger->error('Failed to decode CKM Archetype response', ['error' => $e->getMessage()]);
-            throw new \RuntimeException('Failed to decode CKM Archetype response: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to decode CKM Archetype response: ' . $e->getMessage(), previous: $e);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to search for CKM Archetypes', ['error' => $e->getMessage()]);
-            throw new \RuntimeException('Failed to search for CKM Archetypes: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to search for CKM Archetypes: ' . $e->getMessage(), previous: $e);
         }
     }
 
@@ -220,7 +221,7 @@ final readonly class CkmService
      * @return TextContent
      *   The Archetype definition in the chosen format in a text content code block.
      *
-     * @throws \RuntimeException
+     * @throws ToolCallException
      *   If the CKM API request fails (invalid CID, unsupported format mapping, upstream error).
      */
     #[Schema(additionalProperties: false)]
@@ -241,17 +242,25 @@ final readonly class CkmService
         try {
             $archetypeFormat = Map::archetypeFormat($format);
             $contentType = Map::contentType($archetypeFormat);
-            // If the identifier is an archetype-id, then resolve it to the corresponding CID
+            // An archetype-id must be resolved to a CID; there is no meaningful fallback.
+            // The previous code replaced every non-digit with `-`, turning
+            // `openEHR-EHR-OBSERVATION.blood_pressure.v1` into
+            // `-------------------.-------------.--`, requested *that*, and reported the
+            // resulting 404 as "Failed to retrieve the CKM Archetype" — blaming the
+            // archetype rather than the identifier resolution that actually failed.
             if (str_contains($identifier, 'openEHR-')) {
-                try {
-                    $response = $this->apiClient->get("v1/archetypes/citeable-identifier/$identifier");
-                    $cid = ($response->getStatusCode() === 200) ? $response->getBody()->getContents() : null;
-                } catch (ClientExceptionInterface $e) {
-                    $this->logger->error('Failed to resolve CID identifier', ['error' => $e->getMessage(), 'identifier' => $identifier]);
-                }
+                $cid = $this->resolveCitableIdentifier($identifier);
+            } elseif ($this->looksLikeCid($identifier)) {
+                $cid = $identifier;
             }
-            // if CID is not yet resolved, then normalize the identifier to a CID
-            $cid = $cid ?? preg_replace('/[^\d.]/', '-', $identifier);
+
+            if ($cid === null) {
+                throw new ToolCallException(sprintf(
+                    'Could not resolve "%s" to a CKM citeable identifier (CID). Pass a CID (digits and dots, as returned by ckm_archetype_search) or a full archetype-id containing "openEHR-".',
+                    $identifier,
+                ));
+            }
+
             // retrieve the archetype definition
             $response = $this->apiClient->get("v1/archetypes/{$cid}/{$archetypeFormat}", [
                 RequestOptions::HEADERS => [
@@ -263,7 +272,7 @@ final readonly class CkmService
             return TextContent::code($data);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to retrieve the CKM Archetype', ['error' => $e->getMessage(), 'identifier' => $identifier, 'cid' => $cid, 'format' => $format]);
-            throw new \RuntimeException('Failed to retrieve the CKM Archetype: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to retrieve the CKM Archetype: ' . $e->getMessage(), previous: $e);
         }
     }
 
@@ -289,7 +298,7 @@ final readonly class CkmService
      *   A list of CKM Template metadata entries.
      *   Entries usually include a Template CID identifier, display name, status, and other descriptive fields.
      *
-     * @throws \RuntimeException
+     * @throws ToolCallException
      *   If the CKM API request fails (network error, upstream outage, invalid response).
      */
     #[Schema(additionalProperties: false)]
@@ -387,10 +396,10 @@ final readonly class CkmService
             ];
         } catch (\JsonException $e) {
             $this->logger->error('Failed to decode CKM Template response', ['error' => $e->getMessage()]);
-            throw new \RuntimeException('Failed to decode CKM Template response: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to decode CKM Template response: ' . $e->getMessage(), previous: $e);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to search for CKM Templates', ['error' => $e->getMessage()]);
-            throw new \RuntimeException('Failed to search for CKM Templates: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to search for CKM Templates: ' . $e->getMessage(), previous: $e);
         }
     }
 
@@ -417,7 +426,7 @@ final readonly class CkmService
      * @return TextContent
      *   The Template definition in the chosen format in a text content code block.
      *
-     * @throws \RuntimeException
+     * @throws ToolCallException
      *   If the CKM API request fails.
      */
     #[Schema(additionalProperties: false)]
@@ -451,7 +460,7 @@ final readonly class CkmService
             return TextContent::code($data);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to retrieve the CKM Template', ['error' => $e->getMessage(), 'identifier' => $identifier, 'format' => $format]);
-            throw new \RuntimeException('Failed to retrieve the CKM Template: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to retrieve the CKM Template: ' . $e->getMessage(), previous: $e);
         }
     }
 
@@ -599,7 +608,54 @@ final readonly class CkmService
         return $aliases[$value] ?? $value;
     }
 
-    /** Validate/uppercase an RM-class filter token; throws \InvalidArgumentException on a malformed non-empty value. */
+    /**
+     * Resolve a full archetype-id to its CKM citeable identifier, or null if it cannot be.
+     *
+     * Returns null (rather than a guess) for every failure mode, so the caller can name the
+     * resolution step in the error instead of issuing a request built from a mangled path.
+     */
+    private function resolveCitableIdentifier(string $archetypeId): ?string
+    {
+        try {
+            $response = $this->apiClient->get("v1/archetypes/citeable-identifier/$archetypeId");
+        } catch (ClientExceptionInterface $e) {
+            $this->logger->error('Failed to resolve CID identifier', ['error' => $e->getMessage(), 'identifier' => $archetypeId]);
+
+            return null;
+        }
+
+        if ($response->getStatusCode() !== 200) {
+            $this->logger->error('CID resolution returned a non-200 status', [
+                'identifier' => $archetypeId,
+                'status' => $response->getStatusCode(),
+            ]);
+
+            return null;
+        }
+
+        // A 200 with an empty body used to survive the `??` fallback as '' and produce the
+        // request path `v1/archetypes//adl`. Quotes are trimmed because the endpoint may
+        // return the CID as a JSON string rather than bare text.
+        $cid = trim($response->getBody()->getContents(), " \t\n\r\0\x0B\"'");
+        if (!$this->looksLikeCid($cid)) {
+            $this->logger->error('CID resolution returned an unexpected body', [
+                'identifier' => $archetypeId,
+                'body' => $cid,
+            ]);
+
+            return null;
+        }
+
+        return $cid;
+    }
+
+    /** A CKM citeable identifier is a dot-separated numeric path, e.g. `1249.32.1234`. */
+    private function looksLikeCid(string $value): bool
+    {
+        return preg_match('/^\d+(\.\d+)*$/', $value) === 1;
+    }
+
+    /** Validate/uppercase an RM-class filter token; throws ToolCallException on a malformed non-empty value. */
     private function normalizeRmClassFilter(string $rmClass): string
     {
         $rmClass = strtoupper(trim($rmClass));
@@ -607,7 +663,7 @@ final readonly class CkmService
             return '';
         }
         if (preg_match('/^[A-Z][A-Z_]*$/', $rmClass) !== 1) {
-            throw new \InvalidArgumentException(sprintf('Invalid RM class filter: "%s".', $rmClass));
+            throw new ToolCallException(sprintf('Invalid RM class filter: "%s".', $rmClass));
         }
         return $rmClass;
     }
@@ -700,7 +756,7 @@ final readonly class CkmService
     private function assertCkmRowList(mixed $data, string $kind): void
     {
         if (!is_array($data) || !array_is_list($data)) {
-            throw new \RuntimeException(sprintf(
+            throw new ToolCallException(sprintf(
                 'Unexpected CKM %s response payload: expected a JSON array of rows, got %s.',
                 $kind,
                 is_array($data) ? 'an object' : get_debug_type($data),
@@ -709,7 +765,7 @@ final readonly class CkmService
 
         foreach ($data as $index => $row) {
             if (!is_array($row)) {
-                throw new \RuntimeException(sprintf(
+                throw new ToolCallException(sprintf(
                     'Unexpected CKM %s response payload: row %d is %s, not an object.',
                     $kind,
                     $index,

@@ -90,8 +90,8 @@ try {
         ->setInstructions($instructions)
         ->setLogger($logger);
     // add resources
-    Guides::addResources($builder);
-    Examples::addResources($builder);
+    Guides::addResources($builder, $logger);
+    Examples::addResources($builder, $logger);
 
     $server = $builder->build();
 
