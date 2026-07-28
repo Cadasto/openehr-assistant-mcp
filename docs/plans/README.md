@@ -12,6 +12,9 @@ work lands.
   `make spec-check` and `make ci` green; then move the plan to `archive/`.
 
 Archive completed plans under [`archive/`](archive/) — leaving `done` plans in the
-active list rots the index. Day-to-day work in this repo is typically tracked via
+active list rots the index. If a requirement in
+[`traceability.yaml`](../traceability.yaml) cites the plan under `plans:`, move
+the file and update that path **in the same commit** — `spec-check` fails on a
+dangling `plans:` entry. Day-to-day work in this repo is typically tracked via
 pull requests and the CHANGELOG; use a plan file for multi-step changes that
 benefit from an explicit, citable task breakdown.

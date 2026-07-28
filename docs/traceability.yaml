@@ -183,6 +183,6 @@ requirements:
     status: draft
     implementation: landed
     packages: [docs/site, Makefile, .github/workflows/docs-site.yml]
-    verification: make docs-build; docs-site workflow on main
+    verification: make docs-check
     adr: ["0007"]
     plans: [docs/plans/2026-07-28-product-website.md]

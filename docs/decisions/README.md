@@ -28,7 +28,12 @@ referenced from [requirements.md](../requirements.md),
 ## Writing a new ADR
 
 1. Copy the structure of an existing record. Number sequentially (`NNNN-kebab-title.md`).
-2. Fill **Context / Decision / Consequences**; set status `Proposed`.
+2. Fill **Context / Decision / Consequences**. Keep operator runbooks and other
+   content that changes over time out of the record — an ADR states what was
+   decided and why, and is immutable once merged.
 3. Cite the `REQ-#`(s) it serves and add a row to this index and to
    [traceability.md](../traceability.md).
-4. On merge, set status to `Accepted`.
+4. Status is `Proposed` while the pull request is open and `Accepted` when it
+   merges — the review that approves the PR *is* the acceptance, so a record
+   may be opened already marked `Accepted` and left untouched on merge. Use
+   `Proposed` only when the decision is genuinely still open for debate.

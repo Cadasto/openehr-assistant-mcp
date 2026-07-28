@@ -126,8 +126,10 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
 
 Public-facing MkDocs Material site: landing page, MCP server and plugin
 overviews, and install (symlinked from `docs/install.md`). Built with
-`make docs-build` → `docs-build/`; published by GitHub Actions to GitHub Pages.
-Contributor SDD docs in `docs/` are excluded from the site nav.
+`make docs-build` → `docs-build/`; `make docs-check` adds the output assertions
+that CI gates on, for pull requests as well as `main`. Published by GitHub
+Actions to GitHub Pages. `docs_dir` is `docs/site/pages/`, so contributor SDD
+docs in `docs/` are not part of the site at all — neither published nor indexed.
 → [ADR-0007](decisions/0007-product-website-mkdocs-github-pages.md)
 
 ## Versioning
