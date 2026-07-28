@@ -73,7 +73,7 @@ openEHR Terminology
 
 Guides (model-reachable)
 - `guide_search` — Search bundled guides and return short snippets with canonical `openehr://guides` URIs
-- `guide_get` — Retrieve guide content by URI or (category, name), chunked by default
+- `guide_get` — Retrieve full guide content by URI or (category, name)
 - `guide_adl_idiom_lookup` — Look up targeted ADL idiom snippets for common modelling patterns
 
 Examples (curated artefacts)

@@ -38,7 +38,9 @@ final class Examples
         uriTemplate: 'openehr://examples/{kind}/{name}',
         name: 'examples',
         description: 'Curated openEHR example artefact — AQL query, FLAT/STRUCTURED JSON payload (Markdown-wrapped) or ADL archetype (native .adl)',
-        mimeType: 'text/markdown'
+        // No template-level mimeType: this one template serves both text/markdown (.md) and
+        // text/plain (.adl), so any single value would misdescribe part of the namespace.
+        // Concrete per-example resources carry the correct type (see addResources()).
     )]
     public function read(
         #[CompletionProvider(values: ['aql', 'flat', 'structured', 'archetypes'])]
