@@ -1,22 +1,37 @@
-@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500&family=Roboto:wght@400&display=swap");
+/* Roboto / Roboto Mono come from the theme's `font:` setting; only the display
+   face is imported here. The `privacy` plugin downloads and self-hosts both at
+   build time, so the published site makes no third-party font requests. */
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500&display=swap");
 
+/* Brand tokens are ours alone, so :root is the right home for them. */
 :root {
   --cadasto-navy: #0a1a66;
+  --cadasto-navy-dark: #081452;
   --cadasto-blue: #5cb2ff;
   --cadasto-blue-dark: #007bb6;
-  --cadasto-teal: #24e363;
+  --cadasto-green: #24e363;
+}
+
+/* Material declares its scheme variables on the element carrying
+   `data-md-color-scheme` — that is <body>, not <html>. A custom property set on
+   <body> beats one inherited from :root, so these overrides must use the same
+   selector or they are silently discarded. */
+[data-md-color-scheme="slate"] {
   --md-primary-fg-color: var(--cadasto-blue);
   --md-primary-fg-color--light: var(--cadasto-blue);
   --md-primary-fg-color--dark: var(--cadasto-blue-dark);
-  --md-accent-fg-color: var(--cadasto-teal);
+  --md-accent-fg-color: var(--cadasto-green);
   --md-default-bg-color: var(--cadasto-navy);
   --md-default-fg-color: rgba(255, 255, 255, 0.87);
+  --md-default-fg-color--light: rgba(255, 255, 255, 0.72);
+  --md-default-fg-color--lighter: rgba(255, 255, 255, 0.45);
+  --md-typeset-color: rgba(255, 255, 255, 0.87);
   --md-typeset-a-color: var(--cadasto-blue);
+  --md-footer-bg-color: var(--cadasto-navy-dark);
 }
 
 body,
 .md-typeset {
-  font-family: Roboto, Helvetica, Arial, sans-serif;
   font-weight: 400;
 }
 
@@ -34,7 +49,7 @@ body,
 }
 
 .md-tabs {
-  background-color: #081452;
+  background-color: var(--cadasto-navy-dark);
 }
 
 .home-hero {
@@ -44,7 +59,7 @@ body,
 
 .home-hero h1 {
   font-size: clamp(2rem, 5vw, 3.25rem);
-  background: linear-gradient(135deg, var(--cadasto-blue) 0%, var(--cadasto-teal) 100%);
+  background: linear-gradient(135deg, var(--cadasto-blue) 0%, var(--cadasto-green) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -83,7 +98,7 @@ body,
 }
 
 .feature-card h3 {
-  color: var(--cadasto-teal);
+  color: var(--cadasto-green);
   margin-top: 0;
   font-size: 1.1rem;
 }
@@ -109,7 +124,7 @@ body,
   background: rgba(255, 255, 255, 0.04);
   border-radius: 1rem;
   padding: 1.25rem 1.5rem;
-  border-left: 4px solid var(--cadasto-teal);
+  border-left: 4px solid var(--cadasto-green);
 }
 
 .product-card h3 {

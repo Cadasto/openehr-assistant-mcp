@@ -10,7 +10,7 @@ resources (CKM, guides, terminology, type specs).
 | Layer | Role |
 |-------|------|
 | **Skills** | Guide-first workflows for archetypes, templates, AQL, compositions, demographics |
-| **Commands** | Explicit one-shots: CKM search, explain, semantic diff, syntax fix, template-from-form |
+| **Commands** | Explicit one-shots: CKM search, explain, semantic diff, syntax fix, impact scan, template-from-form |
 | **Agents** | `clinical-modeler`, `ckm-scout`, `spec-researcher` for delegated tasks |
 | **Hooks & rules** | Session context and openEHR modelling guardrails |
 
@@ -43,8 +43,13 @@ Full install, update, MCP permissions, and Cursor details:
 
 ## MCP wiring
 
-The plugin bundles a `.mcp.json` pointing at the hosted MCP server. Override it
-for a local or stdio server — see [Install](install.md) on this site.
+The plugin bundles a `.mcp.json` that registers the hosted MCP server under the
+name `openehr-assistant` — use that same name if you also configure the server
+by hand, or you will end up with two entries for one server. To point the plugin
+at a local or stdio server instead, follow
+[MCP wiring](https://github.com/cadasto/openehr-assistant-plugin/blob/main/docs/install.md#mcp-wiring)
+in the plugin repository; [Install](install.md) on this site has the server URLs
+and client configurations.
 
 ## Maintainer tooling
 

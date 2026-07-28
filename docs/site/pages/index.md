@@ -29,14 +29,14 @@ AI-native tooling for openEHR — archetypes, templates, AQL, terminology, and s
 <div class="feature-card" markdown="1">
 
 ### MCP-native tools
-Twelve tools for CKM, guides, examples, terminology, and type specifications — ready for any MCP client.
+Search and retrieval for CKM, guides, examples, terminology, and type specifications — ready for any MCP client.
 
 </div>
 
 <div class="feature-card" markdown="1">
 
 ### Guide-first workflows
-Bundled implementation guides and fourteen prompts orchestrate multi-step modelling and review.
+Bundled implementation guides ground each answer; task prompts orchestrate multi-step modelling and review.
 
 </div>
 

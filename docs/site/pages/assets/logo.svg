@@ -1,3 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" role="img" aria-label="openEHR Assistant">
-  <text x="0" y="34" font-family="Fira Sans, sans-serif" font-size="28" font-weight="500" fill="#5CB2FF">openEHR Assistant</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="openEHR Assistant">
+  <title>openEHR Assistant</title>
+  <!-- Placeholder brand mark. Deliberately geometry-only: an SVG used as <img>
+       (header logo, favicon) cannot load a webfont, so a text wordmark would
+       render in an arbitrary fallback face and be illegible at 16 px. -->
+  <defs>
+    <linearGradient id="cadasto-mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5CB2FF"/>
+      <stop offset="1" stop-color="#24E363"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#cadasto-mark)"/>
+  <path d="M12 34h9l6-14 8 26 6-12h11"
+        fill="none" stroke="#0A1A66" stroke-width="5"
+        stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

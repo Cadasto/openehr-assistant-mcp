@@ -36,7 +36,7 @@ requirements.md  →  architecture.md  →  src/  →  tests/        (forward)
 
 End-user landing pages and install flow are published via MkDocs from [`site/`](site/).
 Contributor SDD docs in this directory are **not** included in the public site.
-Build: `make docs-build` · See [site/README.md](site/README.md) and [ADR-0007](decisions/0007-product-website-mkdocs-github-pages.md).
+Build: `make docs-check` · See [site/README.md](site/README.md) and [ADR-0007](decisions/0007-product-website-mkdocs-github-pages.md).
 
 ## How to change the system (SDD flow)
 

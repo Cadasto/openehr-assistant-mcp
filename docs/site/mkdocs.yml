@@ -3,9 +3,26 @@ site_url: https://cadasto.github.io/openehr-assistant-mcp/
 site_description: MCP server and AI plugin for openEHR clinical modelling
 repo_url: https://github.com/cadasto/openehr-assistant-mcp
 repo_name: cadasto/openehr-assistant-mcp
-edit_uri: edit/main/docs/site/pages/
+# No `edit_uri`: the theme only renders edit links with the `content.action.edit`
+# feature, and for the symlinked install page such a link would open the symlink
+# itself in the GitHub editor rather than the canonical `docs/install.md`.
 
 docs_dir: pages
+
+# Warnings are build failures. Both `make docs-build` and CI rely on this rather
+# than passing --strict, so the two can never diverge.
+strict: true
+
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+    absolute_links: warn
+  links:
+    not_found: warn
+    anchors: warn
+    absolute_links: warn
+    unrecognized_links: warn
 
 theme:
   name: material
@@ -45,6 +62,10 @@ nav:
 
 plugins:
   - search
+  # Downloads the Google Fonts stylesheet and its woff2 files at build time and
+  # rewrites the references to local copies, so the published site issues no
+  # third-party requests.
+  - privacy
 
 hooks:
   - hooks/link_fix.py

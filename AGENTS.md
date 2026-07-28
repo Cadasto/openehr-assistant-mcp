@@ -12,6 +12,8 @@ concise conventions layer that links into it.
 - [`docs/architecture.md`](docs/architecture.md) — components mapped to requirements (the *how*).
 - [`docs/decisions/`](docs/decisions/README.md) — Architecture Decision Records (the *why*).
 - [`docs/traceability.md`](docs/traceability.md) — REQ ↔ code ↔ test ↔ ADR matrix (human-readable); the machine-checked source is [`docs/traceability.yaml`](docs/traceability.yaml), validated by `make spec-check` ([ADR-0006](docs/decisions/0006-machine-checked-traceability.md)). Repo SDD conventions live in [`docs/.sdd.yaml`](docs/.sdd.yaml).
+- [`docs/plans/`](docs/plans/README.md) — implementation plans; the only place checkbox task lists live. Archive them on completion.
+- [`docs/site/`](docs/site/README.md) — source of the public product website ([ADR-0007](docs/decisions/0007-product-website-mkdocs-github-pages.md)); `make docs-check` builds and verifies it. Only files under `docs/site/pages/` are published.
 - [`docs/development.md`](docs/development.md) · [`docs/testing.md`](docs/testing.md) — Docker dev environment and the test/validation workflow.
 - [`docs/install.md`](docs/install.md) — hosted & local setup and MCP client configurations (user-facing).
 

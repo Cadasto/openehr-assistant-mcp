@@ -11,7 +11,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ### Added
 
-- Product website: MkDocs site under `docs/site/`, `make docs-build`, GitHub Pages via Actions artifact deploy (REQ-N10, ADR-0007).
+- Product website: public MkDocs site under `docs/site/`, published to GitHub Pages.
 
 ## [0.20.0] - 2026-07-30
 

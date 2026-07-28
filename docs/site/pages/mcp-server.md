@@ -31,7 +31,7 @@ See [Install](install.md) for local Docker, stdio, and per-client configuration.
 
 ### Prompts
 
-Fourteen guided prompts cover CKM exploration, type specs, terminology, guides,
+Guided prompts cover CKM exploration, type specs, terminology, guides,
 explanation (archetype, template, AQL, simplified formats), ADL syntax fixing,
 translation, and design/review workflows.
 
