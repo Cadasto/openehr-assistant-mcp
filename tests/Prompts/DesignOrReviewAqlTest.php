@@ -19,7 +19,7 @@ final class DesignOrReviewAqlTest extends TestCase
     {
         $prompt = new DesignOrReviewAql();
         $messages = $prompt->__invoke(
-            task_type: 'review-existing',
+            task_type: 'review',
             query_intent: 'latest BP per EHR',
             template_or_archetypes: 'vital_signs',
             existing_aql: 'SELECT c FROM EHR e CONTAINS COMPOSITION c',
@@ -42,7 +42,7 @@ final class DesignOrReviewAqlTest extends TestCase
         $this->assertStringContainsString('openehr://guides/aql/idioms-cheatsheet', $combined);
         $this->assertStringContainsString('openehr://guides/aql/checklist', $combined);
 
-        $this->assertStringContainsString('review-existing', $combined);
+        $this->assertStringContainsString('review', $combined);
         $this->assertStringContainsString('latest BP per EHR', $combined);
         $this->assertStringContainsString('vital_signs', $combined);
         $this->assertStringContainsString('SELECT c FROM EHR e CONTAINS COMPOSITION c', $combined);

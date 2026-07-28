@@ -11,6 +11,7 @@ use Mcp\Schema\Content\PromptMessage;
 use Mcp\Schema\Content\TextContent;
 use Mcp\Schema\Enum\Role;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AbstractPrompt::class)]
@@ -237,5 +238,33 @@ final class AbstractPromptTest extends TestCase
         $messages = $promptInstance->testLoadWith('test_prompt', ['existing_artefact' => 'contains a literal {{token}} in it']);
 
         $this->assertStringContainsString('contains a literal {{token}} in it', $messages[array_key_last($messages)]->content->text);
+    }
+
+    /**
+     * @return list<array{0: string}>
+     */
+    public static function malformedPlaceholderProvider(): array
+    {
+        // Each of these is outside the substituter's `[a-z0-9_]+` charset, so it was
+        // neither replaced nor detected: the literal token shipped to the client in a
+        // user-role message where the artefact should have been.
+        return [
+            'capitalised' => ['{{Existing_Artefact}}'],
+            'kebab-case' => ['{{existing-artefact}}'],
+            'inner whitespace' => ['{{ existing_artefact }}'],
+            'empty' => ['{{}}'],
+        ];
+    }
+
+    #[DataProvider('malformedPlaceholderProvider')]
+    public function testLoadRejectsAPlaceholderTheSubstituterWouldLeaveInPlace(string $token): void
+    {
+        file_put_contents($this->tempPromptsDir . '/shared/policy.md', "## Role: user\n\nShared policy.");
+        file_put_contents($this->tempPromptsDir . '/test_prompt.md', "## Role: user\n\n" . $token);
+        $promptInstance = $this->getMockPrompt($this->tempPromptsDir);
+
+        $this->expectException(PromptGetException::class);
+        $this->expectExceptionMessage(sprintf('Malformed prompt placeholder "%s" in test_prompt', $token));
+        $promptInstance->testLoadWith('test_prompt', ['existing_artefact' => 'the artefact']);
     }
 }

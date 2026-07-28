@@ -222,4 +222,75 @@ final class OutputSchemaValidatorTest extends TestCase
         $this->expectExceptionMessageMatches('/not one of the allowed values/');
         OutputSchemaValidator::assertValid('archetypes', ['type' => 'string', 'enum' => ['aql', 'flat']]);
     }
+
+    public function test_maximum_is_enforced(): void
+    {
+        // `minimum` had a regression test; `maximum`'s branch was never exercised.
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/is above maximum/');
+        OutputSchemaValidator::assertValid(51, ['type' => 'integer', 'maximum' => 50]);
+    }
+
+    public function test_an_absent_optional_property_is_skipped(): void
+    {
+        // The complement of the required check: a property that is declared but not present
+        // must not be validated (or the minimal CKM row would fail).
+        OutputSchemaValidator::assertValid(
+            ['cid' => '1.2.3'],
+            [
+                'type' => 'object',
+                'additionalProperties' => false,
+                'required' => ['cid'],
+                'properties' => ['cid' => ['type' => 'string'], 'status' => ['type' => 'string']],
+            ],
+        );
+        $this->expectNotToPerformAssertions();
+    }
+
+    public function test_an_unimplemented_format_value_fails_loudly(): void
+    {
+        // `format` is allow-listed as a keyword, but only `uri` is implemented. Accepting
+        // `date-time` and then checking nothing is the same silent-ignore the class exists
+        // to prevent — plausible for `creationTime`, which is a bare string today.
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/does not implement/');
+        OutputSchemaValidator::assertValid('2026-07-28', ['type' => 'string', 'format' => 'date-time']);
+    }
+
+    public function test_a_schema_form_additional_properties_fails_loudly(): void
+    {
+        // `additionalProperties: {type: string}` used to be read as fully permissive.
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/`additionalProperties` must be a boolean/');
+        OutputSchemaValidator::assertValid(
+            ['a' => 'x'],
+            ['type' => 'object', 'additionalProperties' => ['type' => 'string']],
+        );
+    }
+
+    public function test_object_keywords_without_a_type_fail_loudly(): void
+    {
+        // Legal JSON Schema, and an easy omission in a hand-written nested `items`: without
+        // `type: object` every one of these constraints used to be skipped in silence.
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/declares no `type`/');
+        OutputSchemaValidator::assertValid(
+            ['unexpected' => 'x'],
+            ['required' => ['cid'], 'properties' => ['cid' => ['type' => 'string']], 'additionalProperties' => false],
+        );
+    }
+
+    public function test_a_malformed_numeric_bound_fails_loudly(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/`minimum` must be numeric/');
+        OutputSchemaValidator::assertValid(5, ['type' => 'integer', 'minimum' => '3']);
+    }
+
+    public function test_a_malformed_enum_fails_loudly(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/`enum` must be a non-empty array/');
+        OutputSchemaValidator::assertValid('x', ['type' => 'string', 'enum' => []]);
+    }
 }

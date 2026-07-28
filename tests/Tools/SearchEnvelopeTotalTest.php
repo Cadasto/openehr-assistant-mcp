@@ -35,17 +35,18 @@ final class SearchEnvelopeTotalTest extends TestCase
         $this->assertGreaterThan(2, $result['total']);
     }
 
-    public function test_guide_search_total_is_bounded_by_top_candidates_as_documented(): void
+    public function test_guide_search_total_does_not_depend_on_top_candidates(): void
     {
-        // `total` is scoped to the scoring window, and the schema says so. Raising
-        // `topCandidates` must widen both the search and the count.
+        // `topCandidates` used to bound which guides were content-scored, so a low value
+        // silently shrank recall and `total` with it. It is now inert: the same query must
+        // report the same number of matches whatever the caller passes.
         $service = new GuideService(new NullLogger());
 
-        $narrow = $service->search('archetype', maxResults: 1, topCandidates: 5);
+        $narrow = $service->search('archetype', maxResults: 1, topCandidates: 1);
         $wide = $service->search('archetype', maxResults: 1, topCandidates: 200);
 
-        $this->assertLessThanOrEqual(5, $narrow['total']);
-        $this->assertGreaterThan($narrow['total'], $wide['total']);
+        $this->assertSame($narrow['total'], $wide['total']);
+        $this->assertSame($narrow['items'], $wide['items']);
     }
 
     public function test_examples_search_total_counts_matches_beyond_the_returned_items(): void
@@ -101,7 +102,25 @@ final class SearchEnvelopeTotalTest extends TestCase
         $this->assertSame(482, $result['total']);
     }
 
-    public function test_ckm_search_total_never_undercounts_the_returned_items(): void
+    public function test_ckm_search_total_is_raised_to_the_match_count_when_the_header_undercounts(): void
+    {
+        // The `max()` in resolveTotal() was untested: the case named for it below feeds a
+        // non-numeric header, which returns early on `ctype_digit` and never reaches `max()`.
+        // Replacing `max((int) $header, $matchCount)` with `(int) $header` kept every CKM
+        // total test green. A well-formed header that undercounts is the real trigger — a
+        // stale or under-reported upstream count alongside rows we actually returned.
+        $service = $this->ckmServiceReturning(
+            [['cid' => '1.2.3', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.bp.v1']],
+            ['X-Total-Count' => '0'],
+        );
+
+        $result = $service->archetypeSearch('blood pressure');
+
+        $this->assertCount(1, $result['items']);
+        $this->assertSame(1, $result['total'], 'total must never be reported below the items returned');
+    }
+
+    public function test_ckm_search_total_falls_back_when_the_header_is_malformed(): void
     {
         // Regression: a non-numeric header used to yield `total: 0` alongside a non-empty
         // `items` list, contradicting the field's own contract.

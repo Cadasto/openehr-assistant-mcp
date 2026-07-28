@@ -206,6 +206,45 @@ final class GuideServiceTest extends TestCase
         $this->assertLessThan($everything['total'], $identifier['total']);
     }
 
+    public function test_guideSearch_finds_a_term_that_appears_only_in_a_guide_body(): void
+    {
+        // Regression: the candidate window was ranked on metadata (title/abstract/headings)
+        // alone and sliced to 24 of 66 guides *before* any body was scored. A term living
+        // solely in a body therefore scored 0 everywhere, and the zero-score floor turned
+        // that into an empty envelope — which an agent reads as "no such guidance exists".
+        // `access_token` occurs only in the body of specs/its-rest-smart_app_launch, which
+        // sorted 26th by name and so fell outside the old window. Asserted at *default*
+        // parameters: passing `topCandidates: 200` is the workaround real clients cannot apply.
+        $result = $this->service->search('access_token');
+
+        $names = array_map(static fn(array $i): string => (string) $i['name'], $result['items']);
+        $this->assertContains('its-rest-smart_app_launch', $names);
+        $this->assertGreaterThan(0, $result['total']);
+    }
+
+    public function test_guideSearch_body_only_term_reports_every_matching_guide(): void
+    {
+        // Same defect, multi-hit shape: `hide_on_form` occurs in four template guides, three
+        // of which sorted outside the old window, so the tool reported a single hit.
+        $result = $this->service->search('hide_on_form', maxResults: 50);
+
+        $this->assertGreaterThanOrEqual(4, $result['total']);
+    }
+
+    public function test_guideSearch_taskType_cannot_evict_a_genuine_match(): void
+    {
+        // The other half of the documented "never filters" contract. It held for the
+        // relevance floor but not for the old candidate window, where a +2 boost on
+        // unrelated guides could push a genuine body-only match out of scoring entirely,
+        // so adding a hint *removed* a result.
+        $without = $this->service->search('access_token');
+        $withHint = $this->service->search('access_token', null, 'review');
+
+        $names = static fn(array $r): array => array_map(static fn(array $i): string => (string) $i['name'], $r['items']);
+        $this->assertSame($names($without), $names($withHint));
+        $this->assertSame($without['total'], $withHint['total']);
+    }
+
     public function test_guideSearch_splits_on_punctuation_between_terms(): void
     {
         $comma = $this->service->search('cardinality, occurrences', maxResults: 5);

@@ -18,7 +18,7 @@ readonly final class DesignOrReviewTemplate extends AbstractPrompt
      * @param mixed $clinical_context Clinical workflow/context
      * @param mixed $root_archetype Root archetype (archetype-id or concept)
      * @param mixed $included_archetypes Included Archetypes (list of IDs or concepts, optional)
-     * @param mixed $existing_template Existing Template (OET, OPT, or URI) — optional for design, expected when task_type is review
+     * @param mixed $existing_template Existing Template (OET, OPT, or URI) — optional for design, required when task_type is review
      * @return PromptMessage[]
      */
     public function __invoke(
@@ -29,13 +29,19 @@ readonly final class DesignOrReviewTemplate extends AbstractPrompt
         mixed $included_archetypes = '',
         mixed $existing_template = '',
     ): array {
-        return $this->loadPromptMessages('design_or_review_template', [
-            'task_type' => $task_type,
-            'concept' => $concept,
-            'clinical_context' => $clinical_context,
-            'root_archetype' => $root_archetype,
-            'included_archetypes' => $included_archetypes,
-            'existing_template' => $existing_template,
-        ], ['task_type', 'concept', 'clinical_context', 'root_archetype']);
+        return $this->loadPromptMessages(
+            'design_or_review_template',
+            [
+                'task_type' => $task_type,
+                'concept' => $concept,
+                'clinical_context' => $clinical_context,
+                'root_archetype' => $root_archetype,
+                'included_archetypes' => $included_archetypes,
+                'existing_template' => $existing_template,
+            ],
+            ['task_type', 'concept', 'clinical_context', 'root_archetype'],
+            ['task_type' => ['design', 'review']],
+            ['existing_template' => ['task_type' => ['review']]],
+        );
     }
 }

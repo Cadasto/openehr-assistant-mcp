@@ -61,7 +61,7 @@ final readonly class CkmService
      *   Query search string (one or multiple words); wildcards `*` supported; prefer meaningful clinical terms over internal codes, e.g. "blood pressure", "medication", "diabetes", "body weight".
      *
      * @param int $maxResults
-     *   The maximum number of result items to be returned; defaults to 20, capped at 50.
+     *   The maximum number of result items to be returned; defaults to 20 and must be between 1 and 50 (values outside that range are rejected, not clamped).
      *
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
@@ -141,9 +141,7 @@ final readonly class CkmService
                 ],
             ]);
             $data = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-            if (!is_array($data)) {
-                throw new \RuntimeException('Unexpected CKM archetype response payload.');
-            }
+            $this->assertCkmRowList($data, 'archetype');
             $this->logger->info('Found CKM Archetypes', ['keyword' => $keyword, 'count' => count($data)]);
 
             // Map each item to a simpler structure and score
@@ -152,14 +150,14 @@ final readonly class CkmService
                     // `cid` is declared `required` in the outputSchema and is the handle
                     // `ckm_archetype_get` needs, so it is never filtered out below — an
                     // upstream row without one yields '' rather than a missing key.
-                    'cid' => $this->ckmString($item['cid'] ?? null) ?? '',
-                    'archetypeId' => $this->ckmString($item['resourceMainId'] ?? null),
-                    'name' => $this->ckmString($item['resourceMainDisplayName'] ?? null),
-                    'projectName' => $this->ckmString($item['projectName'] ?? null),
-                    'status' => $this->ckmString($item['status'] ?? null),
-                    'revision' => $this->ckmString($item['revision'] ?? null),
-                    'creationTime' => $this->ckmString($item['creationTime'] ?? null),
-                    'modificationTime' => $this->ckmString($item['modificationTime'] ?? $item['creationTime'] ?? null),
+                    'cid' => $this->ckmString($item['cid'] ?? null, 'cid') ?? '',
+                    'archetypeId' => $this->ckmString($item['resourceMainId'] ?? null, 'resourceMainId'),
+                    'name' => $this->ckmString($item['resourceMainDisplayName'] ?? null, 'resourceMainDisplayName'),
+                    'projectName' => $this->ckmString($item['projectName'] ?? null, 'projectName'),
+                    'status' => $this->ckmString($item['status'] ?? null, 'status'),
+                    'revision' => $this->ckmString($item['revision'] ?? null, 'revision'),
+                    'creationTime' => $this->ckmString($item['creationTime'] ?? null, 'creationTime'),
+                    'modificationTime' => $this->ckmString($item['modificationTime'] ?? $item['creationTime'] ?? null, 'modificationTime'),
                     'score' => $this->scoreArchetypeItem($item, $keyword),
                 ];
                 if ($new['cid'] === '') {
@@ -282,7 +280,7 @@ final readonly class CkmService
      *   Query search string, one or multiple words, wildcards `*` supported.
      *
      * @param int $maxResults
-     *   The maximum number of result items to be returned; defaults to 20, capped at 50.
+     *   The maximum number of result items to be returned; defaults to 20 and must be between 1 and 50 (values outside that range are rejected, not clamped).
      *
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
@@ -352,9 +350,7 @@ final readonly class CkmService
                 ],
             ]);
             $data = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-            if (!is_array($data)) {
-                throw new \RuntimeException('Unexpected CKM template response payload.');
-            }
+            $this->assertCkmRowList($data, 'template');
             $this->logger->info('Found CKM Templates', ['keyword' => $keyword, 'count' => count($data)]);
 
             // Map each item to a simpler structure and score
@@ -362,13 +358,13 @@ final readonly class CkmService
                 $new = [
                     // See the `cid` note in archetypeSearch(): declared `required`, so it
                     // is always present even when the upstream row omits it.
-                    'cid' => $this->ckmString($item['cid'] ?? null) ?? '',
-                    'name' => $this->ckmString($item['resourceMainDisplayName'] ?? null),
-                    'projectName' => $this->ckmString($item['projectName'] ?? null),
-                    'status' => $this->ckmString($item['status'] ?? null),
-                    'version' => $this->ckmString($item['versionAsset'] ?? null),
-                    'creationTime' => $this->ckmString($item['creationTime'] ?? null),
-                    'modificationTime' => $this->ckmString($item['modificationTime'] ?? $item['creationTime'] ?? null),
+                    'cid' => $this->ckmString($item['cid'] ?? null, 'cid') ?? '',
+                    'name' => $this->ckmString($item['resourceMainDisplayName'] ?? null, 'resourceMainDisplayName'),
+                    'projectName' => $this->ckmString($item['projectName'] ?? null, 'projectName'),
+                    'status' => $this->ckmString($item['status'] ?? null, 'status'),
+                    'version' => $this->ckmString($item['versionAsset'] ?? null, 'versionAsset'),
+                    'creationTime' => $this->ckmString($item['creationTime'] ?? null, 'creationTime'),
+                    'modificationTime' => $this->ckmString($item['modificationTime'] ?? $item['creationTime'] ?? null, 'modificationTime'),
                     'score' => $this->scoreTemplateItem($item, $keyword),
                 ];
                 if ($new['cid'] === '') {
@@ -468,9 +464,9 @@ final readonly class CkmService
     {
         // Narrowed here rather than trusted: CKM is external, and every helper below
         // takes `?string`, so an unexpected int/bool/object would raise a TypeError.
-        $archetypeId = $this->ckmString($item['resourceMainId'] ?? null);
-        $name = $this->ckmString($item['resourceMainDisplayName'] ?? null);
-        $projectName = $this->ckmString($item['projectName'] ?? null);
+        $archetypeId = $this->ckmString($item['resourceMainId'] ?? null, 'resourceMainId');
+        $name = $this->ckmString($item['resourceMainDisplayName'] ?? null, 'resourceMainDisplayName');
+        $projectName = $this->ckmString($item['projectName'] ?? null, 'projectName');
         $keywords = array_filter(explode(' ', trim($keyword)));
         $score = 0;
         $keywordsMatched = 0;
@@ -491,11 +487,11 @@ final readonly class CkmService
             $score += self::SCORE_EXACT_CONCEPT_BONUS;
         }
         $score += $this->projectBucketBonus($projectName);
-        $status = $this->ckmString($item['status'] ?? null);
-        $creationTime = $this->ckmString($item['creationTime'] ?? null);
+        $status = $this->ckmString($item['status'] ?? null, 'status');
+        $creationTime = $this->ckmString($item['creationTime'] ?? null, 'creationTime');
         $score += $this->scoreStatus($status);
         $score += $this->agePenalty(
-            $this->ckmString($item['modificationTime'] ?? null) ?? $creationTime,
+            $this->ckmString($item['modificationTime'] ?? null, 'modificationTime') ?? $creationTime,
             $creationTime,
             $status
         );
@@ -510,8 +506,8 @@ final readonly class CkmService
     private function scoreTemplateItem(array $item, string $keyword): int
     {
         // See the note in scoreArchetypeItem(): narrow before scoring.
-        $name = $this->ckmString($item['resourceMainDisplayName'] ?? null);
-        $projectName = $this->ckmString($item['projectName'] ?? null);
+        $name = $this->ckmString($item['resourceMainDisplayName'] ?? null, 'resourceMainDisplayName');
+        $projectName = $this->ckmString($item['projectName'] ?? null, 'projectName');
         $keywords = array_filter(explode(' ', trim($keyword)));
         $score = 0;
         $keywordsMatched = 0;
@@ -531,11 +527,11 @@ final readonly class CkmService
             $score += self::SCORE_EXACT_CONCEPT_BONUS;
         }
         $score += $this->projectBucketBonus($projectName);
-        $status = $this->ckmString($item['status'] ?? null);
-        $creationTime = $this->ckmString($item['creationTime'] ?? null);
+        $status = $this->ckmString($item['status'] ?? null, 'status');
+        $creationTime = $this->ckmString($item['creationTime'] ?? null, 'creationTime');
         $score += $this->scoreStatus($status);
         $score += $this->agePenalty(
-            $this->ckmString($item['modificationTime'] ?? null) ?? $creationTime,
+            $this->ckmString($item['modificationTime'] ?? null, 'modificationTime') ?? $creationTime,
             $creationTime,
             $status
         );
@@ -690,15 +686,56 @@ final readonly class CkmService
     }
 
     /**
+     * Assert that a decoded CKM search payload is a flat list of row objects.
+     *
+     * `is_array()` alone accepted two shapes that then failed far from the cause. A
+     * pagination envelope (`{"content": [...]}` — the most common way a REST response
+     * drifts) passed the check and handed `array_map` the inner list as a single "row",
+     * yielding one bogus schema-conformant item with an empty `cid`. Add a sibling scalar
+     * (`{"totalElements": 482, "content": [...]}`) and the typed closure raised a TypeError
+     * that neither catch arm here matches, surfacing as a generic internal error.
+     *
+     * @phpstan-assert list<array<string, mixed>> $data
+     */
+    private function assertCkmRowList(mixed $data, string $kind): void
+    {
+        if (!is_array($data) || !array_is_list($data)) {
+            throw new \RuntimeException(sprintf(
+                'Unexpected CKM %s response payload: expected a JSON array of rows, got %s.',
+                $kind,
+                is_array($data) ? 'an object' : get_debug_type($data),
+            ));
+        }
+
+        foreach ($data as $index => $row) {
+            if (!is_array($row)) {
+                throw new \RuntimeException(sprintf(
+                    'Unexpected CKM %s response payload: row %d is %s, not an object.',
+                    $kind,
+                    $index,
+                    get_debug_type($row),
+                ));
+            }
+        }
+    }
+
+    /**
      * Narrow a value from a CKM payload to a string, preserving "absent" as null so the
      * caller's `array_filter` can still drop optional keys.
      *
      * Every mapped field is declared `type: string` in the outputSchema, and the ageing
-     * helpers take `?string` — CKM returns `creationTime` as either an ISO 8601 string or
-     * an epoch-ms value, and an unquoted number would otherwise reach `yearsSince()` as an
-     * int and raise a TypeError. Non-scalars collapse to null rather than to "Array".
+     * helpers take `?string` — CKM has been observed to return `creationTime` as either an
+     * ISO 8601 string or an epoch-ms value, and an unquoted number would otherwise reach
+     * `yearsSince()` as an int and raise a TypeError; the narrowing is defensive either way.
+     * Non-scalars collapse to null rather than to "Array".
+     *
+     * `$field` is mandatory because a silent collapse is the dangerous case: the caller's
+     * `array_filter` then drops the key entirely. When that key is `resourceMainId` and a
+     * `rmClass` filter is active, `archetypeRmClass(null)` returns null for every row, the
+     * filter deletes them all, and the tool reports "0 matching archetypes" with no error —
+     * a confident falsehood. One log line per collapse is what makes that diagnosable.
      */
-    private function ckmString(mixed $value): ?string
+    private function ckmString(mixed $value, string $field): ?string
     {
         if ($value === null) {
             return null;
@@ -706,8 +743,16 @@ final readonly class CkmService
         if (is_string($value)) {
             return $value;
         }
+        if (is_int($value) || is_float($value) || is_bool($value)) {
+            return (string) $value;
+        }
 
-        return is_int($value) || is_float($value) || is_bool($value) ? (string) $value : null;
+        $this->logger->warning('CKM field has an unexpected non-scalar shape and was dropped.', [
+            'field' => $field,
+            'type' => get_debug_type($value),
+        ]);
+
+        return null;
     }
 
     /**

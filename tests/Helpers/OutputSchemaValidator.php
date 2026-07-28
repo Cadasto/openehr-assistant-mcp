@@ -48,6 +48,21 @@ final class OutputSchemaValidator
         self::assertKeywordsSupported($schema, $path);
 
         $type = $schema['type'] ?? null;
+
+        // Object keywords used to be honoured only when `type: 'object'` was literally
+        // present. A sub-schema written as `['required' => [...], 'properties' => [...]]` —
+        // legal JSON Schema, and an easy omission when hand-writing a nested `items` — fell
+        // through to the scalar path, which returns immediately for a null type. Every
+        // constraint was then skipped and the payload passed unchecked.
+        $objectKeywords = array_intersect(['properties', 'required', 'additionalProperties'], array_keys($schema));
+        if ($type === null && $objectKeywords !== []) {
+            throw new InvalidArgumentException(sprintf(
+                '%s: schema uses %s but declares no `type` — add `type: "object"` so the constraint is actually enforced.',
+                $path,
+                implode('/', $objectKeywords),
+            ));
+        }
+
         if ($type === 'object') {
             self::assertObject($data, $schema, $path);
             return;
@@ -104,7 +119,19 @@ final class OutputSchemaValidator
         /** @var array<string, array<string, mixed>> $properties */
         $properties = $schema['properties'] ?? [];
 
-        if (($schema['additionalProperties'] ?? true) === false) {
+        // Only the boolean form is implemented. `additionalProperties: {type: string}` is
+        // legal JSON Schema but used to be treated as fully permissive — a constraint the
+        // author wrote and believed was being checked.
+        $additional = $schema['additionalProperties'] ?? true;
+        if (!is_bool($additional)) {
+            throw new InvalidArgumentException(sprintf(
+                '%s: `additionalProperties` must be a boolean; %s does not implement the schema form.',
+                $path,
+                self::class,
+            ));
+        }
+
+        if ($additional === false) {
             $allowed = array_keys($properties);
             foreach (array_keys($data) as $key) {
                 if (!in_array($key, $allowed, true)) {
@@ -173,15 +200,23 @@ final class OutputSchemaValidator
             return;
         }
 
+        // A non-numeric bound is a malformed schema, not an absent constraint. Skipping it
+        // silently would leave the author believing a bound they wrote is being enforced.
         $minimum = $schema['minimum'] ?? null;
-        if (is_int($minimum) || is_float($minimum)) {
+        if ($minimum !== null) {
+            if (!is_int($minimum) && !is_float($minimum)) {
+                throw new InvalidArgumentException(sprintf('%s: `minimum` must be numeric, %s given', $path, get_debug_type($minimum)));
+            }
             if ($data < $minimum) {
                 throw new InvalidArgumentException(sprintf('%s: %s is below minimum %s', $path, (string) $data, (string) $minimum));
             }
         }
 
         $maximum = $schema['maximum'] ?? null;
-        if (is_int($maximum) || is_float($maximum)) {
+        if ($maximum !== null) {
+            if (!is_int($maximum) && !is_float($maximum)) {
+                throw new InvalidArgumentException(sprintf('%s: `maximum` must be numeric, %s given', $path, get_debug_type($maximum)));
+            }
             if ($data > $maximum) {
                 throw new InvalidArgumentException(sprintf('%s: %s is above maximum %s', $path, (string) $data, (string) $maximum));
             }
@@ -194,8 +229,11 @@ final class OutputSchemaValidator
     private static function assertEnum(mixed $data, array $schema, string $path): void
     {
         $enum = $schema['enum'] ?? null;
-        if (!is_array($enum) || $enum === []) {
+        if ($enum === null) {
             return;
+        }
+        if (!is_array($enum) || $enum === []) {
+            throw new InvalidArgumentException(sprintf('%s: `enum` must be a non-empty array, %s given', $path, get_debug_type($enum)));
         }
 
         if (!in_array($data, $enum, true)) {
@@ -208,7 +246,24 @@ final class OutputSchemaValidator
      */
     private static function assertFormat(mixed $data, array $schema, string $path): void
     {
-        if (($schema['format'] ?? null) !== 'uri' || !is_string($data)) {
+        $format = $schema['format'] ?? null;
+        if ($format === null) {
+            return;
+        }
+
+        // The keyword allowlist admits `format`, but support is per *value*. Accepting an
+        // unimplemented value and then checking nothing is the same silent-ignore this
+        // class exists to prevent, one level down — so reject the value, not just the keyword.
+        if ($format !== 'uri') {
+            throw new InvalidArgumentException(sprintf(
+                '%s: schema uses format "%s", which %s does not implement — add support for it rather than leaving it unchecked.',
+                $path,
+                is_string($format) ? $format : get_debug_type($format),
+                self::class,
+            ));
+        }
+
+        if (!is_string($data)) {
             return;
         }
 

@@ -43,8 +43,8 @@ final class PromptCompositionTest extends TestCase
                 ['openehr://guides/aql/principles', 'archetype path'],
             ],
             'design/review aql' => [
-                static fn (): array => (new DesignOrReviewAql())(task_type: 'design-new', query_intent: 'latest BP per EHR'),
-                ['openehr://guides/aql/checklist', 'design-new'],
+                static fn (): array => (new DesignOrReviewAql())(task_type: 'design', query_intent: 'latest BP per EHR'),
+                ['openehr://guides/aql/checklist', 'design'],
             ],
             'ckm explorer' => [static fn (): array => (new CkmExplorer())(), ['ckm_archetype_search', 'ckm_archetype_get', 'ckm_template_search', 'ckm_template_get']],
         ];

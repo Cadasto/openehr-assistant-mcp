@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tools;
 
+use Cadasto\OpenEHR\MCP\Assistant\Helpers\SearchTokenizer;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Capability\Attribute\Schema;
 use Mcp\Exception\ToolCallException;
@@ -279,11 +280,25 @@ final readonly class ExamplesService
         if ($query === '') {
             return 1;
         }
-        $haystack = strtolower($title . ' ' . $metadata);
-        $keywords = array_filter(preg_split('/\s+/', trim(strtolower($query))) ?: []);
+        // Shares `guide_search`'s tokenizer: byte-wise `strtolower` left non-ASCII uppercase
+        // unfolded (so `Å` scored 0 corpus-wide), and splitting on whitespace alone glued
+        // punctuation to terms, making `pressure,` in "blood pressure, weight" match nothing.
+        // Both were fixed in the sibling tool while this one kept the old behaviour.
+        $haystack = mb_strtolower($title . ' ' . $metadata, 'UTF-8');
+        $lowerTitle = mb_strtolower($title, 'UTF-8');
+        $keywords = SearchTokenizer::tokenize($query);
+        if ($keywords === null) {
+            $this->logger->warning('Could not tokenize examples search query.', [
+                'query' => $query,
+                'error' => preg_last_error_msg(),
+            ]);
+
+            return 0;
+        }
+
         $score = 0;
         foreach ($keywords as $keyword) {
-            if (str_contains(strtolower($title), $keyword)) {
+            if (str_contains($lowerTitle, $keyword)) {
                 $score += 5;
             }
             $score += min(substr_count($haystack, $keyword), 6);

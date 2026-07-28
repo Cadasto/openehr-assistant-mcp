@@ -22,6 +22,29 @@ final class PromptArgumentSubstitutionTest extends TestCase
 {
     private const string PROMPTS_NAMESPACE = 'Cadasto\\OpenEHR\\MCP\\Assistant\\Prompts\\';
 
+    /**
+     * One legal token per argument constrained to a closed vocabulary. The generic
+     * reflection-driven tests below feed `value-for-<name>` to every argument, which
+     * `AbstractPrompt::applyVocabularies()` rejects by design.
+     *
+     * The samples deliberately pick the value that triggers *no* conditional requirement
+     * (`design`, not `review`), so a prompt still renders when only its required arguments
+     * are supplied. If a new vocabulary is declared without being added here, the generic
+     * tests fail with the "must be one of" message naming the argument.
+     */
+    private const array VOCABULARY_SAMPLES = [
+        'task_type' => 'design',
+        'format_variant' => 'flat',
+    ];
+
+    /** Any `{{…}}`-shaped token, including ones the substituter would not replace. */
+    private const string ANY_PLACEHOLDER = '/\{\{[^{}]*\}\}/';
+
+    private static function sampleValue(string $parameterName): string
+    {
+        return self::VOCABULARY_SAMPLES[$parameterName] ?? 'value-for-' . $parameterName;
+    }
+
     #[DataProvider('parameterizedPromptProvider')]
     public function test_prompt_substitutes_all_placeholders_and_leaves_none_unresolved(string $className): void
     {
@@ -31,7 +54,7 @@ final class PromptArgumentSubstitutionTest extends TestCase
 
         $args = [];
         foreach ($params as $param) {
-            $args[$param->getName()] = 'value-for-' . $param->getName();
+            $args[$param->getName()] = self::sampleValue($param->getName());
         }
 
         /** @var callable $prompt */
@@ -47,7 +70,10 @@ final class PromptArgumentSubstitutionTest extends TestCase
             $this->assertStringContainsString($value, $combined, sprintf('%s: %s not substituted', $className, $name));
         }
 
-        $this->assertDoesNotMatchRegularExpression('/\{\{[a-z0-9_]+\}\}/', $combined);
+        // Asserted with the broad pattern, not the substituter's strict one: matching only
+        // `[a-z0-9_]+` made a leaked `{{Audience}}` or `{{adl-text}}` invisible to this
+        // guard as well as to production, so the leak shipped with CI green.
+        $this->assertDoesNotMatchRegularExpression(self::ANY_PLACEHOLDER, $combined);
     }
 
     /**
@@ -65,7 +91,7 @@ final class PromptArgumentSubstitutionTest extends TestCase
 
         $baseline = [];
         foreach ($params as $param) {
-            $baseline[$param->getName()] = 'value-for-' . $param->getName();
+            $baseline[$param->getName()] = self::sampleValue($param->getName());
         }
 
         $requiredSeen = 0;
@@ -114,7 +140,7 @@ final class PromptArgumentSubstitutionTest extends TestCase
             if ($param->isDefaultValueAvailable()) {
                 continue;
             }
-            $args[$param->getName()] = 'value-for-' . $param->getName();
+            $args[$param->getName()] = self::sampleValue($param->getName());
         }
 
         /** @var callable $prompt */
@@ -126,7 +152,7 @@ final class PromptArgumentSubstitutionTest extends TestCase
             $messages,
         ));
 
-        $this->assertDoesNotMatchRegularExpression('/\{\{[a-z0-9_]+\}\}/', $combined);
+        $this->assertDoesNotMatchRegularExpression(self::ANY_PLACEHOLDER, $combined);
         foreach ($args as $value) {
             $this->assertStringContainsString($value, $combined);
         }
@@ -140,7 +166,7 @@ final class PromptArgumentSubstitutionTest extends TestCase
 
         $args = [];
         foreach ($params as $param) {
-            $args[$param->getName()] = 'value-for-' . $param->getName();
+            $args[$param->getName()] = self::sampleValue($param->getName());
         }
         $first = $params[0]->getName();
         $args[$first] = ['an', 'array'];
@@ -172,6 +198,76 @@ final class PromptArgumentSubstitutionTest extends TestCase
         }
     }
 
+    public function test_task_type_outside_its_vocabulary_is_rejected_by_name(): void
+    {
+        // The prompt body gates destructive behaviour on this token ("for review, do not
+        // rewrite the artefact"). An unrecognised value does not degrade: the branch never
+        // fires and the model rewrites an artefact the user asked it only to review. The
+        // four sibling prompts used to advertise three different vocabularies, so a client
+        // could plausibly send AQL's `review-existing` to the template prompt.
+        $prompt = new \Cadasto\OpenEHR\MCP\Assistant\Prompts\DesignOrReviewTemplate();
+
+        $this->expectException(PromptGetException::class);
+        $this->expectExceptionMessage('Prompt argument "task_type" must be one of: design | review — "review-existing" given.');
+        $prompt('review-existing', 'concept', 'context', 'root');
+    }
+
+    public function test_task_type_is_canonicalised_so_capitalisation_cannot_miss_a_branch(): void
+    {
+        $prompt = new \Cadasto\OpenEHR\MCP\Assistant\Prompts\DesignOrReviewTemplate();
+        $messages = $prompt('ReVieW', 'concept', 'context', 'root', '', 'the existing OET');
+
+        $combined = implode("\n", array_map(static fn ($m): string => $m->content->text, $messages));
+        $this->assertStringContainsString("Task type (design | review):\nreview", $combined);
+        $this->assertStringNotContainsString('ReVieW', $combined);
+    }
+
+    /**
+     * @return list<array{0: string, 1: list<string>, 2: string}>
+     */
+    public static function conditionalArtefactProvider(): array
+    {
+        return [
+            'template review needs the template' => ['DesignOrReviewTemplate', ['review', 'c', 'ctx', 'root'], 'existing_template'],
+            'aql review needs the query' => ['DesignOrReviewAql', ['review', 'intent'], 'existing_aql'],
+            'archetype review needs the archetype' => ['DesignOrReviewArchetype', ['review', 'c', 'OBSERVATION', 'ctx'], 'existing_archetype'],
+            'archetype specialise needs the parent' => ['DesignOrReviewArchetype', ['specialise', 'c', 'OBSERVATION', 'ctx'], 'parent_archetype'],
+            'simplified review needs the payload' => ['DesignOrReviewSimplifiedFormat', ['review', 'tpl', 'flat'], 'existing_json'],
+        ];
+    }
+
+    /**
+     * @param list<string> $args
+     */
+    #[DataProvider('conditionalArtefactProvider')]
+    public function test_review_without_its_artefact_is_rejected(string $class, array $args, string $expected): void
+    {
+        // Without this, `task_type: review` and no artefact renders "preserve the supplied
+        // Existing X unchanged" directly above an empty slot, and the model confidently
+        // reviews nothing.
+        $rc = new ReflectionClass(self::PROMPTS_NAMESPACE . $class);
+        /** @var callable $prompt */
+        $prompt = $rc->newInstance();
+
+        try {
+            $prompt(...$args);
+            $this->fail(sprintf('%s: expected %s to be required', $class, $expected));
+        } catch (PromptGetException $e) {
+            $this->assertStringContainsString($expected, $e->getMessage());
+        }
+    }
+
+    public function test_shared_policy_carries_no_placeholders(): void
+    {
+        // shared/policy.md is prepended to *every* prompt and is substituted with whatever
+        // arguments that prompt declares, so a `{{token}}` here would break all ten at once
+        // — including the four parameterless explorers, whose value map is empty. The file
+        // sits outside parameterizedPromptFiles()'s glob, so nothing else states this.
+        $policy = file_get_contents(__DIR__ . '/../../resources/prompts/shared/policy.md');
+        $this->assertIsString($policy);
+        $this->assertDoesNotMatchRegularExpression(self::ANY_PLACEHOLDER, $policy);
+    }
+
     public function test_every_markdown_placeholder_is_covered_by_invoke_parameters(): void
     {
         $promptsDir = __DIR__ . '/../../resources/prompts';
@@ -180,9 +276,12 @@ final class PromptArgumentSubstitutionTest extends TestCase
             $content = file_get_contents($promptsDir . '/' . $file);
             $this->assertIsString($content);
 
-            preg_match_all('/\{\{([a-z0-9_]+)\}\}/', $content, $matches);
-            $placeholders = array_unique($matches[1]);
-            $this->assertNotEmpty($placeholders, sprintf('%s expected to contain placeholders', $file));
+            // Scanned with the broad pattern so a malformed token is reported here rather
+            // than silently skipped: the strict pattern would not see `{{adl-text}}` at all,
+            // and production would then ship it verbatim.
+            preg_match_all(self::ANY_PLACEHOLDER, $content, $matches);
+            $tokens = array_unique($matches[0]);
+            $this->assertNotEmpty($tokens, sprintf('%s expected to contain placeholders', $file));
 
             $rc = new ReflectionClass($className);
             $paramNames = array_map(
@@ -190,7 +289,14 @@ final class PromptArgumentSubstitutionTest extends TestCase
                 $rc->getMethod('__invoke')->getParameters(),
             );
 
-            foreach ($placeholders as $placeholder) {
+            foreach ($tokens as $token) {
+                $this->assertMatchesRegularExpression(
+                    '/^\{\{[a-z0-9_]+\}\}$/',
+                    $token,
+                    sprintf('%s: %s is not a substitutable placeholder (lower_snake_case, no spaces)', $file, $token),
+                );
+
+                $placeholder = trim($token, '{}');
                 $this->assertContains(
                     $placeholder,
                     $paramNames,

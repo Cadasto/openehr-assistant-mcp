@@ -127,13 +127,85 @@ final class CkmServiceUpstreamShapeTest extends TestCase
      */
     private function serviceReturning(array $payload): CkmService
     {
+        return $this->serviceReturningRaw(json_encode($payload, JSON_THROW_ON_ERROR));
+    }
+
+    private function serviceReturningRaw(string $body): CkmService
+    {
         $client = $this->createMock(CkmClient::class);
         $client->method('get')->willReturn(new Response(
             200,
             ['Content-Type' => 'application/json'],
-            json_encode($payload, JSON_THROW_ON_ERROR),
+            $body,
         ));
 
         return new CkmService($client, new NullLogger());
+    }
+
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function driftedEnvelopeProvider(): array
+    {
+        // `is_array()` alone accepted every one of these. The pagination wrapper is the
+        // realistic case, and it was the worst: it produced one bogus item with an empty
+        // `cid` that satisfied the output schema, so both the conformance test and the
+        // row-shape cases above stayed green while the tool lied to the model.
+        return [
+            'pagination wrapper' => ['{"content": [{"cid": "1.2.3", "resourceMainId": "openEHR-EHR-OBSERVATION.bp.v1"}]}'],
+            'wrapper with sibling scalar' => ['{"totalElements": 482, "content": [{"cid": "1.2.3"}]}'],
+            'list of scalars' => ['["openEHR-EHR-OBSERVATION.bp.v1", "openEHR-EHR-OBSERVATION.pulse.v1"]'],
+            'list with a scalar row' => ['[{"cid": "1.2.3"}, 482]'],
+            'bare scalar' => ['482'],
+        ];
+    }
+
+    #[DataProvider('driftedEnvelopeProvider')]
+    public function test_archetype_search_rejects_a_drifted_envelope(string $body): void
+    {
+        $service = $this->serviceReturningRaw($body);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageMatches('/Unexpected CKM archetype response payload/');
+        $service->archetypeSearch('blood pressure');
+    }
+
+    #[DataProvider('driftedEnvelopeProvider')]
+    public function test_template_search_rejects_a_drifted_envelope(string $body): void
+    {
+        $service = $this->serviceReturningRaw($body);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageMatches('/Unexpected CKM template response payload/');
+        $service->templateSearch('discharge');
+    }
+
+    public function test_a_non_scalar_field_is_logged_when_it_is_dropped(): void
+    {
+        // Silent field loss is the dangerous half of the shape hardening: with `rmClass`
+        // set, a wrapped `resourceMainId` drops `archetypeId` from every row, the RM-class
+        // filter then deletes them all, and `total` confirms 0 — with no error anywhere.
+        $logger = new class extends \Psr\Log\AbstractLogger {
+            /** @var list<string> */
+            public array $records = [];
+
+            /** @param mixed[] $context */
+            public function log($level, \Stringable|string $message, array $context = []): void
+            {
+                $this->records[] = (string) $message . ' ' . json_encode($context);
+            }
+        };
+
+        $client = $this->createMock(CkmClient::class);
+        $client->method('get')->willReturn(new Response(
+            200,
+            ['Content-Type' => 'application/json'],
+            '[{"cid": "1.2.3", "resourceMainId": {"value": "openEHR-EHR-OBSERVATION.bp.v1"}}]',
+        ));
+        (new CkmService($client, $logger))->archetypeSearch('blood pressure');
+
+        $dropped = array_filter($logger->records, static fn (string $r): bool => str_contains($r, 'unexpected non-scalar shape'));
+        $this->assertNotEmpty($dropped, 'dropping a field must be logged, not silent');
+        $this->assertStringContainsString('resourceMainId', implode("\n", $dropped));
     }
 }

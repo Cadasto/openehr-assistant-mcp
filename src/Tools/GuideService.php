@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tools;
 
+use Cadasto\OpenEHR\MCP\Assistant\Helpers\SearchTokenizer;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Capability\Attribute\Schema;
 use Mcp\Exception\ToolCallException;
@@ -50,12 +51,16 @@ final class GuideService
      *   Optional guide category filter. Categories: authoring guides for archetypes/templates/AQL/simplified_formats, plus "specs" (per-document openEHR spec digests) and "howto" (toolchain how-to guides). Omit to search all categories.
      *
      * @param string|null $taskType
-     *   Optional task hint (e.g. "lint", "review", "refactor", "author"). When supplied it adds a small ranking boost to guides whose title, abstract, or indexed headings mention it. It never filters, and never makes a guide the query did not match appear in the results.
+     *   Optional task hint (e.g. "lint", "review", "refactor", "author"). When supplied it adds a small ranking boost to guides whose title, abstract, or indexed headings mention it. It only reorders guides the query already matched: it never filters, and never makes a guide the query did not match appear in the results.
+     *
+     * @param int $topCandidates
+     *   Retained for backward compatibility and no longer limits what is searched. Every
+     *   guide in scope is scored over its full body text, so recall does not depend on
+     *   this value.
      *
      * @return array{items: list<array<string, string|int>>, total: int}
-     *   A list of matching guides with short snippets and URIs, plus `total` — the number
-     *   of matches found within the scored candidate window (see the `total` note in the
-     *   outputSchema), which may exceed the number of returned `items`.
+     *   A list of matching guides with short snippets and URIs, plus `total` — the total
+     *   number of guides that matched, which may exceed the number of returned `items`.
      */
     #[Schema(additionalProperties: false)]
     #[McpTool(
@@ -84,7 +89,7 @@ final class GuideService
                         ],
                     ],
                 ],
-                'total' => ['type' => 'integer', 'minimum' => 0, 'description' => 'Number of guides that matched within the top-`topCandidates` relevance window, before the `maxResults` cap; may exceed items.length. Bounded by `topCandidates` — raise that to widen both the search and this count.'],
+                'total' => ['type' => 'integer', 'minimum' => 0, 'description' => 'Total number of guides that matched the query, counted before the `maxResults` cap; may exceed items.length. Raise `maxResults` to see more of them.'],
             ],
         ],
     )]
@@ -97,6 +102,10 @@ final class GuideService
         int $maxResults = self::DEFAULT_MAX_RESULTS,
         #[Schema(minimum: 80, maximum: self::MAX_SNIPPET_CHARS)]
         int $snippetChars = self::DEFAULT_SNIPPET_CHARS,
+        // Intentionally unread: kept in the signature so existing callers (and the
+        // published inputSchema, which is now `additionalProperties: false`) keep working.
+        // It used to bound which guides were content-scored, which cost recall — see the
+        // note in the body. Removing it would hard-fail any client that still passes it.
         #[Schema(minimum: 1)]
         int $topCandidates = self::DEFAULT_TOP_CANDIDATES,
     ): array
@@ -107,80 +116,106 @@ final class GuideService
         $taskType = trim((string)($taskType ?? ''));
         $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
         $snippetChars = max(80, min($snippetChars, self::MAX_SNIPPET_CHARS));
-        $topCandidates = max($maxResults, $topCandidates);
 
-        $indexedGuides = $this->loadGuideIndex();
-        $candidates = [];
-        foreach ($indexedGuides as $guide) {
+        $matches = [];
+        foreach ($this->loadGuideIndex() as $guide) {
             if ($category !== '' && $guide['category'] !== $category) {
                 continue;
             }
 
+            $content = $this->readGuideContent($guide['category'], $guide['name']);
+            if ($content === null) {
+                continue;
+            }
+
+            // Relevance is scored over metadata *and* the full body of every guide in
+            // scope. Ranking a metadata-only window first and scoring bodies only within
+            // it made a term appearing solely in a guide's body unreachable: with the
+            // zero-score floor below, the caller then got an empty envelope, which an
+            // agent reads as "no such guidance exists" rather than "look harder".
+            // `buildGuideIndex()` already reads every file, so the window saved no I/O.
             $metadataText = sprintf('%s %s %s', $guide['title'], $guide['abstract'], implode(' ', $guide['headings']));
-            // Query relevance and the taskType hint are tracked separately. The hint may
-            // reorder results, but it must never contribute to the relevance floor below
-            // — otherwise a +2 boost alone would resurrect a guide the query never matched.
-            $candidates[] = [
-                'guide' => $guide,
-                'queryScore' => $this->scoreGuide($query, $guide['title'], $metadataText, $guide['category']),
-                'taskTypeBoost' => $this->taskTypeBoost($metadataText, $taskType),
-            ];
-        }
-
-        usort(
-            $candidates,
-            static fn(array $a, array $b): int => ($b['queryScore'] + $b['taskTypeBoost']) <=> ($a['queryScore'] + $a['taskTypeBoost'])
-                ?: strcmp($a['guide']['name'], $b['guide']['name'])
-        );
-        $candidates = array_slice($candidates, 0, $topCandidates);
-
-        $scored = [];
-        foreach ($candidates as $candidate) {
-            $guide = $candidate['guide'];
-            $path = $this->guidePath($guide['category'], $guide['name']);
-            if (!is_file($path) || !is_readable($path)) {
-                // The index just enumerated this file, so a miss here means the tree
-                // changed underneath us or permissions are wrong — never silent.
-                $this->logger->warning('Indexed guide is missing or unreadable; excluded from search results.', [
-                    'category' => $guide['category'],
-                    'name' => $guide['name'],
-                    'path' => $path,
-                ]);
-                continue;
-            }
-
-            $content = file_get_contents($path);
-            if ($content === false) {
-                $this->logger->warning('Could not read guide file; excluded from search results.', ['path' => $path]);
-                continue;
-            }
-            if (trim($content) === '') {
-                $this->logger->warning('Guide file is empty; excluded from search results.', ['path' => $path]);
-                continue;
-            }
-
-            $queryScore = $candidate['queryScore'] + $this->scoreGuide($query, $guide['title'], $content, $guide['category']);
+            $queryScore = $this->scoreGuide($query, $guide['title'], $metadataText, $guide['category'])
+                + $this->scoreGuide($query, $guide['title'], $content, $guide['category']);
             if ($query !== '' && $queryScore <= 0) {
                 continue;
             }
 
-            $scored[] = [
-                'title' => $guide['title'],
-                'category' => $guide['category'],
-                'name' => $guide['name'],
-                'resourceUri' => $guide['resourceUri'],
-                'snippet' => $this->buildSnippet($content, $query, $snippetChars),
-                'score' => $queryScore + $candidate['taskTypeBoost'],
+            // The taskType hint is added only after the relevance floor above, so it can
+            // reorder matches but never resurrect a guide the query did not match.
+            $matches[] = [
+                'guide' => $guide,
+                'content' => $content,
+                'score' => $queryScore + $this->taskTypeBoost($metadataText, $taskType),
             ];
         }
 
-        usort($scored, static fn(array $a, array $b): int => $b['score'] <=> $a['score'] ?: strcmp($a['name'], $b['name']));
-        // Count matches before the `maxResults` cap so `total` tells the caller whether
-        // widening the request would surface more, not merely how many were returned.
-        $totalMatches = count($scored);
-        $scored = array_slice($scored, 0, $maxResults);
+        // Ties break on `category/name`, not `name` alone: guide names are unique only
+        // within a category (`checklist` and `principles` each occur in four), so the
+        // narrower comparison left 13 files ordered by filesystem iteration order.
+        usort(
+            $matches,
+            static fn(array $a, array $b): int => $b['score'] <=> $a['score']
+                ?: strcmp(
+                    $a['guide']['category'] . '/' . $a['guide']['name'],
+                    $b['guide']['category'] . '/' . $b['guide']['name'],
+                )
+        );
 
-        return ['items' => $scored, 'total' => $totalMatches];
+        // Count every match before the `maxResults` cap, so `total` reports how much
+        // relevant guidance exists rather than how much this call chose to return.
+        $totalMatches = count($matches);
+
+        $items = [];
+        // Snippets are built only for the returned slice: snippet extraction is the
+        // per-result cost, and computing it for matches nobody sees is pure waste.
+        foreach (array_slice($matches, 0, $maxResults) as $match) {
+            $items[] = [
+                'title' => $match['guide']['title'],
+                'category' => $match['guide']['category'],
+                'name' => $match['guide']['name'],
+                'resourceUri' => $match['guide']['resourceUri'],
+                'snippet' => $this->buildSnippet($match['content'], $query, $snippetChars),
+                'score' => $match['score'],
+            ];
+        }
+
+        return ['items' => $items, 'total' => $totalMatches];
+    }
+
+    /**
+     * Read an indexed guide's body, logging every reason it cannot be used.
+     *
+     * The index enumerated these files moments earlier, so any failure here means the
+     * tree changed underneath us or permissions are wrong. Returning null (never '')
+     * keeps "unusable" distinguishable from "empty" at the call site.
+     */
+    private function readGuideContent(string $category, string $name): ?string
+    {
+        $path = $this->guidePath($category, $name);
+        if (!is_file($path) || !is_readable($path)) {
+            $this->logger->warning('Indexed guide is missing or unreadable; excluded from search results.', [
+                'category' => $category,
+                'name' => $name,
+                'path' => $path,
+            ]);
+
+            return null;
+        }
+
+        $content = file_get_contents($path);
+        if ($content === false) {
+            $this->logger->warning('Could not read guide file; excluded from search results.', ['path' => $path]);
+
+            return null;
+        }
+        if (trim($content) === '') {
+            $this->logger->warning('Guide file is empty; excluded from search results.', ['path' => $path]);
+
+            return null;
+        }
+
+        return $content;
     }
 
     /**
@@ -288,7 +323,7 @@ final class GuideService
                         ],
                     ],
                 ],
-                'total' => ['type' => 'integer', 'minimum' => 0, 'description' => 'Total matching idiom sections before the 7-section cap is applied; may exceed items.length'],
+                'total' => ['type' => 'integer', 'minimum' => 0, 'description' => 'Total matching idiom sections before the section cap is applied; may exceed items.length'],
             ],
         ],
     )]
@@ -302,12 +337,14 @@ final class GuideService
 
         $category = 'archetypes';
         $name = 'adl-idioms-cheatsheet';
-        $path = $this->guidePath($category, $name);
-        if (!is_file($path) || !is_readable($path)) {
-            throw new ToolCallException('ADL idioms cheatsheet not found.');
+        $content = $this->readGuideContent($category, $name);
+        if ($content === null) {
+            // Unlike `search()`, this tool has a single source file. If it cannot be read
+            // there is no degraded answer to give — only a wrong "no idiom matched" for
+            // every pattern — so fail loudly instead of returning an empty envelope.
+            throw new ToolCallException('ADL idioms cheatsheet is missing or unreadable.');
         }
 
-        $content = (string)file_get_contents($path);
         $title = $this->extractTitle($content, $name);
         $sections = $this->parseSections($content);
 
@@ -328,8 +365,9 @@ final class GuideService
 
         usort($matches, static fn(array $a, array $b): int => $b['score'] <=> $a['score'] ?: strcmp($a['section'], $b['section']));
         $totalMatches = count($matches);
-        // A cheatsheet symptom often spans adjacent sections, so return a couple more
-        // than the general section limit; `total` above reports how many were dropped.
+        // A cheatsheet symptom often spans adjacent sections, so return a couple more than
+        // the general section limit; `total` reports how many matched, so the caller can
+        // derive how many were dropped as `total - items.length`.
         $matches = array_slice($matches, 0, self::DEFAULT_SECTION_LIMIT + 2);
 
         $items = array_map(static function (array $match): array {
@@ -456,26 +494,13 @@ final class GuideService
     }
 
     /**
-     * Split a query into lower-cased search tokens.
-     *
-     * `-` and `.` are treated as word characters (as `_` already is) so that openEHR
-     * identifiers survive as single tokens: splitting `openEHR-EHR-OBSERVATION` into
-     * `openehr`/`ehr`/`observation` would match essentially every guide in the corpus
-     * on its most generic parts. Punctuation that genuinely separates terms — commas,
-     * slashes, parentheses — still splits, so `DV_QUANTITY, DV_CODED_TEXT` yields two
-     * tokens. Stray leading/trailing `-`/`.` (sentence punctuation) are trimmed off.
-     *
      * @return list<string>
+     * @see SearchTokenizer::tokenize() for the tokenization rules.
      */
     private function tokenizeQuery(string $query): array
     {
-        $normalized = mb_strtolower(trim($query), 'UTF-8');
-        if ($normalized === '') {
-            return [];
-        }
-
-        $parts = preg_split('/[^\p{L}\p{N}_.\-]+/u', $normalized);
-        if ($parts === false) {
+        $tokens = SearchTokenizer::tokenize($query);
+        if ($tokens === null) {
             $this->logger->warning('Could not tokenize guide search query.', [
                 'query' => $query,
                 'error' => preg_last_error_msg(),
@@ -484,15 +509,7 @@ final class GuideService
             return [];
         }
 
-        $tokens = [];
-        foreach ($parts as $part) {
-            $token = trim($part, '-.');
-            if ($token !== '') {
-                $tokens[] = $token;
-            }
-        }
-
-        return array_values(array_unique($tokens));
+        return $tokens;
     }
 
     private function scoreGuide(string $query, string $title, string $content, string $category = ''): int

@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Tools;
 
-use Cadasto\OpenEHR\MCP\Assistant\Tools\CkmService;
-use Cadasto\OpenEHR\MCP\Assistant\Tools\ExamplesService;
-use Cadasto\OpenEHR\MCP\Assistant\Tools\GuideService;
-use Cadasto\OpenEHR\MCP\Assistant\Tools\TerminologyService;
-use Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Capability\Discovery\DocBlockParser;
 use Mcp\Capability\Discovery\SchemaGenerator;

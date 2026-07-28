@@ -9,18 +9,12 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
-### Fixed
-
-- Tools: multibyte-safe snippet slicing in `guide_search`, `guide_adl_idiom_lookup`, and `examples_search`; malformed UTF-8 previously broke the whole JSON-RPC response.
-- Tools: CKM results survive unexpected upstream field types, and `cid` is always present as the output schema declares.
-- Tools: `type_specification_get` rejects a malformed BMM document instead of returning a payload missing its required keys.
-- Prompts: a non-string argument is rejected by name rather than silently substituted as the literal `Array`, and an omitted required argument now names itself.
-
 ### Added
 
 - Guides: new template-design guide `templates/cgem-framework` and runtime-serialisation guides `templates/opt-structure` and `templates/web-template`.
 - Guides: new spec digests — PROC (overview, task-planning, decision-language), CNF, and `lang-bmm3`.
 - SDD: machine-checked traceability — a `.sdd.yaml` descriptor, a `traceability.yaml` map, and a `spec-check` CI drift gate.
+- SDD: new REQ-N9 covering CI validation of published MCP tool input/output schemas.
 
 ### Changed
 
@@ -33,10 +27,20 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Tools: `guide_search` scoring is case-insensitive, Unicode-aware, and drops zero-score hits; `taskType` only re-ranks.
 - Tools: stricter input/output schemas (`additionalProperties: false`, nullable optional enums, required envelopes) — **breaking** for strict MCP clients.
 - Tools: search envelopes gained a `total` companion, counted before the result cap.
+- Tools: `guide_search` and `examples_search` share one query tokenizer; `topCandidates` no longer limits recall.
 - Prompts: real prompt arguments with safe `{{name}}` substitution — **breaking** for clients relying on parameterless `prompts/get`.
+- Prompts: `task_type` uses one vocabulary (`design | review`, plus `specialise` for archetypes) and is validated, as are review/artefact pairings — **breaking** for clients sending the old per-prompt tokens.
 - Prompts/docs: shared policy documented as a resilience layer, conditional full-rewrite output, and retrieved content treated as data.
 - Docs/guides: aligned `spec-lookup` wording on the `development` spec stream and dropped a false `guide_get` chunking claim.
 - Resources: Examples resource template no longer advertises an incorrect shared MIME type.
+
+### Fixed
+
+- Tools: multibyte-safe snippet slicing across the search tools; malformed UTF-8 previously broke the JSON-RPC response.
+- Tools: `guide_search` no longer returns an empty result for terms that appear only in a guide body.
+- Tools: CKM search rejects a drifted response envelope and logs dropped fields instead of reporting zero matches.
+- Tools: `type_specification_get` rejects a malformed BMM document instead of returning an incomplete payload.
+- Prompts: malformed or non-string arguments and unsubstitutable `{{tokens}}` are rejected by name.
 
 ## [0.19.0] - 2026-06-09
 

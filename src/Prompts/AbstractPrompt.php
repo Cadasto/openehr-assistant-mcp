@@ -14,6 +14,13 @@ abstract readonly class AbstractPrompt
 {
     private const string SHARED_PROMPT_PATH = 'shared/policy';
     private const string PLACEHOLDER_PATTERN = '/\{\{([a-z0-9_]+)\}\}/';
+    /**
+     * Deliberately broader than PLACEHOLDER_PATTERN so that a token the substituter would
+     * *not* replace — `{{Audience}}`, `{{adl-text}}`, `{{ adl_text }}` — is still seen and
+     * rejected. Matching only the strict form left such tokens invisible to both the
+     * substituter and the guard, so they shipped to the client as literal text.
+     */
+    private const string PLACEHOLDER_SCAN_PATTERN = '/\{\{[^{}]*\}\}/';
 
     protected function getPromptsDir(): string
     {
@@ -24,13 +31,29 @@ abstract readonly class AbstractPrompt
      * @param string $name
      * @param array<string, mixed> $values Raw argument values as received from the client.
      * @param list<string> $requiredKeys Arguments that must be supplied and non-blank.
+     * @param array<string, list<string>> $vocabularies
+     *   Argument name → the closed set of values the prompt body branches on.
+     * @param array<string, array<string, list<string>>> $requiredWhen
+     *   Argument name → controlling argument → the values that make it mandatory.
      * @return PromptMessage[]
      *
-     * @throws PromptGetException If an argument is missing, blank, or not a string.
+     * @throws PromptGetException
+     *   If a required argument is missing or blank, if an argument is neither a string nor
+     *   a number, if a value falls outside its declared vocabulary, if a conditionally
+     *   required argument is absent, or if the template carries a placeholder that is
+     *   malformed or has no matching argument.
+     * @throws InvalidArgumentException If the shared policy block contains no user message.
      */
-    protected function loadPromptMessages(string $name, array $values = [], array $requiredKeys = []): array
-    {
+    protected function loadPromptMessages(
+        string $name,
+        array $values = [],
+        array $requiredKeys = [],
+        array $vocabularies = [],
+        array $requiredWhen = [],
+    ): array {
         $values = $this->normaliseArguments($values, $requiredKeys);
+        $values = $this->applyVocabularies($values, $vocabularies);
+        $this->applyConditionalRequirements($values, $requiredWhen);
 
         $sharedMessages = array_values(array_filter(
             $this->loadPromptFile(self::SHARED_PROMPT_PATH),
@@ -113,6 +136,86 @@ abstract readonly class AbstractPrompt
     }
 
     /**
+     * Constrain arguments whose value the prompt body branches on.
+     *
+     * These tokens gate destructive behaviour — "for review, do not rewrite the artefact" —
+     * so an unrecognised value does not degrade gracefully: the branch simply never fires
+     * and the model rewrites an artefact the user asked it only to review. Matching is
+     * case-insensitive and the value is rewritten to the canonical token, so a client
+     * sending `Review` cannot miss a `review` branch on capitalisation alone.
+     *
+     * Blank values are left to `$requiredKeys` / `$requiredWhen`; an optional argument the
+     * client omitted is not a vocabulary violation.
+     *
+     * @param array<string, string> $values
+     * @param array<string, list<string>> $vocabularies
+     * @return array<string, string>
+     */
+    private function applyVocabularies(array $values, array $vocabularies): array
+    {
+        foreach ($vocabularies as $key => $allowed) {
+            $value = trim($values[$key] ?? '');
+            if ($value === '') {
+                continue;
+            }
+
+            $canonical = null;
+            foreach ($allowed as $candidate) {
+                if (strcasecmp($value, $candidate) === 0) {
+                    $canonical = $candidate;
+                    break;
+                }
+            }
+
+            if ($canonical === null) {
+                throw new PromptGetException(sprintf(
+                    'Prompt argument "%s" must be one of: %s — "%s" given.',
+                    $key,
+                    implode(' | ', $allowed),
+                    $value,
+                ));
+            }
+
+            $values[$key] = $canonical;
+        }
+
+        return $values;
+    }
+
+    /**
+     * Enforce the "expected when" pairings the prompt body already relies on.
+     *
+     * `task_type: review` with no artefact supplied renders an instruction to "preserve the
+     * supplied Existing Archetype unchanged" directly above an empty slot, and the model
+     * confidently reviews nothing. Declaring the pairing turns that into a named error.
+     *
+     * @param array<string, string> $values
+     * @param array<string, array<string, list<string>>> $requiredWhen
+     */
+    private function applyConditionalRequirements(array $values, array $requiredWhen): void
+    {
+        foreach ($requiredWhen as $key => $conditions) {
+            if (trim($values[$key] ?? '') !== '') {
+                continue;
+            }
+
+            foreach ($conditions as $controlKey => $triggerValues) {
+                $controlValue = trim($values[$controlKey] ?? '');
+                foreach ($triggerValues as $trigger) {
+                    if (strcasecmp($controlValue, $trigger) === 0) {
+                        throw new PromptGetException(sprintf(
+                            'Prompt argument "%s" is required when "%s" is "%s".',
+                            $key,
+                            $controlKey,
+                            $trigger,
+                        ));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * @param array<string, string> $values
      */
     private function substitutePlaceholders(PromptMessage $message, array $values, string $name): PromptMessage
@@ -123,12 +226,13 @@ abstract readonly class AbstractPrompt
 
         $text = $message->content->text;
 
-        // Collect placeholder names from the template itself, before substitution.
-        // `preg_replace_callback` never rescans its own replacements, so validating the
-        // template (rather than the substituted output) is what lets a value containing
-        // a literal `{{token}}` — a pasted ADL/OET snippet, say — pass through verbatim
-        // instead of being rejected as an unresolved placeholder.
-        if (preg_match_all(self::PLACEHOLDER_PATTERN, $text, $matches) === false) {
+        // Scan the template itself, before substitution. `preg_replace_callback` never
+        // rescans its own replacements, so validating the template (rather than the
+        // substituted output) is what lets a *value* containing a literal `{{token}}` — a
+        // pasted ADL/OET snippet, say — pass through verbatim instead of being rejected as
+        // an unresolved placeholder. Templates are repo-controlled, so scanning them
+        // strictly costs nothing at runtime.
+        if (preg_match_all(self::PLACEHOLDER_SCAN_PATTERN, $text, $matches) === false) {
             throw new PromptGetException(sprintf(
                 'Failed to scan placeholders in %s: %s',
                 $name,
@@ -136,9 +240,20 @@ abstract readonly class AbstractPrompt
             ));
         }
 
-        foreach (array_unique($matches[1]) as $placeholder) {
-            if (!array_key_exists($placeholder, $values)) {
-                throw new PromptGetException(sprintf('Unresolved prompt placeholder "%s" in %s', $placeholder, $name));
+        foreach (array_unique($matches[0]) as $token) {
+            // Reject anything the substituter below would silently leave in place. A token
+            // outside the strict charset is an authoring mistake, not client input, and
+            // shipping it hands the model a literal `{{…}}` where content should be.
+            if (preg_match(self::PLACEHOLDER_PATTERN, $token, $strict) !== 1 || $strict[0] !== $token) {
+                throw new PromptGetException(sprintf(
+                    'Malformed prompt placeholder "%s" in %s: names must be lower_snake_case with no surrounding whitespace.',
+                    $token,
+                    $name,
+                ));
+            }
+
+            if (!array_key_exists($strict[1], $values)) {
+                throw new PromptGetException(sprintf('Unresolved prompt placeholder "%s" in %s', $strict[1], $name));
             }
         }
 

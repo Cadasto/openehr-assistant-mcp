@@ -530,7 +530,15 @@ EOF
 
 Extend `PromptPolicySeparationTest` (or a small new test):
 
+> **Implemented differently — this snippet is not what shipped.** The assertion below was
+> inverted during implementation: the maintainer rationale belongs in ADR-0003, *not* in the
+> prompt payload, which every `prompts/get` pays for in tokens (REQ-N7). The shipped test is
+> `PromptPolicySeparationTest::test_resilience_layer_rationale_lives_in_the_adr_not_in_the_shipped_prompt()`,
+> which asserts `'resilience'` **is** in the ADR and is **absent** from `policy.md`.
+> Consequently Step 3.1 below was deliberately not performed and `policy.md` is unchanged.
+
 ```php
+// NOT SHIPPED — see the note above; the shipped assertion is the inverse.
 public function test_shared_policy_documents_resilience_layer(): void
 {
     $policy = file_get_contents(__DIR__ . '/../../resources/prompts/shared/policy.md');
@@ -566,7 +574,7 @@ Tune the last assertion to match the wording you actually write in Step 3.
 
 - [x] **Step 3: Edit content**
 
-1. `policy.md` — add an explicit note that shared policy is a **deliberate resilience layer** duplicating always-on guidance from server instructions for clients that under-inject `instructions`.
+1. ~~`policy.md` — add an explicit note that shared policy is a **deliberate resilience layer**~~ — **not performed.** The rationale was placed in [ADR-0003](../decisions/0003-prompt-policy-split.md) instead; shipping it inside the prompt payload would bill every `prompts/get` for maintainer prose (REQ-N7). `policy.md` is unchanged.
 
 2. `architecture.md` cross-cutting rule + ADR-0003 Consequences — document the resilience exception: thin shared user block may restate Guide-First / output-contract globals; full global policy still canonical in `server-instructions.md`. Adjust `PromptPolicySeparationTest` expectations if they conflict.
 
