@@ -95,6 +95,11 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
   discipline, no guessing, Guide/Spec/Digest/Examples-First) lives in
   `resources/server-instructions.md`; `resources/prompts/*.md` carry only
   task-specific constraints. Enforced by `PromptPolicySeparationTest`.
+  **Resilience exception:** `resources/prompts/shared/policy.md` is a thin
+  user-role block prepended to every prompt that restates a subset of
+  Guide-First / output-contract globals, so clients that under-inject the MCP
+  `instructions` field still receive core policy; `server-instructions.md`
+  remains the sole canonical source for full global policy.
   → [ADR-0003](decisions/0003-prompt-policy-split.md)
 - **Spec alignment (REQ-N1).** Standards content is retrieved from authoritative
   sources, cheapest representation first.

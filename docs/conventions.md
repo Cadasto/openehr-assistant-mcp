@@ -33,7 +33,11 @@ register — see [development.md](development.md#gotcha--mcp-discovery-cache).
   via `loadPromptMessages('<name>')`.
   - **Prompt policy split:** global, always-applicable policy (tool discipline, no
     guessing, workflow) lives in `resources/server-instructions.md`; keep
-    `resources/prompts/*.md` focused on task-specific constraints and output structure
+    `resources/prompts/*.md` focused on task-specific constraints and output structure.
+    **Resilience exception:** `resources/prompts/shared/policy.md` is a thin user-role
+    block prepended to every prompt that deliberately restates a small subset of the
+    global policy, for clients that under-inject the MCP `instructions` field —
+    `server-instructions.md` remains the sole canonical source for full global policy
     ([ADR-0003](decisions/0003-prompt-policy-split.md)).
 - **Resources** — `src/Resources/`; `#[McpResource]` / `#[McpResourceTemplate]`. URIs:
   `openehr://guides/{category}/{name}`, `openehr://examples/{kind}/{name}`,
