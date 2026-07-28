@@ -57,7 +57,12 @@ try {
     if (!is_dir($cacheDir)) {
         mkdir($cacheDir, 0775, true);
     }
-    $cache = new Psr16Cache(new PhpFilesAdapter('mcp-server', 0, $cacheDir));
+    // Namespace by APP_VERSION so a version bump (which may change discovery schema,
+    // attribute signatures, or tool/prompt/resource sets) invalidates stale caches
+    // rather than silently serving a mismatched, previously-cached capability set.
+    // The namespace becomes a subdirectory under $cacheDir and old ones are never pruned
+    // (no TTL), so releases accumulate directories there — see docs/development.md.
+    $cache = new Psr16Cache(new PhpFilesAdapter('mcp-server-' . APP_VERSION, 0, $cacheDir));
 
     // Load server instructions. Optional at the protocol level, but this server
     // ships a canonical resources/server-instructions.md — a missing/unreadable
