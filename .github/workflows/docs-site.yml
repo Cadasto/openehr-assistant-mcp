@@ -1,42 +1,59 @@
 name: Docs site
 
+# `docs/**` rather than `docs/site/**`: pages symlinked in from the contributor
+# docs (currently `pages/install.md` → `docs/install.md`) have their real source
+# outside `docs/site/`, and a narrower filter would publish stale content with
+# no failed run to notice. The build takes seconds, so breadth costs nothing.
 on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'Makefile'
+      - '.github/workflows/docs-site.yml'
   push:
     branches: [main]
     paths:
-      - 'docs/site/**'
-      - 'docs/install.md'
+      - 'docs/**'
+      - 'Makefile'
       - '.github/workflows/docs-site.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build site with MkDocs Material
-        run: |
-          docker run --rm -v "$PWD:/docs" -w /docs/docs/site \
-            squidfunk/mkdocs-material:latest build -d /docs/docs-build
+      # `make docs-check` is the same strict build and output assertion a
+      # maintainer runs locally — pinned image, brand assets present, install
+      # page populated, no third-party font requests.
+      - name: Build and verify the site
+        run: make docs-check
 
       - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs-build
 
   deploy:
     needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

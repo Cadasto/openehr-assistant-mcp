@@ -1,4 +1,4 @@
-.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio conformance spec-check ci inspector inspector-stop docs-build docs-serve docs-clean
+.PHONY: help up down clean logs ps build build-dev env install up-dev sh run-stdio conformance spec-check ci inspector inspector-stop docs-build docs-check docs-serve docs-clean
 
 # Default target
 .DEFAULT_GOAL := help
@@ -76,18 +76,43 @@ ci: ## Run CI checks in dev container (spec-check + PHPStan + tests)
 
 ##@ Documentation site
 
-MKDOCS_IMAGE ?= squidfunk/mkdocs-material:latest
+# Pinned: the published site is built from this image without human review, and
+# an unpinned tag would silently change both the output and CI-vs-local parity.
+MKDOCS_IMAGE ?= squidfunk/mkdocs-material:9.7.6
 MKDOCS_DIR   := docs/site
 DOCS_BUILD   := docs-build
+DOCKER_USER  := $(shell id -u):$(shell id -g)
+# Run as the invoking user so build output and the plugin cache are not left
+# root-owned in the working tree; PYTHONDONTWRITEBYTECODE keeps `__pycache__`
+# out of `docs/site/hooks/`. The build is strict — see `strict:` in mkdocs.yml.
+MKDOCS_RUN   := docker run --rm -u $(DOCKER_USER) -e PYTHONDONTWRITEBYTECODE=1 \
+                  -v "$(CURDIR):/docs" -w /docs/$(MKDOCS_DIR) $(MKDOCS_IMAGE)
 
 docs-build: ## Build product website to docs-build/
-	docker run --rm -v "$(CURDIR):/docs" -w /docs/$(MKDOCS_DIR) $(MKDOCS_IMAGE) build -d /docs/$(DOCS_BUILD)
+	$(MKDOCS_RUN) build -d /docs/$(DOCS_BUILD)
 
-docs-serve: ## Serve product website locally on :8000
-	docker run --rm -it -p 8000:8000 -v "$(CURDIR):/docs" -w /docs/$(MKDOCS_DIR) $(MKDOCS_IMAGE) serve -a 0.0.0.0:8000
+docs-check: docs-build ## Build the site and assert the published output is complete
+	@set -e; \
+	test -s "$(DOCS_BUILD)/index.html" \
+	  || { echo "docs-check: no index.html in $(DOCS_BUILD)/"; exit 1; }; \
+	test -s "$(DOCS_BUILD)/stylesheets/cadasto.css" \
+	  || { echo "docs-check: brand stylesheet not emitted — is it inside $(MKDOCS_DIR)/pages/?"; exit 1; }; \
+	test -s "$(DOCS_BUILD)/assets/logo.svg" \
+	  || { echo "docs-check: logo/favicon not emitted — is it inside $(MKDOCS_DIR)/pages/?"; exit 1; }; \
+	grep -q 'openehr-assistant-mcp.apps.cadasto.com' "$(DOCS_BUILD)/install/index.html" \
+	  || { echo "docs-check: install page has no install content — is pages/install.md still a symlink?"; exit 1; }; \
+	! grep -rqE 'https?://fonts\.(googleapis|gstatic)\.com' "$(DOCS_BUILD)" \
+	  || { echo "docs-check: remote font URLs in output — the privacy plugin did not localise them"; exit 1; }; \
+	echo "docs-check: OK"
 
-docs-clean: ## Remove docs-build/
-	docker run --rm -v "$(CURDIR):/docs" alpine:3.20 rm -rf /docs/$(DOCS_BUILD)
+docs-serve: ## Serve product website locally on http://127.0.0.1:8000
+	docker run --rm -it -u $(DOCKER_USER) -e PYTHONDONTWRITEBYTECODE=1 \
+	  -p 127.0.0.1:8000:8000 -v "$(CURDIR):/docs" -w /docs/$(MKDOCS_DIR) \
+	  $(MKDOCS_IMAGE) serve -a 0.0.0.0:8000
+
+docs-clean: ## Remove docs-build/ and the MkDocs plugin cache
+	@test -n "$(DOCS_BUILD)" || { echo "docs-clean: DOCS_BUILD must not be empty"; exit 1; }
+	rm -rf "$(CURDIR)/$(DOCS_BUILD)" "$(CURDIR)/$(MKDOCS_DIR)/.cache"
 
 ##@ MCP inspector UI
 
