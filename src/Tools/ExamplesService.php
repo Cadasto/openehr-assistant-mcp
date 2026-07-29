@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tools;
 
+use Cadasto\OpenEHR\MCP\Assistant\Helpers\SearchTokenizer;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Capability\Attribute\Schema;
 use Mcp\Exception\ToolCallException;
@@ -36,7 +37,7 @@ final readonly class ExamplesService
     }
 
     /**
-     * Search openEHR example artefacts (AQL queries, FLAT/STRUCTURED JSON payloads) and return short snippets plus canonical openehr://examples URIs.
+     * Search openEHR example artefacts (AQL queries, FLAT/STRUCTURED JSON payloads, native ADL archetypes) and return short snippets plus canonical openehr://examples URIs.
      *
      * Use this tool to discover curated, ready-to-reference examples that illustrate specific patterns
      * (e.g. "latest per patient", "time-window", "aggregation", "FLAT vs STRUCTURED pair").
@@ -46,47 +47,57 @@ final readonly class ExamplesService
      *   The query string describing what you need (e.g. "blood pressure", "latest per patient", "DV_QUANTITY projection").
      *   Leave empty to list all examples in the optional kind filter.
      *
-     * @param string $kind
-     *   Optional artefact-kind filter (AQL query, FLAT/STRUCTURED JSON payload, or native archetype). Leave empty to search all kinds.
+     * @param string|null $kind
+     *   Optional artefact-kind filter (AQL query, FLAT/STRUCTURED JSON payload, or native archetype). Omit to search all kinds.
      *
-     * @return array<string, array<int, array<string, string|int>>>
-     *   A list of matching examples with short snippets and URIs.
+     * @return array{items: list<array<string, string|int>>, total: int}
+     *   A list of matching examples with short snippets and URIs, plus `total` — the number
+     *   of matches before the `maxResults` cap, which may exceed the number of returned
+     *   `items` (see the `total` note in the outputSchema).
      */
+    #[Schema(additionalProperties: false)]
     #[McpTool(
         name: 'examples_search',
         title: 'Search openEHR examples',
         annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: false),
         outputSchema: [
             'type' => 'object',
+            'additionalProperties' => false,
+            'required' => ['items', 'total'],
             'properties' => [
                 'items' => [
                     'type' => 'array',
                     'description' => 'List of matching example snippets and canonical example URIs',
                     'items' => [
                         'type' => 'object',
+                        'additionalProperties' => false,
+                        'required' => ['title', 'kind', 'name', 'resourceUri', 'snippet', 'score'],
                         'properties' => [
                             'title' => ['type' => 'string'],
                             'kind' => ['type' => 'string', 'description' => 'Example kind: aql | flat | structured | archetypes'],
                             'name' => ['type' => 'string'],
-                            'resourceUri' => ['type' => 'string', 'description' => 'Canonical example URI in openehr://examples namespace'],
+                            'resourceUri' => ['type' => 'string', 'format' => 'uri', 'description' => 'Canonical example URI in openehr://examples namespace'],
                             'snippet' => ['type' => 'string', 'description' => 'Short, task-relevant snippet'],
                             'score' => ['type' => 'integer', 'description' => 'Relative match score (higher is better)'],
                         ],
                     ],
                 ],
+                'total' => ['type' => 'integer', 'minimum' => 0, 'description' => 'Total matching examples before the maxResults cap is applied; may exceed items.length'],
             ],
         ],
     )]
     public function search(
         string $query = '',
-        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes'])]
-        string $kind = '',
+        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes', null])]
+        ?string $kind = null,
+        #[Schema(minimum: 1, maximum: self::MAX_RESULTS_LIMIT)]
         int $maxResults = self::DEFAULT_MAX_RESULTS,
+        #[Schema(minimum: 80, maximum: self::MAX_SNIPPET_CHARS)]
         int $snippetChars = self::DEFAULT_SNIPPET_CHARS,
     ): array {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $query = trim($query);
-        $kind = trim($kind);
+        $kind = trim((string)($kind ?? ''));
         $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
         $snippetChars = max(80, min($snippetChars, self::MAX_SNIPPET_CHARS));
 
@@ -114,27 +125,34 @@ final readonly class ExamplesService
         }
 
         usort($scored, static fn(array $a, array $b): int => $b['score'] <=> $a['score'] ?: strcmp($a['name'], $b['name']));
-        return ['items' => array_slice($scored, 0, $maxResults)];
+        // Count matches before the `maxResults` cap so `total` reflects how many
+        // examples matched, not merely how many were returned in `items`.
+        $totalMatches = count($scored);
+        $items = array_slice($scored, 0, $maxResults);
+        return ['items' => $items, 'total' => $totalMatches];
     }
 
     /**
      * Fetch the full content of an openEHR example artefact by canonical URI or by specifying kind and name.
      *
-     * Use this tool to retrieve a curated example — the example file wraps the AQL query or FLAT/STRUCTURED JSON payload
-     * in a Markdown file with a short metadata header (what pattern it demonstrates, related specs/guides) and a fenced code block.
+     * Use this tool to retrieve a curated example. The payload is one of two shapes: for the `aql`, `flat` and
+     * `structured` kinds a Markdown wrapper (`text/markdown`) with a short metadata header — what pattern it
+     * demonstrates, related specs/guides — around a fenced code block; for the `archetypes` kind a native
+     * CKM-published `.adl` file (`text/plain`), with no metadata header and no fence.
      *
      * @param string $uri
      *   Canonical example URI (openehr://examples/{kind}/{name}). Optional when kind and name are provided.
      *
-     * @param string $kind
+     * @param string|null $kind
      *   Artefact kind (AQL query, FLAT/STRUCTURED JSON payload, or native archetype). Optional when URI is provided.
      *
      * @param string $name
      *   Example filename without extension. Optional when URI is provided.
      *
      * @return EmbeddedResource
-     *   The selected example markdown content.
+     *   The selected example content: Markdown for `aql`/`flat`/`structured`, native ADL for `archetypes`.
      */
+    #[Schema(additionalProperties: false)]
     #[McpTool(
         name: 'examples_get',
         title: 'Get openEHR example',
@@ -142,14 +160,14 @@ final readonly class ExamplesService
     )]
     public function get(
         string $uri = '',
-        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes'])]
-        string $kind = '',
+        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes', null])]
+        ?string $kind = null,
         string $name = '',
     ): EmbeddedResource
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $uri = trim($uri);
-        $kind = trim($kind);
+        $kind = trim((string)($kind ?? ''));
         $name = trim($name);
 
         if ($uri) {
@@ -188,8 +206,11 @@ final readonly class ExamplesService
     /** @return array<int, array{title: string, kind: string, name: string, resourceUri: string, metadata: string}> */
     private function loadExamplesIndex(): array
     {
-        if (!is_dir(self::EXAMPLES_DIR)) {
-            return [];
+        if (!is_dir(self::EXAMPLES_DIR) || !is_readable(self::EXAMPLES_DIR)) {
+            // The examples corpus ships with the server, so an unusable directory is a
+            // packaging/permissions fault, not "no examples matched". Returning an empty
+            // index made every search indistinguishable from a legitimate miss.
+            throw new ToolCallException(sprintf('Examples directory is missing or unreadable: %s', self::EXAMPLES_DIR));
         }
 
         $index = [];
@@ -211,7 +232,17 @@ final readonly class ExamplesService
                 continue;
             }
 
-            $content = (string)file_get_contents($fileInfo->getPathname()) ?: '';
+            $content = file_get_contents($fileInfo->getPathname());
+            if ($content === false) {
+                // Without this the entry still shipped: title degraded to the filename and
+                // metadata went empty, so `examples_search` advertised a hollow result whose
+                // `resourceUri` `examples_get` would then reject.
+                $this->logger->warning('Could not read example file while indexing; skipping.', [
+                    'path' => $fileInfo->getPathname(),
+                ]);
+                continue;
+            }
+
             $relative = str_replace(self::EXAMPLES_DIR . '/', '', $fileInfo->getPathname());
             $parts = explode('/', $relative);
             if (count($parts) < 2) {
@@ -264,11 +295,25 @@ final readonly class ExamplesService
         if ($query === '') {
             return 1;
         }
-        $haystack = strtolower($title . ' ' . $metadata);
-        $keywords = array_filter(preg_split('/\s+/', trim(strtolower($query))) ?: []);
+        // Shares `guide_search`'s tokenizer: byte-wise `strtolower` left non-ASCII uppercase
+        // unfolded (so `Å` scored 0 corpus-wide), and splitting on whitespace alone glued
+        // punctuation to terms, making `pressure,` in "blood pressure, weight" match nothing.
+        // Both were fixed in the sibling tool while this one kept the old behaviour.
+        $haystack = mb_strtolower($title . ' ' . $metadata, 'UTF-8');
+        $lowerTitle = mb_strtolower($title, 'UTF-8');
+        $keywords = SearchTokenizer::tokenize($query);
+        if ($keywords === null) {
+            $this->logger->warning('Could not tokenize examples search query.', [
+                'query' => $query,
+                'error' => preg_last_error_msg(),
+            ]);
+
+            return 0;
+        }
+
         $score = 0;
         foreach ($keywords as $keyword) {
-            if (str_contains(strtolower($title), $keyword)) {
+            if (str_contains($lowerTitle, $keyword)) {
                 $score += 5;
             }
             $score += min(substr_count($haystack, $keyword), 6);
@@ -276,28 +321,31 @@ final readonly class ExamplesService
         return $score;
     }
 
+    /**
+     * Build a snippet centred on the first occurrence of the query.
+     *
+     * Slicing is multibyte-aware throughout: byte offsets would cut UTF-8 sequences
+     * mid-character, and the malformed string then fails `json_encode` for the whole
+     * JSON-RPC envelope — the client gets no response at all rather than a bad snippet.
+     */
     private function buildSnippet(string $content, string $query, int $snippetChars = self::DEFAULT_SNIPPET_CHARS): string
     {
-        if ($query === '') {
-            return $this->limitText($content, $snippetChars);
-        }
-        $lower = strtolower($content);
-        $needle = strtolower($query);
-        $pos = strpos($lower, $needle);
+        $needle = trim($query);
+        $pos = $needle === '' ? false : mb_stripos($content, $needle, 0, 'UTF-8');
         if ($pos === false) {
             return $this->limitText($content, $snippetChars);
         }
-        $start = max(0, $pos - (int)($snippetChars / 2));
-        return trim(substr($content, $start, $snippetChars));
+        $start = max(0, $pos - intdiv($snippetChars, 2));
+        return trim(mb_substr($content, $start, $snippetChars, 'UTF-8'));
     }
 
     private function limitText(string $text, int $maxChars): string
     {
         $text = trim($text);
-        if (strlen($text) <= $maxChars) {
+        if (mb_strlen($text, 'UTF-8') <= $maxChars) {
             return $text;
         }
-        return rtrim(substr($text, 0, $maxChars - 1)) . '…';
+        return rtrim(mb_substr($text, 0, $maxChars - 1, 'UTF-8')) . '…';
     }
 
     /** @return array{string, string} */

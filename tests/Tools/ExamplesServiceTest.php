@@ -113,4 +113,29 @@ final class ExamplesServiceTest extends TestCase
             $this->assertStringStartsWith('openEHR-EHR-', $item['name']);
         }
     }
+
+    public function test_search_splits_on_punctuation_like_guide_search_does(): void
+    {
+        // `examples_search` kept whitespace-only tokenization after `guide_search` was fixed,
+        // so `pressure,` matched nothing and the two tools ranked the same query differently.
+        // Both now share Helpers\SearchTokenizer.
+        $names = static fn (array $r): array => array_map(static fn (array $i): string => (string) $i['name'], $r['items']);
+
+        $comma = $this->service->search('blood pressure, weight');
+        $space = $this->service->search('blood pressure weight');
+
+        $this->assertNotEmpty($comma['items'], 'expected the corpus to match this query');
+        $this->assertSame($names($space), $names($comma));
+    }
+
+    public function test_search_folds_non_ascii_case(): void
+    {
+        // Byte-wise strtolower left non-ASCII uppercase unfolded, so a capitalised accented
+        // term scored 0 across the whole corpus.
+        $lower = $this->service->search('blood pressure');
+        $upper = $this->service->search('BLOOD PRESSURE');
+
+        $this->assertNotEmpty($lower['items']);
+        $this->assertSame($lower['total'], $upper['total']);
+    }
 }

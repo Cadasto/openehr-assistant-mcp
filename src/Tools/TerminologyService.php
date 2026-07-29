@@ -6,6 +6,7 @@ namespace Cadasto\OpenEHR\MCP\Assistant\Tools;
 
 use Cadasto\OpenEHR\MCP\Assistant\Helpers\TerminologyXmlLoader;
 use Mcp\Capability\Attribute\McpTool;
+use Mcp\Capability\Attribute\Schema;
 use Mcp\Exception\ToolCallException;
 use Mcp\Schema\ToolAnnotations;
 use Psr\Log\LoggerInterface;
@@ -34,15 +35,19 @@ readonly final class TerminologyService
      *
      * @param string $input The concept ID (e.g., "433") or concept rubric (e.g., "event") to resolve.
      * @param string $groupId Optional openEHR terminology group ID (e.g., "composition_category") to restrict the search.
-     * @return array<string, string|null> The resolved pair: ['id' => '...', 'rubric' => '...', 'groupId' => '...', 'groupName' => '...']
+     * @return array<string, string> The resolved pair: ['id' => '...', 'rubric' => '...', 'groupId' => '...', 'groupName' => '...']. Never returns null values — an unresolved input throws instead.
      * @throws ToolCallException If the input or groupId cannot be resolved, or if the input is missing/invalid.
+     * @throws \RuntimeException If the bundled terminology XML cannot be read or parsed.
      */
+    #[Schema(additionalProperties: false)]
     #[McpTool(
         name: 'terminology_resolve',
         title: 'Resolve openEHR terminology',
         annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: false),
         outputSchema: [
             'type' => 'object',
+            'additionalProperties' => false,
+            'required' => ['id', 'rubric', 'groupId', 'groupName'],
             'properties' => [
                 'id' => ['type' => 'string'],
                 'rubric' => ['type' => 'string'],
@@ -104,9 +109,14 @@ readonly final class TerminologyService
     {
         try {
             return TerminologyXmlLoader::load(self::FILE_PATH);
-        } catch (\Throwable $e) {
-            $this->logger->error('Error parsing terminology XML', ['error' => $e->getMessage()]);
-            throw new RuntimeException('Error parsing terminology XML: ' . $e->getMessage());
+        } catch (RuntimeException $e) {
+            // Narrowed from `\Throwable`, which was wider than the loader's contract: an
+            // `\Error` from inside it (a TypeError after a refactor, a missing class) was
+            // relabelled "Error parsing terminology XML", sending the reader to inspect a
+            // perfectly valid file. `previous` and the full exception are kept so the
+            // original stack trace survives.
+            $this->logger->error('Error parsing terminology XML', ['exception' => $e]);
+            throw new ToolCallException('Error parsing terminology XML: ' . $e->getMessage(), previous: $e);
         }
     }
 }
