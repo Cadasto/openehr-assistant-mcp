@@ -99,7 +99,7 @@ final class TypeSpecificationServiceTest extends TestCase
     {
         $svc = new TypeSpecificationService($this->logger);
         $results = $svc->search('dv');
-        $this->assertSame(['items' => []], $results);
+        $this->assertSame(['items' => [], 'total' => 0], $results);
     }
 
     /**
@@ -153,5 +153,51 @@ final class TypeSpecificationServiceTest extends TestCase
         $svc = new TypeSpecificationService($this->logger);
         $this->expectException(\RuntimeException::class);
         $content = $svc->get('this_type_does_not_exist');
+    }
+
+    /**
+     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::get
+     */
+    public function test_get_synthesises_the_declared_resource_uri(): void
+    {
+        // `resourceUri` is declared `required` in the outputSchema but appears in none of the
+        // bundled BMM documents, so the value — not merely its presence — is pinned here.
+        $svc = new TypeSpecificationService($this->logger);
+
+        $this->assertSame('openehr://spec/type/RM/COMPOSITION', $svc->get('COMPOSITION')['resourceUri'] ?? null);
+    }
+
+    /**
+     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::get
+     */
+    public function test_get_and_search_agree_on_the_resource_uri_for_the_same_type(): void
+    {
+        // `get()` derived the component with bare basename() while `search()` upper-cased it;
+        // the two matched only because resources/bmm/ happens to hold upper-case directories.
+        $svc = new TypeSpecificationService($this->logger);
+
+        $fromGet = $svc->get('COMPOSITION')['resourceUri'] ?? null;
+        $fromSearch = $svc->search('composition')['items'][0]['resourceUri'] ?? null;
+
+        $this->assertSame($fromSearch, $fromGet);
+    }
+
+    /**
+     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::get
+     */
+    public function test_get_always_returns_the_schema_required_keys(): void
+    {
+        // The outputSchema declares `name` and `resourceUri` required. `name` comes from the
+        // BMM document, so assert it is resolved rather than assumed. (The malformed-document
+        // guards in get() are defensive only: BMM_DIR is a compile-time constant, so a
+        // corrupt corpus cannot be injected without restructuring the class.)
+        $svc = new TypeSpecificationService($this->logger);
+        $content = $svc->get('DV_QUANTITY');
+
+        $this->assertArrayHasKey('name', $content);
+        $this->assertIsString($content['name']);
+        $this->assertNotSame('', $content['name']);
+        $this->assertArrayHasKey('resourceUri', $content);
+        $this->assertStringStartsWith('openehr://spec/type/', (string) $content['resourceUri']);
     }
 }

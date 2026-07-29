@@ -18,7 +18,7 @@ Task-specific guidance:
 Required output:
 1) Clinical intent and target deployed templates/archetypes.
 2) Containment tree and constraints.
-3) Query or review findings with path rationale.
+3) Query output, conditional on task_type: for design, the full AQL with path rationale. For review-only (task_type = review), preserve the supplied Existing AQL unchanged and give findings plus a minimal patch (targeted clause fix) per issue.
 4) Parameters and safety notes.
 5) Checklist-based validation summary.
 
@@ -29,7 +29,7 @@ Tools: `guide_search`, `guide_get`, `ckm_archetype_get`, `ckm_template_search`, 
 
 Design or review this AQL according to the openEHR AQL guides.
 
-Task type (design-new | review-existing):
+Task type (design | review):
 {{task_type}}
 
 Clinical question or query intent:

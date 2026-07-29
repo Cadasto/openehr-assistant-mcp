@@ -13,14 +13,14 @@ Before fetching any openEHR specification document, route through this lookup or
 
 - resolve a user's component/doc phrase to a canonical URL,
 - discover sibling docs within a component,
-- confirm the current `latest` release tag before linking.
+- prefer `development` stream URLs unless the user requests a fixed release tag.
 
-## 2. Markdown twin of any spec page
+## 2. Markdown twin of spec pages
 
-**Any** `*.html` spec URL has a `.md` counterpart that returns the same chapter as Markdown prose. Examples:
+**Most** specification pages have a `.md` counterpart that returns the same chapter as Markdown prose. Examples:
 
-- `releases/RM/latest/ehr.html` → `releases/RM/latest/ehr.md`
-- `releases/AM/latest/ADL2.html` → `releases/AM/latest/ADL2.md`
+- `releases/RM/development/ehr.html` → `releases/RM/development/ehr.md`
+- `releases/AM/development/ADL2.html` → `releases/AM/development/ADL2.md`
 
 The same representation is also obtainable by sending `Accept: text/markdown` against the HTML URL.
 

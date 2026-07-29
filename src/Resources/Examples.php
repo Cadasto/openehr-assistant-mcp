@@ -9,6 +9,7 @@ use Mcp\Capability\Attribute\CompletionProvider;
 use Mcp\Capability\Attribute\McpResourceTemplate;
 use Mcp\Exception\ResourceReadException;
 use Mcp\Server\Builder;
+use Psr\Log\LoggerInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -38,7 +39,9 @@ final class Examples
         uriTemplate: 'openehr://examples/{kind}/{name}',
         name: 'examples',
         description: 'Curated openEHR example artefact — AQL query, FLAT/STRUCTURED JSON payload (Markdown-wrapped) or ADL archetype (native .adl)',
-        mimeType: 'text/markdown'
+        // No template-level mimeType: this one template serves both text/markdown (.md) and
+        // text/plain (.adl), so any single value would misdescribe part of the namespace.
+        // Concrete per-example resources carry the correct type (see addResources()).
     )]
     public function read(
         #[CompletionProvider(values: ['aql', 'flat', 'structured', 'archetypes'])]
@@ -72,7 +75,7 @@ final class Examples
      * @param Builder $builder The resource builder instance used to register the examples.
      * @return void
      */
-    public static function addResources(Builder $builder): void
+    public static function addResources(Builder $builder, ?LoggerInterface $logger = null): void
     {
         if (is_dir(self::DIR) && is_readable(self::DIR)) {
             $iterator = new RecursiveIteratorIterator(
@@ -100,8 +103,16 @@ final class Examples
                     continue;
                 }
 
-                $content = @file_get_contents($fileInfo->getPathname());
-                if (empty($content)) {
+                // `@` used to suppress the warning and `empty()` conflated an unreadable
+                // file with an empty one, so a bad file silently vanished from
+                // `resources/list` while the search index still advertised its URI —
+                // leaving a 404 with nothing logged anywhere to explain it.
+                $content = file_get_contents($fileInfo->getPathname());
+                if ($content === false || trim($content) === '') {
+                    $logger?->warning('Skipping unreadable or empty example file; it will not be listed as a resource.', [
+                        'path' => $fileInfo->getPathname(),
+                        'readable' => $content !== false,
+                    ]);
                     continue;
                 }
 

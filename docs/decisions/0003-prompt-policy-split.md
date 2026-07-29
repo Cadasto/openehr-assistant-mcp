@@ -19,6 +19,11 @@ focused on **task-specific** constraints: required output structure and
 domain-specialised rules for that one prompt. Prompt classes load their body via
 `AbstractPrompt::loadPromptMessages()`.
 
+The split carries one deliberate carve-out: `resources/prompts/shared/policy.md`
+may restate a short subset of the global policy as a fallback for clients that
+drop the `instructions` field. It is a resilience layer, not a second source of
+truth — see the **Resilience exception** under Consequences for the bounds.
+
 ## Consequences
 
 - **Positive:** policy is stated once; prompt bodies stay short and scannable,
@@ -31,3 +36,11 @@ domain-specialised rules for that one prompt. Prompt classes load their body via
 - **Negative:** contributors must know *where* a given instruction belongs;
   the rule of thumb (global → server-instructions, task-specific → prompt file)
   is documented in [AGENTS.md](../../AGENTS.md) and the authoring guidance.
+- **Resilience exception:** `resources/prompts/shared/policy.md` is a thin
+  user-role block prepended to every prompt. It deliberately restates a small
+  subset of always-on guidance (Guide-First, output-contract, scope control)
+  because some MCP clients under-inject or drop the server `instructions`
+  field entirely; without this restatement those clients would run prompts
+  with no global policy at all. `server-instructions.md` remains the single
+  canonical source for full global policy — the shared block is a fallback,
+  not a second source of truth, and must not grow beyond a short restatement.

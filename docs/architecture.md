@@ -37,7 +37,7 @@ a file-based discovery cache (Symfony Cache, under `XDG_DATA_HOME`, default
 `/tmp`) so attribute scanning is not repeated on every boot.
 → [ADR-0001](decisions/0001-attribute-driven-discovery.md)
 
-### Tools — `src/Tools/` · REQ-F1–F5
+### Tools — `src/Tools/` · REQ-F1–F5, REQ-N9
 Service classes whose public methods are annotated `#[McpTool(name: '…')]`. Each
 is the MCP-facing surface for one knowledge domain:
 
@@ -83,7 +83,9 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
 
 ### Helpers — `src/Helpers/`
 `CliOptions` (transport option parsing), `Map` (data shaping),
-`TerminologyXmlLoader` (loads the bundled openEHR terminology XML).
+`TerminologyXmlLoader` (loads the bundled openEHR terminology XML),
+`SearchTokenizer` (the one query tokenizer shared by `guide_search` and
+`examples_search`, so the two cannot rank the same query differently).
 
 ### Static content — `resources/`
 `guides/`, `examples/`, `bmm/` (BMM JSON for type specs), `terminology/`,
@@ -95,7 +97,21 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
   discipline, no guessing, Guide/Spec/Digest/Examples-First) lives in
   `resources/server-instructions.md`; `resources/prompts/*.md` carry only
   task-specific constraints. Enforced by `PromptPolicySeparationTest`.
+  **Resilience exception:** `resources/prompts/shared/policy.md` is a thin
+  user-role block prepended to every prompt that restates a subset of
+  Guide-First / output-contract globals, so clients that under-inject the MCP
+  `instructions` field still receive core policy; `server-instructions.md`
+  remains the sole canonical source for full global policy.
   → [ADR-0003](decisions/0003-prompt-policy-split.md)
+- **Schemas are the wire contract (REQ-N9).** Tool schemas are published to
+  clients, and the SDK enforces only the input half: `CallToolHandler` validates
+  arguments against the generated `inputSchema` before a method runs, but return
+  values are never checked against `outputSchema`. The asymmetry is why the
+  contract is pinned in CI from both sides — `InputSchemaGuardTest` reflects every
+  `#[McpTool]` method for closed, self-consistent inputs, and
+  `OutputSchemaConformanceTest` is the *only* enforcement the output half has
+  anywhere. The authoring rules that satisfy this live in
+  [conventions.md](conventions.md#mcp-capabilities-authoring).
 - **Spec alignment (REQ-N1).** Standards content is retrieved from authoritative
   sources, cheapest representation first.
   → [ADR-0005](decisions/0005-spec-aligned-content-retrieval.md)
@@ -108,6 +124,9 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
 
 ## Versioning
 
-Application version is defined in `src/constants.php` (`APP_VERSION`, currently
-`0.16.0`). Release process and CHANGELOG conventions live in
+Application version is defined in `src/constants.php` (`APP_VERSION`) — the single
+source, deliberately not restated here. It also namespaces the discovery cache, so
+a release bump invalidates stale capability entries
+([ADR-0001](decisions/0001-attribute-driven-discovery.md)).
+Release process and CHANGELOG conventions live in
 [AGENTS.md](../AGENTS.md) (Coding style → CHANGELOG entries) and `CHANGELOG.md`.

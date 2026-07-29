@@ -20,8 +20,8 @@ not rely on training memory. Retrieve from authoritative sources, preferring the
 cheapest representation that answers the question:
 
 1. **Site index** — `https://specifications.openehr.org/llms.txt` to resolve doc
-   phrases to canonical URLs and confirm the current release tag.
-2. **Markdown twin** — every `*.html` spec page has a `.md` counterpart; prefer
+   phrases to canonical URLs and discover sibling docs within a component.
+2. **Markdown twin** — most `*.html` spec pages have a `.md` counterpart; prefer
    it for prose. *Caveat:* the `.md` omits per-class attribute/function/invariant
    tables.
 3. **Class detail** — for per-class tables, use the BMM-backed

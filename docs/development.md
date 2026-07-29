@@ -99,11 +99,29 @@ Environment variables are read from `.env` (template in `.env.example`):
 
 ## Gotcha — MCP discovery cache
 
-Capability discovery is cached (Symfony Cache, under `XDG_DATA_HOME`) for fast
-startup — see [ADR-0001](decisions/0001-attribute-driven-discovery.md). **After
-adding or renaming a tool/prompt/resource/completion-provider class, clear the
-cache** (the cache directory under `XDG_DATA_HOME`, default `/tmp`) or the new
-capability will not register.
+Capability discovery is cached (Symfony Cache `PhpFilesAdapter`, under
+`XDG_DATA_HOME`) for fast startup — see
+[ADR-0001](decisions/0001-attribute-driven-discovery.md). The cache pool is
+namespaced by `APP_VERSION` (`src/constants.php`), so a version bump
+automatically invalidates stale entries whenever the discovery schema, an
+attribute signature, or the tool/prompt/resource set changes as part of a
+release — no manual step needed in that case.
+
+**During local development**, when adding or renaming a tool/prompt/resource/
+completion-provider class *without* bumping `APP_VERSION`, clear the cache
+directory under `XDG_DATA_HOME` (default `/tmp`) yourself, or the new
+capability will not register. For the same reason, **deploys that don't bump
+`APP_VERSION`** (e.g. hotfixes to capability code) should also clear the cache
+directory as part of the deploy step. Containerised deploys get this for free —
+`APP_DATA_DIR` defaults to the ephemeral `/tmp/app`.
+
+Two consequences of the namespacing worth knowing:
+
+- The pool name becomes a **subdirectory** (`$XDG_DATA_HOME/app/cache/mcp-server-<version>/`)
+  and entries have no TTL, so every release leaves its predecessor's cache behind.
+  Prune `$XDG_DATA_HOME/app/cache` periodically on long-lived hosts.
+- `APP_VERSION` is now part of a filesystem path, so it must stay within
+  `[-+_.A-Za-z0-9]`; any other character makes Symfony Cache throw at startup.
 
 ## Troubleshooting
 

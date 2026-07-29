@@ -25,7 +25,7 @@ Required output:
 3) Constraints (Narrowing): exclusions (max=0), mandations (min=1), data-type choices.
 4) Value sets & units: quantity/unit constraints, limitToList coded-text strategy.
 5) Naming & UI: label overrides, hide_on_form / annotations.
-6) Full OET: XML or high-level structure with key rules/paths.
+6) Artefact output, conditional on task_type: for design, Full OET (XML or high-level structure with key rules/paths). For review-only (task_type = review), do not rewrite the artefact — preserve the supplied Existing Template unchanged and instead give findings plus a minimal patch (targeted OET snippet or diff) per issue.
 7) Quality Self-Assessment: guide conformance, risks, follow-ups.
 
 Tools: `guide_get`, `ckm_archetype_search`, `ckm_archetype_get`, `ckm_template_search`, `ckm_template_get`, `type_specification_get`.

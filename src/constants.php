@@ -4,6 +4,8 @@ define('APP_NAME', 'openehr-assistant-mcp');
 define('APP_TITLE', 'openEHR Assistant');
 define('APP_DESCRIPTION', 'MCP Server to assist with various openEHR specifications or modeling related tasks.');
 define('APP_ICON', 'https://www.cadasto.com/wp-content/uploads/2025/11/cropped-cadasto-favicon-32x32.png');
+// Also namespaces the MCP discovery cache pool (see public/index.php), which Symfony Cache
+// turns into a directory name — so this must stay within [-+_.A-Za-z0-9] or startup throws.
 define('APP_VERSION', '0.19.0');
 define('APP_ENV', getenv('APP_ENV') ?: 'production');
 define('LOG_LEVEL', getenv('LOG_LEVEL') ?: 'info');

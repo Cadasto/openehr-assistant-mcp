@@ -7,6 +7,7 @@ namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Tools;
 use Cadasto\OpenEHR\MCP\Assistant\Apis\CkmClient;
 use Cadasto\OpenEHR\MCP\Assistant\Tools\CkmService;
 use GuzzleHttp\Psr7\Response;
+use Mcp\Exception\ToolCallException;
 use Mcp\Schema\Content\TextContent;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -70,9 +71,8 @@ final class CkmServiceTest extends TestCase
             ->method('get')
             ->with(
                 $this->callback(function (string $endpoint): bool {
-                    // CID is sanitized: non-digits replaced with '-'. For '123.45a', becomes '123.45-'
-                    // The service then requests v1/archetypes/{cid}/{format}
-                    return str_starts_with($endpoint, 'v1/archetypes/123.45-') && str_ends_with($endpoint, '/adl');
+                    // A CID is passed through unchanged: v1/archetypes/{cid}/{format}
+                    return str_starts_with($endpoint, 'v1/archetypes/123.45/') && str_ends_with($endpoint, '/adl');
                 }),
                 $this->callback(function (array $opts): bool {
                     return ($opts['headers']['Accept'] ?? null) === 'text/plain';
@@ -81,10 +81,66 @@ final class CkmServiceTest extends TestCase
             ->willReturn(new Response(200, ['Content-Type' => 'text/plain'], 'archetype ADL content'));
 
         $svc = new CkmService($this->client, $this->logger);
-        $content = $svc->archetypeGet('123.45a', 'adl');
+        $content = $svc->archetypeGet('123.45', 'adl');
         $this->assertInstanceOf(TextContent::class, $content);
         $this->assertStringContainsString('archetype ADL content', $content->text);
         $this->assertStringContainsString('```', $content->text);
+    }
+
+    public function testArchetypeGetRejectsAnIdentifierItCannotResolve(): void
+    {
+        // Regression: a non-CID, non-archetype-id identifier used to be mangled by
+        // `preg_replace('/[^\d.]/', '-', …)` and requested anyway, so the client was told
+        // "Failed to retrieve the CKM Archetype: 404" — pointing at the archetype rather
+        // than the identifier. No request should be issued at all.
+        $this->client->expects($this->never())->method('get');
+
+        $svc = new CkmService($this->client, $this->logger);
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessageMatches('/Could not resolve "123\.45a" to a CKM citeable identifier/');
+        $svc->archetypeGet('123.45a', 'adl');
+    }
+
+    public function testArchetypeGetReportsAFailedCidResolutionRatherThanGuessing(): void
+    {
+        // A 200 with an empty body used to survive as '' and produce `v1/archetypes//adl`.
+        $this->client
+            ->expects($this->once())
+            ->method('get')
+            ->with($this->stringContains('citeable-identifier'))
+            ->willReturn(new Response(200, [], ''));
+
+        $svc = new CkmService($this->client, $this->logger);
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessageMatches('/Could not resolve .* to a CKM citeable identifier/');
+        $svc->archetypeGet('openEHR-EHR-OBSERVATION.blood_pressure.v1', 'adl');
+    }
+
+    public function testArchetypeGetResolvesAnArchetypeIdToACid(): void
+    {
+        $matcher = $this->exactly(2);
+        $this->client
+            ->expects($matcher)
+            ->method('get')
+            ->willReturnCallback(function (string $endpoint) use ($matcher): Response {
+                if ($matcher->numberOfInvocations() === 1) {
+                    $this->assertStringContainsString('citeable-identifier/openEHR-EHR-OBSERVATION.blood_pressure.v1', $endpoint);
+
+                    // Quoted, as a JSON string response would arrive.
+                    return new Response(200, [], '"1249.32.1234"');
+                }
+
+                $this->assertSame('v1/archetypes/1249.32.1234/adl', $endpoint);
+
+                return new Response(200, ['Content-Type' => 'text/plain'], 'resolved ADL');
+            });
+
+        $svc = new CkmService($this->client, $this->logger);
+        $content = $svc->archetypeGet('openEHR-EHR-OBSERVATION.blood_pressure.v1', 'adl');
+
+        $this->assertStringContainsString('resolved ADL', $content->text);
     }
 
     public function testArchetypeSearchFetchesMoreThenSlicesToMaxResults(): void
@@ -391,7 +447,10 @@ final class CkmServiceTest extends TestCase
     public function testArchetypeSearchRejectsMalformedRmClass(): void
     {
         $svc = new CkmService($this->client, $this->logger);
-        $this->expectException(\InvalidArgumentException::class);
+        // ToolCallException, not InvalidArgumentException: `CallToolHandler` maps only the
+        // former to a tool-level error carrying its message, and replaces everything else
+        // with a generic protocol error that most clients never show the model.
+        $this->expectException(ToolCallException::class);
         // digits/punctuation are not a valid RM class token
         $svc->archetypeSearch('summary', 10, true, 'comp-osition!');
     }

@@ -15,10 +15,15 @@ use ReflectionClass;
 #[CoversClass(DesignOrReviewSimplifiedFormat::class)]
 final class DesignOrReviewSimplifiedFormatTest extends TestCase
 {
-    public function test_prompt_structure_placeholders_and_attribute(): void
+    public function test_prompt_structure_substitution_and_attribute(): void
     {
         $prompt = new DesignOrReviewSimplifiedFormat();
-        $messages = $prompt->__invoke();
+        $messages = $prompt->__invoke(
+            task_type: 'review',
+            template_id: 'vital_signs.v1',
+            format_variant: 'flat',
+            existing_json: '{"vital_signs/blood_pressure:0/systolic|magnitude": 120}',
+        );
 
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
@@ -34,10 +39,11 @@ final class DesignOrReviewSimplifiedFormatTest extends TestCase
 
         $this->assertStringContainsString('openehr://guides/simplified_formats/principles', $combined);
         $this->assertStringContainsString('openehr://guides/simplified_formats/rules', $combined);
-        $this->assertStringContainsString('{{task_type}}', $combined);
-        $this->assertStringContainsString('{{template_id}}', $combined);
-        $this->assertStringContainsString('{{format_variant}}', $combined);
-        $this->assertStringContainsString('{{existing_json}}', $combined);
+        $this->assertStringContainsString('review', $combined);
+        $this->assertStringContainsString('vital_signs.v1', $combined);
+        $this->assertStringContainsString('flat', $combined);
+        $this->assertStringContainsString('vital_signs/blood_pressure:0/systolic|magnitude', $combined);
+        $this->assertDoesNotMatchRegularExpression('/\{\{[a-z0-9_]+\}\}/', $combined);
 
         $rc = new ReflectionClass(DesignOrReviewSimplifiedFormat::class);
         $attrs = $rc->getAttributes(McpPrompt::class);
@@ -45,5 +51,15 @@ final class DesignOrReviewSimplifiedFormatTest extends TestCase
         $args = $attrs[0]->getArguments();
         $this->assertArrayHasKey('name', $args);
         $this->assertSame('design_or_review_simplified_format', $args['name']);
+    }
+
+    public function test_requires_task_type_template_id_and_format_variant(): void
+    {
+        $this->expectException(\Mcp\Exception\PromptGetException::class);
+        (new DesignOrReviewSimplifiedFormat())->__invoke(
+            task_type: 'review',
+            template_id: 'vital_signs.v1',
+            format_variant: '',
+        );
     }
 }

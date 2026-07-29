@@ -15,10 +15,13 @@ use ReflectionClass;
 #[CoversClass(ExplainArchetype::class)]
 final class ExplainArchetypeTest extends TestCase
 {
-    public function test_prompt_structure_placeholders_and_attribute(): void
+    public function test_prompt_structure_substitution_and_attribute(): void
     {
         $prompt = new ExplainArchetype();
-        $messages = $prompt->__invoke();
+        $messages = $prompt->__invoke(
+            adl_text: 'archetype (adl_version=2.3.0) openEHR-EHR-OBSERVATION.blood_pressure.v2',
+            audience: 'clinician',
+        );
 
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
@@ -32,12 +35,13 @@ final class ExplainArchetypeTest extends TestCase
             $combined .= "\n" . $msg->content->text;
         }
 
-        // Guides references and placeholders
+        // Guides references and substituted values
         $this->assertStringContainsString('openehr://guides/archetypes/principles', $combined);
         $this->assertStringContainsString('openehr://guides/archetypes/terminology', $combined);
         $this->assertStringContainsString('openehr://guides/archetypes/structural-constraints', $combined);
-        $this->assertStringContainsString('{{adl_text}}', $combined);
-        $this->assertStringContainsString('{{audience}}', $combined);
+        $this->assertStringContainsString('openEHR-EHR-OBSERVATION.blood_pressure.v2', $combined);
+        $this->assertStringContainsString('clinician', $combined);
+        $this->assertDoesNotMatchRegularExpression('/\{\{[a-z0-9_]+\}\}/', $combined);
 
         // Attribute presence and expected name
         $rc = new ReflectionClass(ExplainArchetype::class);
@@ -46,5 +50,11 @@ final class ExplainArchetypeTest extends TestCase
         $args = $attrs[0]->getArguments();
         $this->assertArrayHasKey('name', $args);
         $this->assertSame('explain_archetype', $args['name']);
+    }
+
+    public function test_requires_adl_text(): void
+    {
+        $this->expectException(\Mcp\Exception\PromptGetException::class);
+        (new ExplainArchetype())->__invoke(adl_text: '');
     }
 }

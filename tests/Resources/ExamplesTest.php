@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Resources;
 
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Examples;
+use Mcp\Capability\Attribute\McpResourceTemplate;
 use Mcp\Exception\ResourceReadException;
 use Mcp\Server\Builder;
+use ReflectionMethod;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -61,6 +63,20 @@ final class ExamplesTest extends TestCase
 
         $this->assertStringContainsString('archetype', $content);
         $this->assertStringContainsString('openEHR-EHR-OBSERVATION.blood_pressure.v2', $content);
+    }
+
+    public function test_examples_resource_template_advertises_no_mime_type(): void
+    {
+        // Asserted on the published ResourceTemplate rather than on the attribute's argument
+        // list: the wire-visible outcome is what clients see, and it stays correct however the
+        // attribute happens to be written. The template serves both .md and .adl, so a single
+        // template-level mimeType would misdescribe one of them.
+        $rc = new ReflectionMethod(Examples::class, 'read');
+        $attrs = $rc->getAttributes(McpResourceTemplate::class);
+        /** @var McpResourceTemplate $attribute */
+        $attribute = $attrs[0]->newInstance();
+
+        $this->assertNull($attribute->mimeType);
     }
 
     public function test_addResources_registers_examples(): void

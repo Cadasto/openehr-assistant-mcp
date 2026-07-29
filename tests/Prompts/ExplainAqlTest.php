@@ -15,10 +15,13 @@ use ReflectionClass;
 #[CoversClass(ExplainAql::class)]
 final class ExplainAqlTest extends TestCase
 {
-    public function test_prompt_structure_placeholders_and_attribute(): void
+    public function test_prompt_structure_substitution_and_attribute(): void
     {
         $prompt = new ExplainAql();
-        $messages = $prompt->__invoke();
+        $messages = $prompt->__invoke(
+            aql_query: 'SELECT c FROM EHR e CONTAINS COMPOSITION c',
+            context: 'vital_signs template',
+        );
 
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
@@ -35,8 +38,9 @@ final class ExplainAqlTest extends TestCase
         $this->assertStringContainsString('openehr://guides/aql/principles', $combined);
         $this->assertStringContainsString('openehr://guides/aql/syntax', $combined);
         $this->assertStringContainsString('archetype path', $combined);
-        $this->assertStringContainsString('{{aql_query}}', $combined);
-        $this->assertStringContainsString('{{context}}', $combined);
+        $this->assertStringContainsString('SELECT c FROM EHR e CONTAINS COMPOSITION c', $combined);
+        $this->assertStringContainsString('vital_signs template', $combined);
+        $this->assertDoesNotMatchRegularExpression('/\{\{[a-z0-9_]+\}\}/', $combined);
 
         $rc = new ReflectionClass(ExplainAql::class);
         $attrs = $rc->getAttributes(McpPrompt::class);
@@ -44,5 +48,11 @@ final class ExplainAqlTest extends TestCase
         $args = $attrs[0]->getArguments();
         $this->assertArrayHasKey('name', $args);
         $this->assertSame('explain_aql', $args['name']);
+    }
+
+    public function test_requires_aql_query(): void
+    {
+        $this->expectException(\Mcp\Exception\PromptGetException::class);
+        (new ExplainAql())->__invoke(aql_query: '');
     }
 }

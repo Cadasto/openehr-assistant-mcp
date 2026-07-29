@@ -9,6 +9,7 @@ use Cadasto\OpenEHR\MCP\Assistant\Helpers\Map;
 use GuzzleHttp\RequestOptions;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Capability\Attribute\Schema;
+use Mcp\Exception\ToolCallException;
 use Mcp\Schema\Content\TextContent;
 use Mcp\Schema\ToolAnnotations;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -61,7 +62,7 @@ final readonly class CkmService
      *   Query search string (one or multiple words); wildcards `*` supported; prefer meaningful clinical terms over internal codes, e.g. "blood pressure", "medication", "diabetes", "body weight".
      *
      * @param int $maxResults
-     *   The maximum number of result items to be returned; defaults to 20.
+     *   The maximum number of result items to be returned; defaults to 20 and must be between 1 and 50 (values outside that range are rejected, not clamped).
      *
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
@@ -69,28 +70,35 @@ final readonly class CkmService
      * @param string $rmClass
      *   Optional RM class filter on the archetype-id (e.g. `COMPOSITION`, `OBSERVATION`, `CLUSTER`); case-insensitive; empty (default) = no filter.
      *
-     * @return array<string,mixed>
-     *   A list of CKM Archetype metadata entries.
-     *   Entries usually include a CID identifier, archetypeId, display name, status, and other descriptive fields.
+     * @return array{items: list<array<string, string|int>>, total: int}
+     *   A list of CKM Archetype metadata entries — each with a CID identifier, and usually
+     *   archetypeId, display name, status and other descriptive fields — plus `total` (see
+     *   the `total` note in the outputSchema).
      *
-     * @throws \RuntimeException
-     *   If the CKM API request fails (network error, upstream outage, invalid response).
-     *
-     * @throws \InvalidArgumentException
-     *   If $rmClass is provided but is not a valid RM class token.
+     * @throws ToolCallException
+     *   If the CKM API request fails (network error, upstream outage, invalid response), or
+     *   if $rmClass is provided but is malformed (it is shape-checked, not validated against
+     *   the RM class list). `ToolCallException` specifically: `CallToolHandler` preserves its
+     *   message as a tool-level error result the model can act on, and replaces every other
+     *   throwable with a generic protocol error most clients never surface.
      */
+    #[Schema(additionalProperties: false)]
     #[McpTool(
         name: 'ckm_archetype_search',
         title: 'Search CKM archetypes',
         annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: true),
         outputSchema: [
             'type' => 'object',
+            'additionalProperties' => false,
+            'required' => ['items', 'total'],
             'properties' => [
                 'items' => [
                     'type' => 'array',
                     'description' => 'List of CKM Archetypes matching the search criteria',
                     'items' => [
                         'type' => 'object',
+                        'additionalProperties' => false,
+                        'required' => ['cid', 'score'],
                         'properties' => [
                             'cid' => ['type' => 'string', 'description' => 'CKM Archetype identifier'],
                             'archetypeId' => ['type' => 'string'],
@@ -98,18 +106,23 @@ final readonly class CkmService
                             'projectName' => ['type' => 'string', 'description' => 'Project name where the Archetype belongs to'],
                             'status' => ['type' => 'string'],
                             'revision' => ['type' => 'string'],
-                            'creationTime' => ['type' => 'string'],
-                            'modificationTime' => ['type' => 'string'],
+                            'creationTime' => ['type' => 'string', 'description' => 'ISO 8601 or epoch-ms string from CKM'],
+                            'modificationTime' => ['type' => 'string', 'description' => 'ISO 8601 or epoch-ms string from CKM'],
                             'score' => ['type' => 'integer', 'description' => 'Score of the match, based on the search keywords'],
                         ],
                     ],
                 ],
-                'total' => ['type' => 'integer', 'description' => 'Total number of Archetypes found'],
+                'total' => ['type' => 'integer', 'minimum' => 0, 'description' => "Upstream CKM match count for the keyword search (`X-Total-Count`), falling back to the number of matches when that header is absent or malformed. When `rmClass` is supplied the count reflects the locally filtered matches instead. May exceed items.length."],
             ],
         ]
     )]
-    public function archetypeSearch(string $keyword, int $maxResults = self::DEFAULT_MAX_RESULTS, bool $requireAllSearchWords = true, string $rmClass = ''): array
-    {
+    public function archetypeSearch(
+        string $keyword,
+        #[Schema(minimum: 1, maximum: self::MAX_RESULTS_LIMIT)]
+        int $maxResults = self::DEFAULT_MAX_RESULTS,
+        bool $requireAllSearchWords = true,
+        string $rmClass = '',
+    ): array {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
         $fetchSize = min(self::FETCH_SIZE_LIMIT, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER));
@@ -129,24 +142,29 @@ final readonly class CkmService
                 ],
             ]);
             $data = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-            if (!is_array($data)) {
-                throw new \RuntimeException('Unexpected CKM archetype response payload.');
-            }
+            $this->assertCkmRowList($data, 'archetype');
             $this->logger->info('Found CKM Archetypes', ['keyword' => $keyword, 'count' => count($data)]);
 
             // Map each item to a simpler structure and score
             $data = array_map(function (array $item) use ($keyword): array {
                 $new = [
-                    'cid' => $item['cid'] ?? null,
-                    'archetypeId' => $item['resourceMainId'] ?? null,
-                    'name' => $item['resourceMainDisplayName'] ?? null,
-                    'projectName' => $item['projectName'] ?? null,
-                    'status' => $item['status'] ?? null,
-                    'revision' => $item['revision'] ?? null,
-                    'creationTime' => $item['creationTime'] ?? null,
-                    'modificationTime' => $item['modificationTime'] ?? $item['creationTime'] ?? null,
+                    // `cid` is declared `required` in the outputSchema and is the handle
+                    // `ckm_archetype_get` needs, so it is never filtered out below — an
+                    // upstream row without one yields '' rather than a missing key.
+                    'cid' => $this->ckmString($item['cid'] ?? null, 'cid') ?? '',
+                    'archetypeId' => $this->ckmString($item['resourceMainId'] ?? null, 'resourceMainId'),
+                    'name' => $this->ckmString($item['resourceMainDisplayName'] ?? null, 'resourceMainDisplayName'),
+                    'projectName' => $this->ckmString($item['projectName'] ?? null, 'projectName'),
+                    'status' => $this->ckmString($item['status'] ?? null, 'status'),
+                    'revision' => $this->ckmString($item['revision'] ?? null, 'revision'),
+                    'creationTime' => $this->ckmString($item['creationTime'] ?? null, 'creationTime'),
+                    'modificationTime' => $this->ckmString($item['modificationTime'] ?? $item['creationTime'] ?? null, 'modificationTime'),
                     'score' => $this->scoreArchetypeItem($item, $keyword),
                 ];
+                if ($new['cid'] === '') {
+                    $this->logger->warning('CKM archetype row has no cid; it cannot be retrieved.', ['name' => $new['name']]);
+                }
+
                 return array_filter($new, fn($v) => $v !== null);
             }, $data);
 
@@ -162,19 +180,19 @@ final readonly class CkmService
             usort($data, function ($a, $b) {
                 return $b['score'] <=> $a['score'];
             });
+            $matchCount = count($data);
             $data = array_slice($data, 0, $maxResults);
 
-            $totalHeader = $response->getHeaderLine('X-Total-Count');
             return [
                 'items' => $data,
-                'total' => $totalHeader !== '' ? (integer) $totalHeader : count($data),
+                'total' => $this->resolveTotal($response->getHeaderLine('X-Total-Count'), $matchCount, $rmClass !== ''),
             ];
         } catch (\JsonException $e) {
             $this->logger->error('Failed to decode CKM Archetype response', ['error' => $e->getMessage()]);
-            throw new \RuntimeException('Failed to decode CKM Archetype response: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to decode CKM Archetype response: ' . $e->getMessage(), previous: $e);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to search for CKM Archetypes', ['error' => $e->getMessage()]);
-            throw new \RuntimeException('Failed to search for CKM Archetypes: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to search for CKM Archetypes: ' . $e->getMessage(), previous: $e);
         }
     }
 
@@ -203,9 +221,10 @@ final readonly class CkmService
      * @return TextContent
      *   The Archetype definition in the chosen format in a text content code block.
      *
-     * @throws \RuntimeException
+     * @throws ToolCallException
      *   If the CKM API request fails (invalid CID, unsupported format mapping, upstream error).
      */
+    #[Schema(additionalProperties: false)]
     #[McpTool(
         name: 'ckm_archetype_get',
         title: 'Get CKM archetype',
@@ -223,17 +242,25 @@ final readonly class CkmService
         try {
             $archetypeFormat = Map::archetypeFormat($format);
             $contentType = Map::contentType($archetypeFormat);
-            // If the identifier is an archetype-id, then resolve it to the corresponding CID
+            // An archetype-id must be resolved to a CID; there is no meaningful fallback.
+            // The previous code replaced every non-digit with `-`, turning
+            // `openEHR-EHR-OBSERVATION.blood_pressure.v1` into
+            // `-------------------.-------------.--`, requested *that*, and reported the
+            // resulting 404 as "Failed to retrieve the CKM Archetype" — blaming the
+            // archetype rather than the identifier resolution that actually failed.
             if (str_contains($identifier, 'openEHR-')) {
-                try {
-                    $response = $this->apiClient->get("v1/archetypes/citeable-identifier/$identifier");
-                    $cid = ($response->getStatusCode() === 200) ? $response->getBody()->getContents() : null;
-                } catch (ClientExceptionInterface $e) {
-                    $this->logger->error('Failed to resolve CID identifier', ['error' => $e->getMessage(), 'identifier' => $identifier]);
-                }
+                $cid = $this->resolveCitableIdentifier($identifier);
+            } elseif ($this->looksLikeCid($identifier)) {
+                $cid = $identifier;
             }
-            // if CID is not yet resolved, then normalize the identifier to a CID
-            $cid = $cid ?? preg_replace('/[^\d.]/', '-', $identifier);
+
+            if ($cid === null) {
+                throw new ToolCallException(sprintf(
+                    'Could not resolve "%s" to a CKM citeable identifier (CID). Pass a CID (digits and dots, as returned by ckm_archetype_search) or a full archetype-id containing "openEHR-".',
+                    $identifier,
+                ));
+            }
+
             // retrieve the archetype definition
             $response = $this->apiClient->get("v1/archetypes/{$cid}/{$archetypeFormat}", [
                 RequestOptions::HEADERS => [
@@ -245,7 +272,7 @@ final readonly class CkmService
             return TextContent::code($data);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to retrieve the CKM Archetype', ['error' => $e->getMessage(), 'identifier' => $identifier, 'cid' => $cid, 'format' => $format]);
-            throw new \RuntimeException('Failed to retrieve the CKM Archetype: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to retrieve the CKM Archetype: ' . $e->getMessage(), previous: $e);
         }
     }
 
@@ -262,7 +289,7 @@ final readonly class CkmService
      *   Query search string, one or multiple words, wildcards `*` supported.
      *
      * @param int $maxResults
-     *   The maximum number of result items to be returned; defaults to 20.
+     *   The maximum number of result items to be returned; defaults to 20 and must be between 1 and 50 (values outside that range are rejected, not clamped).
      *
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
@@ -271,39 +298,48 @@ final readonly class CkmService
      *   A list of CKM Template metadata entries.
      *   Entries usually include a Template CID identifier, display name, status, and other descriptive fields.
      *
-     * @throws \RuntimeException
+     * @throws ToolCallException
      *   If the CKM API request fails (network error, upstream outage, invalid response).
      */
+    #[Schema(additionalProperties: false)]
     #[McpTool(
         name: 'ckm_template_search',
         title: 'Search CKM templates',
         annotations: new ToolAnnotations(readOnlyHint: true, openWorldHint: true),
         outputSchema: [
             'type' => 'object',
+            'additionalProperties' => false,
+            'required' => ['items', 'total'],
             'properties' => [
                 'items' => [
                     'type' => 'array',
                     'description' => 'List of CKM Templates matching the search criteria',
                     'items' => [
                         'type' => 'object',
+                        'additionalProperties' => false,
+                        'required' => ['cid', 'score'],
                         'properties' => [
                             'cid' => ['type' => 'string', 'description' => 'CKM Template identifier'],
                             'name' => ['type' => 'string', 'description' => 'Template display name'],
                             'projectName' => ['type' => 'string', 'description' => 'Project name where the Template belongs to'],
                             'status' => ['type' => 'string'],
                             'version' => ['type' => 'string'],
-                            'creationTime' => ['type' => 'string'],
-                            'modificationTime' => ['type' => 'string'],
+                            'creationTime' => ['type' => 'string', 'description' => 'ISO 8601 or epoch-ms string from CKM'],
+                            'modificationTime' => ['type' => 'string', 'description' => 'ISO 8601 or epoch-ms string from CKM'],
                             'score' => ['type' => 'integer', 'description' => 'Score of the match, based on the search keywords'],
                         ],
                     ],
                 ],
-                'total' => ['type' => 'integer', 'description' => 'Total number of Templates found'],
+                'total' => ['type' => 'integer', 'minimum' => 0, 'description' => "Upstream CKM match count for the keyword search (`X-Total-Count`), falling back to the number of matches when that header is absent or malformed. May exceed items.length."],
             ],
         ]
     )]
-    public function templateSearch(string $keyword, int $maxResults = self::DEFAULT_MAX_RESULTS, bool $requireAllSearchWords = true): array
-    {
+    public function templateSearch(
+        string $keyword,
+        #[Schema(minimum: 1, maximum: self::MAX_RESULTS_LIMIT)]
+        int $maxResults = self::DEFAULT_MAX_RESULTS,
+        bool $requireAllSearchWords = true,
+    ): array {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
         $fetchSize = min(self::FETCH_SIZE_LIMIT, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER));
@@ -323,23 +359,27 @@ final readonly class CkmService
                 ],
             ]);
             $data = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-            if (!is_array($data)) {
-                throw new \RuntimeException('Unexpected CKM template response payload.');
-            }
+            $this->assertCkmRowList($data, 'template');
             $this->logger->info('Found CKM Templates', ['keyword' => $keyword, 'count' => count($data)]);
 
             // Map each item to a simpler structure and score
             $data = array_map(function (array $item) use ($keyword): array {
                 $new = [
-                    'cid' => $item['cid'] ?? null,
-                    'name' => $item['resourceMainDisplayName'] ?? null,
-                    'projectName' => $item['projectName'] ?? null,
-                    'status' => $item['status'] ?? null,
-                    'version' => $item['versionAsset'] ?? null,
-                    'creationTime' => $item['creationTime'] ?? null,
-                    'modificationTime' => $item['modificationTime'] ?? $item['creationTime'] ?? null,
+                    // See the `cid` note in archetypeSearch(): declared `required`, so it
+                    // is always present even when the upstream row omits it.
+                    'cid' => $this->ckmString($item['cid'] ?? null, 'cid') ?? '',
+                    'name' => $this->ckmString($item['resourceMainDisplayName'] ?? null, 'resourceMainDisplayName'),
+                    'projectName' => $this->ckmString($item['projectName'] ?? null, 'projectName'),
+                    'status' => $this->ckmString($item['status'] ?? null, 'status'),
+                    'version' => $this->ckmString($item['versionAsset'] ?? null, 'versionAsset'),
+                    'creationTime' => $this->ckmString($item['creationTime'] ?? null, 'creationTime'),
+                    'modificationTime' => $this->ckmString($item['modificationTime'] ?? $item['creationTime'] ?? null, 'modificationTime'),
                     'score' => $this->scoreTemplateItem($item, $keyword),
                 ];
+                if ($new['cid'] === '') {
+                    $this->logger->warning('CKM template row has no cid; it cannot be retrieved.', ['name' => $new['name']]);
+                }
+
                 return array_filter($new, fn($v) => $v !== null);
             }, $data);
 
@@ -347,19 +387,19 @@ final readonly class CkmService
             usort($data, function ($a, $b) {
                 return $b['score'] <=> $a['score'];
             });
+            $matchCount = count($data);
             $data = array_slice($data, 0, $maxResults);
 
-            $totalHeader = $response->getHeaderLine('X-Total-Count');
             return [
                 'items' => $data,
-                'total' => $totalHeader !== '' ? (integer) $totalHeader : count($data),
+                'total' => $this->resolveTotal($response->getHeaderLine('X-Total-Count'), $matchCount, false),
             ];
         } catch (\JsonException $e) {
             $this->logger->error('Failed to decode CKM Template response', ['error' => $e->getMessage()]);
-            throw new \RuntimeException('Failed to decode CKM Template response: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to decode CKM Template response: ' . $e->getMessage(), previous: $e);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to search for CKM Templates', ['error' => $e->getMessage()]);
-            throw new \RuntimeException('Failed to search for CKM Templates: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to search for CKM Templates: ' . $e->getMessage(), previous: $e);
         }
     }
 
@@ -386,9 +426,10 @@ final readonly class CkmService
      * @return TextContent
      *   The Template definition in the chosen format in a text content code block.
      *
-     * @throws \RuntimeException
+     * @throws ToolCallException
      *   If the CKM API request fails.
      */
+    #[Schema(additionalProperties: false)]
     #[McpTool(
         name: 'ckm_template_get',
         title: 'Get CKM template',
@@ -419,7 +460,7 @@ final readonly class CkmService
             return TextContent::code($data);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to retrieve the CKM Template', ['error' => $e->getMessage(), 'identifier' => $identifier, 'format' => $format]);
-            throw new \RuntimeException('Failed to retrieve the CKM Template: ' . $e->getMessage(), 0, $e);
+            throw new ToolCallException('Failed to retrieve the CKM Template: ' . $e->getMessage(), previous: $e);
         }
     }
 
@@ -430,9 +471,11 @@ final readonly class CkmService
      */
     private function scoreArchetypeItem(array $item, string $keyword): int
     {
-        $archetypeId = $item['resourceMainId'] ?? null;
-        $name = $item['resourceMainDisplayName'] ?? null;
-        $projectName = $item['projectName'] ?? null;
+        // Narrowed here rather than trusted: CKM is external, and every helper below
+        // takes `?string`, so an unexpected int/bool/object would raise a TypeError.
+        $archetypeId = $this->ckmString($item['resourceMainId'] ?? null, 'resourceMainId');
+        $name = $this->ckmString($item['resourceMainDisplayName'] ?? null, 'resourceMainDisplayName');
+        $projectName = $this->ckmString($item['projectName'] ?? null, 'projectName');
         $keywords = array_filter(explode(' ', trim($keyword)));
         $score = 0;
         $keywordsMatched = 0;
@@ -453,11 +496,13 @@ final readonly class CkmService
             $score += self::SCORE_EXACT_CONCEPT_BONUS;
         }
         $score += $this->projectBucketBonus($projectName);
-        $score += $this->scoreStatus($item['status'] ?? null);
+        $status = $this->ckmString($item['status'] ?? null, 'status');
+        $creationTime = $this->ckmString($item['creationTime'] ?? null, 'creationTime');
+        $score += $this->scoreStatus($status);
         $score += $this->agePenalty(
-            $item['modificationTime'] ?? $item['creationTime'] ?? null,
-            $item['creationTime'] ?? null,
-            $item['status'] ?? null
+            $this->ckmString($item['modificationTime'] ?? null, 'modificationTime') ?? $creationTime,
+            $creationTime,
+            $status
         );
         return $score;
     }
@@ -469,8 +514,9 @@ final readonly class CkmService
      */
     private function scoreTemplateItem(array $item, string $keyword): int
     {
-        $name = $item['resourceMainDisplayName'] ?? null;
-        $projectName = $item['projectName'] ?? null;
+        // See the note in scoreArchetypeItem(): narrow before scoring.
+        $name = $this->ckmString($item['resourceMainDisplayName'] ?? null, 'resourceMainDisplayName');
+        $projectName = $this->ckmString($item['projectName'] ?? null, 'projectName');
         $keywords = array_filter(explode(' ', trim($keyword)));
         $score = 0;
         $keywordsMatched = 0;
@@ -490,11 +536,13 @@ final readonly class CkmService
             $score += self::SCORE_EXACT_CONCEPT_BONUS;
         }
         $score += $this->projectBucketBonus($projectName);
-        $score += $this->scoreStatus($item['status'] ?? null);
+        $status = $this->ckmString($item['status'] ?? null, 'status');
+        $creationTime = $this->ckmString($item['creationTime'] ?? null, 'creationTime');
+        $score += $this->scoreStatus($status);
         $score += $this->agePenalty(
-            $item['modificationTime'] ?? $item['creationTime'] ?? null,
-            $item['creationTime'] ?? null,
-            $item['status'] ?? null
+            $this->ckmString($item['modificationTime'] ?? null, 'modificationTime') ?? $creationTime,
+            $creationTime,
+            $status
         );
         return $score;
     }
@@ -560,7 +608,54 @@ final readonly class CkmService
         return $aliases[$value] ?? $value;
     }
 
-    /** Validate/uppercase an RM-class filter token; throws \InvalidArgumentException on a malformed non-empty value. */
+    /**
+     * Resolve a full archetype-id to its CKM citeable identifier, or null if it cannot be.
+     *
+     * Returns null (rather than a guess) for every failure mode, so the caller can name the
+     * resolution step in the error instead of issuing a request built from a mangled path.
+     */
+    private function resolveCitableIdentifier(string $archetypeId): ?string
+    {
+        try {
+            $response = $this->apiClient->get("v1/archetypes/citeable-identifier/$archetypeId");
+        } catch (ClientExceptionInterface $e) {
+            $this->logger->error('Failed to resolve CID identifier', ['error' => $e->getMessage(), 'identifier' => $archetypeId]);
+
+            return null;
+        }
+
+        if ($response->getStatusCode() !== 200) {
+            $this->logger->error('CID resolution returned a non-200 status', [
+                'identifier' => $archetypeId,
+                'status' => $response->getStatusCode(),
+            ]);
+
+            return null;
+        }
+
+        // A 200 with an empty body used to survive the `??` fallback as '' and produce the
+        // request path `v1/archetypes//adl`. Quotes are trimmed because the endpoint may
+        // return the CID as a JSON string rather than bare text.
+        $cid = trim($response->getBody()->getContents(), " \t\n\r\0\x0B\"'");
+        if (!$this->looksLikeCid($cid)) {
+            $this->logger->error('CID resolution returned an unexpected body', [
+                'identifier' => $archetypeId,
+                'body' => $cid,
+            ]);
+
+            return null;
+        }
+
+        return $cid;
+    }
+
+    /** A CKM citeable identifier is a dot-separated numeric path, e.g. `1249.32.1234`. */
+    private function looksLikeCid(string $value): bool
+    {
+        return preg_match('/^\d+(\.\d+)*$/', $value) === 1;
+    }
+
+    /** Validate/uppercase an RM-class filter token; throws ToolCallException on a malformed non-empty value. */
     private function normalizeRmClassFilter(string $rmClass): string
     {
         $rmClass = strtoupper(trim($rmClass));
@@ -568,7 +663,7 @@ final readonly class CkmService
             return '';
         }
         if (preg_match('/^[A-Z][A-Z_]*$/', $rmClass) !== 1) {
-            throw new \InvalidArgumentException(sprintf('Invalid RM class filter: "%s".', $rmClass));
+            throw new ToolCallException(sprintf('Invalid RM class filter: "%s".', $rmClass));
         }
         return $rmClass;
     }
@@ -644,6 +739,98 @@ final readonly class CkmService
             return 0;
         }
         return (int) $interval->y;
+    }
+
+    /**
+     * Assert that a decoded CKM search payload is a flat list of row objects.
+     *
+     * `is_array()` alone accepted two shapes that then failed far from the cause. A
+     * pagination envelope (`{"content": [...]}` — the most common way a REST response
+     * drifts) passed the check and handed `array_map` the inner list as a single "row",
+     * yielding one bogus schema-conformant item with an empty `cid`. Add a sibling scalar
+     * (`{"totalElements": 482, "content": [...]}`) and the typed closure raised a TypeError
+     * that neither catch arm here matches, surfacing as a generic internal error.
+     *
+     * @phpstan-assert list<array<string, mixed>> $data
+     */
+    private function assertCkmRowList(mixed $data, string $kind): void
+    {
+        if (!is_array($data) || !array_is_list($data)) {
+            throw new ToolCallException(sprintf(
+                'Unexpected CKM %s response payload: expected a JSON array of rows, got %s.',
+                $kind,
+                is_array($data) ? 'an object' : get_debug_type($data),
+            ));
+        }
+
+        foreach ($data as $index => $row) {
+            if (!is_array($row)) {
+                throw new ToolCallException(sprintf(
+                    'Unexpected CKM %s response payload: row %d is %s, not an object.',
+                    $kind,
+                    $index,
+                    get_debug_type($row),
+                ));
+            }
+        }
+    }
+
+    /**
+     * Narrow a value from a CKM payload to a string, preserving "absent" as null so the
+     * caller's `array_filter` can still drop optional keys.
+     *
+     * Every mapped field is declared `type: string` in the outputSchema, and the ageing
+     * helpers take `?string` — CKM has been observed to return `creationTime` as either an
+     * ISO 8601 string or an epoch-ms value, and an unquoted number would otherwise reach
+     * `yearsSince()` as an int and raise a TypeError; the narrowing is defensive either way.
+     * Non-scalars collapse to null rather than to "Array".
+     *
+     * `$field` is mandatory because a silent collapse is the dangerous case: the caller's
+     * `array_filter` then drops the key entirely. When that key is `resourceMainId` and a
+     * `rmClass` filter is active, `archetypeRmClass(null)` returns null for every row, the
+     * filter deletes them all, and the tool reports "0 matching archetypes" with no error —
+     * a confident falsehood. One log line per collapse is what makes that diagnosable.
+     */
+    private function ckmString(mixed $value, string $field): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+        if (is_string($value)) {
+            return $value;
+        }
+        if (is_int($value) || is_float($value) || is_bool($value)) {
+            return (string) $value;
+        }
+
+        $this->logger->warning('CKM field has an unexpected non-scalar shape and was dropped.', [
+            'field' => $field,
+            'type' => get_debug_type($value),
+        ]);
+
+        return null;
+    }
+
+    /**
+     * Resolve the `total` companion to a search result set.
+     *
+     * CKM reports the size of the *keyword* match in `X-Total-Count`. That is the useful
+     * figure when it is the only filter, but it says nothing about a filter this server
+     * applies locally, and a malformed header must never report fewer matches than the
+     * items actually returned.
+     */
+    private function resolveTotal(string $totalHeader, int $matchCount, bool $locallyFiltered): int
+    {
+        if ($locallyFiltered) {
+            return $matchCount;
+        }
+
+        $header = trim($totalHeader);
+        if ($header === '' || ctype_digit($header) === false) {
+            return $matchCount;
+        }
+
+        return max((int) $header, $matchCount);
     }
 
     /**
