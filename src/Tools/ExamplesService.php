@@ -50,6 +50,12 @@ final readonly class ExamplesService
      * @param string|null $kind
      *   Optional artefact-kind filter (AQL query, FLAT/STRUCTURED JSON payload, or native archetype). Omit to search all kinds.
      *
+     * @param int $maxResults
+     *   The maximum number of examples to return; defaults to 10 and must be between 1 and 30 (values outside that range are rejected, not clamped). `total` reports how many examples matched before this cap.
+     *
+     * @param int $snippetChars
+     *   The maximum length of each returned snippet in characters; defaults to 220 and must be between 80 and 1200 (values outside that range are rejected, not clamped).
+     *
      * @return array{items: list<array<string, string|int>>, total: int}
      *   A list of matching examples with short snippets and URIs, plus `total` — the number
      *   of matches before the `maxResults` cap, which may exceed the number of returned

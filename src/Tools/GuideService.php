@@ -53,6 +53,12 @@ final class GuideService
      * @param string|null $taskType
      *   Optional task hint (e.g. "lint", "review", "refactor", "author"). When supplied it adds a small ranking boost to guides whose title, abstract, or indexed headings mention it. It only reorders guides the query already matched: it never filters, and never makes a guide the query did not match appear in the results.
      *
+     * @param int $maxResults
+     *   The maximum number of guides to return; defaults to 10 and must be between 1 and 50 (values outside that range are rejected, not clamped). `total` reports how many guides matched before this cap.
+     *
+     * @param int $snippetChars
+     *   The maximum length of each returned snippet in characters; defaults to 220 and must be between 80 and 1200 (values outside that range are rejected, not clamped).
+     *
      * @param int $topCandidates
      *   Retained for backward compatibility and no longer limits what is searched. Every
      *   guide in scope is scored over its full body text, so recall does not depend on
@@ -134,9 +140,13 @@ final class GuideService
             // zero-score floor below, the caller then got an empty envelope, which an
             // agent reads as "no such guidance exists" rather than "look harder".
             // `buildGuideIndex()` already reads every file, so the window saved no I/O.
+            // Occurrences are counted in metadata and body separately, but the title and
+            // category bonuses are per *guide*, not per text: scoring both texts through
+            // the full `scoreGuide()` would award them twice and silently double the
+            // weight of a title hit relative to body relevance.
             $metadataText = sprintf('%s %s %s', $guide['title'], $guide['abstract'], implode(' ', $guide['headings']));
             $queryScore = $this->scoreGuide($query, $guide['title'], $metadataText, $guide['category'])
-                + $this->scoreGuide($query, $guide['title'], $content, $guide['category']);
+                + $this->scoreOccurrences($query, $content);
             if ($query !== '' && $queryScore <= 0) {
                 continue;
             }
@@ -514,19 +524,35 @@ final class GuideService
 
     private function scoreGuide(string $query, string $title, string $content, string $category = ''): int
     {
-        $content = mb_strtolower($content, 'UTF-8');
         $title = mb_strtolower($title, 'UTF-8');
         $category = mb_strtolower($category, 'UTF-8');
-        $keywords = $this->tokenizeQuery($query);
 
         $score = 0;
-        foreach ($keywords as $keyword) {
+        foreach ($this->tokenizeQuery($query) as $keyword) {
             if (str_contains($title, $keyword)) {
                 $score += 4;
             }
             if ($category !== '' && str_contains($category, $keyword)) {
                 $score += 3;
             }
+        }
+
+        return $score + $this->scoreOccurrences($query, $content);
+    }
+
+    /**
+     * Count query-keyword occurrences in one body of text, capped per keyword.
+     *
+     * Split out of {@see scoreGuide()} so a guide scored over several texts (metadata and
+     * full body) accumulates occurrences from each without re-earning the per-guide title
+     * and category bonuses.
+     */
+    private function scoreOccurrences(string $query, string $content): int
+    {
+        $content = mb_strtolower($content, 'UTF-8');
+
+        $score = 0;
+        foreach ($this->tokenizeQuery($query) as $keyword) {
             $score += min(substr_count($content, $keyword), 6);
         }
 

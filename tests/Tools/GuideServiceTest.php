@@ -145,6 +145,27 @@ final class GuideServiceTest extends TestCase
         $this->assertSame([], $results['items']);
     }
 
+    public function test_guideScoring_awards_title_and_category_bonus_once_per_guide(): void
+    {
+        // The title and category bonuses belong to the *guide*; occurrence counting belongs
+        // to a *text*. `search()` scores metadata and body as two texts, so bonuses living in
+        // the per-text scorer would be earned twice — silently doubling the weight of a title
+        // hit against body relevance. Both scorers are internal to ranking, so the split is
+        // pinned here rather than through the envelope.
+        $scoreGuide = new \ReflectionMethod(GuideService::class, 'scoreGuide');
+        $scoreOccurrences = new \ReflectionMethod(GuideService::class, 'scoreOccurrences');
+        $body = 'cardinality appears twice here: cardinality.';
+
+        $this->assertSame(2, $scoreOccurrences->invoke($this->service, 'cardinality', $body));
+        $this->assertSame(0, $scoreOccurrences->invoke($this->service, 'cardinality', 'unrelated text'));
+
+        // 2 occurrences + one title bonus (4) + one category bonus (3).
+        $this->assertSame(
+            9,
+            $scoreGuide->invoke($this->service, 'cardinality', 'Cardinality', $body, 'cardinality'),
+        );
+    }
+
     public function test_guideSearch_taskType_is_boost_not_hard_filter(): void
     {
         // A taskType string unlikely to appear verbatim in every matching guide body
