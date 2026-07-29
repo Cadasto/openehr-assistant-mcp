@@ -58,6 +58,6 @@ The three category codes (`431 persistent`, `451 episodic`, `433 event`) are def
 ## References
 
 - freshEHR, *Introduction to the 'CGEM' Framework* — <https://freshehr.notion.site/Introduction-to-the-CGEM-Framework-115ed58514b344da825c3b42c372aff2>
-- openEHR EHR Information Model — Compositions (persistent / episodic / event) and the Instruction State Machine: <https://specifications.openehr.org/releases/RM/latest/ehr.html> (see openehr://guides/specs/rm-ehr)
+- openEHR EHR Information Model — Compositions (persistent / episodic / event) and the Instruction State Machine: <https://specifications.openehr.org/releases/RM/development/ehr.html> (see openehr://guides/specs/rm-ehr)
 - openEHR Terminology — composition category codes 431 / 451 / 433 (see openehr://guides/specs/term-SupportTerminology)
 - openEHR Common IM — version lifecycle (completing/abandoning episodic compositions): openehr://guides/specs/rm-common

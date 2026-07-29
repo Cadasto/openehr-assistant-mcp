@@ -89,5 +89,5 @@ and the formal flattening and conformance algorithms.
 - openEHR AM — AOM 2 specification: https://specifications.openehr.org/releases/AM/development/AOM2.html
 - openEHR AM — ADL 2 specification: https://specifications.openehr.org/releases/AM/development/ADL2.html
 - openEHR AM — Operational Template (OPT 2): https://specifications.openehr.org/releases/AM/development/OPT2.html
-- openEHR AM — AOM 1.4 (legacy): https://specifications.openehr.org/releases/AM/latest/AOM1.4.html
+- openEHR AM — AOM 1.4 (legacy): https://specifications.openehr.org/releases/AM/development/AOM1.4.html
 - ISO 13606-2:2019 — Health informatics — EHR communication — Part 2: Archetype interchange specification.

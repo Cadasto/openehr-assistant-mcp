@@ -16,7 +16,7 @@ requirements:
     status: draft
     implementation: landed
     packages: [src/Tools/CkmService.php, src/Apis/CkmClient.php]
-    tests: [tests/Tools/CkmServiceTest.php, tests/Clients/CkmClientTest.php]
+    tests: [tests/Tools/CkmServiceTest.php, tests/Clients/CkmClientTest.php, tests/Tools/CkmServiceUpstreamShapeTest.php]
     adr: ["0002"]
 
   - id: REQ-F2
@@ -25,7 +25,7 @@ requirements:
     status: draft
     implementation: landed
     packages: [src/Tools/GuideService.php, src/Resources/Guides.php]
-    tests: [tests/Tools/GuideServiceTest.php, tests/Resources/GuidesTest.php]
+    tests: [tests/Tools/GuideServiceTest.php, tests/Resources/GuidesTest.php, tests/Tools/SearchEnvelopeTotalTest.php]
 
   - id: REQ-F3
     title: Curated examples search & get
@@ -33,7 +33,7 @@ requirements:
     status: draft
     implementation: landed
     packages: [src/Tools/ExamplesService.php, src/Resources/Examples.php]
-    tests: [tests/Tools/ExamplesServiceTest.php, tests/Resources/ExamplesTest.php]
+    tests: [tests/Tools/ExamplesServiceTest.php, tests/Resources/ExamplesTest.php, tests/Tools/SearchEnvelopeTotalTest.php]
 
   - id: REQ-F4
     title: Terminology resolution
@@ -101,6 +101,7 @@ requirements:
     status: draft
     implementation: landed
     packages: [resources/guides/howto/spec-lookup.md]
+    tests: [tests/Content/SpecLookupAndReadmeClaimsTest.php]
     verification: content review against ground_truth (see .sdd.yaml)
     adr: ["0005"]
 
@@ -127,7 +128,8 @@ requirements:
     canonical: docs/requirements.md
     status: draft
     implementation: landed
-    packages: [public/index.php]
+    packages: [public/index.php, src/constants.php]
+    tests: [tests/Content/DiscoveryCacheNamespaceTest.php]
     verification: server startup (cache warm path)
     adr: ["0001"]
 
@@ -165,3 +167,12 @@ requirements:
     packages: [src/Sdd/SpecCheck.php, scripts/spec-check.php]
     tests: [tests/Sdd/SpecCheckTest.php]
     adr: ["0006"]
+
+  - id: REQ-N9
+    title: Published MCP tool schemas validated in CI
+    canonical: docs/requirements.md
+    status: draft
+    implementation: landed
+    packages: [src/Tools/CkmService.php, src/Tools/GuideService.php, src/Tools/ExamplesService.php, src/Tools/TerminologyService.php, src/Tools/TypeSpecificationService.php]
+    tests: [tests/Tools/InputSchemaGuardTest.php, tests/Tools/InputSchemaValidationTest.php, tests/Tools/OutputSchemaConformanceTest.php, tests/Helpers/OutputSchemaValidatorTest.php, tests/Tools/SearchEnvelopeTotalTest.php]
+    verification: composer test (the SDK validates tool input but never tool output)
