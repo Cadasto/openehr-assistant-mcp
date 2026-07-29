@@ -24,7 +24,7 @@ requirements:
     canonical: docs/requirements.md
     status: draft
     implementation: landed
-    packages: [src/Tools/GuideService.php, src/Resources/Guides.php]
+    packages: [src/Tools/GuideService.php, src/Resources/Guides.php, src/Helpers/SearchTokenizer.php]
     tests: [tests/Tools/GuideServiceTest.php, tests/Resources/GuidesTest.php, tests/Tools/SearchEnvelopeTotalTest.php]
 
   - id: REQ-F3
@@ -32,7 +32,7 @@ requirements:
     canonical: docs/requirements.md
     status: draft
     implementation: landed
-    packages: [src/Tools/ExamplesService.php, src/Resources/Examples.php]
+    packages: [src/Tools/ExamplesService.php, src/Resources/Examples.php, src/Helpers/SearchTokenizer.php]
     tests: [tests/Tools/ExamplesServiceTest.php, tests/Resources/ExamplesTest.php, tests/Tools/SearchEnvelopeTotalTest.php]
 
   - id: REQ-F4

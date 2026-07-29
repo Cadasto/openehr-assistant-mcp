@@ -1,8 +1,8 @@
 # MCP audit remediation — design
 
 **Date:** 2026-07-28  
-**Branch:** `fix/mcp-audit-remediation`  
-**Status:** Approved — implemented on `fix/mcp-audit-remediation`  
+**Branch:** `fix/mcp-audit-hardening` (supersedes `fix/mcp-audit-remediation`, closed unmerged)  
+**Status:** Approved — implemented on `fix/mcp-audit-hardening`  
 
 ## Goal
 

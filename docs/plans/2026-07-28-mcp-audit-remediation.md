@@ -1,14 +1,14 @@
 # MCP Audit Remediation Implementation Plan
 
-**Status:** implemented — awaiting merge of `fix/mcp-audit-remediation`; archive under [`archive/`](archive/) once merged.
+**Status:** implemented — awaiting merge of `fix/mcp-audit-hardening`; archive under [`archive/`](archive/) once merged. (The work was first opened as `fix/mcp-audit-remediation`; that branch was closed unmerged and replaced by an identical, rebuilt history — archive on the merge of the branch named here.)
 
-**Implements:** [REQ-F2](../requirements.md) (guide discovery — search scoring), [REQ-F3](../requirements.md) (examples envelope), [REQ-F10](../requirements.md) + [REQ-N7](../requirements.md) (prompt policy split and context economy), [REQ-N1](../requirements.md) (spec-aligned content), [REQ-N4](../requirements.md) (discovery cache).
+**Implements:** [REQ-F2](../requirements.md) (guide discovery — search scoring), [REQ-F3](../requirements.md) (examples envelope), [REQ-F6](../requirements.md) (prompt arguments), [REQ-F10](../requirements.md) + [REQ-N7](../requirements.md) (prompt policy split and context economy), [REQ-N1](../requirements.md) (spec-aligned content), [REQ-N4](../requirements.md) (discovery cache), [REQ-N9](../requirements.md) (CI-validated tool schemas — Track B).
 
 **Decisions:** [ADR-0001](../decisions/0001-attribute-driven-discovery.md) (discovery cache namespacing), [ADR-0003](../decisions/0003-prompt-policy-split.md) (shared-policy resilience exception), [ADR-0005](../decisions/0005-spec-aligned-content-retrieval.md) (`development` stream).
 
 **Goal:** Fix guide search scoring, tighten MCP tool schemas with CI validation, parameterize prompts with safe substitution, align prompt/guide policy copy, and correct Examples MIME / README / spec-lookup wording — without changing the pinned MCP protocol version.
 
-**Architecture:** Track-ordered commits on `fix/mcp-audit-remediation` (A → B → D → E → F′). Changes stay in existing service/prompt classes plus a small test helper for output-schema validation. Protocol bump remains parked (documented in the design spec).
+**Architecture:** Track-ordered commits on `fix/mcp-audit-hardening` (A → B → D → E → F′). Changes stay in existing service/prompt classes plus a small test helper for output-schema validation. Protocol bump remains parked (documented in the design spec).
 
 **Tech Stack:** PHP 8.4, `mcp/sdk` ^0.7, PHPUnit, Docker-only runtime (`make up-dev` / compose exec).
 

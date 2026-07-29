@@ -29,8 +29,10 @@ register — see [development.md](development.md#gotcha--mcp-discovery-cache).
   - **Schemas are a contract, and the input half is enforced by the SDK** —
     `CallToolHandler` validates arguments against the generated `inputSchema`
     *before* your method runs, so a published constraint rejects bad calls rather
-    than clamping them. Four rules ([REQ-N9](requirements.md), guarded by
-    `tests/Tools/InputSchemaGuardTest.php`):
+    than clamping them. [REQ-N9](requirements.md) states normatively *what* must
+    hold and is the single canonical home for it; the four steps below are only
+    *how* to satisfy it in this codebase, guarded by
+    `tests/Tools/InputSchemaGuardTest.php`:
     1. Add method-level `#[Schema(additionalProperties: false)]` so unknown
        arguments are rejected instead of silently ignored.
     2. Constrain closed sets with `#[Schema(enum: [...])]`. For an **optional**

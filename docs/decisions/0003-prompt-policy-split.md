@@ -19,6 +19,11 @@ focused on **task-specific** constraints: required output structure and
 domain-specialised rules for that one prompt. Prompt classes load their body via
 `AbstractPrompt::loadPromptMessages()`.
 
+The split carries one deliberate carve-out: `resources/prompts/shared/policy.md`
+may restate a short subset of the global policy as a fallback for clients that
+drop the `instructions` field. It is a resilience layer, not a second source of
+truth — see the **Resilience exception** under Consequences for the bounds.
+
 ## Consequences
 
 - **Positive:** policy is stated once; prompt bodies stay short and scannable,
