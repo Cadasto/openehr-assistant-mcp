@@ -29,5 +29,5 @@ Explain this archetype for the requested audience.
 Archetype (ADL):
 {{adl_text}}
 
-Intended audience (clinician | implementer | modeller):
+Intended audience (optional: clinician | implementer | modeller):
 {{audience}}

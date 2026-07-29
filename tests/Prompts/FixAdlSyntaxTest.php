@@ -15,10 +15,13 @@ use ReflectionClass;
 #[CoversClass(FixAdlSyntax::class)]
 final class FixAdlSyntaxTest extends TestCase
 {
-    public function test_prompt_structure_placeholders_and_attribute(): void
+    public function test_prompt_structure_substitution_and_attribute(): void
     {
         $prompt = new FixAdlSyntax();
-        $messages = $prompt->__invoke();
+        $messages = $prompt->__invoke(
+            adl_text: 'archetype (adl_version=2.3.0) openEHR-EHR-OBSERVATION.blood_pressure.v2',
+            adl_version: '2',
+        );
 
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
@@ -32,11 +35,11 @@ final class FixAdlSyntaxTest extends TestCase
             $combined .= "\n" . $msg->content->text;
         }
 
-        // Guides references and placeholders
+        // Guides references and substituted values
         $this->assertStringContainsString('openehr://guides/archetypes/adl-syntax', $combined);
         $this->assertStringContainsString('openehr://guides/archetypes/adl-idioms-cheatsheet', $combined);
-        $this->assertStringContainsString('{{adl_text}}', $combined);
-        $this->assertStringContainsString('{{adl_version}}', $combined);
+        $this->assertStringContainsString('openEHR-EHR-OBSERVATION.blood_pressure.v2', $combined);
+        $this->assertDoesNotMatchRegularExpression('/\{\{[a-z0-9_]+\}\}/', $combined);
 
         // Attribute presence and expected name
         $rc = new ReflectionClass(FixAdlSyntax::class);
@@ -45,5 +48,11 @@ final class FixAdlSyntaxTest extends TestCase
         $args = $attrs[0]->getArguments();
         $this->assertArrayHasKey('name', $args);
         $this->assertSame('fix_adl_syntax', $args['name']);
+    }
+
+    public function test_requires_adl_text_and_adl_version(): void
+    {
+        $this->expectException(\Mcp\Exception\PromptGetException::class);
+        (new FixAdlSyntax())->__invoke(adl_text: 'archetype ...', adl_version: '');
     }
 }

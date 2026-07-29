@@ -19,7 +19,7 @@ Short workflow:
 
 Required output:
 1) Intent + format variant.
-2) Corrected or proposed JSON.
+2) Payload output, conditional on task_type: for design, the proposed JSON. For review-only (task_type = review), preserve the supplied Existing Flat/Structured JSON unchanged and give findings plus a minimal patch (targeted field fix) per issue.
 3) Rule violations and corrections: what was changed and why.
 4) Checklist self-assessment: rule-by-rule validation notes for context, cardinality, types, and optional RM attributes.
 

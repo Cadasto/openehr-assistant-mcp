@@ -15,10 +15,15 @@ use ReflectionClass;
 #[CoversClass(TranslateArchetypeLanguage::class)]
 final class TranslateArchetypeLanguageTest extends TestCase
 {
-    public function test_prompt_structure_placeholders_and_attribute(): void
+    public function test_prompt_structure_substitution_and_attribute(): void
     {
         $prompt = new TranslateArchetypeLanguage();
-        $messages = $prompt->__invoke();
+        $messages = $prompt->__invoke(
+            adl_text: 'archetype (adl_version=2.3.0) openEHR-EHR-OBSERVATION.blood_pressure.v2',
+            source_language_code: 'en',
+            target_language_code: 'nl',
+            translation_intent: 'add-new-language',
+        );
 
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
@@ -32,13 +37,14 @@ final class TranslateArchetypeLanguageTest extends TestCase
             $combined .= "\n" . $msg->content->text;
         }
 
-        // Guides references and placeholders
+        // Guides references and substituted values
         $this->assertStringContainsString('openehr://guides/archetypes/terminology', $combined);
         $this->assertStringContainsString('openehr://guides/archetypes/adl-idioms-cheatsheet', $combined);
-        $this->assertStringContainsString('{{adl_text}}', $combined);
-        $this->assertStringContainsString('{{source_language_code}}', $combined);
-        $this->assertStringContainsString('{{target_language_code}}', $combined);
-        $this->assertStringContainsString('{{translation_intent}}', $combined);
+        $this->assertStringContainsString('openEHR-EHR-OBSERVATION.blood_pressure.v2', $combined);
+        $this->assertStringContainsString('en', $combined);
+        $this->assertStringContainsString('nl', $combined);
+        $this->assertStringContainsString('add-new-language', $combined);
+        $this->assertDoesNotMatchRegularExpression('/\{\{[a-z0-9_]+\}\}/', $combined);
 
         // Attribute presence and expected name
         $rc = new ReflectionClass(TranslateArchetypeLanguage::class);
@@ -47,5 +53,16 @@ final class TranslateArchetypeLanguageTest extends TestCase
         $args = $attrs[0]->getArguments();
         $this->assertArrayHasKey('name', $args);
         $this->assertSame('translate_archetype_language', $args['name']);
+    }
+
+    public function test_requires_all_arguments(): void
+    {
+        $this->expectException(\Mcp\Exception\PromptGetException::class);
+        (new TranslateArchetypeLanguage())->__invoke(
+            adl_text: 'archetype ...',
+            source_language_code: 'en',
+            target_language_code: '',
+            translation_intent: 'add-new-language',
+        );
     }
 }

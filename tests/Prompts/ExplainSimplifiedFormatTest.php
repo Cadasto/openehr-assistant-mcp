@@ -15,10 +15,14 @@ use ReflectionClass;
 #[CoversClass(ExplainSimplifiedFormat::class)]
 final class ExplainSimplifiedFormatTest extends TestCase
 {
-    public function test_prompt_structure_placeholders_and_attribute(): void
+    public function test_prompt_structure_substitution_and_attribute(): void
     {
         $prompt = new ExplainSimplifiedFormat();
-        $messages = $prompt->__invoke();
+        $messages = $prompt->__invoke(
+            json_payload: '{"vital_signs/blood_pressure:0/systolic|magnitude": 120}',
+            template_id: 'vital_signs.v1',
+            context: 'clinician-facing summary',
+        );
 
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
@@ -33,9 +37,10 @@ final class ExplainSimplifiedFormatTest extends TestCase
         }
 
         $this->assertStringContainsString('openehr://guides/simplified_formats/principles', $combined);
-        $this->assertStringContainsString('{{json_payload}}', $combined);
-        $this->assertStringContainsString('{{template_id}}', $combined);
-        $this->assertStringContainsString('{{context}}', $combined);
+        $this->assertStringContainsString('vital_signs/blood_pressure:0/systolic|magnitude', $combined);
+        $this->assertStringContainsString('vital_signs.v1', $combined);
+        $this->assertStringContainsString('clinician-facing summary', $combined);
+        $this->assertDoesNotMatchRegularExpression('/\{\{[a-z0-9_]+\}\}/', $combined);
 
         $rc = new ReflectionClass(ExplainSimplifiedFormat::class);
         $attrs = $rc->getAttributes(McpPrompt::class);
@@ -43,5 +48,11 @@ final class ExplainSimplifiedFormatTest extends TestCase
         $args = $attrs[0]->getArguments();
         $this->assertArrayHasKey('name', $args);
         $this->assertSame('explain_simplified_format', $args['name']);
+    }
+
+    public function test_requires_json_payload(): void
+    {
+        $this->expectException(\Mcp\Exception\PromptGetException::class);
+        (new ExplainSimplifiedFormat())->__invoke(json_payload: '');
     }
 }

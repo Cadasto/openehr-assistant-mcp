@@ -31,3 +31,11 @@ domain-specialised rules for that one prompt. Prompt classes load their body via
 - **Negative:** contributors must know *where* a given instruction belongs;
   the rule of thumb (global → server-instructions, task-specific → prompt file)
   is documented in [AGENTS.md](../../AGENTS.md) and the authoring guidance.
+- **Resilience exception:** `resources/prompts/shared/policy.md` is a thin
+  user-role block prepended to every prompt. It deliberately restates a small
+  subset of always-on guidance (Guide-First, output-contract, scope control)
+  because some MCP clients under-inject or drop the server `instructions`
+  field entirely; without this restatement those clients would run prompts
+  with no global policy at all. `server-instructions.md` remains the single
+  canonical source for full global policy — the shared block is a fallback,
+  not a second source of truth, and must not grow beyond a short restatement.
