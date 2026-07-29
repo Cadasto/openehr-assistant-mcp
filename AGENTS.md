@@ -94,6 +94,7 @@ The full policy, fall-through order, and failure modes live in the [`spec-lookup
 
 - When updating guides under `resources/guides/`, prefer substantive improvements that add value; avoid trivial or small changes that do not improve the guidelines.
 - Guide content is consumed by AI agents: keep it short, concise, and scannable.
+- Do not flag or recommend `APP_VERSION` bumps during code-review tasks — version bumping is a manual action the maintainer invokes explicitly; leave it out of review findings.
 
 ## Learned Workspace Facts
 
