@@ -7,6 +7,49 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: [https://keepachangelog.com/en/1.1.0/](https://keepachangelog.com/en/1.1.0/)
 - Semantic Versioning: [https://semver.org/spec/v2.0.0.html](https://semver.org/spec/v2.0.0.html)
 
+## [0.20.0] - 2026-07-30
+
+### Added
+
+- Guides: new template-design guide `templates/cgem-framework` and runtime-serialisation guides `templates/opt-structure` and `templates/web-template`.
+- Guides: new spec digests — PROC (overview, task-planning, decision-language), CNF, and `lang-bmm3`.
+- SDD: machine-checked traceability — a `.sdd.yaml` descriptor, a `traceability.yaml` map, and a `spec-check` CI drift gate.
+- SDD: new REQ-N9 covering CI validation of published MCP tool input/output schemas.
+
+### Changed
+
+- Guides: broadened AQL versioning coverage (`VERSION` / `LATEST_VERSION` / `ALL_VERSIONS`, node/name predicates) and tightened ADL 1.4 archetype alignment.
+- Guides: extended the Simplified Formats guides (ordinal/proportion suffixes, participations, `ctx` defaults) and template serialisation guidance.
+- Guides: refreshed the `specs/` digests to development-branch class names and relations.
+- Prompts: aligned tool lists and workflows with current tools; added a CKM reuse-check, explain-only guardrails, and a `type_specification_explorer` coverage fix.
+- Prompts: consolidated the two CKM explorer prompts into a single `ckm_explorer`.
+- Dependencies: upgrade `mcp/sdk` to `^0.7` (eager element loading retained); refresh Guzzle, PHPUnit, PHPStan, and Symfony.
+- Tools: `guide_search` scoring is case-insensitive, Unicode-aware, and drops zero-score hits; `taskType` only re-ranks.
+- Tools: stricter input/output schemas (`additionalProperties: false`, nullable optional enums, required envelopes) — **breaking** for strict MCP clients.
+- Tools: search envelopes gained a `total` companion, counted before the result cap.
+- Tools: `guide_search` and `examples_search` share one query tokenizer; `topCandidates` no longer limits recall.
+- Prompts: real prompt arguments with safe `{{name}}` substitution — **breaking** for clients relying on parameterless `prompts/get`.
+- Prompts: `task_type` uses one vocabulary (`design | review`, plus `specialise` for archetypes) and is validated, as are review/artefact pairings — **breaking** for clients sending the old per-prompt tokens.
+- Prompts/docs: shared policy documented as a resilience layer, conditional full-rewrite output, and retrieved content treated as data.
+- Docs/guides: aligned `spec-lookup` wording on the `development` spec stream and dropped a false `guide_get` chunking claim.
+- Resources: Examples resource template no longer advertises an incorrect shared MIME type.
+- Server: the MCP discovery cache is namespaced by `APP_VERSION`; upgrading without a version bump requires clearing the cache (see [development.md](docs/development.md#gotcha--mcp-discovery-cache)).
+- Server instructions: ~13% shorter after folding thrice-stated discovery guidance into one policy bullet; guidance unchanged.
+
+### Fixed
+
+- Tools: multibyte-safe snippet slicing across the search tools; malformed UTF-8 previously broke the JSON-RPC response.
+- Tools: `guide_search` no longer returns an empty result for terms that appear only in a guide body.
+- Tools: CKM search rejects a drifted response envelope and logs dropped fields instead of reporting zero matches.
+- Tools: `type_specification_get` rejects a malformed BMM document instead of returning an incomplete payload.
+- Prompts: malformed or non-string arguments and unsubstitutable `{{tokens}}` are rejected by name.
+- Tools: CKM and terminology failures surface as tool errors carrying their message instead of a generic protocol error.
+- Tools: `ckm_archetype_get` reports an unresolvable identifier instead of mangling it into a doomed request — **breaking** for callers passing neither a CID nor an archetype-id.
+- Tools: CKM searches always score a minimum candidate window, so a small `maxResults` no longer changes which matches rank highest.
+- Resources: unreadable guide/example files are logged rather than silently dropped from `resources/list`.
+- Build: restored `make inspector` against MCP Inspector v2 — pinned image with an OS keyring, seeded dev targets, and a fixed auth-URL match.
+- Server: warn instead of silently starting without server instructions; harden bootstrap crash handling and preserve exception cause chain.
+
 ## [Unreleased]
 
 ### Added
@@ -48,6 +91,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Tools: CKM searches always score a minimum candidate window, so a small `maxResults` no longer changes which matches rank highest.
 - Resources: unreadable guide/example files are logged rather than silently dropped from `resources/list`.
 - Build: restored `make inspector` against MCP Inspector v2 — pinned image with an OS keyring, seeded dev targets, and a fixed auth-URL match.
+- Server: warn instead of silently starting without server instructions; harden bootstrap crash handling and preserve exception cause chain.
 
 ## [0.19.0] - 2026-06-09
 
