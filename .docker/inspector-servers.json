@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "openehr-assistant-dev": {
+      "type": "streamable-http",
+      "url": "http://ingress:8343/mcp"
+    },
+    "openehr-assistant-dev-vhost": {
+      "type": "streamable-http",
+      "url": "http://openehr-assistant-mcp.local:8343/mcp"
+    }
+  }
+}

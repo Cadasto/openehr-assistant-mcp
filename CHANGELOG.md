@@ -45,6 +45,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Tools: CKM and terminology failures surface as tool errors carrying their message instead of a generic protocol error.
 - Tools: `ckm_archetype_get` reports an unresolvable identifier instead of mangling it into a doomed request — **breaking** for callers passing neither a CID nor an archetype-id.
 - Resources: unreadable guide/example files are logged rather than silently dropped from `resources/list`.
+- Build: restored `make inspector` against MCP Inspector v2 — pinned image with an OS keyring, seeded dev targets, and a fixed auth-URL match.
 
 ## [0.19.0] - 2026-06-09
 

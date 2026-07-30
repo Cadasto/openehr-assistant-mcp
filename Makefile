@@ -76,11 +76,11 @@ ci: ## Run CI checks in dev container (spec-check + PHPStan + tests)
 
 ##@ MCP inspector UI
 
-inspector: ## Run modelcontextprotocol/inspector UI (prints the auth URL; target http://openehr-assistant-mcp.local:8343/mcp)
-	$(DOCKER_COMPOSE_DEV) up -d inspector
+inspector: ## Run modelcontextprotocol/inspector UI (prints the auth URL; seeded target http://ingress:8343/mcp)
+	$(DOCKER_COMPOSE_DEV) up -d --build inspector
 	@printf 'Waiting for MCP Inspector'; \
 	for i in $$(seq 1 30); do \
-		url=$$($(DOCKER_COMPOSE_DEV) logs inspector 2>/dev/null | grep -oE 'http://[^[:space:]]*:6274/\?MCP_PROXY_AUTH_TOKEN=[A-Za-z0-9]+' | tail -1); \
+		url=$$($(DOCKER_COMPOSE_DEV) logs inspector 2>/dev/null | grep -oE 'http://[^[:space:]]*:6274/?\?MCP_(INSPECTOR_API|PROXY_AUTH)_TOKEN=[A-Za-z0-9]+' | tail -1); \
 		if [ -n "$$url" ]; then \
 			printf '\n\nMCP Inspector ready — open:\n  %s\n' "$$(echo "$$url" | sed 's#://0\.0\.0\.0:#://localhost:#')"; \
 			exit 0; \

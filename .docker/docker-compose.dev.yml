@@ -33,18 +33,31 @@ services:
       - "443:443"
       - "443:443/udp"
 
-  # MCP Inspector UI — on-demand (not started by `make up-dev`; see profile).
-  # Runs on the project network so its proxy can reach the server at
-  # http://openehr-assistant-mcp.${DOMAIN:-local}:8343/mcp (or http://ingress:8343/mcp).
+  # MCP Inspector UI (v2) — on-demand (not started by `make up-dev`; see profile).
+  #
+  # Built from the `inspector` stage rather than pulled: the upstream v2 image
+  # needs an OS keyring it cannot reach in a container. Stage and digest pin live
+  # in .docker/Dockerfile. HOST, CLIENT_PORT and DANGEROUSLY_BIND_ALL_INTERFACES
+  # are already set in the upstream image, so they are not repeated here; the v1
+  # proxy port 6277 no longer exists in v2.
+  #
+  # v2 takes its server list from a file. `--config` is a read-only session file
+  # (never rewritten, seeded or migrated), so the targets below stay under version
+  # control — drop the flag if you would rather add servers ad-hoc in the UI. The
+  # Inspector's backend dials the server from inside this container, so the targets
+  # use compose-network names; both are in the app's MCP_ALLOWED_HOSTS allow-list.
   inspector:
-    image: ghcr.io/modelcontextprotocol/inspector:latest
-    pull_policy: always
+    image: cadasto/openehr-assistant-mcp-inspector:latest
+    build:
+      context: ..
+      dockerfile: .docker/Dockerfile
+      target: inspector
     profiles: ["inspector"]
-    environment:
-      HOST: 0.0.0.0
+    command: ["--web", "--config", "/config/inspector-servers.json"]
+    volumes:
+      - ./inspector-servers.json:/config/inspector-servers.json:ro
     ports:
       - "6274:6274"
-      - "6277:6277"
 
 volumes:
   composer-cache:

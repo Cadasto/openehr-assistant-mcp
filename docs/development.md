@@ -47,6 +47,7 @@ Cursor: add the dev-plugin repository under **Settings → Plugins** (Git URL or
 | `app` | Application container — production-like and (with dev overrides) development runs. |
 | `ingress` | Caddy reverse proxy. |
 | `node` | Dev-only — Node + curl, used by `make conformance` and other npx/curl tooling. |
+| `inspector` | Dev-only, on-demand (`inspector` profile) — MCP Inspector v2 UI; see [below](#testing-with-the-mcp-inspector-ui). |
 
 ## Transports (REQ-F9)
 
@@ -56,29 +57,86 @@ Cursor: add the dev-plugin repository under **Settings → Plugins** (Git URL or
 
 ## Testing with the MCP Inspector UI
 
-With the dev stack running (`make up-dev`), launch the [MCP Inspector](https://github.com/modelcontextprotocol/inspector):
+With the dev stack running (`make up-dev`), launch the
+[MCP Inspector](https://github.com/modelcontextprotocol/inspector) (**v2**):
 
 ```bash
-make inspector        # prints the UI URL, e.g. http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=...
+make inspector        # builds if needed, then prints the UI URL
+                      # e.g. http://localhost:6274?MCP_INSPECTOR_API_TOKEN=...
 ```
 
-Open the printed URL (the token is required), then configure the connection:
+Open the printed URL — the token is required — and pick a server from the list.
+Two targets are seeded from [`.docker/inspector-servers.json`](../.docker/inspector-servers.json),
+so there is nothing to type:
 
-| Field | Value |
-|-------|-------|
-| **Transport Type** | `Streamable HTTP` |
-| **URL** | `http://openehr-assistant-mcp.local:8343/` |
-| **Via proxy** | ✅ checked |
-
-Notes:
-
-- **Via proxy** must be checked — the connection is made by the Inspector's proxy
-  process (on the dev network), not directly from your browser.
-- `openehr-assistant-mcp.local` must resolve to the dev host on your machine — add a
-  hosts-file entry if needed. It is pre-listed in `MCP_ALLOWED_HOSTS`, so the
-  streamable-http transport's DNS-rebinding check (SDK ≥ 0.6) accepts that host.
+| Server | URL |
+|--------|-----|
+| `openehr-assistant-dev` | `http://ingress:8343/mcp` |
+| `openehr-assistant-dev-vhost` | `http://openehr-assistant-mcp.local:8343/mcp` |
 
 Stop it with `make inspector-stop`.
+
+### Why those hostnames
+
+The Inspector's **backend** dials the MCP server from inside its own container, so
+the target must be a compose-network name — not a host-side one. Both seeded names
+are in the app's `MCP_ALLOWED_HOSTS`, so the streamable-http transport's
+DNS-rebinding check (SDK ≥ 0.6) accepts them. `ingress` is the compose service and
+is independent of `DOMAIN`; the vhost form additionally needs
+`openehr-assistant-mcp.local` in your hosts file.
+
+Host-side addresses **do not** work from the container and fail in distinct ways:
+`host.docker.internal:8343` resolves but is rejected with
+`403 Forbidden: Invalid Host header` (not in the allow-list), and `127.0.0.1:8343`
+is the Inspector container's own loopback, so the connection is refused.
+
+### CLI and TUI
+
+v2 also ships a scriptable CLI and a terminal UI, useful for a fast loop with no
+browser. Route them through the image's entrypoint wrapper (see the gotcha below);
+`--config`/`--server` reuse the same seeded targets:
+
+```bash
+docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml \
+  exec inspector /usr/local/bin/inspector-entrypoint --cli \
+  --config /config/inspector-servers.json --server openehr-assistant-dev \
+  --method tools/list
+```
+
+An ad-hoc URL works too: `… --cli http://ingress:8343/mcp --method tools/list`.
+
+### Gotcha — v2 needs an OS keyring
+
+v2 keeps per-server secrets in an OS keychain (`@napi-rs/keyring` → libsecret over
+D-Bus). The upstream image ships neither, so **every** `/api/servers` call fails
+with `Couldn't access platform storage: PermissionDenied` and the UI cannot list or
+add any server. The `inspector` stage in [`.docker/Dockerfile`](../.docker/Dockerfile)
+therefore installs `libsecret`/`gnome-keyring` and runs the Inspector inside a
+private D-Bus session with a throwaway unlocked keyring — see
+[`.docker/inspector-entrypoint.sh`](../.docker/inspector-entrypoint.sh).
+
+Because `dbus-run-session` wraps only the container's main process, a plain
+`docker compose exec … mcp-inspector` hits the same error — invoke
+`/usr/local/bin/inspector-entrypoint` instead, as shown above.
+
+### Migrating from v1
+
+`:latest` moved to the v2.0.0 rewrite on 2026-07-28, so the image is pinned by
+digest in the `inspector` stage; bump it deliberately. What changed:
+
+| | v1 | v2 |
+|---|---|---|
+| Auth token env var | `MCP_PROXY_AUTH_TOKEN` | `MCP_INSPECTOR_API_TOKEN` |
+| Printed URL | `…:6274/?TOKEN=…` | `…:6274?TOKEN=…` (no `/`) |
+| Proxy port `6277` | separate proxy process | removed |
+| "Via proxy" toggle | UI checkbox | removed — always server-side |
+| Server list | typed into the UI | `--config` (read-only) / `--catalog` (writable) |
+| Packaging | three sub-packages | one package: `--web` / `--cli` / `--tui` |
+
+Drop the `--config` flag from the `inspector` service's `command` if you would
+rather add servers ad-hoc in the UI; they then persist to the container's own
+writable catalog (`~/.mcp-inspector/mcp.json`), which is not volume-mounted and so
+is lost when the container is removed.
 
 ## Configuration
 
