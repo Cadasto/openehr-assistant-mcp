@@ -1,8 +1,8 @@
 # MCP audit remediation — design
 
 **Date:** 2026-07-28  
-**Branch:** `fix/mcp-audit-hardening` (supersedes `fix/mcp-audit-remediation`, closed unmerged)  
-**Status:** Approved — implemented on `fix/mcp-audit-hardening`  
+**Branch:** `fix/mcp-audit-hardening` (superseded `fix/mcp-audit-remediation`, closed unmerged)  
+**Status:** done — merged to `main` as `545be7d` ([PR #25](https://github.com/Cadasto/openehr-assistant-mcp/pull/25)) and archived  
 
 ## Goal
 

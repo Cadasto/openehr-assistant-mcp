@@ -1,6 +1,6 @@
 # MCP Audit Remediation Implementation Plan
 
-**Status:** implemented — awaiting merge of `fix/mcp-audit-hardening`; archive under [`archive/`](archive/) once merged. (The work was first opened as `fix/mcp-audit-remediation`; that branch was closed unmerged and replaced by an identical, rebuilt history — archive on the merge of the branch named here.)
+**Status:** done — merged to `main` as `545be7d` ([PR #25](https://github.com/Cadasto/openehr-assistant-mcp/pull/25), 2026-07-29) and archived. (The work was first opened as `fix/mcp-audit-remediation`; that branch was closed unmerged and replaced by an identical, rebuilt history which merged as `fix/mcp-audit-hardening`.)
 
 **Implements:** [REQ-F2](../requirements.md) (guide discovery — search scoring), [REQ-F3](../requirements.md) (examples envelope), [REQ-F6](../requirements.md) (prompt arguments), [REQ-F10](../requirements.md) + [REQ-N7](../requirements.md) (prompt policy split and context economy), [REQ-N1](../requirements.md) (spec-aligned content), [REQ-N4](../requirements.md) (discovery cache), [REQ-N9](../requirements.md) (CI-validated tool schemas — Track B).
 
