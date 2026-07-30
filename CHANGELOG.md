@@ -34,6 +34,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Docs/guides: aligned `spec-lookup` wording on the `development` spec stream and dropped a false `guide_get` chunking claim.
 - Resources: Examples resource template no longer advertises an incorrect shared MIME type.
 - Server: the MCP discovery cache is namespaced by `APP_VERSION`; upgrading without a version bump requires clearing the cache (see [development.md](docs/development.md#gotcha--mcp-discovery-cache)).
+- Server instructions: ~13% shorter after folding thrice-stated discovery guidance into one policy bullet; guidance unchanged.
 
 ### Fixed
 
