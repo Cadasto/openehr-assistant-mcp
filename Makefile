@@ -112,7 +112,11 @@ docs-serve: ## Serve product website locally on http://127.0.0.1:8000
 
 docs-clean: ## Remove docs-build/ and the MkDocs plugin cache
 	@test -n "$(DOCS_BUILD)" || { echo "docs-clean: DOCS_BUILD must not be empty"; exit 1; }
-	rm -rf "$(CURDIR)/$(DOCS_BUILD)" "$(CURDIR)/$(MKDOCS_DIR)/.cache"
+	@rm -rf "$(CURDIR)/$(DOCS_BUILD)" "$(CURDIR)/$(MKDOCS_DIR)/.cache" \
+	        "$(CURDIR)/$(MKDOCS_DIR)/hooks/__pycache__" 2>/dev/null \
+	  || { echo "docs-clean: output is root-owned (built before the -u fix) — removing in a container"; \
+	       docker run --rm -v "$(CURDIR):/docs" alpine:3.20 sh -c \
+	         'rm -rf /docs/$(DOCS_BUILD) /docs/$(MKDOCS_DIR)/.cache /docs/$(MKDOCS_DIR)/hooks/__pycache__'; }
 
 ##@ MCP inspector UI
 
