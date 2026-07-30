@@ -22,6 +22,17 @@ final readonly class CkmService
     private const int MAX_RESULTS_LIMIT = 50;
     /** Fetch a wider candidate window than requested so re-ranking can surface concepts CKM ranked low. */
     private const float FETCH_SIZE_MULTIPLIER = 3.0;
+    /**
+     * Floor on the API fetch window, so a small `maxResults` still scores a usefully wide
+     * candidate set. Without it the window scaled purely with `maxResults`, which made the
+     * ranking depend on how many results the caller asked for: a generic keyword scored
+     * against 9 candidates (`maxResults` 3) surfaced a different top 3 than the same keyword
+     * scored against 30 (`maxResults` 10). At 30 the whole 1..10 range shares one window, so
+     * results are stable across it. Above 10 the multiplier takes over and the window widens
+     * again, so top-N is not a strict prefix of top-M across that boundary — a deliberate
+     * trade-off against always fetching FETCH_SIZE_LIMIT rows.
+     */
+    private const int FETCH_SIZE_MIN = 30;
     /** Hard cap on the API fetch window, decoupled from MAX_RESULTS_LIMIT (the returned-count cap). */
     private const int FETCH_SIZE_LIMIT = 60;
 
@@ -125,7 +136,10 @@ final readonly class CkmService
     ): array {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
-        $fetchSize = min(self::FETCH_SIZE_LIMIT, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER));
+        $fetchSize = min(
+            self::FETCH_SIZE_LIMIT,
+            max(self::FETCH_SIZE_MIN, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER)),
+        );
         $rmClass = $this->normalizeRmClassFilter($rmClass);
         try {
             $response = $this->apiClient->get('v1/archetypes', [
@@ -342,7 +356,10 @@ final readonly class CkmService
     ): array {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
-        $fetchSize = min(self::FETCH_SIZE_LIMIT, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER));
+        $fetchSize = min(
+            self::FETCH_SIZE_LIMIT,
+            max(self::FETCH_SIZE_MIN, (int) ceil($maxResults * self::FETCH_SIZE_MULTIPLIER)),
+        );
         try {
             $response = $this->apiClient->get('v1/templates', [
                 RequestOptions::QUERY => [

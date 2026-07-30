@@ -11,6 +11,7 @@ use Mcp\Exception\ToolCallException;
 use Mcp\Schema\Content\TextContent;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Log\NullLogger;
@@ -146,8 +147,9 @@ final class CkmServiceTest extends TestCase
     public function testArchetypeSearchFetchesMoreThenSlicesToMaxResults(): void
     {
         $maxResults = 10;
-        // Updated for the wider re-ranking window: multiplier 3.0, capped at FETCH_SIZE_LIMIT (60).
-        $fetchSize = min(60, (int) ceil($maxResults * 3.0)); // 30
+        // Re-ranking window: multiplier 3.0, floored at FETCH_SIZE_MIN (30), capped at
+        // FETCH_SIZE_LIMIT (60). 10 * 3.0 = 30, exactly the floor.
+        $fetchSize = min(60, max(30, (int) ceil($maxResults * 3.0))); // 30
         $payload = array_fill(0, $fetchSize, ['cid' => '1.0.0', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.foo.v1', 'resourceMainDisplayName' => 'Foo']);
 
         $capturedQuery = null;
@@ -166,9 +168,122 @@ final class CkmServiceTest extends TestCase
         $svc = new CkmService($this->client, $this->logger);
         $result = $svc->archetypeSearch('foo', $maxResults);
 
-        $this->assertSame($fetchSize, (int) ($capturedQuery['size'] ?? 0), 'Request size should be 3.0× maxResults (capped) for ranking');
+        $this->assertSame($fetchSize, (int) ($capturedQuery['size'] ?? 0), 'Request size should be 3.0× maxResults, floored and capped, for ranking');
         $this->assertSame(0, (int) ($capturedQuery['offset'] ?? -1), 'Request offset should always be 0');
         $this->assertCount($maxResults, $result['items'], 'Returned items should be sliced to maxResults');
+    }
+
+    /**
+     * A small `maxResults` must not shrink the scored candidate set, or the ranking would
+     * depend on how many results the caller asked for: the top 3 of a `maxResults` 3 search
+     * would be drawn from a different candidate pool than the top 3 of a `maxResults` 10 one.
+     * FETCH_SIZE_MIN keeps the whole 1..10 range on one window, so those agree.
+     *
+     * @return list<array{int}>
+     */
+    public static function smallMaxResultsProvider(): array
+    {
+        return [[1], [2], [3], [5], [8], [10]];
+    }
+
+    #[DataProvider('smallMaxResultsProvider')]
+    public function testArchetypeSearchFloorsFetchSizeSoRankingIsStableForSmallMaxResults(int $maxResults): void
+    {
+        $capturedQuery = null;
+        $this->client
+            ->expects($this->once())
+            ->method('get')
+            ->with('v1/archetypes', $this->callback(function (array $opts) use (&$capturedQuery): bool {
+                $capturedQuery = $opts['query'] ?? [];
+                return true;
+            }))
+            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], '[]'));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $svc->archetypeSearch('blood', $maxResults);
+
+        $this->assertSame(
+            30,
+            (int) ($capturedQuery['size'] ?? 0),
+            "maxResults={$maxResults} should still score FETCH_SIZE_MIN (30) candidates",
+        );
+    }
+
+    #[DataProvider('smallMaxResultsProvider')]
+    public function testTemplateSearchFloorsFetchSizeSoRankingIsStableForSmallMaxResults(int $maxResults): void
+    {
+        $capturedQuery = null;
+        $this->client
+            ->expects($this->once())
+            ->method('get')
+            ->with('v1/templates', $this->callback(function (array $opts) use (&$capturedQuery): bool {
+                $capturedQuery = $opts['query'] ?? [];
+                return true;
+            }))
+            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], '[]'));
+
+        $svc = new CkmService($this->client, $this->logger);
+        $svc->templateSearch('vital', $maxResults);
+
+        $this->assertSame(
+            30,
+            (int) ($capturedQuery['size'] ?? 0),
+            "maxResults={$maxResults} should still score FETCH_SIZE_MIN (30) candidates",
+        );
+    }
+
+    /**
+     * The property the fetch-size floor exists to guarantee: for a generic keyword, the top 3
+     * of a `maxResults` 3 search are the first 3 of a `maxResults` 10 search. The upstream rows
+     * are ordered so that the best-scoring candidate sits at CKM position 25 — reachable only
+     * because the window no longer shrinks with `maxResults`.
+     */
+    public function testArchetypeSearchTopResultsDoNotDependOnMaxResults(): void
+    {
+        $payload = [];
+        for ($i = 0; $i < 30; $i++) {
+            // Low-relevance filler: keyword matches the display name only as a substring.
+            $payload[] = [
+                'cid' => "filler-{$i}",
+                'resourceMainId' => "openEHR-EHR-OBSERVATION.bloodstream_{$i}.v1",
+                'resourceMainDisplayName' => 'Bloodstream infection',
+                'projectName' => 'Other',
+                'status' => 'DRAFT',
+            ];
+        }
+        // The strongest candidate, buried where a maxResults=3 window (9 rows) would never see it.
+        $payload[25] = [
+            'cid' => 'winner',
+            'resourceMainId' => 'openEHR-EHR-OBSERVATION.blood.v1',
+            'resourceMainDisplayName' => 'Blood',
+            'projectName' => 'Common resources',
+            'status' => 'PUBLISHED',
+        ];
+
+        // Honour the requested `size` the way CKM does, so a narrower window really does hide
+        // the later rows — otherwise this test would pass even with the floor removed.
+        $this->client
+            ->method('get')
+            ->willReturnCallback(function (string $path, array $opts) use ($payload): Response {
+                $size = (int) ($opts['query']['size'] ?? count($payload));
+
+                return new Response(
+                    200,
+                    ['Content-Type' => 'application/json'],
+                    json_encode(array_slice($payload, 0, $size), JSON_THROW_ON_ERROR),
+                );
+            });
+
+        $svc = new CkmService($this->client, $this->logger);
+        $narrow = $svc->archetypeSearch('blood', 3);
+        $wide = $svc->archetypeSearch('blood', 10);
+
+        $this->assertSame('winner', $narrow['items'][0]['cid'] ?? null, 'The best candidate must survive a small maxResults');
+        $this->assertSame(
+            array_column($narrow['items'], 'cid'),
+            array_slice(array_column($wide['items'], 'cid'), 0, 3),
+            'top-3 of maxResults=3 must be the first 3 of maxResults=10',
+        );
     }
 
     public function testArchetypeSearchAllKeywordsMatchedScoresHigherThanPartialMatch(): void
@@ -378,8 +493,9 @@ final class CkmServiceTest extends TestCase
     public function testTemplateSearchFetchesMoreThenSlicesToMaxResults(): void
     {
         $maxResults = 8;
-        // Updated for the wider re-ranking window: multiplier 3.0, capped at FETCH_SIZE_LIMIT (60).
-        $fetchSize = min(60, (int) ceil($maxResults * 3.0)); // 24
+        // Re-ranking window: multiplier 3.0, floored at FETCH_SIZE_MIN (30), capped at
+        // FETCH_SIZE_LIMIT (60). 8 * 3.0 = 24, so the floor applies here.
+        $fetchSize = min(60, max(30, (int) ceil($maxResults * 3.0))); // 30
 
         $payload = array_fill(0, $fetchSize, ['cid' => '1.0.0', 'resourceMainDisplayName' => 'Vital', 'projectName' => 'Test']);
 
@@ -399,7 +515,7 @@ final class CkmServiceTest extends TestCase
         $svc = new CkmService($this->client, $this->logger);
         $result = $svc->templateSearch('vital', $maxResults);
 
-        $this->assertSame($fetchSize, (int) ($capturedQuery['size'] ?? 0), 'Request size should be 3.0× maxResults (capped) for ranking');
+        $this->assertSame($fetchSize, (int) ($capturedQuery['size'] ?? 0), 'Request size should be 3.0× maxResults, floored and capped, for ranking');
         $this->assertSame(0, (int) ($capturedQuery['offset'] ?? -1), 'Request offset should always be 0');
         $this->assertCount($maxResults, $result['items'], 'Returned items should be sliced to maxResults');
     }
