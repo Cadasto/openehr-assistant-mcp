@@ -103,6 +103,8 @@ docs-check: docs-build ## Build the site and assert the published output is comp
 	  || { echo "docs-check: install page has no install content — is pages/install.md still a symlink?"; exit 1; }; \
 	! grep -rqE 'https?://fonts\.(googleapis|gstatic)\.com' "$(DOCS_BUILD)" \
 	  || { echo "docs-check: remote font URLs in output — the privacy plugin did not localise them"; exit 1; }; \
+	! grep -rqE '(href|src)="[^":]*\.md"' "$(DOCS_BUILD)" \
+	  || { echo "docs-check: an unresolved relative .md path reached the output — templates must resolve links, strict mode only checks Markdown"; exit 1; }; \
 	echo "docs-check: OK"
 
 docs-serve: ## Serve product website locally on http://127.0.0.1:8000

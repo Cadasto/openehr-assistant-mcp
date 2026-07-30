@@ -71,6 +71,11 @@ hooks:
   - hooks/link_fix.py
 
 markdown_extensions:
+  # Renders `:material-xxx:` shortcodes as inline SVG from the theme's bundled
+  # icon sets — no sprite sheet and no third-party request.
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - admonition
   - pymdownx.details
   - pymdownx.superfences

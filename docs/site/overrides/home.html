@@ -1,5 +1,66 @@
+{#-
+  Landing page template.
+
+  The theme's chrome (header, tabs, both sidebars, the width-constrained content
+  grid and the docs footer) is replaced so the page reads as a product landing
+  page rather than a documentation page. Page content is rendered in the `hero`
+  block because that block sits outside `md-main__inner`, which is what makes it
+  full-bleed; `md-typeset` is kept so buttons, code blocks and typography still
+  pick up the theme's styles. Documentation pages are untouched — they extend
+  `main.html` and keep the full theme chrome, including search.
+-#}
 {% extends "main.html" %}
 
-{% block content %}
-  {{ page.content }}
+{% block header %}
+  <header class="home-nav">
+    <div class="home-nav__inner">
+      {#- `url` only prefixes base_url, so a doc path would ship verbatim. -#}
+      <a class="home-nav__brand" href="{{ nav.homepage.url | url }}">
+        <img src="{{ config.theme.logo | url }}" alt="">
+        <span>{{ config.site_name }}</span>
+      </a>
+      <nav class="home-nav__links">
+        {% for item in nav %}
+          {% if not (item.is_page and item.url == page.url) %}
+            <a href="{{ item.url | url }}">{{ item.title }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if config.repo_url %}
+          <a class="home-nav__repo" href="{{ config.repo_url }}">
+            {% include ".icons/fontawesome/brands/github.svg" %}
+            GitHub
+          </a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+{% endblock %}
+
+{% block tabs %}{% endblock %}
+
+{% block hero %}
+  <div class="home md-typeset">
+    {{ page.content }}
+  </div>
+{% endblock %}
+
+{% block site_nav %}{% endblock %}
+{% block container %}{% endblock %}
+
+{% block footer %}
+  <footer class="home-footer">
+    <div class="home-footer__inner">
+      <p class="home-footer__copyright">{{ config.copyright }}</p>
+      <nav class="home-footer__links">
+        {% for item in nav %}
+          {% if not (item.is_page and item.url == page.url) %}
+            <a href="{{ item.url | url }}">{{ item.title }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if config.repo_url %}
+          <a href="{{ config.repo_url }}">Repository</a>
+        {% endif %}
+      </nav>
+    </div>
+  </footer>
 {% endblock %}
