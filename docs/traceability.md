@@ -49,6 +49,7 @@ the Implementation column is either dead code or an undocumented requirement.
 | **REQ-N7** | Concise AI-facing content | guide/prompt bodies, policy split | `tests/Prompts/PromptCompositionTest.php` | 0003 |
 | **REQ-N8** | Machine-checked traceability drift gate | `src/Sdd/SpecCheck.php`, `scripts/spec-check.php` | `tests/Sdd/SpecCheckTest.php` | 0006 |
 | **REQ-N9** | Published MCP tool schemas validated in CI | `src/Tools/*.php` (`#[Schema]` / `outputSchema`) | `tests/Tools/{InputSchemaGuardTest,InputSchemaValidationTest,OutputSchemaConformanceTest,SearchEnvelopeTotalTest}.php`, `tests/Helpers/OutputSchemaValidatorTest.php` | — |
+| **REQ-N10** | Install docs canonical and externally consumable | `docs/install.md` | `tests/Content/InstallDocContractTest.php` | 0007 |
 
 ## Guard tests (cross-cutting invariants)
 
