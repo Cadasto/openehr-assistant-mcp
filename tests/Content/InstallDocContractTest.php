@@ -31,6 +31,13 @@ final class InstallDocContractTest extends TestCase
 
     private const HOSTED_ENDPOINT = 'openehr-assistant-mcp.apps.cadasto.com';
 
+    /**
+     * Heading of the zero-install option, matched by meaning so the title stays free to
+     * change. `self-hosted` is excluded deliberately: it names the opposite arrangement,
+     * so a section titled that way must not be able to satisfy this guard.
+     */
+    private const HOSTED_HEADING = '/(?<!self-)hosted/i';
+
     public function test_the_install_doc_exists_at_the_path_the_website_fetches(): void
     {
         $this->assertFileExists(
@@ -42,7 +49,7 @@ final class InstallDocContractTest extends TestCase
 
     public function test_it_still_offers_the_hosted_endpoint_as_an_option(): void
     {
-        $section = $this->sectionMatching('/hosted/i');
+        $section = $this->sectionMatching(self::HOSTED_HEADING);
 
         $this->assertNotNull(
             $section,
@@ -59,6 +66,20 @@ final class InstallDocContractTest extends TestCase
                 . 'reader which endpoint the hosted option is.',
                 self::HOSTED_ENDPOINT,
             ),
+        );
+    }
+
+    public function test_its_code_fences_are_balanced(): void
+    {
+        $fences = preg_match_all('/^(```|~~~)/m', $this->installDoc());
+
+        $this->assertSame(
+            0,
+            $fences % 2,
+            'docs/install.md leaves a code fence unclosed. The website publishes this file, so '
+            . 'every heading after that point renders as code — and the section guard above '
+            . 'reads the same run-on block, which would let a hostname anywhere below the '
+            . 'hosted section satisfy it.',
         );
     }
 
@@ -93,7 +114,8 @@ final class InstallDocContractTest extends TestCase
      * Body of the first `##` section whose heading matches, or null if there is none.
      *
      * Fenced blocks are skipped so a `##` inside a shell or JSON sample cannot be read
-     * as a heading and truncate the section early.
+     * as a heading and truncate the section early. That relies on the fences balancing,
+     * which is why an unclosed one is a failure of its own rather than a silent run-on.
      */
     private function sectionMatching(string $headingPattern): ?string
     {
