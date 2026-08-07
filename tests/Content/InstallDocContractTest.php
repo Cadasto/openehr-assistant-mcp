@@ -15,15 +15,21 @@ use PHPUnit\Framework\TestCase;
  * publishes the result. That keeps a single source, at the cost of making this file's
  * path and shape an external contract.
  *
- * Nothing in this repository would otherwise notice a break: renaming the file, dropping
- * the hosted-endpoint section, or converting the sibling links to some other form all
- * leave this build green and silently damage a published page one release later. These
- * assertions are deliberately shallow — they pin the contract, not the prose.
+ * Nothing would otherwise notice a break. Renaming the file, dropping the hosted-endpoint
+ * section, or adding a sibling link that does not resolve all leave this build green and
+ * damage a published page one release later — and the consuming site cannot be relied on
+ * to catch it either, because it frames the fetched document with prose of its own and
+ * checks the rendered result, so its assertions can pass over impoverished content.
+ *
+ * The assertions pin the contract, not the prose: a section is located by meaning rather
+ * than by its exact title, so install.md stays free to be reworded.
  */
 #[CoversNothing]
 final class InstallDocContractTest extends TestCase
 {
     private const INSTALL_DOC = __DIR__ . '/../../docs/install.md';
+
+    private const HOSTED_ENDPOINT = 'openehr-assistant-mcp.apps.cadasto.com';
 
     public function test_the_install_doc_exists_at_the_path_the_website_fetches(): void
     {
@@ -34,13 +40,25 @@ final class InstallDocContractTest extends TestCase
         );
     }
 
-    public function test_it_still_documents_the_hosted_endpoint(): void
+    public function test_it_still_offers_the_hosted_endpoint_as_an_option(): void
     {
+        $section = $this->sectionMatching('/hosted/i');
+
+        $this->assertNotNull(
+            $section,
+            'docs/install.md must keep a top-level section offering the hosted endpoint. The '
+            . 'website publishes this file as its install page, so dropping the section removes '
+            . 'the zero-install path a reader is most likely to want.',
+        );
         $this->assertStringContainsString(
-            'openehr-assistant-mcp.apps.cadasto.com',
-            $this->installDoc(),
-            'the website asserts the published install page mentions the hosted endpoint; '
-            . 'removing it here fails that downstream check instead of this one',
+            self::HOSTED_ENDPOINT,
+            $section,
+            sprintf(
+                'the hosted-endpoint section of docs/install.md must name %s. The hostname '
+                . 'appearing only in a client-config snippet further down does not tell a '
+                . 'reader which endpoint the hosted option is.',
+                self::HOSTED_ENDPOINT,
+            ),
         );
     }
 
@@ -69,6 +87,40 @@ final class InstallDocContractTest extends TestCase
                 sprintf('docs/install.md links to "%s", which does not exist', $target),
             );
         }
+    }
+
+    /**
+     * Body of the first `##` section whose heading matches, or null if there is none.
+     *
+     * Fenced blocks are skipped so a `##` inside a shell or JSON sample cannot be read
+     * as a heading and truncate the section early.
+     */
+    private function sectionMatching(string $headingPattern): ?string
+    {
+        $body = null;
+        $inFence = false;
+
+        foreach (explode("\n", $this->installDoc()) as $line) {
+            if (preg_match('/^(```|~~~)/', $line) === 1) {
+                $inFence = !$inFence;
+            }
+
+            if (!$inFence && str_starts_with($line, '## ')) {
+                if ($body !== null) {
+                    break;
+                }
+                if (preg_match($headingPattern, $line) === 1) {
+                    $body = $line . "\n";
+                }
+                continue;
+            }
+
+            if ($body !== null) {
+                $body .= $line . "\n";
+            }
+        }
+
+        return $body;
     }
 
     private function installDoc(): string
