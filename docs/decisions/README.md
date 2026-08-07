@@ -23,6 +23,7 @@ referenced from [requirements.md](../requirements.md),
 | [0004](0004-docker-only-runtime.md) | Docker-only runtime; no host PHP/Composer | Accepted | REQ-N5 |
 | [0005](0005-spec-aligned-content-retrieval.md) | Authoritative, cheapest-first specification retrieval | Accepted | REQ-N1 |
 | [0006](0006-machine-checked-traceability.md) | Machine-checked traceability with a `spec-check` drift gate | Accepted | REQ-N8 |
+| [0007](0007-website-in-separate-repository.md) | The public website lives in its own repository | Accepted | REQ-N10 |
 
 ## Writing a new ADR
 

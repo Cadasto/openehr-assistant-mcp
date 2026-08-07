@@ -122,6 +122,16 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
 - **Docker-only runtime (REQ-N5).** See [development.md](development.md).
   → [ADR-0004](decisions/0004-docker-only-runtime.md)
 
+## Documentation boundary · REQ-N10
+
+Contributor and user documentation stays in this repository; the public product
+website is a separate repository, [cadasto/openehr-assistant](https://github.com/cadasto/openehr-assistant),
+which documents this server *and* the plugin. It holds no copy of the install
+instructions — it fetches [install.md](install.md) at a released tag, which makes
+that file's path and shape an external contract, guarded by
+`tests/Content/InstallDocContractTest.php`.
+→ [ADR-0007](decisions/0007-website-in-separate-repository.md)
+
 ## Versioning
 
 Application version is defined in `src/constants.php` (`APP_VERSION`) — the single
