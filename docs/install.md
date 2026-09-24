@@ -1,16 +1,16 @@
-# Installation & Client Setup
+# Installing the openEHR Assistant MCP Server
 
-How to connect an MCP client to the openEHR Assistant MCP Server — either the
-hosted endpoint (no install) or a local instance. For contributing to the
-server itself, see [development.md](development.md).
+This page shows how to connect an MCP client to the openEHR Assistant MCP Server,
+either through the hosted endpoint (no install) or through a local instance you run
+with Docker. To contribute to the server itself, see [development.md](development.md).
 
-> **Tip:** For the best experience, also install the user-facing
+> **Tip:** In Claude Code or Cursor, also install the user-facing
 > [openEHR Assistant Plugin](https://github.com/cadasto/openehr-assistant-plugin)
-> (skills, prompts, and agents that guide AI assistants through openEHR workflows).
+> (skills, commands, agents, and hooks that guide AI assistants through openEHR workflows).
 
-## Option 1 — Hosted endpoint (no install)
+## Option 1: hosted endpoint (no install)
 
-The fastest path: point your client at the hosted server.
+Point your client at the hosted server; there is nothing to install.
 
 | | |
 |---|---|
@@ -28,11 +28,11 @@ The fastest path: point your client at the hosted server.
 }
 ```
 
-## Option 2 — Run locally with Docker
+## Option 2: run locally with Docker
 
-Use this to run your own instance (also the basis for contributing).
+Use this to run your own instance; it is also the basis for contributing.
 
-**Prerequisites:** Docker + Docker Compose, Git.
+**Prerequisites:** Docker with Docker Compose, and Git.
 
 ```bash
 git clone https://github.com/cadasto/openehr-assistant-mcp.git
@@ -47,14 +47,14 @@ Local endpoints once the stack is up:
 | Endpoint | URL |
 |----------|-----|
 | Dev HTTP (host) | `http://localhost:8343/` |
-| Dev HTTP (from another container, e.g. LibreChat) | `http://host.docker.internal:8343/` |
+| Dev HTTP (from another container, such as LibreChat) | `http://host.docker.internal:8343/` |
 | Named host (optional) | `http://openehr-assistant-mcp.local:8343/` |
 
 > To use `openehr-assistant-mcp.local`, add `127.0.0.1 openehr-assistant-mcp.local`
-> to your hosts file. If it doesn't resolve, just use `http://localhost:8343/`.
+> to your hosts file. If it does not resolve, use `http://localhost:8343/`.
 > (`make` and Docker commands are documented in [development.md](development.md).)
 
-## Option 3 — Run locally via stdio
+## Option 3: run locally via stdio
 
 For clients that launch the server process directly.
 
@@ -70,7 +70,7 @@ docker run --rm -i ghcr.io/cadasto/openehr-assistant-mcp:latest php public/index
 ## Client configurations
 
 Add **one** server entry to your client. Pick the transport that matches your setup
-(hosted / local HTTP / stdio).
+(hosted, local HTTP, or stdio).
 
 ```json
 {
@@ -96,10 +96,12 @@ Add **one** server entry to your client. Pick the transport that matches your se
 ```
 
 ### Claude Desktop
+
 Add the hosted URL via **Menu → Settings → Connectors → Add custom connector**,
 or use **Menu → Developer → Edit Config** and add one of the entries above.
 
 ### LibreChat (streamable HTTP)
+
 ```yaml
 mcpServers:
   openehr-assistant-mcp:
@@ -108,12 +110,15 @@ mcpServers:
 ```
 
 ### Cursor
+
 **Cursor Settings → MCP → Add server**, then choose:
+
 - **Hosted:** `type=streamable-http`, `url=https://openehr-assistant-mcp.apps.cadasto.com/`
 - **Local dev:** `type=streamable-http`, `url=http://host.docker.internal:8343/`
 - **Local stdio:** the Docker command above.
 
 ### IntelliJ Junie
+
 **Settings → Tools → Junie → MCP Servers** (wording varies by version). Add a
 **Streamable HTTP** URL (hosted or `http://host.docker.internal:8343/`) or the
-**stdio** Docker command, then refresh/restart Junie so tools are discovered.
+**stdio** Docker command, then refresh or restart Junie so tools are discovered.

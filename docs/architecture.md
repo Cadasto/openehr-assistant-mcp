@@ -1,10 +1,10 @@
-# Architecture — openEHR Assistant MCP Server
+# openEHR Assistant MCP Server architecture
 
-> Part of the [Specification-Driven Development docs](README.md). This describes
-> *how* the system satisfies [requirements.md](requirements.md). Each component
-> notes the `REQ-#` it serves; the full mapping is in
-> [traceability.md](traceability.md). Design choices are recorded as
-> [decision records](decisions/).
+This page describes *how* the server satisfies [requirements.md](requirements.md),
+for contributors who need to know where a capability lives before changing it. It
+is part of the [Specification-Driven Development docs](README.md): each component
+notes the `REQ-#` it serves, the full mapping is in [traceability.md](traceability.md),
+and design choices are recorded as [decision records](decisions/).
 
 ## Overview
 
@@ -14,7 +14,7 @@ startup; discovery results are cached. A single outbound HTTP client reaches the
 CKM REST API. Domain content (guides, examples, terminology, BMM type specs)
 ships as static resources under `resources/`.
 
-```
+```text
 MCP client ──(streamable-http :8343 | stdio)──▶ public/index.php
                                                   │  attribute discovery (cached)
                     ┌─────────────────────────────┼─────────────────────────────┐
@@ -30,14 +30,14 @@ MCP client ──(streamable-http :8343 | stdio)──▶ public/index.php
 
 ## Layers
 
-### Entry point — `public/index.php` · REQ-F9, REQ-N4
+### Entry point: `public/index.php` · REQ-F9, REQ-N4
 Registers tools, prompts, resources, and completion providers; selects the
 transport (`--transport=stdio`, else `streamable-http`); starts the server. Uses
 a file-based discovery cache (Symfony Cache, under `XDG_DATA_HOME`, default
 `/tmp`) so attribute scanning is not repeated on every boot.
 → [ADR-0001](decisions/0001-attribute-driven-discovery.md)
 
-### Tools — `src/Tools/` · REQ-F1–F5, REQ-N9
+### Tools: `src/Tools/` · REQ-F1–F5, REQ-N9
 Service classes whose public methods are annotated `#[McpTool(name: '…')]`. Each
 is the MCP-facing surface for one knowledge domain:
 
@@ -49,7 +49,7 @@ is the MCP-facing surface for one knowledge domain:
 | `TerminologyService` | `terminology_resolve` | REQ-F4 |
 | `TypeSpecificationService` | `type_specification_search`, `type_specification_get` | REQ-F5 |
 
-### Prompts — `src/Prompts/` · REQ-F6
+### Prompts: `src/Prompts/` · REQ-F6
 All extend `AbstractPrompt`, which loads message bodies from markdown under
 `resources/prompts/` via `loadPromptMessages()`. Each prompt class exposes a
 single `__invoke`. Two families: **explorers** (`*_explorer`) that orchestrate
@@ -57,7 +57,7 @@ discovery/retrieval, and **explain / design_or_review** prompts per artefact
 kind, plus `fix_adl_syntax` and `translate_archetype_language`.
 → [ADR-0003](decisions/0003-prompt-policy-split.md)
 
-### Resources — `src/Resources/` · REQ-F7
+### Resources: `src/Resources/` · REQ-F7
 Expose retrievable content under stable URIs:
 
 | Class | URI | REQ |
@@ -71,23 +71,23 @@ Guide categories: `archetypes`, `templates`, `aql`, `simplified_formats`,
 `specs` (per-document spec digests), `howto` (toolchain how-tos). Example kinds:
 `aql`, `flat`, `structured`, `archetypes`.
 
-### Completion providers — `src/CompletionProviders/` · REQ-F8
-`Examples`, `Guides`, `SpecificationComponents` — implement
+### Completion providers: `src/CompletionProviders/` · REQ-F8
+`Examples`, `Guides`, and `SpecificationComponents` implement
 `Mcp\Capability\Completion\ProviderInterface`, annotated `#[CompletionProvider]`,
 to suggest argument values for prompts/resource templates.
 
-### External boundary — `src/Apis/CkmClient` · REQ-F1, REQ-N2
+### External boundary: `src/Apis/CkmClient` · REQ-F1, REQ-N2
 The **only** outbound HTTP client (Guzzle). `request` / `requestAsync` wrap the
 CKM REST API. Every CKM-touching test mocks this client; live CKM is never hit
 in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
 
-### Helpers — `src/Helpers/`
+### Helpers: `src/Helpers/`
 `CliOptions` (transport option parsing), `Map` (data shaping),
 `TerminologyXmlLoader` (loads the bundled openEHR terminology XML),
 `SearchTokenizer` (the one query tokenizer shared by `guide_search` and
 `examples_search`, so the two cannot rank the same query differently).
 
-### Static content — `resources/`
+### Static content: `resources/`
 `guides/`, `examples/`, `bmm/` (BMM JSON for type specs), `terminology/`,
 `prompts/` (prompt message bodies), `server-instructions.md` (REQ-F10).
 
@@ -107,7 +107,7 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
   clients, and the SDK enforces only the input half: `CallToolHandler` validates
   arguments against the generated `inputSchema` before a method runs, but return
   values are never checked against `outputSchema`. The asymmetry is why the
-  contract is pinned in CI from both sides — `InputSchemaGuardTest` reflects every
+  contract is pinned in CI from both sides: `InputSchemaGuardTest` reflects every
   `#[McpTool]` method for closed, self-consistent inputs, and
   `OutputSchemaConformanceTest` is the *only* enforcement the output half has
   anywhere. The authoring rules that satisfy this live in
@@ -116,9 +116,9 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
   sources, cheapest representation first.
   → [ADR-0005](decisions/0005-spec-aligned-content-retrieval.md)
 - **Test mirror (REQ-N2).** Each `src/` class has a parallel `tests/…/*Test`.
-  Two extra guard tests cross-check invariants: `PromptCompositionTest` (prompt
-  size baselines in `tests/fixtures/prompt_lengths_before_shared.json`) and
-  `PromptPolicySeparationTest`.
+  Extra guard tests cross-check invariants, among them `PromptCompositionTest`
+  (prompt size baselines in `tests/fixtures/prompt_lengths_before_shared.json`) and
+  `PromptPolicySeparationTest`; [testing.md](testing.md#guard-tests) lists them.
 - **Docker-only runtime (REQ-N5).** See [development.md](development.md).
   → [ADR-0004](decisions/0004-docker-only-runtime.md)
 
@@ -127,16 +127,16 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
 Contributor and user documentation stays in this repository; the public product
 website is a separate repository, [cadasto/openehr-assistant](https://github.com/cadasto/openehr-assistant),
 which documents this server *and* the plugin. It holds no copy of the install
-instructions — it fetches [install.md](install.md) at a released tag, which makes
+instructions; it fetches [install.md](install.md) at a released tag, which makes
 that file's path and shape an external contract, guarded by
 `tests/Content/InstallDocContractTest.php`.
 → [ADR-0007](decisions/0007-website-in-separate-repository.md)
 
 ## Versioning
 
-Application version is defined in `src/constants.php` (`APP_VERSION`) — the single
+Application version is defined in `src/constants.php` (`APP_VERSION`), the single
 source, deliberately not restated here. It also namespaces the discovery cache, so
 a release bump invalidates stale capability entries
 ([ADR-0001](decisions/0001-attribute-driven-discovery.md)).
 Release process and CHANGELOG conventions live in
-[AGENTS.md](../AGENTS.md) (Coding style → CHANGELOG entries) and `CHANGELOG.md`.
+[AGENTS.md](../AGENTS.md) (Conventions) and `CHANGELOG.md`.
