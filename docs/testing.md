@@ -23,7 +23,7 @@ Conventions:
   files named `*Test.php`, mirroring the `src/` layout 1:1.
 - **Mock external HTTP to CKM** via `CkmClient`; never hit live APIs
   ([ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)).
-- Run a subset with the filter: `vendor/bin/phpunit --filter CkmServiceTest`.
+- Run a subset with the filter: `composer test -- --filter CkmServiceTest` (the PHPUnit config lives at `tests/phpunit.xml`, so a bare `vendor/bin/phpunit` does not find it).
 
 ### Guard tests
 
