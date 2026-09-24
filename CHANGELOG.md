@@ -1,17 +1,18 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+This file records all notable changes to this project.
 
-The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
-
-- Keep a Changelog: [https://keepachangelog.com/en/1.1.0/](https://keepachangelog.com/en/1.1.0/)
-- Semantic Versioning: [https://semver.org/spec/v2.0.0.html](https://semver.org/spec/v2.0.0.html)
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 ### Added
 
 - SDD: REQ-N10 and ADR-0007 record that the public website lives in its own repository and consumes `docs/install.md` from here.
+
+### Changed
+
+- Docs: restructured the README and line-edited the contributor docs, correcting stale `make ci` and configuration details.
 
 ## [0.20.0] - 2026-07-30
 
