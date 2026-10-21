@@ -1,3 +1,7 @@
+---
+kind: plan
+---
+
 # MCP Audit Remediation Implementation Plan
 
 **Status:** done — merged to `main` as `545be7d` ([PR #25](https://github.com/Cadasto/openehr-assistant-mcp/pull/25), 2026-07-29) and archived. (The work was first opened as `fix/mcp-audit-remediation`; that branch was closed unmerged and replaced by an identical, rebuilt history which merged as `fix/mcp-audit-hardening`.)

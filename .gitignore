@@ -48,3 +48,6 @@ Thumbs.db
 worktrees/
 # Claude Code local project memory (machine-specific)
 CLAUDE.local.md
+
+# SDD scratch folder (findings files, session state)
+/.sdd/

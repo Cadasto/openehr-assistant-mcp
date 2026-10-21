@@ -6,20 +6,28 @@
 # requirements index and the design narrative carry the normative prose; the
 # machine-readable map below is validated against the tree by `make spec-check`.
 sdd:
+  profile: formal                   # formal | informative (methodology §1a)
+
   # Requirement identifiers are area-prefixed: REQ-F# (functional) and
   # REQ-N# (non-functional). Never switch styles — it would renumber published IDs.
   req_style: area-prefixed
   req_areas: [F, N]
   req_gap: 1
+  excluded_areas: []                # area-prefixed only; tokens that are deliberately not areas
+
+  # The document-kind vocabulary every `kind:` frontmatter value is checked against.
+  doc_kinds: [requirement, specification, adr, guide, analysis, operations, reference, upstream, constitution]
+
+  default_mode: spec-first          # the mode a specification has when its frontmatter names none
 
   paths:
     requirements: docs/requirements.md   # single-file index (not a per-REQ directory)
     specifications: docs/architecture.md # design narrative; requirements.md owns the normative one-liners
     adr: docs/decisions                  # ADRs live under decisions/, MADR-lite
-    plans: docs/plans
-    plans_archive: docs/plans/archive
 
   traceability: docs/traceability.yaml   # machine-readable map, beside the human docs/traceability.md
+
+  forge: auto                       # auto | github | azure-devops | none — how sdd-pr reaches the pull request
 
   build_entrypoint: make
   ci_target: ci                          # `make ci` — the full PR gate
@@ -32,3 +40,46 @@ sdd:
 
   # Domain facts MUST be looked up here, never guessed (see ADR-0005 and REQ-N1).
   ground_truth: "specifications.openehr.org (development branch), CKM, and bundled BMM/terminology — via resources/guides/howto/spec-lookup.md"
+
+  check:
+    script: scripts/sdd-check.py   # where the vendored gate lives
+    version: "0.15.0"              # must equal the vendored tool's own version
+    links:
+      exclude: []                  # globs; printed in every report when non-empty
+    changelog:
+      path: CHANGELOG.md
+      max_words: 35
+    code_roots: []                 # for tree-to-map; must exist; empty = the repository minus docs/, .git/,
+                                   # vendor/, node_modules/, every paths.*, the traceability map, check.script
+    test_globs: ["*_test.go", "test_*.py", "*_test.py", "*Test.php", "*.test.ts", "*.spec.ts", "*_test.rs"]
+    probes_catalogue: ""           # a document whose headings carry PROBE ids; empty = a probe resolves through a cited test
+    rfc2119:
+      sections: section-sign       # what heading opens a normative section: section-sign (§) | requirement-id | either
+    families:                      # error | warn | off
+      descriptor: error
+      map-schema: error
+      map-to-tree: error
+      index-sync: error
+      tree-to-map: warn
+      doc-kinds: warn
+      rfc2119: warn                # the per-kind table in sdd-check.md still errors for requirement/adr/reference
+      one-home: error
+      links: error
+      changelog: warn
+      generated: error
+      draft-reason: off
+
+  hooks:
+    stop_nudge: true               # the session-stop hook's one-shot "record progress" nudge; false disables it in this repository
+
+  # Delivery parameters. /sdd-deliver and /sdd-review read these instead of asking.
+  # Every value here is an EXAMPLE — no model and no reviewer is required by the plugin.
+  agents:
+    worker_model: inherit           # per-dispatch model override; inherit = no override, or a host model id
+    max_parallel_workers: 3
+    worktree_per_worker: false      # true: each parallel worker on its own branch and worktree, merged; false: one shared branch
+    worker_skills: [php-coding:php-coding]   # skills named in the worker's brief
+    reviewers:                      # this repo's own language reviewers, by agent name: a list, or a block map of path patterns to names
+      "**/*.php": php-coding:php-reviewer
+    skip: []                        # path patterns no reviewer reads (a vendored corpus, fixture data), e.g. ["testdata/**"]
+    task_review: lane               # on | off | lane  (lane = on for full, off for maintenance)
