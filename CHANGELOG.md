@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Docs: restructured the README and line-edited the contributor docs, correcting stale `make ci` and configuration details.
 
+### Security
+
+- Dependencies: refreshed locked packages within existing constraints, clearing four known advisories (Guzzle, `mcp/sdk`, `symfony/yaml`).
+
 ## [0.20.0] - 2026-07-30
 
 ### Added
