@@ -14,7 +14,7 @@
         "ext-curl": "*",
         "ext-json": "*",
         "ext-simplexml": "*",
-        "guzzlehttp/guzzle": "^7.9",
+        "guzzlehttp/guzzle": "^8.3",
         "mcp/sdk": "^0.9.0",
         "monolog/monolog": "^3.9",
         "nyholm/psr7": "^1.8",
