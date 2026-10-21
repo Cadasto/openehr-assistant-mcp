@@ -44,10 +44,12 @@ register; see [development.md](development.md#gotcha-mcp-discovery-cache).
        is now only a defence against non-validating callers.
     4. Search tools return the `{items, total}` envelope, with top-level
        `required` + `additionalProperties: false` and the same on each item.
-  - **Output schemas have no runtime enforcement.** The SDK does *not* validate
-    return values against `outputSchema`, so `tests/Tools/OutputSchemaConformanceTest.php`
-    is the only thing holding that contract. Add a case there for every new
-    structured tool.
+  - **Output schemas are enforced at runtime.** Since `mcp/sdk` 0.9 a return value
+    that fails its `outputSchema` reaches the client as a failed (`isError`) tool call,
+    so `tests/Tools/OutputSchemaConformanceTest.php` must catch it first. Add a case
+    there for every new structured tool. The check runs on the value as sent: an empty
+    PHP array goes out as `[]`, so return `new \stdClass()` where the schema declares
+    an object.
 - **Prompts**: `src/Prompts/`; annotate classes with `#[McpPrompt(name: '...')]` and
   extend `AbstractPrompt`, which loads the **Markdown** body from `resources/prompts/`
   and renders it via
