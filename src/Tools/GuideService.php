@@ -31,10 +31,11 @@ final class GuideService
 
     public function __construct(
         private LoggerInterface $logger,
+        private readonly string $guideDir = self::GUIDE_DIR,
     )
     {
-        if (!is_dir(self::GUIDE_DIR) || !is_readable(self::GUIDE_DIR)) {
-            $this->logger->warning('Guides directory not found or not readable.', ['dir' => self::GUIDE_DIR]);
+        if (!is_dir($this->guideDir) || !is_readable($this->guideDir)) {
+            $this->logger->warning('Guides directory not found or not readable.', ['dir' => $this->guideDir]);
         }
     }
 
@@ -403,17 +404,17 @@ final class GuideService
     /** @return array<int, array{title: string, category: string, name: string, resourceUri: string, abstract: string, headings: array<int, string>}> */
     private function buildGuideIndex(): array
     {
-        if (!is_dir(self::GUIDE_DIR) || !is_readable(self::GUIDE_DIR)) {
+        if (!is_dir($this->guideDir) || !is_readable($this->guideDir)) {
             // The guides corpus ships with the server, so an unusable directory is a
             // packaging/permissions fault, not "no guides matched". Say so loudly —
             // otherwise every search returns an empty result indistinguishable from
             // a legitimate miss.
-            throw new ToolCallException(sprintf('Guides directory is missing or unreadable: %s', self::GUIDE_DIR));
+            throw new ToolCallException(sprintf('Guides directory is missing or unreadable: %s', $this->guideDir));
         }
 
         $index = [];
         $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(self::GUIDE_DIR, \FilesystemIterator::SKIP_DOTS)
+            new RecursiveDirectoryIterator($this->guideDir, \FilesystemIterator::SKIP_DOTS)
         );
         /** @var SplFileInfo $fileInfo */
         foreach ($iterator as $fileInfo) {
@@ -441,7 +442,7 @@ final class GuideService
                 continue;
             }
 
-            $relative = str_replace(self::GUIDE_DIR . '/', '', $fileInfo->getPathname());
+            $relative = str_replace($this->guideDir . '/', '', $fileInfo->getPathname());
             $parts = explode('/', $relative);
             $category = $parts[0] ?: 'unknown';
             $title = $this->extractTitle($content, $name);
@@ -657,13 +658,14 @@ final class GuideService
             return '';
         }
 
-        return self::GUIDE_DIR . '/' . $category . '/' . $name . '.md';
+        return $this->guideDir . '/' . $category . '/' . $name . '.md';
     }
 
     private function validateGuideSegment(string $segment, string $label): string
     {
         $value = trim($segment);
-        if ($value === '' || preg_match('/^[\w.-]+$/', $value) !== 1) {
+        // A segment of dots only (`.`, `..`) would step out of the guides directory.
+        if (preg_match('/^[\w.-]+$/', $value) !== 1 || trim($value, '.') === '') {
             throw new ToolCallException(sprintf('Invalid guide %s: %s', $label, $segment));
         }
 
@@ -672,7 +674,7 @@ final class GuideService
 
     private function assertPathWithinGuides(string $path): void
     {
-        $guideRoot = realpath(self::GUIDE_DIR);
+        $guideRoot = realpath($this->guideDir);
         $resolvedPath = realpath($path);
         if ($guideRoot === false || $resolvedPath === false || !str_starts_with($resolvedPath, $guideRoot . '/')) {
             throw new ToolCallException('Guide path is outside guides directory.');

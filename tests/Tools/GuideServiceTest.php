@@ -9,17 +9,37 @@ use Mcp\Exception\ToolCallException;
 use Mcp\Schema\Content\EmbeddedResource;
 use Mcp\Schema\Content\TextResourceContents;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 #[CoversClass(GuideService::class)]
 final class GuideServiceTest extends TestCase
 {
     private GuideService $service;
 
+    private ?string $root = null;
+
     protected function setUp(): void
     {
         $this->service = new GuideService(new NullLogger());
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->root === null) {
+            return;
+        }
+        $entries = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($this->root, \FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST,
+        );
+        foreach ($entries as $entry) {
+            $entry->isDir() && !$entry->isLink() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
+        }
+        rmdir($this->root);
     }
 
     public function test_guideSearch_returns_matches(): void
@@ -132,14 +152,61 @@ final class GuideServiceTest extends TestCase
         $this->service->get('', 'archetypes', 'no-such-guide');
     }
 
+    /**
+     * @return array<string, array{string, ?string, string, string}>
+     */
+    public static function dotOnlySegments(): array
+    {
+        return [
+            // resources/server-instructions.md exists one level above guides/, so `..` used to
+            // reach the containment check and answer differently from a missing file.
+            'category ..' => ['', '..', 'server-instructions', 'Invalid guide category: ..'],
+            'category .' => ['', '.', 'anything', 'Invalid guide category: .'],
+            'category ...' => ['', '...', 'anything', 'Invalid guide category: ...'],
+            'name ..' => ['', 'archetypes', '..', 'Invalid guide name: ..'],
+            'name .' => ['', 'archetypes', '.', 'Invalid guide name: .'],
+            'name ...' => ['', 'archetypes', '...', 'Invalid guide name: ...'],
+            // The URI pattern allows dots in the name only.
+            'uri name ..' => ['openehr://guides/archetypes/..', null, '', 'Invalid guide name: ..'],
+            'uri name .' => ['openehr://guides/archetypes/.', null, '', 'Invalid guide name: .'],
+        ];
+    }
+
+    #[DataProvider('dotOnlySegments')]
+    public function test_guideGet_rejects_dot_only_segments(string $uri, ?string $category, string $name, string $message): void
+    {
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessageMatches('/^' . preg_quote($message, '/') . '$/');
+
+        $this->service->get($uri, $category, $name);
+    }
+
     public function test_guideGet_refuses_an_existing_file_outside_the_guides_directory(): void
     {
-        // `..` passes the segment check and resources/server-instructions.md exists,
-        // so only the containment check stops this read.
+        // A segment can no longer step out of the guides directory, but a link inside it
+        // still can; only the containment check stops this read.
+        $guides = $this->temporaryGuidesDirectory();
+        file_put_contents($this->root . '/outside.md', '# Outside');
+        symlink($this->root . '/outside.md', $guides . '/archetypes/escape.md');
+        $service = new GuideService(new NullLogger(), $guides);
+
         $this->expectException(ToolCallException::class);
         $this->expectExceptionMessage('Guide path is outside guides directory.');
 
-        $this->service->get('', '..', 'server-instructions');
+        $service->get('', 'archetypes', 'escape');
+    }
+
+    public function test_guideGet_reads_a_guide_from_the_given_guides_directory(): void
+    {
+        $guides = $this->temporaryGuidesDirectory();
+        file_put_contents($guides . '/archetypes/inside.md', '# Inside');
+        $service = new GuideService(new NullLogger(), $guides);
+
+        $resource = $service->get('', 'archetypes', 'inside')->resource;
+
+        $this->assertInstanceOf(TextResourceContents::class, $resource);
+        $this->assertSame('# Inside', $resource->text);
+        $this->assertSame('openehr://guides/archetypes/inside', $resource->uri);
     }
 
     public function test_guideSearch_is_case_insensitive_for_query_tokens(): void
@@ -345,5 +412,13 @@ final class GuideServiceTest extends TestCase
             }
             $this->assertIsString(json_encode($results, JSON_THROW_ON_ERROR));
         }
+    }
+
+    private function temporaryGuidesDirectory(): string
+    {
+        $this->root = sys_get_temp_dir() . '/guide-service-' . bin2hex(random_bytes(6));
+        mkdir($this->root . '/guides/archetypes', recursive: true);
+
+        return $this->root . '/guides';
     }
 }
