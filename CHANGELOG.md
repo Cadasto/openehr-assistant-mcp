@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Security
 
 - Dependencies: refreshed locked packages within existing constraints, clearing four known advisories (Guzzle, `mcp/sdk`, `symfony/yaml`).
+- Docker: the image requires PHP 8.4.27 or later (CVE-2026-109618, CVE-2026-109619) and turns off session upload progress; the ingress refuses multipart and over-8 MB request bodies.
 
 ## [0.20.0] - 2026-07-30
 

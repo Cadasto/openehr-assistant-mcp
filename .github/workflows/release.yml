@@ -47,6 +47,7 @@ jobs:
           file: ./.docker/Dockerfile
           target: production
           push: true
+          pull: true # always the latest PHP base, so a release carries its security fixes
           platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
