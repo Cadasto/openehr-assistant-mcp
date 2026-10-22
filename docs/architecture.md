@@ -12,9 +12,9 @@ it serves, is in [components.md](components.md).
 
 ## Boundaries
 
-- Outbound network access MUST go only through `src/Apis/CkmClient`. Classes outside `src/Apis/`, and code
-  under `public/`, MUST NOT construct an HTTP client or open a network stream
-  ([ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)).
+- Outbound network access MUST go only through the API client layer in `src/Apis/`, which today holds one
+  client, `CkmClient`. Classes outside `src/Apis/`, and code under `public/`, MUST NOT construct an HTTP
+  client or open a network stream ([ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)).
 - The discovery cache MUST be namespaced by `APP_VERSION`, so a release never serves capabilities cached by
   an earlier one ([ADR-0001](decisions/0001-attribute-driven-discovery.md)).
 
