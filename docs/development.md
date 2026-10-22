@@ -76,7 +76,12 @@ make inspector        # builds if needed, then prints the UI URL
                       # e.g. http://localhost:6274?MCP_INSPECTOR_API_TOKEN=...
 ```
 
-Open the printed URL (the token is required) and pick a server from the list.
+Open the printed URL (the token is required) and pick a server from the list. The
+same URL works with `openehr-assistant-mcp.local` in place of `localhost`. Any other
+address (the WSL IP, the machine name) is refused with `403`: the Inspector admits
+only the hosts and browser origins set in its `MCP_INSPECTOR_ALLOWED_HOSTS` and
+`ALLOWED_ORIGINS` ([`.docker/docker-compose.dev.yml`](../.docker/docker-compose.dev.yml));
+add yours there if you need one.
 Two targets are seeded from [`.docker/inspector-servers.json`](../.docker/inspector-servers.json),
 so there is nothing to type:
 
@@ -104,36 +109,26 @@ the connection is refused.
 ### CLI and TUI
 
 v2 also ships a scriptable CLI and a terminal UI, useful for a fast loop with no
-browser. Route them through the image's entrypoint wrapper (see the gotcha below);
-`--config`/`--server` reuse the same seeded targets:
+browser; `--config`/`--server` reuse the same seeded targets:
 
 ```bash
 docker compose -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml \
-  exec inspector /usr/local/bin/inspector-entrypoint --cli \
+  --profile inspector exec inspector mcp-inspector --cli \
   --config /config/inspector-servers.json --server openehr-assistant-dev \
   --method tools/list
 ```
 
 An ad-hoc URL works too: `… --cli http://ingress:8343/mcp --method tools/list`.
 
-### Gotcha: v2 needs an OS keyring
-
-v2 keeps per-server secrets in an OS keychain (`@napi-rs/keyring` → libsecret over
-D-Bus). The upstream image ships neither, so **every** `/api/servers` call fails
-with `Couldn't access platform storage: PermissionDenied` and the UI cannot list or
-add any server. The `inspector` stage in [`.docker/Dockerfile`](../.docker/Dockerfile)
-therefore installs `libsecret`/`gnome-keyring` and runs the Inspector inside a
-private D-Bus session with a throwaway unlocked keyring; see
-[`.docker/inspector-entrypoint.sh`](../.docker/inspector-entrypoint.sh).
-
-Because `dbus-run-session` wraps only the container's main process, a plain
-`docker compose exec … mcp-inspector` hits the same error; invoke
-`/usr/local/bin/inspector-entrypoint` instead, as shown above.
+The container has no OS keychain, so `MCP_INSPECTOR_SECRET_STORE=memory` keeps
+per-server secrets in memory; they are lost when the container stops.
 
 ### Migrating from v1
 
 `:latest` moved to the v2.0.0 rewrite on 2026-07-28, so the image is pinned by
-digest in the `inspector` stage; bump it deliberately. What changed:
+digest in the `inspector` service of
+[`.docker/docker-compose.dev.yml`](../.docker/docker-compose.dev.yml); bump it
+deliberately. What changed:
 
 | | v1 | v2 |
 |---|---|---|
