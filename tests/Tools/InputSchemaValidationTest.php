@@ -65,6 +65,11 @@ final class InputSchemaValidationTest extends TestCase
             'explicit null for an optional enum' => [['category' => null], false, ['category']],
             'an unknown enum value' => [['category' => 'nonsense'], false, ['category']],
 
+            'a taskType hint' => [['taskType' => 'review'], true],
+            // BREAKING: taskType is published as a plain string (a nullable type is not portable
+            // to single-`type` schema dialects), so an explicit null is rejected; omit it instead.
+            'explicit null for taskType' => [['taskType' => null], false, ['taskType']],
+
             // BREAKING: out-of-range numbers used to be silently clamped in-method; they are
             // now rejected at the protocol layer, so the in-method clamp is a belt-and-braces
             // guard for non-validating callers rather than the primary defence.
