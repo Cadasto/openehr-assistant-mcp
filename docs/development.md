@@ -76,12 +76,12 @@ make inspector        # builds if needed, then prints the UI URL
                       # e.g. http://localhost:6274?MCP_INSPECTOR_API_TOKEN=...
 ```
 
-Open the printed URL (the token is required) and pick a server from the list. The
-same URL works with `openehr-assistant-mcp.local` in place of `localhost`. Any other
-address (the WSL IP, the machine name) is refused with `403`: the Inspector admits
-only the hosts and browser origins set in its `MCP_INSPECTOR_ALLOWED_HOSTS` and
-`ALLOWED_ORIGINS` ([`.docker/docker-compose.dev.yml`](../.docker/docker-compose.dev.yml));
-add yours there if you need one.
+Open the printed URL (the token is required) and pick a server from the list. Keep
+`localhost` (or `127.0.0.1`) in it: the Inspector admits only loopback hosts and
+origins by default, and the UI needs a secure context (it calls
+`crypto.randomUUID`), which over plain http only loopback is. Opened at another
+address, such as `openehr-assistant-mcp.local:6274`, it fails with `403` or
+`crypto.randomUUID is not a function`.
 Two targets are seeded from [`.docker/inspector-servers.json`](../.docker/inspector-servers.json),
 so there is nothing to type:
 

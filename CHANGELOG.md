@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Dev: the MCP Inspector moves to 2.12.0 on its upstream image; open it at `localhost`, as other addresses cannot run its UI over plain http.
 - SDD: moved to the sdd informative profile, where the code leads and only the `docs/architecture.md` constitution binds; the traceability map and its matrix are retired.
 - SDD: the vendored `sdd-check` replaced the PHP `spec-check` gate in `make ci` and PR validation.
 - Docs: restructured the README and line-edited the contributor docs, correcting stale `make ci` and configuration details.
@@ -25,7 +26,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Tools: CKM lookups validate identifiers before they reach the request URL, and a CKM outage during archetype-id resolution is reported as one.
 - Tools/resources: guide, example and type-spec lookups refuse dot-only names and report not-found, invalid-name and decode errors accurately.
 - Dev: the dev stack accepts `host.docker.internal`, the URL the install guide gives clients in other containers.
-- Dev: the MCP Inspector, now 2.12.0, also connects when opened at `openehr-assistant-mcp.local:6274`.
 
 ### Security
 
