@@ -7,6 +7,7 @@ use Cadasto\OpenEHR\MCP\Assistant\Resources\Guides;
 use Mcp\Exception\ResourceReadException;
 use Mcp\Server\Builder;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Guides::class)]
@@ -38,6 +39,36 @@ final class GuidesTest extends TestCase
         $reader = new Guides();
         $this->expectException(ResourceReadException::class);
         $reader->read('archetypes', 'unknown');
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function dotOnlySegments(): array
+    {
+        return [
+            // resources/server-instructions.md exists one level above the guides directory.
+            'parent directory as category' => ['..', 'server-instructions'],
+            'current directory as category' => ['.', 'checklist'],
+            'three dots as category' => ['...', 'checklist'],
+            'parent directory as name' => ['archetypes', '..'],
+        ];
+    }
+
+    #[DataProvider('dotOnlySegments')]
+    public function test_rejects_a_segment_made_only_of_dots(string $category, string $name): void
+    {
+        $this->expectException(ResourceReadException::class);
+        $this->expectExceptionMessage('Invalid guide resource identifier');
+
+        (new Guides())->read($category, $name);
+    }
+
+    public function test_can_read_a_guide_whose_name_contains_dots(): void
+    {
+        $content = (new Guides())->read('specs', 'am-ADL1.4');
+
+        $this->assertNotSame('', $content);
     }
 
     public function test_addResources_registers_guides_as_mcp_resources(): void

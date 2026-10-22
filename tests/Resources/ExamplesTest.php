@@ -9,6 +9,7 @@ use Mcp\Exception\ResourceReadException;
 use Mcp\Server\Builder;
 use ReflectionMethod;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Examples::class)]
@@ -54,6 +55,29 @@ final class ExamplesTest extends TestCase
         $reader = new Examples();
         $this->expectException(ResourceReadException::class);
         $reader->read('aql', '../../../etc/passwd');
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function dotOnlySegments(): array
+    {
+        return [
+            // resources/server-instructions.md exists one level above the examples directory.
+            'parent directory as kind' => ['..', 'server-instructions'],
+            'current directory as kind' => ['.', 'latest_blood_pressure_per_ehr'],
+            'three dots as kind' => ['...', 'latest_blood_pressure_per_ehr'],
+            'parent directory as name' => ['aql', '..'],
+        ];
+    }
+
+    #[DataProvider('dotOnlySegments')]
+    public function test_rejects_a_segment_made_only_of_dots(string $kind, string $name): void
+    {
+        $this->expectException(ResourceReadException::class);
+        $this->expectExceptionMessage('Invalid example resource identifier');
+
+        (new Examples())->read($kind, $name);
     }
 
     public function test_can_read_native_adl_archetype(): void
