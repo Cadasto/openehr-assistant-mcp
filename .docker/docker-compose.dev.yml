@@ -55,6 +55,15 @@ services:
       target: inspector
     profiles: ["inspector"]
     command: ["--web", "--config", "/config/inspector-servers.json"]
+    # The Inspector accepts only loopback by default, twice over: its web server refuses
+    # any other `Host` (2.12+), and its API refuses calls (connect, send) from any other
+    # browser `Origin` — the server list still loads, as same-origin GETs carry no
+    # Origin. Admit the dev vhost so the UI also works at openehr-assistant-mcp.local:6274.
+    # ALLOWED_ORIGINS replaces the defaults, so the loopback origins are repeated;
+    # MCP_INSPECTOR_ALLOWED_HOSTS adds to them.
+    environment:
+      ALLOWED_ORIGINS: "http://localhost:6274,http://127.0.0.1:6274,http://[::1]:6274,http://openehr-assistant-mcp.${DOMAIN:-local}:6274"
+      MCP_INSPECTOR_ALLOWED_HOSTS: "openehr-assistant-mcp.${DOMAIN:-local}"
     volumes:
       - ./inspector-servers.json:/config/inspector-servers.json:ro
     ports:
