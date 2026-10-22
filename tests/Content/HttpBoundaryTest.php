@@ -16,14 +16,17 @@ use SplFileInfo;
 /**
  * Guards the single outbound-HTTP boundary.
  *
- * The server reaches one external system, the CKM REST API, and only through the API client
- * layer in src/Apis/, which today holds one client, CkmClient. Tests mock that layer, so none
- * of them touches the network. A service that built its own Guzzle client, or read a URL with
- * file_get_contents(), would pass every other test while breaking that promise.
+ * The server reaches one external system, the CKM REST API, and only through
+ * src/Apis/CkmClient. Tests mock that client, so none of them touches the network. Any other
+ * class, a second one under src/Apis/ included, that built its own Guzzle client, found one
+ * through PSR-18 discovery, or read a URL with file_get_contents(), would pass every other test
+ * while breaking that promise. So every PHP file under src/ and public/ but CkmClient is scanned.
  *
  * The scan works on PHP tokens, not raw text, so comments, docblocks and prose inside strings
  * cannot trip it. It reports:
- * - a connection class, imported, written in full, or named inside a grouped import;
+ * - a connection class, imported, written in full, or named inside a grouped import: a client or
+ *   transport, or a class that builds or discovers one (HandlerStack::create(),
+ *   Psr18ClientDiscovery::find(), new Psr18Client());
  * - a connection function, called, imported with `use function` under any alias, or named
  *   alone in a string, the way a callable is written (call_user_func('curl_init', …));
  * - a URL reader, called directly or under a `use function` alias, whose URL argument,
@@ -39,18 +42,25 @@ use SplFileInfo;
  * - a URL held in a variable or a constant, or built at run time ($scheme . '://…');
  * - writing to a URL (file_put_contents('ftp://…'), the target of copy()) and other functions
  *   or classes that accept one (SplFileObject, simplexml_load_file());
- * - a shell command that reaches the network (shell_exec('curl …')).
+ * - a shell command that reaches the network (shell_exec('curl …'));
+ * - an SDK class that builds its own client when none is injected (mcp/sdk OAuth discovery,
+ *   HttpTransport).
  */
 #[CoversNothing]
 final class HttpBoundaryTest extends TestCase
 {
-    /** The one directory allowed to open a connection. */
-    private const BOUNDARY = 'src/Apis/';
+    /** The one file allowed to open a connection. */
+    private const BOUNDARY = 'src/Apis/CkmClient.php';
 
-    /** Classes that hold or build a connection. Matched whole, ignoring case. */
+    /** Classes that hold, build or discover a connection. Matched whole, ignoring case. */
     private const CONNECTION_CLASSES = [
         'GuzzleHttp\Client',
         'GuzzleHttp\ClientInterface',
+        'GuzzleHttp\HandlerStack',
+        'Http\Discovery\HttpAsyncClientDiscovery',
+        'Http\Discovery\HttpClientDiscovery',
+        'Http\Discovery\Psr18Client',
+        'Http\Discovery\Psr18ClientDiscovery',
         'Psr\Http\Client\ClientInterface',
         'SoapClient',
     ];
@@ -88,7 +98,7 @@ final class HttpBoundaryTest extends TestCase
     private const URL = '~(?:https?|ftps?)://~i';
 
     #[DataProvider('applicationFiles')]
-    public function test_boundaries_outbound_network_access_stays_in_src_apis(string $file): void
+    public function test_boundaries_outbound_network_access_stays_in_ckm_client(string $file): void
     {
         $found = array_map(
             static fn (array $hit): string => sprintf('%s:%d %s', $file, $hit['line'], $hit['primitive']),
@@ -98,10 +108,16 @@ final class HttpBoundaryTest extends TestCase
         $this->assertSame(
             [],
             $found,
-            'Outbound network access must go only through the API client layer in src/Apis/ '
+            'Outbound network access must go only through src/Apis/CkmClient '
             . '(the constitution, docs/architecture.md § Boundaries; ADR-0002), so that tests mock '
             . 'one seam and stay offline. Found: ' . implode('; ', $found),
         );
+    }
+
+    #[DataProvider('exemptions')]
+    public function test_the_scan_exempts_only_ckm_client(string $file, bool $scanned): void
+    {
+        $this->assertSame($scanned, self::isScanned($file));
     }
 
     public function test_the_scan_finds_the_guzzle_client_in_ckm_client(): void
@@ -124,7 +140,7 @@ final class HttpBoundaryTest extends TestCase
     }
 
     /**
-     * Every PHP file under src/ and public/, except those inside the boundary.
+     * Every PHP file under src/ and public/, except src/Apis/CkmClient.php.
      *
      * @return array<string, array{string}>
      */
@@ -140,7 +156,7 @@ final class HttpBoundaryTest extends TestCase
             /** @var SplFileInfo $file */
             foreach ($iterator as $file) {
                 $relative = substr($file->getPathname(), strlen($root) + 1);
-                if ($file->getExtension() === 'php' && !str_starts_with($relative, self::BOUNDARY)) {
+                if ($file->getExtension() === 'php' && self::isScanned($relative)) {
                     $files[$relative] = [$relative];
                 }
             }
@@ -148,6 +164,18 @@ final class HttpBoundaryTest extends TestCase
         ksort($files);
 
         return $files;
+    }
+
+    /**
+     * @return iterable<string, array{string, bool}>
+     */
+    public static function exemptions(): iterable
+    {
+        yield 'the client itself' => ['src/Apis/CkmClient.php', false];
+        yield 'a second client beside it' => ['src/Apis/OtherClient.php', true];
+        yield 'a client in a folder under src/Apis/' => ['src/Apis/Ckm/CkmClient.php', true];
+        yield 'a tool service' => ['src/Tools/CkmService.php', true];
+        yield 'the entrypoint' => ['public/index.php', true];
     }
 
     /**
@@ -170,6 +198,48 @@ final class HttpBoundaryTest extends TestCase
             ['Symfony\Component\HttpClient\HttpClient'],
         ];
         yield 'SOAP client' => ['new SoapClient($wsdl);', ['SoapClient']];
+        yield 'Guzzle handler stack import' => ['use GuzzleHttp\HandlerStack;', ['GuzzleHttp\HandlerStack']];
+        yield 'Guzzle handler stack, fully qualified' => [
+            'new \GuzzleHttp\HandlerStack($handler);',
+            ['GuzzleHttp\HandlerStack'],
+        ];
+        yield 'Guzzle handler stack with the default handler' => [
+            '\GuzzleHttp\HandlerStack::create();',
+            ['GuzzleHttp\HandlerStack'],
+        ];
+        yield 'discovered PSR-18 client import' => ['use Http\Discovery\Psr18Client;', ['Http\Discovery\Psr18Client']];
+        yield 'discovered PSR-18 client, fully qualified' => [
+            'new \Http\Discovery\Psr18Client();',
+            ['Http\Discovery\Psr18Client'],
+        ];
+        yield 'PSR-18 client discovery import' => [
+            'use Http\Discovery\Psr18ClientDiscovery;',
+            ['Http\Discovery\Psr18ClientDiscovery'],
+        ];
+        yield 'PSR-18 client discovery, found' => [
+            '\Http\Discovery\Psr18ClientDiscovery::find();',
+            ['Http\Discovery\Psr18ClientDiscovery'],
+        ];
+        yield 'PSR-18 client discovery in a grouped import' => [
+            'use Http\Discovery\{Psr17FactoryDiscovery, Psr18ClientDiscovery};',
+            ['Http\Discovery\Psr18ClientDiscovery'],
+        ];
+        yield 'HTTPlug client discovery import' => [
+            'use Http\Discovery\HttpClientDiscovery;',
+            ['Http\Discovery\HttpClientDiscovery'],
+        ];
+        yield 'HTTPlug client discovery, found' => [
+            'Http\Discovery\HttpClientDiscovery::find();',
+            ['Http\Discovery\HttpClientDiscovery'],
+        ];
+        yield 'HTTPlug async client discovery import' => [
+            'use Http\Discovery\HttpAsyncClientDiscovery;',
+            ['Http\Discovery\HttpAsyncClientDiscovery'],
+        ];
+        yield 'HTTPlug async client discovery, found' => [
+            '\Http\Discovery\HttpAsyncClientDiscovery::find();',
+            ['Http\Discovery\HttpAsyncClientDiscovery'],
+        ];
         yield 'curl_init' => ['curl_init($url);', ['curl_init()']];
         yield 'curl_exec, upper case' => ['CURL_EXEC($handle);', ['curl_exec()']];
         yield 'curl_multi_init, fully qualified' => ['\curl_multi_init();', ['curl_multi_init()']];
@@ -235,10 +305,18 @@ final class HttpBoundaryTest extends TestCase
             "\$send = '\\CURL_EXEC';",
             ['curl_exec()'],
         ];
+        // A grouped import's prefix ends at its `}`, so a call after it keeps its own name.
+        yield 'curl_init after a grouped import' => ["use Foo\\{Bar};\ncurl_init(\$u);", ['curl_init()']];
+        // A `use function` list ends at its `;`, so a later comma does not start an import.
+        yield 'URL reader after a comma, past a function import' => [
+            "use function strlen;\nfoo(\$a, file_get_contents('https://example.invalid'));",
+            ['file_get_contents() on https://example.invalid'],
+        ];
 
         // Each of these only looks like one, and must pass.
         yield 'Guzzle request options' => ['use GuzzleHttp\RequestOptions;', []];
         yield 'PSR-18 client exception' => ['use Psr\Http\Client\ClientExceptionInterface;', []];
+        yield 'PSR-17 factory discovery' => ['\Http\Discovery\Psr17FactoryDiscovery::findRequestFactory();', []];
         yield 'local file read' => ['file_get_contents($path);', []];
         yield 'local file read, named' => ['file_get_contents(filename: $path);', []];
         yield 'standard error stream' => ["fopen('php://stderr', 'w');", []];
@@ -360,6 +438,12 @@ final class HttpBoundaryTest extends TestCase
         }
 
         return $found;
+    }
+
+    /** Whether the boundary test scans the file at this path, relative to the repository root. */
+    private static function isScanned(string $relative): bool
+    {
+        return $relative !== self::BOUNDARY;
     }
 
     private static function isConnectionClass(string $name): bool
