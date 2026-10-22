@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Tools;
 
 use Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService;
+use Mcp\Exception\ToolCallException;
 use Mcp\Schema\Content\TextContent;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -75,6 +77,51 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->assertIsArray($results);
         $this->assertArrayHasKey('items', $results);
         $this->assertIsArray($results['items']);
+    }
+
+    public function test_search_ignores_a_dot_in_the_pattern_as_get_does(): void
+    {
+        $svc = new TypeSpecificationService($this->logger);
+
+        $this->assertSame(['DV_QUANTITY'], array_column($svc->search('DV_QUANTITY.')['items'], 'name'));
+        $this->assertSame('DV_QUANTITY', $svc->get('DV_QUANTITY.')['name'] ?? null);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function dottedNamesGetDoesNotFind(): array
+    {
+        return [
+            'component prefix' => ['rm.DV_QUANTITY'],
+            'package-qualified name' => ['org.openehr.rm.datatypes.DV_TEXT'],
+        ];
+    }
+
+    #[DataProvider('dottedNamesGetDoesNotFind')]
+    public function test_search_with_a_dotted_pattern_raises_no_warning_and_agrees_with_get(string $pattern): void
+    {
+        $svc = new TypeSpecificationService($this->logger);
+        $warnings = [];
+        set_error_handler(static function (int $errno, string $errstr) use (&$warnings): bool {
+            $warnings[] = $errstr;
+
+            return true;
+        });
+        try {
+            $result = $svc->search($pattern);
+        } finally {
+            restore_error_handler();
+        }
+
+        // One entry per distinct message: a broken pattern warns once per BMM file.
+        $this->assertSame([], array_values(array_unique($warnings)));
+        $this->assertSame(['items' => [], 'total' => 0], $result);
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('not found');
+
+        $svc->get($pattern);
     }
 
     public function test_list_with_short_pattern_returns_empty_items_shape(): void
