@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Tools: CKM lookups validate identifiers before they reach the request URL, and a CKM outage during archetype-id resolution is reported as one.
 - Tools/resources: guide, example and type-spec lookups refuse dot-only names and report not-found, invalid-name and decode errors accurately.
 - Dev: the dev stack accepts `host.docker.internal`, the URL the install guide gives clients in other containers.
+- Guides and prompts: corrected statements that contradicted the openEHR specifications, AQL grammar or BMM, such as AQL `LIMIT` parameters, web-template ids and validity-rule provenance, and gave duplicated rules one home.
 
 ### Security
 
