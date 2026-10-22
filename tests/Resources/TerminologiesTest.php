@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Resources;
 
-use Cadasto\OpenEHR\MCP\Assistant\Helpers\TerminologyXmlLoader;
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Terminologies;
 use Mcp\Exception\ResourceReadException;
 use Mcp\Server;
@@ -50,9 +49,6 @@ final class TerminologiesTest extends TestCase
 
     public function test_a_loader_failure_keeps_its_cause(): void
     {
-        // The loader caches the parsed file whatever path it is given, so empty the cache
-        // to make it read the missing file below. It throws before caching anything.
-        (new \ReflectionProperty(TerminologyXmlLoader::class, 'xml'))->setValue(null, null);
         $terminologies = new Terminologies(APP_RESOURCES_DIR . '/terminology/no-such-file.xml');
 
         try {

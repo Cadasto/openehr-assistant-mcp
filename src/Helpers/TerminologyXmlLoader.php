@@ -9,12 +9,13 @@ use SimpleXMLElement;
 
 final class TerminologyXmlLoader
 {
-    private static ?SimpleXMLElement $xml = null;
+    /** @var array<string, SimpleXMLElement> Parsed documents by the path they were read from. */
+    private static array $documents = [];
 
     public static function load(string $path): SimpleXMLElement
     {
-        if (self::$xml !== null) {
-            return self::$xml;
+        if (isset(self::$documents[$path])) {
+            return self::$documents[$path];
         }
 
         if (!file_exists($path) || !is_readable($path)) {
@@ -37,8 +38,6 @@ final class TerminologyXmlLoader
             throw new RuntimeException('No terminology groups found.');
         }
 
-        self::$xml = $xml;
-
-        return self::$xml;
+        return self::$documents[$path] = $xml;
     }
 }
