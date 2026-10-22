@@ -104,8 +104,7 @@ final class GuideService
         string $query = '',
         #[Schema(enum: ['archetypes', 'templates', 'aql', 'simplified_formats', 'specs', 'howto'])]
         ?string $category = null,
-        // A plain string, like `query`: a nullable type would be published as
-        // `["null", "string"]`, which single-`type` schema dialects reject.
+        #[Schema(type: 'string')]
         string $taskType = '',
         #[Schema(minimum: 1, maximum: self::MAX_RESULTS_LIMIT)]
         int $maxResults = self::DEFAULT_MAX_RESULTS,
