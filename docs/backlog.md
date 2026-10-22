@@ -1,6 +1,6 @@
 ---
 kind: plan
-harvested_through: 2026-10-22T22:05:13Z
+harvested_through: 2026-10-22T23:22:49Z
 ---
 # Backlog
 
@@ -8,11 +8,11 @@ Leftovers of merged branches: defects outside their change, suggestions, and fin
 
 ## Decide whether a dotted type name is a qualified name (REQ-F5)
 The type-specification tools ignore dots, so a package-qualified name finds nothing; reading it by its last segment is a behaviour change that needs a product decision first.
-- src/Tools/TypeSpecificationService.php:49 · Dotted inputs such as rm.DV_QUANTITY or org.openehr.rm.datatypes.DV_TEXT find nothing in type_specification_get or _search; reading them as qualified names (last segment) would help clients but changes the published parameter descriptions, so it is a product decision · from: #43
+- src/Tools/TypeSpecificationService.php:54 · Dotted inputs such as rm.DV_QUANTITY or org.openehr.rm.datatypes.DV_TEXT find nothing in type_specification_get or _search; reading them as qualified names (last segment) would help clients but changes the published parameter descriptions, so it is a product decision · from: #43
 
 ## Pin the CKM tools' transport-failure handling (REQ-F1, REQ-N2)
 Only `archetypeSearch` and the archetype-id resolution have tests where the CKM client throws, so the other lookups' failure paths can be deleted with the suite still green.
-- src/Tools/CkmService.php:287 · No test fails if the catch (ClientExceptionInterface) wrapping is removed from archetypeGet (:287), templateSearch (:417) or templateGet (:478). · from: #34
+- src/Tools/CkmService.php:289 · No test fails if the catch (ClientExceptionInterface) wrapping is removed from archetypeGet (:289), templateSearch (:424) or templateGet (:492). · from: #34
 
 ## Close the HTTP boundary scan's blind spots (REQ-N2, ADR-0002)
 `HttpBoundaryTest` guards the constitution's single outbound boundary, but, as its docblock says, some ways of opening a connection still pass it.
@@ -27,4 +27,4 @@ REQ-N3 names PSR-12 and PHPStan, but PHPStan skips the tests and no style checke
 
 ## Make the guard-test table say what each test checks (REQ-N1)
 The table in `docs/testing.md` claims more for one guard test than it checks.
-- docs/testing.md:43 · The README half is not a general guide-claim match and is not REQ-N1; the test only rejects a chunking claim on the guide_get bullet. · from: #41
+- docs/testing.md:44 · The README half is not a general guide-claim match and is not REQ-N1; the test only rejects a chunking claim on the guide_get bullet. · from: #41
