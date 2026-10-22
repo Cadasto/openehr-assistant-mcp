@@ -1,18 +1,18 @@
 ---
 kind: plan
-harvested_through: 2026-10-22T21:15:23Z
+harvested_through: 2026-10-22T22:05:13Z
 ---
 # Backlog
 
 Leftovers of merged branches: defects outside their change, suggestions, and findings the maintainer deferred here. Each line is a lead, not a finding: verify it before acting. Themes group what one delivery takes, defects first; `sdd-pr harvest` and `sdd-pr flip --carry` add lines under Unsorted, and `/sdd-triage --backlog` sorts them, merges duplicates and drops what is settled. Line numbers are as of the pull request in `from:`. Edit freely.
 
-## Unsorted
+## Decide whether a dotted type name is a qualified name (REQ-F5)
+The type-specification tools ignore dots, so a package-qualified name finds nothing; reading it by its last segment is a behaviour change that needs a product decision first.
 - src/Tools/TypeSpecificationService.php:49 · Dotted inputs such as rm.DV_QUANTITY or org.openehr.rm.datatypes.DV_TEXT find nothing in type_specification_get or _search; reading them as qualified names (last segment) would help clients but changes the published parameter descriptions, so it is a product decision · from: #43
 
 ## Pin the CKM tools' transport-failure handling (REQ-F1, REQ-N2)
-Only `archetypeSearch` has tests where the CKM client throws, so the other tools' failure paths can be deleted with the suite still green.
+Only `archetypeSearch` and the archetype-id resolution have tests where the CKM client throws, so the other lookups' failure paths can be deleted with the suite still green.
 - src/Tools/CkmService.php:287 · No test fails if the catch (ClientExceptionInterface) wrapping is removed from archetypeGet (:287), templateSearch (:417) or templateGet (:478). · from: #34
-- src/Tools/CkmService.php:638 · No test covers resolveCitableIdentifier turning a transport failure into null; every test that reaches it mocks a returned response. · from: #34
 
 ## Close the HTTP boundary scan's blind spots (REQ-N2, ADR-0002)
 `HttpBoundaryTest` guards the constitution's single outbound boundary, but, as its docblock says, some ways of opening a connection still pass it.
