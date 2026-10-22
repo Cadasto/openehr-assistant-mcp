@@ -27,8 +27,7 @@
     "require-dev": {
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^12.3",
-        "roave/security-advisories": "dev-latest",
-        "symfony/yaml": "^7.3 || ^8.0"
+        "roave/security-advisories": "dev-latest"
     },
     "autoload": {
         "psr-4": {
@@ -49,7 +48,10 @@
         "test:coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --configuration tests/phpunit.xml --coverage-html var/phpunit/code-coverage --coverage-text=php://stdout",
         "check:phpstan": "XDEBUG_MODE=off vendor/bin/phpstan analyse --configuration tests/phpstan.neon --memory-limit 2G",
         "check:phpstan-baseline": "@phpstan --generate-baseline tests/phpstan-baseline.neon",
-        "check:spec": "XDEBUG_MODE=off php scripts/spec-check.php"
+        "check:spec": [
+            "python3 scripts/sdd-check.py selftest",
+            "python3 scripts/sdd-check.py check --root ."
+        ]
     },
     "config": {
         "sort-packages": true,
