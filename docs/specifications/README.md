@@ -23,6 +23,24 @@ Write and extend specs with `/sdd-specify`.
 - The machine-readable [`traceability.yaml`](traceability.yaml) maps each `REQ` to its canonical section,
   packages, tests, and probes; the `spec-check` target validates it against the tree.
 
+## Known gaps
+
+These binding sentences hold in the shipped code, but no test yet fails when they break. A follow-up change
+adds the tests; until then, review guards them.
+
+- SPEC-TOOLS §1: the `ckm_*_get` tool names, the `adl` default, and `ckm_template_search`'s `total`.
+- SPEC-TOOLS §2, §3: the `guide_get` and `examples_get` names, and `guide_adl_idiom_lookup` returning only the
+  matching sections.
+- SPEC-TOOLS §5: functions and invariants in `type_specification_get`.
+- SPEC-TOOLS §6: `maxResults` bounds outside `guide_search`, and the closed `{items, total}` envelope.
+- SPEC-SURFACE §1, §2: the four explorer prompt names, and the four `openehr://` URIs.
+- SPEC-SURFACE §3: example-name completion.
+- SPEC-SURFACE §4: transport selection and the `MCP_ALLOWED_HOSTS` default.
+- SPEC-SURFACE §5: the advertised instructions and the missing-file fallback.
+- SPEC-SURFACE §6: the disk cache handed to discovery, and eager loading.
+- SPEC-ENGINEERING §1: no network request outside the CKM client, and mirrored tests for `CliOptions`,
+  `SearchTokenizer`, `TerminologyXmlLoader` and `CompletionProviders\Examples`.
+
 ## Topic specs
 
 The table below is generated from the specification documents by `sdd-check generate`. Never hand-edit it.

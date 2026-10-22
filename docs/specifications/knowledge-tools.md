@@ -24,7 +24,7 @@ report the match count in `total`.
 
 `ckm_archetype_get` MUST serialise an archetype as `adl`, `xml` or `mindmap`, and MUST default to `adl`.
 
-Every request to CKM MUST go through the one CKM client that SPEC-ENGINEERING §1 describes.
+Requests to CKM go through the one CKM client that SPEC-ENGINEERING §1 binds.
 
 **Implements:** REQ-F-001
 
@@ -40,8 +40,8 @@ A guide MUST be addressed by category and name. The categories are `archetypes`,
 
 `guide_adl_idiom_lookup` MUST return the ADL idiom snippets that match a modelling pattern.
 
-`guide_search` and `examples_search` MUST share one query tokenizer, so the two tools cannot rank the same query
-differently.
+`guide_search` and `examples_search` MUST share one query tokenizer, so a query splits into the same search
+terms in both tools.
 
 **Implements:** REQ-F-002
 
@@ -88,8 +88,13 @@ number of items.
 
 <a id="tool-schemas-req-n-009"></a>
 
-Every published tool MUST declare a closed input schema: `additionalProperties: false`, optional enum parameters
-nullable, and numeric parameters bounded, so an out-of-range value is rejected rather than clamped.
+Every published tool MUST declare a closed input schema (`additionalProperties: false`).
+
+An optional enum parameter whose default is `null` MUST list `null` among its enum values, so the published
+schema does not contradict itself.
+
+A result-limit parameter (`maxResults`) MUST declare both a minimum and a maximum, so an out-of-range value is
+rejected rather than clamped.
 
 A search tool MUST return its results in an `{items, total}` envelope that is itself closed, with both members
 `required`.

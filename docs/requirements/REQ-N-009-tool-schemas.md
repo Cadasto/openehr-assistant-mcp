@@ -17,7 +17,10 @@ it ships.
 
 ## Acceptance criteria
 
-- [x] A tool whose input schema is open, or whose numeric parameter is unbounded, fails the test suite.
+- [x] A tool whose input schema is open, or whose null-defaulted enum parameter leaves `null` out of its enum,
+  fails the test suite.
+- [ ] A search tool whose result limit is unbounded fails the test suite (pinned for `guide_search` only; see
+  the specifications' known gaps).
 - [x] A search tool whose result envelope is not closed with both members required fails the test suite.
 - [x] A tool whose output does not match its declared output schema fails the test suite, including through the
   SDK's own validator.
