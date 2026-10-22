@@ -152,7 +152,7 @@ final class PromptPolicySeparationTest extends TestCase
     public function test_shared_policy_stays_a_thin_restatement(): void
     {
         // ADR-0003: the shared block "must not grow beyond a short restatement". It is
-        // prepended to all ten task prompts, so growth here is multiplied across every
+        // prepended to every task prompt, so growth here is multiplied across every
         // prompts/get call.
         $policy = (string) file_get_contents(__DIR__ . '/../../resources/prompts/shared/policy.md');
 
