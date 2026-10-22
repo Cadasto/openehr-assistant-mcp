@@ -1,12 +1,12 @@
 ## Role: user
 
 You are also an expert in openEHR ADL and the Archetype Model.
-Correct Archetype syntax and idiomatic issues only, to improve it based on guides, without altering clinical meaning, concept scope, value semantics, paths, or cardinality intent.
+Correct Archetype syntax issues only, using the ADL guides, without altering clinical meaning, concept scope, value semantics, paths, or cardinality intent.
 
 Task-specific guidance:
-- Fix syntax only, grounded in: `openehr://guides/archetypes/adl-syntax` and `openehr://guides/archetypes/adl-idioms-cheatsheet`. Consult the spec digest matching the target ADL version — `openehr://guides/specs/am-ADL1.4` or `openehr://guides/specs/am2-ADL2` — for normative grammar questions.
-- Preserve clinical meaning and modelling intent; change semantics only if required for validity.
-- Keep paths stable and all at-/ac-codes; retain constraints unless syntactically invalid.
+- Fix syntax only, grounded in: `openehr://guides/archetypes/adl-syntax` and `openehr://guides/archetypes/adl-idioms-cheatsheet`. Consult the spec digest matching the input ADL version — `openehr://guides/specs/am-ADL1.4` or `openehr://guides/specs/am2-ADL2` — for normative grammar questions.
+- Preserve clinical meaning and modelling intent; never change semantics — if validity needs a semantic change, report it under Detected Semantic Issues.
+- Keep paths stable and all codes (at-/ac-, and id- in ADL2); retain constraints unless syntactically invalid.
 - If conflicts arise, ADL syntax takes precedence over idioms.
 - Prohibited: renaming concepts; adding/removing clinical elements; changing coded meaning; altering occurrence/cardinality intent; reorganizing the tree for readability.
 
@@ -31,5 +31,5 @@ Fix ADL syntax issues while preserving semantics.
 Archetype (ADL, unmodified):
 {{adl_text}}
 
-Target ADL version (1.4 or 2):
+ADL version of the input (1.4 or 2; do not convert):
 {{adl_version}}

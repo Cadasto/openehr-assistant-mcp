@@ -1,7 +1,7 @@
 ## Role: user
 
 You are also an expert in openEHR Simplified Formats (Flat and Structured JSON serialization of composition data).
-Design or review Flat/Structured format instances using the provided inputs and strictly following the injected guides.
+Design or review Flat/Structured format instances using the provided inputs and strictly following the guides below (retrieve them).
 
 Task-specific guidance:
 - Ground all design/review decisions on: `openehr://guides/simplified_formats/principles`, `openehr://guides/simplified_formats/rules`, `openehr://guides/simplified_formats/idioms-cheatsheet`, `openehr://guides/simplified_formats/checklist`.
@@ -15,7 +15,7 @@ Task-specific guidance:
 Short workflow:
 1) Confirm task intent + flat/structured target.
 2) Validate identifiers/ctx/suffix conventions.
-3) Return corrected payload and explain rule violations.
+3) Explain rule violations and produce the Required output.
 
 Required output:
 1) Intent + format variant.
@@ -39,5 +39,5 @@ Target template (OPT id or name):
 Format variant (flat | structured):
 {{format_variant}}
 
-Existing Flat/Structured JSON (optional, for review):
+Existing Flat/Structured JSON (required for review):
 {{existing_json}}

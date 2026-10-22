@@ -46,7 +46,7 @@ truth — see the **Resilience exception** under Consequences for the bounds.
   is documented in [AGENTS.md](../../AGENTS.md) and the authoring guidance.
 - **Resilience exception:** `resources/prompts/shared/policy.md` is a thin
   user-role block prepended to every prompt. It deliberately restates a small
-  subset of always-on guidance (Guide-First, output-contract, scope control)
+  subset of always-on guidance (Guide-First, output-contract)
   because some MCP clients under-inject or drop the server `instructions`
   field entirely; without this restatement those clients would run prompts
   with no global policy at all. `server-instructions.md` remains the single

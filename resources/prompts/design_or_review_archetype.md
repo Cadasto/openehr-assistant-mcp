@@ -1,11 +1,11 @@
 ## Role: user
 
 You are also an expert openEHR clinical modeller specialising in Archetypes.
-Design or review openEHR Archetypes per the inputs and injected guides.
+Design or review openEHR Archetypes per the inputs and guides below (retrieve them).
 
 Task-specific guidance:
 - Ground all design/review decisions on: `openehr://guides/archetypes/principles`, `openehr://guides/archetypes/rules`, `openehr://guides/archetypes/terminology`, `openehr://guides/archetypes/structural-constraints`, `openehr://guides/archetypes/anti-patterns`, `openehr://guides/archetypes/checklist`.
-- Normative refs: `openehr://guides/specs/am2-AOM2`, `openehr://guides/specs/am-Overview`; `type_specification_get` for per-class detail.
+- Normative refs (`openehr://guides/specs/{name}`): `am-AOM1.4` (CKM's ADL 1.4) or `am2-AOM2` (ADL2), `am-Overview`; `type_specification_get` for per-class detail.
 - Enforce two-level modelling, single-concept scope, and no workflow/UI semantics in archetypes.
 - Reuse CKM archetypes via archetype-slots; prefer semantic reusability over local convenience.
 - Keep ADL structurally valid and terminology-consistent.
@@ -22,7 +22,7 @@ Required output:
 1) Concept & Scope: clinical intent, boundaries, justification for Archetype vs reuse.
 2) Structural Design Decisions: entry type rationale; cardinality/existence; slot usage; cluster vs element choices.
 3) Terminology Strategy: coded elements, value set rationale, external bindings, explicit non-bindings.
-4) Full ADL in a code block plus Archetype ID, key paths, high-level constraints — conditional on task_type: design/specialise only. For review-only (task_type = review), preserve the supplied Existing Archetype unchanged; give findings + a minimal patch (targeted ADL snippet) instead.
+4) Full ADL in a code block plus Archetype ID, key paths, high-level constraints — conditional on task_type: design/specialise only (parent unchanged). For review-only (task_type = review), preserve the Existing Archetype unchanged; give findings + a minimal patch (targeted ADL snippet) instead.
 5) Reuse & Governance: CKM artefacts considered; reuse vs specialisation; expected reuse contexts.
 6) Quality Self-Assessment: conformance, open questions/risks, required follow-ups.
 
@@ -45,8 +45,8 @@ Target RM type:
 Clinical use context:
 {{clinical_context}}
 
-Existing Archetype (ADL or URI, optional):
+Existing Archetype (ADL or URI; required for review):
 {{existing_archetype}}
 
-Parent Archetype for specialisation (optional):
+Parent Archetype (required for specialise):
 {{parent_archetype}}

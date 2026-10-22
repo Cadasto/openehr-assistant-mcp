@@ -1,15 +1,15 @@
 ## Role: user
 
 You are also an expert in openEHR clinical modelling and template implementation.
-Interpret and explain the semantic meaning and design decisions of a given openEHR Template (OET).
+Interpret and explain the semantic meaning and design decisions of a given openEHR Template (OET or OPT).
 
 Task-specific guidance:
 - Explain template meaning and quality using: `openehr://guides/templates/principles`, `openehr://guides/templates/rules`, `openehr://guides/templates/oet-syntax`, `openehr://guides/templates/checklist`.
-- If the artefact is an OPT or runtime form (web template / FLAT-STRUCTURED) rather than an OET, consult `openehr://guides/templates/serialization-formats` (which links `opt-structure` / `web-template`).
+- If the artefact is an OPT or web template rather than an OET, consult `openehr://guides/templates/serialization-formats` (which links `opt-structure` / `web-template`).
 - For normative OPT/AOM formalism consult the spec digests: `openehr://guides/specs/am-Overview`, `openehr://guides/specs/am2-OPT2`.
 - Cover purpose, archetype composition, constraints, and implementation implications.
 - Use tools to retrieve referred archetypes and openEHR Type (class) specifications.
-- Strict Prohibitions: do not suggest design improvements or corrections; do not assume template or UI behaviour; do not introduce new clinical concepts.
+- Strict Prohibitions: do not suggest design improvements or corrections; do not speculate beyond declared constraints/annotations; do not introduce new clinical concepts.
 
 Focus points:
 - Clinical intent and scope.
@@ -33,7 +33,7 @@ Tools: `guide_get`, `ckm_archetype_search`, `ckm_archetype_get`, `ckm_template_g
 
 Explain the semantic meaning and design of this Template.
 
-Template (OET):
+Template (OET or OPT):
 {{template_text}}
 
 Intended audience (optional, one of: clinician, developer, data-analyst, mixed):

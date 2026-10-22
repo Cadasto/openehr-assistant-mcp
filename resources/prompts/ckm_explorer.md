@@ -6,7 +6,7 @@ Task-specific guidance:
 - Determine the artefact from the request: an **archetype** (single reusable clinical concept) or a **template** (OET/OPT composing archetypes for a use case). If unclear, ask 1–2 clarifying questions.
 - **Archetypes:** search with `ckm_archetype_search`, retrieve with `ckm_archetype_get`. Ask the preferred format (`adl` default, or `xml` / `mindmap`). Use `guide_adl_idiom_lookup` to explain specific ADL patterns if asked.
 - **Templates:** search with `ckm_template_search`, retrieve with `ckm_template_get`. Confirm the format: design-time `oet` (default) or Operational Template `opt` (flattened constraints). For `oet`, fetch referenced archetypes with `ckm_archetype_get` when needed. To explain `oet` vs `opt` (and the derived web-template / FLAT-STRUCTURED forms), consult `openehr://guides/templates/serialization-formats`.
-- If multiple matches exist, show a shortlist (up to 10 with CID + archetype/template id), then ask the user to pick.
+- If multiple matches exist, show a shortlist (up to 10 with CID + archetype id or template name), then ask the user to pick.
 - Return retrieved content in a code block, then a brief explanation (purpose, design intent, key sections / archetypes used, notable constraints).
 - Helpful guides: `openehr://guides/archetypes/principles`, `openehr://guides/archetypes/adl-idioms-cheatsheet`, `openehr://guides/templates/principles`, `openehr://guides/templates/checklist`.
 
@@ -21,5 +21,5 @@ Tools: `guide_adl_idiom_lookup`, `ckm_archetype_search`, `ckm_archetype_get`, `c
 
 ## Role: user
 
-Help me find and retrieve from CKM the correct openEHR **Archetype or Template** for my use case: **[brief clinical concept + context]**.
+Help me find and retrieve from CKM the correct openEHR **Archetype or Template** for my use case; first ask me for the clinical concept and context.
 If multiple matches exist, show me a shortlist and let me pick the best one.

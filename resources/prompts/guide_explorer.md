@@ -18,10 +18,7 @@ Short workflow (follow strictly):
 2. Discovery phase: use `guide_search` with relevant keywords to find matching guides.
 3. For ADL-specific syntax questions, also try `guide_adl_idiom_lookup` for targeted snippets.
 4. When a relevant guide is identified, use `guide_get` to retrieve its full content.
-5. Follow `**Related:**` links to `specs/*` digests for the normative source.
-6. For per-class detail (attributes, functions, invariants), use `type_specification_get` — `specs/*` digests defer there.
-7. For direct upstream retrieval, consult `guide_get(category="howto", name="spec-lookup")` first.
-8. Present the guidance clearly, citing the source guide URI.
+5. Present the retrieved guidance.
 
 Failure handling:
 - If no guides match the query, suggest refining the search terms or describe what information would help.
@@ -32,5 +29,5 @@ Tools: `guide_search`, `guide_get`, `guide_adl_idiom_lookup`, `type_specificatio
 
 ## Role: user
 
-Help me find and retrieve openEHR implementation guidance relevant for: **[my task]**.
+Help me find and retrieve openEHR implementation guidance relevant for my task; first ask me what the task is.
 I need help understanding best practices, syntax, constraints, or other modeling topics.

@@ -14,7 +14,7 @@ readonly final class TranslateArchetypeLanguage extends AbstractPrompt
      * Translate an openEHR archetype to a new language or add a language.
      *
      * Use when the user says: "translate this archetype to X", "add X language", "localize archetype", "add Hungarian".
-     * Terminology only; calls guide_get/guide_search for language-standards and terminology before translating.
+     * Translates terminology text and description metadata (Purpose/Use/Misuse) only, never codes or structure; calls guide_get/guide_search for language-standards and terminology before translating.
      *
      * @param mixed $adl_text Archetype (ADL)
      * @param mixed $source_language_code Source language code
