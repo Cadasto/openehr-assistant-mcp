@@ -1,11 +1,15 @@
+---
+kind: guide
+---
+
 # Testing and validation
 
 This page is for contributors checking a change before they push: how to run the
 PHPUnit suite, PHPStan, coverage, the MCP conformance suite, and the SDD drift gate.
 It is the operational companion to the [SDD docs](README.md) and satisfies REQ-N2,
-REQ-N3, and REQ-N6. Tests are the verification end of the
-[traceability chain](traceability.md): each `src/` class has a mirrored
-`tests/…/*Test`.
+REQ-N3, and REQ-N6. Tests are what make the [constitution](architecture.md) bind:
+each of its MUST sentences has a test that fails when the rule breaks, and `src/`
+classes have a mirrored `tests/…/*Test`.
 
 All commands run **inside the dev container** (see [development.md](development.md)).
 Start the stack first with `make up-dev && make install`.
@@ -66,20 +70,20 @@ Results are written to `conformance/`; expected/known failures are listed in
 
 ## SDD drift gate (REQ-N8)
 
-`make spec-check` (`composer check:spec` in the container) validates
-[traceability.yaml](traceability.yaml) against the tree and fails on a missing
-artefact, a dangling path, or a disagreement with the requirements index. When you
-add or move a `REQ-*`, a capability class, or its test, update the map in the same
-change.
+`make spec-check` (`composer check:spec` in the container) runs
+`scripts/sdd-check.py`, the sdd plugin's gate, vendored and version-pinned in
+[.sdd.yaml](.sdd.yaml): first its self-test, then the check. On the informative
+profile the check covers the documents: the descriptor, every page's `kind:`
+frontmatter, relative links and anchors, CHANGELOG bullets, and generated indexes
+(the ADR index; regenerate it with `python3 scripts/sdd-check.py generate --root .`
+in the dev container).
 
 ```bash
 make spec-check
 ```
 
-`scripts/sdd-check.py` is the sdd plugin's own gate, vendored and version-pinned in
-[.sdd.yaml](.sdd.yaml) so the `/sdd-*` skills run a known copy. Neither `make ci` nor
-PR validation runs it: it does not yet accept this repo's `REQ-F1` identifier style
-or map format, so the PHP gate above remains the CI gate.
+Never edit `scripts/sdd-check.py` by hand; upgrade it by re-vendoring with
+`/sdd-scaffold --upgrade`, which also bumps the pin.
 
 ## Before pushing
 

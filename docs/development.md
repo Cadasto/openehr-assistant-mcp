@@ -1,3 +1,7 @@
+---
+kind: guide
+---
+
 # Development environment
 
 This page is for contributors who run and change the server locally: the
@@ -243,19 +247,18 @@ composer check:phpstan
   - `CompletionProviders/`: argument completion providers
   - `Helpers/`: internal helpers (for example content-type and ADL mapping, terminology XML loading, the search tokenizer, CLI options)
   - `Apis/`: internal API clients (CKM)
-  - `Sdd/`: the `spec-check` traceability drift gate (`SpecCheck`)
   - `templates/`: guide and spec-digest authoring conventions and templates
   - `constants.php`: loads env and defaults (incl. `APP_VERSION`)
 - `resources/`: guides, examples, BMM JSON, terminology, prompt bodies, `server-instructions.md`
 - `.docker/`: `docker-compose.yml` (`app`, `ingress`), `docker-compose.dev.yml` (port 8343, `node`), multi-stage `Dockerfile`, `Caddyfile`, PHP config
 - `tests/`: PHPUnit tests and PHPStan config
-- `scripts/`: CLI entry points for repo tooling (for example `spec-check.php`)
+- `scripts/`: repo tooling, among it `sdd-check.py`, the sdd plugin's drift gate (vendored; never edit it by hand)
 - `docs/`: Specification-Driven Development docs (see [README](README.md))
 
 For the component-level architecture (layers, the single CKM HTTP boundary, the
-test mirror), see [architecture.md](architecture.md).
+test mirror), see [components.md](components.md).
 
 ## Next
 
 - Running and validating the suite → [testing.md](testing.md)
-- What the components are → [architecture.md](architecture.md)
+- What the components are → [components.md](components.md); the rules every change keeps → [architecture.md](architecture.md)
