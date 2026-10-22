@@ -95,8 +95,9 @@ restate the PR body.
 ## Modes and lanes
 
 - **New behaviour** → *spec-first*: `/sdd-specify` → `/sdd-deliver`.
-- **Hardening shipped code** → *implementation-aligned*: change the code, then update the constitution
-  (through `/sdd-specify`) and the guide in the **same** change.
+- **Hardening shipped code** → *implementation-aligned*: change the code, then bring the pages that
+  describe it up to date in the **same** change; amend the constitution (through `/sdd-specify`) only
+  when one of its binding sentences no longer holds.
 - **Lane** (formal profile) is answered in one PR-body line: does this change alter any normative
   statement? If not, it is the maintenance lane and owes no normative bookkeeping. The informative profile
   has one lane. See [development-process.md](development-process.md).

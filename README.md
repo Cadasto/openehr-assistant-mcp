@@ -123,8 +123,6 @@ Argument suggestions in MCP clients when reading resource templates:
 
 - `Guides`: guide `{name}` values per category (`openehr://guides/{category}/{name}`)
 - `Examples`: example `{name}` values per kind (`openehr://examples/{kind}/{name}`)
-- `SpecificationComponents`: `{component}` values for type specifications (`openehr://spec/type/{component}/{name}`)
-- `Examples`: example `{name}` values per kind (`openehr://examples/{kind}/{name}`)
 - `SpecificationComponents`: `{component}` values from `resources/bmm` (`openehr://spec/type/{component}/{name}`)
 
 ### Resources
