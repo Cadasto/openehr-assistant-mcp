@@ -12,6 +12,11 @@ final class TypeSpecifications
 {
     public const string DIR = APP_DIR . '/resources/bmm';
 
+    public function __construct(
+        private readonly string $dir = self::DIR,
+    ) {
+    }
+
     /**
      * Read an openEHR Type (class) specification in BMM JSON format from the specifications/types resource tree.
      *
@@ -53,7 +58,7 @@ final class TypeSpecifications
             throw new ResourceReadException(\sprintf('Invalid type specification name: %s', $name));
         }
 
-        $path = self::DIR . "/$component/$name.bmm.json";
+        $path = $this->dir . "/$component/$name.bmm.json";
         if (!\is_file($path) || !\is_readable($path)) {
             throw new ResourceReadException(\sprintf('Type specification not found: %s/%s', $component, $name));
         }
@@ -61,8 +66,20 @@ final class TypeSpecifications
         $json = \file_get_contents($path)
             ?: throw new ResourceReadException(\sprintf('Unable to read Type specification %s/%s content.', $component, $name));
 
-        return json_decode($json, true)
-            ?: throw new ResourceReadException(\sprintf('Unable to decode Type specification %s/%s content.', $component, $name));
+        try {
+            $type = \json_decode($json, true, flags: \JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new ResourceReadException(
+                \sprintf('Unable to decode Type specification %s/%s content.', $component, $name),
+                previous: $e,
+            );
+        }
+        // Valid JSON can still be no type at all: `{}`, `null`, a string or a list.
+        if (!\is_array($type) || \array_is_list($type)) {
+            throw new ResourceReadException(\sprintf('Type specification %s/%s is empty or not a JSON object.', $component, $name));
+        }
+
+        return $type;
     }
 
 }
