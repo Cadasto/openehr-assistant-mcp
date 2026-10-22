@@ -23,14 +23,14 @@ AQL is the openEHR standard for querying EHR content. Queries are written agains
 
 `FROM … CONTAINS …` expresses RM containment. It is the query’s semantic join plan:
 
-- Walk down RM containment (e.g. EHR → COMPOSITION → SECTION or ENTRY; COMPOSITION can contain SECTION, OBSERVATION, EVALUATION, ACTION, ADMIN_ENTRY, etc., as per RM hierarchy)
+- Walk down RM containment (e.g. EHR → COMPOSITION → SECTION or ENTRY; see syntax guide, FROM and CONTAINS)
 - Bind aliases to nodes for projection and filtering
 - Constrain archetype ids early to reduce the search space
 - Use AND/OR and NOT CONTAINS when multiple or exclusion constraints are needed (see syntax guide)
 
 ### Paths define what you read
 
-Once aliases exist, **archetype paths** (and RM class attribute paths) are used to project (SELECT), filter (WHERE), and order (ORDER BY). In AQL, paths are **archetype paths**: they are grounded in the archetype definition and constraints. Path segments and predicates are tightly coupled to RM class properties and to the archetype node tree. See openEHR path syntax and archetype structure in `openehr://guides/archetypes/adl-syntax` (Paths and Identifiers). Node-id predicates on repeated segments provide determinism.
+Once aliases exist, **archetype paths** (and RM class attribute paths) are used to project (SELECT), filter (WHERE), and order (ORDER BY). Node-id predicates on repeated segments provide determinism. Path semantics and predicate forms: see `openehr://guides/aql/syntax` (Paths and Predicates).
 
 ---
 
@@ -69,7 +69,7 @@ The spec defines AQL; engines implement subsets and extensions. Treat “support
 Portability cautions:
 
 - **Template disambiguation:** When the same archetype is reused across templates, add `template_id` conditions in WHERE for contextual disambiguation.
-- **VERSION queries:** the grammar defines `VERSION` class expressions with `LATEST_VERSION`/`ALL_VERSIONS` predicates, but the spec prose does not define their semantics or the no-predicate default (the grammar makes the predicate optional but no default is specified; implementations commonly default to latest-only). Always state the predicate explicitly and verify engine behaviour before use.
+- **VERSION queries:** semantics and the no-predicate default are unspecified; always state `[LATEST_VERSION]`/`[ALL_VERSIONS]` and verify engine behaviour (see `openehr://guides/aql/syntax`, VERSION in FROM).
 - **Repeating structures:** Projecting multiple paths from different repeating scopes can cause row explosion (Cartesian-like combinations). Validate result shape against concrete sample data when querying repeated clinical structures.
 - **Deep path predicates:** Prefer WHERE for non-structural value criteria over exotic path predicates in class expressions; engine support varies.
 
@@ -90,7 +90,7 @@ Stored queries are preferred for production: they support governance (review, ap
 
 1. Define the clinical question (concept, timeframe, cohort, output).
 2. Identify archetype/template(s) that encode the concept.
-3. Build minimal containment (EHR → COMPOSITION → targeted content: SECTION, OBSERVATION, EVALUATION, ACTION, etc., as per RM).
+3. Build minimal containment (EHR → COMPOSITION → targeted content).
 4. Choose leaf projections; add identity, time, and code filters; add ordering/pagination.
 5. Validate syntax, template/path correctness, and engine compatibility.
 

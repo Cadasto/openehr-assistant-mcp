@@ -9,11 +9,11 @@ Before fetching any openEHR specification document, route through this lookup or
 
 ## 1. Site-level index: `llms.txt`
 
-`https://specifications.openehr.org/llms.txt` enumerates every release, document, and JSON endpoint in a machine-readable list. Use it to:
+`https://specifications.openehr.org/llms.txt` lists each component with one release (mostly a pinned `Release-x.y.z`), its documents, and the JSON endpoints. Use it to:
 
 - resolve a user's component/doc phrase to a canonical URL,
 - discover sibling docs within a component,
-- prefer `development` stream URLs unless the user requests a fixed release tag.
+- prefer `development` stream URLs (swap the release segment, e.g. `releases/RM/development/`) unless the user requests a fixed release tag.
 
 ## 2. Markdown twin of spec pages
 
@@ -24,22 +24,22 @@ Before fetching any openEHR specification document, route through this lookup or
 
 The same representation is also obtainable by sending `Accept: text/markdown` against the HTML URL.
 
-**Caveat — do not miss this:** the Markdown representation contains prose, rationale, and examples, **but not the per-class tables** of attributes, functions, invariants, and inherited members. For those, fall through to step 3 or the HTML page.
+**Caveat — do not miss this:** the Markdown representation contains prose, rationale, and examples, **but not the per-class tables** of attributes, functions, invariants, and inherited members. For those, use `type_specification_get` (BMM-backed) first, then the HTML page.
 
 ## 3. Structured JSON APIs
 
 - `GET /api/components.json` — every component, short description, current release.
-- `GET /api/classes.json` — every class across every release, with source doc and anchor.
-- `GET /api/releases.json` — release calendar and status.
+- `GET /api/classes.json` — flat class index (development stream): component, package, spec, anchor; some `link` values are empty.
+- `GET /api/releases.json` — release calendar (id, component, date); status is in `components.json`.
 
 Use these for class lookup, component enumeration, and release-tag resolution instead of scraping HTML.
 
 ## 4. Fall-through order
 
 1. Is the user asking for a digest/overview? → try `guide_search(category="specs")` first; if a digest of the target doc exists, prefer it.
-2. Is the user asking about a class? → `/api/classes.json` then `type_specification_get`.
+2. Is the user asking about a class? → `type_specification_get`; `/api/classes.json` only to locate its spec page and anchor.
 3. Is the user asking about prose, rationale, or examples? → `.md` twin URL (cheapest textual source).
-4. Does the answer require a class-level attribute / function / invariant table? → HTML URL (Markdown omits these).
+4. Does the answer require a class-level attribute / function / invariant table? → `type_specification_get`, then the HTML URL (Markdown omits these).
 
 ## When this guide is wrong
 

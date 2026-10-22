@@ -68,7 +68,7 @@ FROM EHR e
     CONTAINS COMPOSITION c
 ```
 
-**Spec status:** these constructs exist **in the grammar only** — the specification prose does not define their semantics, nor the default when the predicate is omitted (the grammar makes the predicate optional but no default is specified; implementations commonly default to latest-version-only). For portability: always state `[LATEST_VERSION]` or `[ALL_VERSIONS]` explicitly, and verify engine support before use. `VERSIONED_OBJECT` (and other RM version-container classes) parse as ordinary class expressions; only reference them when projecting container-level attributes (e.g. `vo/trunk_lifecycle_state`). Common VERSION projections: `v/uid/value`, `v/preceding_version_uid/value`, `v/commit_audit/time_committed/value`, `v/commit_audit/change_type`, `v/lifecycle_state/defining_code/code_string`.
+**Spec status:** these constructs exist **in the grammar only** — the specification prose does not define their semantics, nor the default when the predicate is omitted (the grammar makes the predicate optional but no default is specified; implementations commonly default to latest-version-only). For portability: always state `[LATEST_VERSION]` or `[ALL_VERSIONS]` explicitly, and verify engine support before use. `VERSIONED_OBJECT` (and other RM version-container classes) parse as ordinary class expressions; only reference them when projecting container-level attributes (`uid`, `owner_id`, `time_created`, e.g. `vo/time_created/value`; `trunk_lifecycle_state` is a function, not an attribute). Common VERSION projections: `v/uid/value`, `v/preceding_version_uid/value`, `v/commit_audit/time_committed/value`, `v/commit_audit/change_type/defining_code/code_string`, `v/lifecycle_state/defining_code/code_string`.
 
 ---
 
@@ -103,7 +103,7 @@ Node predicate forms defined by the spec (all shortcuts for standard predicates 
 - `[at0004, at0005]` or `[at0004, snomed_ct::313267000|optional label|]` — name matched by term code (`terminology_id::code_string|value|`)
 - `[at0004 and value/defining_code/terminology_id/value=$tid]` — general criterion (advanced form)
 
-Common value access by RM type: DV_TEXT `.../value/value`; DV_CODED_TEXT `.../value/defining_code/code_string`; DV_QUANTITY `.../value/magnitude`, `.../value/units`; DV_DATE_TIME `.../value` (or `.../value/value` depending on serialization). Verify against the **deployed template** and engine.
+Common value access by RM type: DV_TEXT `.../value/value`; DV_CODED_TEXT `.../value/defining_code/code_string`; DV_QUANTITY `.../value/magnitude`, `.../value/units`; DV_DATE_TIME `.../value/value` (ISO 8601 string; `.../value` alone is the DV_DATE_TIME object). Verify against the **deployed template** and engine.
 
 ---
 
@@ -125,15 +125,15 @@ Prefer half-open time windows (`>= $from` AND `< $to`) to avoid boundary duplica
 
 ## ORDER BY, LIMIT, OFFSET
 
-ORDER BY: comma-separated **identified paths**, each optionally followed by `DESC`/`DESCENDING`/`ASC`/`ASCENDING` (default: ascending). Without ORDER BY, result order is undefined by the spec. LIMIT n [OFFSET m] for pagination: `n >= 1`, `m >= 0` (default 0); with `DISTINCT`, LIMIT/OFFSET apply after duplicate removal. Do not use LIMIT/OFFSET without ORDER BY when stable paging is required.
+ORDER BY: comma-separated **identified paths**, each optionally followed by `DESC`/`DESCENDING`/`ASC`/`ASCENDING` (default: ascending). Without ORDER BY, result order is undefined by the spec. LIMIT n [OFFSET m] for pagination: integer literals (the grammar admits no `$parameters` here), `n >= 1`, `m >= 0` (default 0); with `DISTINCT`, LIMIT/OFFSET apply after duplicate removal. Do not use LIMIT/OFFSET without ORDER BY when stable paging is required.
 
 ---
 
 ## Functions and Aggregates
 
-Spec-normative aggregates: `COUNT`, `MIN`, `MAX`, `SUM`, `AVG`. The spec also defines core single-row built-in functions: string `LENGTH`, `CONTAINS`, `POSITION`, `SUBSTRING`, `CONCAT`, `CONCAT_WS`; numeric `ABS`, `MOD`, `CEIL`, `FLOOR`, `ROUND`; date/time `CURRENT_DATE`, `CURRENT_TIME`, `CURRENT_DATE_TIME` (alias `NOW`), `CURRENT_TIMEZONE`; plus `TERMINOLOGY(operation, service_api, params_uri)` for terminology-server calls (usable as `MATCHES` operand or as a boolean expression). In practice `COUNT`, `MIN`, `MAX` are broadly implemented; engine coverage of the other aggregates and of the single-row functions varies — verify against your target engine before relying on them. Any function beyond this core list is an engine extension.
+Spec-normative aggregates: `COUNT`, `MIN`, `MAX`, `SUM`, `AVG`. The spec also defines core single-row built-in functions: string `LENGTH`, `CONTAINS`, `POSITION`, `SUBSTRING`, `CONCAT`, `CONCAT_WS`; numeric `ABS`, `MOD`, `CEIL`, `FLOOR`, `ROUND`; date/time `CURRENT_DATE`, `CURRENT_TIME`, `CURRENT_DATE_TIME` (alias `NOW`), `CURRENT_TIMEZONE`; plus `TERMINOLOGY(operation, service_api, params_uri)` for terminology-server calls (usable as `MATCHES` operand, or as a boolean compared in WHERE: `TERMINOLOGY(…) = true`). In practice `COUNT`, `MIN`, `MAX` are broadly implemented; engine coverage of the other aggregates and of the single-row functions varies — verify against your target engine before relying on them. Any function beyond this core list is an engine extension.
 
-- `COUNT([DISTINCT] path | *)` — `COUNT(*)` returns 0 on empty; other aggregates return NULL on empty.
+- `COUNT([DISTINCT] path | *)` — always an Integer, 0 on empty; other aggregates return NULL on empty.
 - `MIN(path)`, `MAX(path)`, `SUM(path)`, `AVG(path)` — NULL on empty result; arguments are identified paths. `MIN`/`MAX` accept String, date/time, Integer or Real inputs; `SUM`/`AVG` numeric only.
 
 ---

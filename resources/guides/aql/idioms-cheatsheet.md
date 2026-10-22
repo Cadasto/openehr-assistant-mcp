@@ -8,7 +8,7 @@
 
 ## Canonical Skeleton
 
-Containment follows RM hierarchy; COMPOSITION can contain SECTION or ENTRY types (OBSERVATION, EVALUATION, ACTION, etc.). Use AND/OR/NOT CONTAINS when needed (see openehr://guides/aql/syntax).
+Containment follows RM hierarchy; for contained types and AND/OR/NOT CONTAINS see openehr://guides/aql/syntax (FROM and CONTAINS).
 
 ```aql
 SELECT <projections>
@@ -37,7 +37,7 @@ CONTAINS OBSERVATION o[openEHR-EHR-OBSERVATION.blood_pressure.v1]
 CONTAINS SECTION s[openEHR-EHR-SECTION.adhoc.v1]
 ```
 
-Apply early in containment for selectivity. Containment targets SECTION, OBSERVATION, EVALUATION, ACTION, etc., as per RM and deployed templates.
+Apply early in containment for selectivity.
 
 ---
 
@@ -115,7 +115,7 @@ Project only what you need: identifiers (e/ehr_id/value, c/uid/value), time (com
 
 ## Archetype Path and Node-Id Rule
 
-Paths in AQL are **archetype paths**: grounded in the archetype definition and constraints; segments and predicates are tied to RM class properties. See openehr://guides/archetypes/adl-syntax for path semantics. Every repeating segment must use a node id (at-code from the archetype).
+Every repeating segment must use a node id (at-code from the archetype); path semantics: see openehr://guides/aql/syntax (Paths and Predicates).
 
 ✅ `events[at0006]/data[at0003]/items[at0004]`  
 ⚠ `events/data/items`
@@ -142,7 +142,7 @@ Commit audit of current versions:
 SELECT
   c/uid/value AS uid,
   v/commit_audit/time_committed/value AS committed,
-  v/commit_audit/change_type/value AS change_type
+  v/commit_audit/change_type/defining_code/code_string AS change_type
 FROM EHR e
   CONTAINS VERSION v[LATEST_VERSION]
     CONTAINS COMPOSITION c
@@ -150,7 +150,7 @@ FROM EHR e
 
 Full history: `VERSION v[ALL_VERSIONS]`; add `v/preceding_version_uid/value` to chain revisions.
 
-Always state `[LATEST_VERSION]` / `[ALL_VERSIONS]` explicitly — the no-predicate default is not defined by the spec (implementations commonly return latest only). These constructs are grammar-level only (semantics not in spec prose); verify engine support. Lifecycle filtering via `v/lifecycle_state/defining_code/code_string` (openEHR terminology: 532 complete, 553 incomplete, 523 deleted) is likewise engine-dependent.
+Always state `[LATEST_VERSION]` / `[ALL_VERSIONS]` explicitly and verify engine support (see openehr://guides/aql/syntax, VERSION in FROM). Lifecycle filtering via `v/lifecycle_state/defining_code/code_string` (openEHR terminology: 532 complete, 553 incomplete, 523 deleted, 800 inactive, 801 abandoned) is likewise engine-dependent.
 
 ---
 
@@ -158,8 +158,8 @@ Always state `[LATEST_VERSION]` / `[ALL_VERSIONS]` explicitly — the no-predica
 
 - `$ehrId` (UUID string)
 - `$from`, `$to` (temporal)
-- `$code`, `$codes` (string / list)
-- `$limit`, `$offset` (integers)
+- `$code` (string); for a set, one parameter per item: `MATCHES {$code1, $code2}` (list-valued parameters are engine-specific)
+- No `$limit`/`$offset`: LIMIT/OFFSET take integer literals; page at runtime via the query API (`offset`/`fetch`)
 
 Keep names consistent for predictable execution.
 
