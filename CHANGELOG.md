@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Changed
 
 - Dev: the MCP Inspector moves to 2.12.0 on its upstream image; open it at `localhost`, as other addresses cannot run its UI over plain http.
+- Prompts: `guide_explorer` names the PROC, CNF and AM2 spec digests.
 - SDD: moved to the sdd informative profile, where the code leads and only the `docs/architecture.md` constitution binds; the traceability map and its matrix are retired.
 - SDD: the vendored `sdd-check` replaced the PHP `spec-check` gate in `make ci` and PR validation.
 - Docs: restructured the README and line-edited the contributor docs, correcting stale `make ci` and configuration details.
@@ -25,6 +26,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Tools: optional enum filters publish strings only, so JetBrains AI Assistant loads the tools again (#28) — **breaking** for clients that send an explicit `null`.
 - Tools: `guide_search` publishes `taskType` as a plain string, which single-`type` schema dialects accept — **breaking** for clients that send an explicit `null`.
 - Tools: CKM lookups validate identifiers before they reach the request URL, and a CKM outage during archetype-id resolution is reported as one.
+- Tools: `ckm_archetype_get` and `ckm_template_get` report an unknown format as a tool error.
+- Tools: `type_specification_search` ignores dots in a pattern as `type_specification_get` does, instead of matching nothing.
+- Tools/resources: a terminology load failure is reported once and keeps its cause.
+- Helpers: a malformed terminology file no longer prints libxml warnings to stdout, which could corrupt the stdio transport.
 - Tools/resources: guide, example and type-spec lookups refuse dot-only names and report not-found, invalid-name and decode errors accurately.
 - Dev: the dev stack accepts `host.docker.internal`, the URL the install guide gives clients in other containers.
 
