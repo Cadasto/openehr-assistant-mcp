@@ -14,8 +14,6 @@ final class TerminologyXmlLoaderTest extends TestCase
 {
     private string $dir;
 
-    private ?bool $libxmlInternalErrors = null;
-
     protected function setUp(): void
     {
         // A fresh directory per test, so a path cached by an earlier test is never reused.
@@ -25,10 +23,6 @@ final class TerminologyXmlLoaderTest extends TestCase
 
     protected function tearDown(): void
     {
-        if ($this->libxmlInternalErrors !== null) {
-            libxml_clear_errors();
-            libxml_use_internal_errors($this->libxmlInternalErrors);
-        }
         foreach (glob($this->dir . '/*') ?: [] as $file) {
             unlink($file);
         }
@@ -71,13 +65,38 @@ final class TerminologyXmlLoaderTest extends TestCase
     {
         $path = $this->dir . '/broken.xml';
         file_put_contents($path, 'not xml');
-        // libxml reports each parse error as a PHP warning as well; keep them out of the run.
-        $this->libxmlInternalErrors = libxml_use_internal_errors(true);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/^Error parsing terminology XML: String could not be parsed as XML$/');
 
         TerminologyXmlLoader::load($path);
+    }
+
+    public function test_an_unparseable_file_raises_no_php_warning_and_restores_the_libxml_mode(): void
+    {
+        $path = $this->dir . '/broken.xml';
+        file_put_contents($path, 'not xml');
+        $callerMode = libxml_use_internal_errors(false);
+        $warnings = [];
+        set_error_handler(static function (int $errno, string $errstr) use (&$warnings): bool {
+            $warnings[] = $errstr;
+
+            return true;
+        });
+
+        try {
+            TerminologyXmlLoader::load($path);
+            $this->fail('expected the unparseable file to be refused');
+        } catch (RuntimeException) {
+            // Refused, as test_an_unparseable_file_is_refused pins.
+        } finally {
+            restore_error_handler();
+            $modeLeftByLoader = libxml_use_internal_errors($callerMode);
+        }
+
+        // On the stdio transport a warning printed to stdout would corrupt the JSON-RPC stream.
+        $this->assertSame([], $warnings);
+        $this->assertFalse($modeLeftByLoader, 'the loader must restore the libxml error mode it found');
     }
 
     public function test_a_file_without_groups_is_refused(): void

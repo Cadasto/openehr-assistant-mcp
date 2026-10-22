@@ -17,8 +17,6 @@ final class TerminologyServiceTest extends TestCase
 
     private ?string $dir = null;
 
-    private ?bool $libxmlInternalErrors = null;
-
     protected function setUp(): void
     {
         $this->service = new TerminologyService(new NullLogger());
@@ -26,10 +24,6 @@ final class TerminologyServiceTest extends TestCase
 
     protected function tearDown(): void
     {
-        if ($this->libxmlInternalErrors !== null) {
-            libxml_clear_errors();
-            libxml_use_internal_errors($this->libxmlInternalErrors);
-        }
         if ($this->dir !== null) {
             foreach (glob($this->dir . '/*') ?: [] as $file) {
                 unlink($file);
@@ -115,9 +109,6 @@ final class TerminologyServiceTest extends TestCase
     public function test_resolve_reports_an_unparseable_terminology_file_once(): void
     {
         $path = $this->temporaryFile('broken.xml', 'not xml');
-        // libxml reports each parse error as a PHP warning as well; keep them out of the run.
-        $this->libxmlInternalErrors = libxml_use_internal_errors(true);
-
         // Matched whole: the loader's message already names the parse failure.
         $this->expectException(ToolCallException::class);
         $this->expectExceptionMessageMatches('/^Error parsing terminology XML: String could not be parsed as XML$/');

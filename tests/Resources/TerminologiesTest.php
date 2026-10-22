@@ -5,8 +5,6 @@ namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Resources;
 
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Terminologies;
 use Mcp\Exception\ResourceReadException;
-use Mcp\Server;
-use Mcp\Server\Builder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 

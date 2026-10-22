@@ -27,10 +27,16 @@ final class TerminologyXmlLoader
             throw new RuntimeException('Unable to read terminology file.');
         }
 
+        // Collect libxml errors instead of letting each one surface as a PHP warning: on the
+        // stdio transport a warning printed to stdout would corrupt the JSON-RPC stream.
+        $previousMode = libxml_use_internal_errors(true);
         try {
             $xml = new SimpleXMLElement($content);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             throw new RuntimeException('Error parsing terminology XML: ' . $e->getMessage(), previous: $e);
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previousMode);
         }
 
         $groups = $xml->xpath('/terminology/group');
