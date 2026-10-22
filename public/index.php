@@ -78,7 +78,7 @@ try {
     $builder = Server::builder()
         ->setServerInfo(APP_TITLE, APP_VERSION, APP_DESCRIPTION, [new Icon(APP_ICON)])
         ->setDiscovery(APP_DIR, ['src/Prompts', 'src/Tools', 'src/Resources'], cache: $cache)
-        // Publish optional enums as strings only, never with null in enum (REQ-N9, #28).
+        // Publish optional enums as strings only, never with null in enum (constitution § Contracts, #28).
         ->setSchemaGenerator(new OptionalEnumSchemaGenerator())
         // mcp/sdk 0.7.0 makes element loading lazy by default. Force eager
         // loading so a broken capability fails at build() (on every request

@@ -9,7 +9,7 @@ use Mcp\Capability\Discovery\SchemaGenerator;
 use Mcp\Capability\Discovery\SchemaGeneratorInterface;
 
 /**
- * Publishes optional enum parameters as plain string enums (REQ-N9, issue #28).
+ * Publishes optional enum parameters as plain string enums (constitution § Contracts, issue #28).
  *
  * The SDK renders `#[Schema(enum: [...])] ?string $x = null` as
  * `{"type": ["null", "string"], "default": null, "enum": [...]}`, and adds `null` to the

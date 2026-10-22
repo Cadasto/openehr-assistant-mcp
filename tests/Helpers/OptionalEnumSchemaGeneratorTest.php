@@ -41,7 +41,7 @@ final class OptionalEnumSchemaGeneratorTest extends TestCase
      * @param array<string, mixed> $expected
      */
     #[DataProvider('optionalNullableEnumProvider')]
-    public function test_REQ_N9_optional_nullable_enum_is_published_as_strings_only(\Closure $fixture, array $expected): void
+    public function test_optional_nullable_enum_is_published_as_strings_only(\Closure $fixture, array $expected): void
     {
         $raw = self::rawSchema($fixture);
         $this->assertSame(['null', 'string'], $raw['properties']['x']['type'], 'Fixture precondition: the SDK renders the parameter as nullable');
@@ -52,7 +52,7 @@ final class OptionalEnumSchemaGeneratorTest extends TestCase
         $this->assertArrayNotHasKey('required', $schema);
     }
 
-    public function test_REQ_N9_required_nullable_enum_is_left_unchanged(): void
+    public function test_required_nullable_enum_is_left_unchanged(): void
     {
         $fixture = static fn (#[Schema(enum: ['a', 'b', null])] ?string $x): null => null;
         $raw = self::rawSchema($fixture);
@@ -64,7 +64,7 @@ final class OptionalEnumSchemaGeneratorTest extends TestCase
         $this->assertSame($raw, $schema);
     }
 
-    public function test_REQ_N9_optional_nullable_parameter_without_enum_keeps_its_nullable_type_and_default(): void
+    public function test_optional_nullable_parameter_without_enum_keeps_its_nullable_type_and_default(): void
     {
         $fixture = static fn (?string $x = null): null => null;
         $raw = self::rawSchema($fixture);
@@ -77,7 +77,7 @@ final class OptionalEnumSchemaGeneratorTest extends TestCase
         $this->assertNull($schema['properties']['x']['default']);
     }
 
-    public function test_REQ_N9_optional_enum_with_a_non_null_default_is_left_unchanged(): void
+    public function test_optional_enum_with_a_non_null_default_is_left_unchanged(): void
     {
         $fixture = static fn (#[Schema(enum: ['a', 'b'])] string $x = 'a'): null => null;
         $raw = self::rawSchema($fixture);
@@ -89,7 +89,7 @@ final class OptionalEnumSchemaGeneratorTest extends TestCase
         $this->assertSame(['a', 'b'], $schema['properties']['x']['enum']);
     }
 
-    public function test_REQ_N9_method_level_keys_pass_through(): void
+    public function test_method_level_keys_pass_through(): void
     {
         $fixture = new class () {
             #[Schema(additionalProperties: false)]
@@ -111,7 +111,7 @@ final class OptionalEnumSchemaGeneratorTest extends TestCase
         $this->assertSame(['type' => 'string', 'enum' => ['a', 'b']], $schema['properties']['kind']);
     }
 
-    public function test_REQ_N9_schema_without_parameters_passes_through(): void
+    public function test_schema_without_parameters_passes_through(): void
     {
         $fixture = static fn (): null => null;
         $raw = self::rawSchema($fixture);
@@ -122,7 +122,7 @@ final class OptionalEnumSchemaGeneratorTest extends TestCase
         $this->assertInstanceOf(\stdClass::class, $schema['properties']);
     }
 
-    public function test_REQ_N9_schema_definition_without_properties_passes_through(): void
+    public function test_schema_definition_without_properties_passes_through(): void
     {
         // A method-level `#[Schema(definition: ...)]` is published as written.
         $definition = ['type' => 'object', 'additionalProperties' => true];
@@ -134,7 +134,7 @@ final class OptionalEnumSchemaGeneratorTest extends TestCase
         $this->assertSame($definition, $schema);
     }
 
-    public function test_REQ_N9_union_type_keeps_its_other_types_as_a_list(): void
+    public function test_union_type_keeps_its_other_types_as_a_list(): void
     {
         $inner = $this->createStub(SchemaGeneratorInterface::class);
         $inner->method('generate')->willReturn([
@@ -175,7 +175,7 @@ final class OptionalEnumSchemaGeneratorTest extends TestCase
      * @param array<string, mixed>|null $outputSchema
      */
     #[DataProvider('outputSchemaProvider')]
-    public function test_REQ_N9_output_schema_passes_through_unchanged(?array $outputSchema): void
+    public function test_output_schema_passes_through_unchanged(?array $outputSchema): void
     {
         $inner = $this->createStub(SchemaGeneratorInterface::class);
         $inner->method('generateOutputSchema')->willReturn($outputSchema);

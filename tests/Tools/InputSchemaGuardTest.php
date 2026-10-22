@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 
 /**
- * CI guard (REQ-N9): reflects every `#[McpTool]` method through the server's production
+ * CI guard (constitution § Contracts): reflects every `#[McpTool]` method through the server's production
  * {@see OptionalEnumSchemaGenerator} (the generator `public/index.php` publishes input
  * schemas with) and asserts wire-visible invariants that are easy to silently regress
  * when adding a parameter:
@@ -89,7 +89,7 @@ final class InputSchemaGuardTest extends TestCase
         );
     }
 
-    public function test_REQ_N9_no_published_enum_holds_null(): void
+    public function test_no_published_enum_holds_null(): void
     {
         // Every parameter, required or optional: issue #28's symptom is a null in any enum.
         $enumParameters = [];
@@ -154,7 +154,7 @@ final class InputSchemaGuardTest extends TestCase
     }
 
     #[DataProvider('wiringOutsideLiveCodeProvider')]
-    public function test_REQ_N9_wiring_check_ignores_a_call_outside_live_code(string $source): void
+    public function test_wiring_check_ignores_a_call_outside_live_code(string $source): void
     {
         $this->assertMatchesRegularExpression(self::WIRING_PATTERN, $source, 'Fixture precondition: the raw text holds the call');
 

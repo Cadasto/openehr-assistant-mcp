@@ -60,7 +60,7 @@ final class InputSchemaValidationTest extends TestCase
             // BREAKING: the empty-string sentinel used to mean "no filter". Clients must now
             // omit the argument. Paired plugin PR depends on this.
             'empty string for an optional enum' => [['category' => ''], false, ['category', 'enum']],
-            // BREAKING (REQ-N9, #28): optional enums are published as strings only, so an
+            // BREAKING (constitution § Contracts, #28): optional enums are published as strings only, so an
             // explicit null is rejected rather than read as "no filter".
             'explicit null for an optional enum' => [['category' => null], false, ['category']],
             'an unknown enum value' => [['category' => 'nonsense'], false, ['category']],
