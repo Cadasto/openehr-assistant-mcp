@@ -80,6 +80,6 @@ When a leaf is constrained to DV_CODED_TEXT with an **open** value-set (`listOpe
 - **Cardinality** and data types match the template.
 - **Terminology** codes and suffixes (e.g. `|code`, `|terminology`) valid where applicable.
 - **Underscore-prefixed** paths only for valid optional RM attributes.
-- **`|other`** used only on open value-set leaves, never combined with `|code`/`|value`/`|terminology`.
+- **`|other`** used only on open value-set leaves, never combined with `|code`/`|value`/`|terminology`/`|preferred_term`.
 
 ---

@@ -10,7 +10,7 @@
 
 A **Web Template (WT)** is a JSON format that **flattens and simplifies an OPT** into a UI- and data-entry-friendly tree. It is:
 
-- **Derived from the OPT** (not authored) — a deliberately simplified, flattened, *lossy* projection with camelCase ids, per-leaf `inputs`, and `aqlPath` on every node.
+- **Derived from the OPT** (not authored) — a deliberately simplified, flattened, *lossy* projection with lowercase snake_case node ids, per-leaf `inputs`, and `aqlPath` on every node.
 - The **path/schema source** for the FLAT (`simSDT`) and STRUCTURED (`structSDT`) composition serialisations — the segment ids used in FLAT paths are Web-Template node ids.
 
 > A Web Template is **not** a template you write, and **not** a JSON re-serialisation of the OPT/AOM. Better's own framing: the OPT "can be hard to parse," and the Web Template is "a much simpler JSON format based on the operational template."
@@ -33,7 +33,7 @@ EHRbase serves it from `GET .../definition/template/adl1.4/{template_id}` with `
 
 **Root** (`WebTemplate`): `templateId`, `version` (EHRbase `"2.3"`), `defaultLanguage`, `languages[]`, `tree` (single root node), `semVer?` (Better), `otherDetails?`.
 
-**Node** (`WebTemplateNode`, recursive): `id` (sanitised camelCase "web id", disambiguated among siblings) · `name` · `localizedName(s)` / `localizedDescriptions` · `rmType` (e.g. `OBSERVATION`, `DV_QUANTITY`) · `nodeId` (archetype id or `atNNNN`) · `min`/`max` (`max=-1` = unbounded) · `aqlPath` (canonical AQL/AOM path with `atNNNN`) · `cardinalities` · `dependsOn` · `inContext` · `termBindings` · `annotations` · `proportionTypes` · `inputs[]` · `children[]`.
+**Node** (`WebTemplateNode`, recursive): `id` (normalised lowercase snake_case "web id", e.g. `blood_pressure`, disambiguated among siblings; rules: openehr://guides/simplified_formats/rules) · `name` · `localizedName(s)` / `localizedDescriptions` · `rmType` (e.g. `OBSERVATION`, `DV_QUANTITY`) · `nodeId` (archetype id or `atNNNN`) · `min`/`max` (`max=-1` = unbounded) · `aqlPath` (canonical AQL/AOM path with `atNNNN`) · `cardinalities` · `dependsOn` · `inContext` · `termBindings` · `annotations` · `proportionTypes` · `inputs[]` · `children[]`.
 
 **Leaf input** (`WebTemplateInput`): `suffix` (the FLAT attribute suffix — `magnitude`, `unit`, `code`, `value`, `numerator`, `denominator`, …; empty = implicit value) · `type` (`TEXT`, `CODED_TEXT`, `DECIMAL`, `INTEGER`, `BOOLEAN`, `DATE`, `DATETIME`, `TIME`, `QUANTITY`, `COUNT`, `PROPORTION`, `DURATION`) · `list[]` (coded/ordinal: `value`, `label`, `localizedLabels`, `ordinal`, `termBindings`) · `listOpen` · `validation` (`pattern`, `range`, `precision`) · `terminology` · `defaultValue`.
 
@@ -50,7 +50,7 @@ FLAT paths are built from `id`s (plus `:index` and `|suffix`); AQL uses `aqlPath
 
 - **Not the validation contract.** A Web Template is fine for form/field-level validation, but authoritative composition validation is against the **OPT** (openehr://guides/templates/opt-structure).
 - **Vendor drift.** Better and EHRbase schemas are near-identical but not guaranteed equal; EHRbase pins `version "2.3"`.
-- **Media-type caution.** The FLAT/STRUCTURED composition media types are fixed by the spec: `application/openehr.wt.flat+json` and `application/openehr.wt.structured+json`. EHRbase's `.schema`-suffixed strings (`…wt.flat.schema+json`) are a **non-conformant deviation** — emit the canonical strings; be liberal on input if you must interoperate with current EHRbase. Legacy `simSDT`/`structSDT` names survive only as historical aliases.
+- **Media-type caution.** Canonical FLAT/STRUCTURED media types and the EHRbase `.schema` deviation: see openehr://guides/templates/serialization-formats.
 - **Not hand-written.** Regenerate it from the OPT rather than editing it.
 
 ## References

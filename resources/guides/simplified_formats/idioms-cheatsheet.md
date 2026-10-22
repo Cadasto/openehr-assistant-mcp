@@ -14,11 +14,12 @@
   "ctx/territory": "US",
   "ctx/time": "2024-01-15T10:30:00Z",
   "ctx/composer_name": "Dr. Smith",
-  "template_id/observation_id:0/any_event:0/element|magnitude": 37.5
+  "vital_signs/body_temperature:0/any_event:0/temperature|magnitude": 37.5,
+  "vital_signs/body_temperature:0/any_event:0/temperature|unit": "°C"
 }
 ```
 
-Context first; then composition paths under template/root node id.
+Context first; then composition paths under the root node id (the normalised template id, e.g. `Blood_Pressure_Demo.v0` → `blood_pressure_demo.v0`).
 
 ---
 
@@ -38,7 +39,7 @@ Context first; then composition paths under template/root node id.
 
 `|value` and `|terminology` are required only for external terminologies; for local at-codes they can be derived from the template.
 
-- `path/element|other`: free-text branch of an **open** value-set (`listOpen: true`); mutually exclusive with `|code`/`|value`/`|terminology`; persists as DV_TEXT.
+- `path/element|other`: free-text branch of an **open** value-set (`listOpen: true`); mutually exclusive with `|code`/`|value`/`|terminology`/`|preferred_term`; persists as DV_TEXT.
 
 ---
 
@@ -121,6 +122,6 @@ Use `|raw` to embed a full RM object (e.g. DV_QUANTITY) as JSON; value must incl
 - ctx/language and ctx/territory set (if required)?
 - Pipe suffixes correct for type (magnitude/unit, code/value/terminology, ordinal, numerator/denominator/type)?
 - Instance indices zero-based and within cardinality?
-- `|other` only on open (`listOpen`) coded leaves, never with `|code`/`|value`/`|terminology`?
+- `|other` only on open (`listOpen`) coded leaves, never with `|code`/`|value`/`|terminology`/`|preferred_term`?
 
 ---

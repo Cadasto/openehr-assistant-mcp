@@ -11,8 +11,7 @@
 - [ ] Is the scope of the template clearly defined (e.g., does it cover a single clinical encounter or document)?
 - [ ] Are all included archetypes necessary for this use case?
 - [ ] Have you chosen the most appropriate COMPOSITION archetype as the root?
-- [ ] For multi-template designs: Is composition type (event vs persistent longitudinal/episodic) and data category (e.g. CGEM) explicit and consistent?
-- [ ] If the template involves orders or referrals: Are Instruction/Action used only where order/fulfilment tracking is required (Managed Response), not for simple yes/no or date records?
+- [ ] For multi-template designs: Do each template's `COMPOSITION.category` and INSTRUCTION/ACTION use match its CGEM category (openehr://guides/templates/cgem-framework)?
 
 ## 2. Archetype Usage and Constraints
 - [ ] Are all mandatory elements from the underlying archetypes present?
@@ -22,7 +21,7 @@
 
 ## 3. Data Types and Values
 - [ ] Are coded elements (`DV_CODED_TEXT`) used instead of free text where appropriate?
-- [ ] For coded elements, is `limitToList="true"` set if the list is intended to be exhaustive?
+- [ ] For coded elements, is `limitToList` left `true` (the OET default) when the list is exhaustive, and `"false"` only where free text is intended?
 - [ ] Are Quantity constraints (units and ranges) defined for all `DV_QUANTITY` elements?
 - [ ] Are the units consistent with local or international standards (e.g., UCUM)?
 - [ ] Are default values set where the use case fixes a single value (e.g., setting, patient position)?
@@ -34,9 +33,9 @@
 
 ## 5. Metadata and Governance
 - [ ] Is the `<description>` section (Purpose, Use, Misuse) fully populated?
-- [ ] Is the lifecycle state correctly set (e.g., `Draft`, `Release Candidate`)?
+- [ ] Is the lifecycle state correctly set (e.g., `Initial`, `Release Candidate`, `Published`)?
 - [ ] Are authorship and copyright details provided?
-- [ ] Are there any missing integrity checks for referenced archetypes?
+- [ ] Are `integrity_checks` digests left to tooling (never hand-written; a missing digest is not a defect — see openehr://guides/templates/serialization-formats)?
 
 ## 6. Technical Validation
 - [ ] Does the template validate against the referenced archetypes?

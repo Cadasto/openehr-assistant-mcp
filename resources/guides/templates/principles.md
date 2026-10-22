@@ -73,13 +73,6 @@ Templates can embed other templates for modularity and consistency across docume
 
 ## Splitting Datasets and Composition Semantics (CGEM)
 
-When one form or use case touches many datapoints, split the dataset across templates so data is **strategic** (patient-centric, reusable) while forms stay **tactical** (good UX). The CGEM framework (freshEHR) categorises data to guide this split — see the full guide at **openehr://guides/templates/cgem-framework** for definitions, the openEHR mapping table, and caveats. In summary:
-
-- **Global Background:** True regardless of care context (e.g. allergies, CPR decision). One current version per patient → composition `category = persistent`.
-- **Contextual Situation:** Single source of truth for a care journey or episode (e.g. cancer staging, care plan). One current version per journey → composition `category = episodic` (a standalone RM category with persistent-like semantics but bounded to an episode; not a subtype of `persistent`).
-- **Event Assessment:** Each submission is a new record (e.g. clinic visit, lab result). Many compositions over time → composition `category = event`.
-- **Managed Response:** Formal order/fulfilment cycle (referral, prescription). Use Instruction and Action archetypes; place in dedicated or encounter template as appropriate.
-
-One form can read/write multiple compositions; Global Background may be read-only (AQL) in a form. Distinguish true managed workflows (Instruction/Action) from simple yes/no or date records—the latter belong in Contextual or Event templates.
+When one form or use case touches many datapoints, split the dataset across templates so data is **strategic** (patient-centric, reusable) while forms stay **tactical** (good UX); categories, `COMPOSITION.category` mapping and caveats: see openehr://guides/templates/cgem-framework.
 
 ---

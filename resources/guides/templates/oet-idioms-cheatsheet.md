@@ -38,9 +38,8 @@
 ---
 
 ## Coded Text: The "Limit to List" Guardrail
-**Idiom:** For `DV_CODED_TEXT`, define a list of `<includedValues>` and always set `limitToList="true"`.
+**Idiom:** Subset an archetype's local value set by dropping codes with `<excludedValues>local::atNNNN</excludedValues>`; `<includedValues>` lists free-text or external codes (e.g. `SNOMED-CT::…`). Keep `limitToList="true"` (the default).
 - This prevents free-text "leakage" into coded fields.
-- Use this to subset a large archetype value set to a local one.
 
 ---
 
@@ -74,10 +73,8 @@
 
 ---
 
-## Composition Type: Event vs Persistent
-**Idiom:** Choose composition semantics when designing templates. 
-- **Event:** many submissions over time, each a new composition (e.g. lab results, clinic visits). 
-- **Persistent:** single “current version”; longitudinal = lifetime (e.g. allergies), episodic = per journey (e.g. cancer care plan). Align with CGEM (Global Background → longitudinal; Contextual Situation → episodic; Event Assessment → event).
+## Composition Category
+**Idiom:** Set each template's `COMPOSITION.category` from its data lifecycle (CGEM): see openehr://guides/templates/cgem-framework.
 
 ---
 

@@ -15,13 +15,11 @@
   "ctx/territory": "US",
   "ctx/time": "2026-04-21T09:30:00Z",
   "ctx/composer_name": "Dr. A. Smith",
-  "ctx/category|code": "433",
-  "ctx/category|value": "event",
-  "ctx/category|terminology": "openehr",
-  "ctx/setting|code": "238",
-  "ctx/setting|value": "other care",
-  "ctx/setting|terminology": "openehr",
+  "ctx/setting": "238",
 
+  "vital_signs/category|code": "433",
+  "vital_signs/category|value": "event",
+  "vital_signs/category|terminology": "openehr",
   "vital_signs/blood_pressure:0/any_event:0/time": "2026-04-21T09:28:00Z",
   "vital_signs/blood_pressure:0/any_event:0/systolic|magnitude": 128,
   "vital_signs/blood_pressure:0/any_event:0/systolic|unit": "mm[Hg]",
@@ -35,7 +33,7 @@
 
 ## Notes
 
-- **`ctx/` context** carries composition-level metadata. `language` and `territory` are mandatory; most others default server-side when omitted.
+- **`ctx/` context** carries composition-level metadata. `language` and `territory` are mandatory; most others default server-side when omitted. `ctx/setting` takes the code or the value; `category` is set on the root (`vital_signs/category|code`), not through `ctx/`.
 - **Root `vital_signs`** is the normalised template id (lowercased, snake-cased). Every FLAT key is fully qualified from this root.
 - **`:0` indices** are zero-based. `blood_pressure:0/any_event:0` picks the first BP observation and its first event. Add `:1`, `:2`, … for subsequent instances.
 - **Pipe suffixes** (`|magnitude`, `|unit`, `|code`, `|value`, `|terminology`) are typed-attribute accessors — see `openehr://guides/simplified_formats/rules` for the full list.

@@ -19,9 +19,9 @@ One design intent, several serialisations — **not interchangeable**, different
 
 > **`.t.json` is NOT a web template.** It is an ADL2 *differential template* (`TEMPLATE`/`TEMPLATE_OVERLAY` in AOM2; see openehr://guides/specs/am2-AOM2). A web template is *flattened runtime* JSON from the OPT for FLAT/STRUCTURED (see openehr://guides/specs/its-rest-simplified_formats) — different lifecycle stage and consumer.
 
-**Extensions and variants.** In ADL 1.4 practice, "the OPT" is a single XML file named `.opt` (root `<template xmlns="http://schemas.openehr.org/v1">`). The `.opt`/`.optx`/`.optj` scheme above is the OPT2 (ADL2) convention: `.opt` = ADL text, `.optx` = XML, `.optj` = JSON (OPT2 spec, *Types of OPT*). OPT2 also distinguishes a **raw** OPT (all languages and terminology bindings retained) from a **profiled** OPT (languages/bindings filtered, `annotations` optionally removed, terminology substitutions applied) — formally the same artefact with less content.
+**Extensions and variants.** `.opt`/`.optx`/`.optj` above is the OPT2 (ADL2) convention; ADL 1.4 practice uses one XML `.opt`. Details and raw vs profiled OPT: see openehr://guides/templates/opt-structure.
 
-**Media types.** Composition FLAT `application/openehr.wt.flat+json` and STRUCTURED `application/openehr.wt.structured+json` are fixed by the ITS-REST *Simplified Formats* spec (no `.schema` variants — treat EHRbase's `.schema`-suffixed strings as a deviation). The web template itself is served as `application/openehr.wt+json` (ITS-REST DEFINITION API / de-facto; the WT-as-resource is out of the Simplified Formats spec's scope).
+**Media types.** Composition FLAT `application/openehr.wt.flat+json` and STRUCTURED `application/openehr.wt.structured+json` are fixed by the ITS-REST *Simplified Formats* spec (no `.schema` variants — EHRbase's `.schema`-suffixed strings, e.g. `…wt.flat.schema+json`, are a non-conformant deviation: emit the canonical strings, be liberal on input if you must interoperate with current EHRbase; legacy `simSDT`/`structSDT` names are historical aliases only). The web template itself is served as `application/openehr.wt+json` (ITS-REST DEFINITION API / de-facto; the WT-as-resource is out of the Simplified Formats spec's scope).
 
 ---
 
