@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Docs: restructured the README and line-edited the contributor docs, correcting stale `make ci` and configuration details.
 
+### Fixed
+
+- Tools: optional enum filters publish strings only, so JetBrains AI Assistant loads the tools again (#28) — **breaking** for clients that send an explicit `null`.
+
 ### Security
 
 - Dependencies: refreshed locked packages within existing constraints, clearing four known advisories (Guzzle, `mcp/sdk`, `symfony/yaml`).

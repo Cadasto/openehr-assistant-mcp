@@ -31,7 +31,7 @@ Conventions:
 |------|--------|
 | `tests/Prompts/PromptCompositionTest.php` | Prompt size vs baselines in `tests/fixtures/prompt_lengths_before_shared.json` (REQ-N7) |
 | `tests/Prompts/PromptPolicySeparationTest.php` | Global policy stays in `server-instructions.md`, not prompt files (REQ-F10) |
-| `tests/Tools/InputSchemaGuardTest.php` | Every `#[McpTool]` input schema is closed and self-consistent (REQ-N9) |
+| `tests/Tools/InputSchemaGuardTest.php` | Every `#[McpTool]` input schema is closed, and no published `enum` holds `null`: optional enums are strings only (REQ-N9) |
 | `tests/Tools/OutputSchemaConformanceTest.php` | Tool output conforms to its declared `outputSchema`, which the SDK never checks (REQ-N9) |
 | `tests/Content/InstallDocContractTest.php` | `docs/install.md` keeps the path, hosted-endpoint section, and relative links the website relies on (REQ-N10) |
 
