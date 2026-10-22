@@ -35,7 +35,7 @@ sdd:
 
   upstream: ""                           # no sibling SDD repo consumed
 
-  # Domain facts MUST be looked up here, never guessed (see ADR-0005 and REQ-N1).
+  # Domain facts are looked up here, never guessed (the rule of ADR-0005; see REQ-N1).
   ground_truth: "specifications.openehr.org (development branch), CKM, and bundled BMM/terminology — via resources/guides/howto/spec-lookup.md"
 
   check:

@@ -157,7 +157,7 @@ Environment variables are read from `.env` (template in `.env.example`):
 | `LOG_LEVEL` | Monolog level (`debug`, `info`, `warning`, `error`, …) | `info` |
 | `CKM_API_BASE_URL` | CKM REST API base URL | `https://ckm.openehr.org/ckm/rest` |
 | `HTTP_TIMEOUT` | Guzzle client timeout, seconds (float) | `10.0`; `.env.example` sets `3.0` |
-| `HTTP_SSL_VERIFY` | `false` to disable, or a CA bundle path | `true` |
+| `HTTP_SSL_VERIFY` | `true` or `false`; `false` disables TLS verification (dev only). Any other value, including a CA bundle path, keeps verification on | `true` |
 | `XDG_DATA_HOME` | App data dir (cache + sessions, incl. MCP discovery cache) | `/tmp` |
 | `MCP_ALLOWED_HOSTS` | `streamable-http` DNS-rebinding allow-list for the `Host` header (SDK ≥ 0.6); comma-separated hostnames. Set to the reverse-proxy host / public domain in deployments. | `localhost,127.0.0.1,[::1]` |
 
