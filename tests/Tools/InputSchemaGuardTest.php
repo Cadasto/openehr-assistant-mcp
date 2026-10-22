@@ -85,6 +85,20 @@ final class InputSchemaGuardTest extends TestCase
         }
     }
 
+    public function test_the_server_publishes_with_the_production_generator(): void
+    {
+        // The guards above read the production generator, so they only hold for the wire if
+        // the entrypoint really hands it to the builder.
+        $entrypoint = file_get_contents(__DIR__ . '/../../public/index.php');
+        $this->assertIsString($entrypoint);
+
+        $this->assertMatchesRegularExpression(
+            '/->setSchemaGenerator\(\s*new OptionalEnumSchemaGenerator\(\)\s*\)/',
+            $entrypoint,
+            'public/index.php must publish input schemas with OptionalEnumSchemaGenerator, or optional enums reach clients with null in enum (#28)',
+        );
+    }
+
     private static function rawGenerator(): SchemaGenerator
     {
         return self::$rawGenerator ??= new SchemaGenerator(new DocBlockParser());

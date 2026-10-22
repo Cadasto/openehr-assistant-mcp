@@ -251,7 +251,7 @@ readonly final class TypeSpecificationService
     )]
     public function get(
         string $name,
-        #[Schema(enum: ['AM', 'AM2', 'BASE', 'LANG', 'RM', 'TERM', null])]
+        #[Schema(enum: ['AM', 'AM2', 'BASE', 'LANG', 'RM', 'TERM'])]
         ?string $component = null,
     ): array
     {

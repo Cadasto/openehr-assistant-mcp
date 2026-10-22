@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Tools;
 
+use Cadasto\OpenEHR\MCP\Assistant\Helpers\OptionalEnumSchemaGenerator;
 use Cadasto\OpenEHR\MCP\Assistant\Tools\GuideService;
-use Mcp\Capability\Discovery\DocBlockParser;
-use Mcp\Capability\Discovery\SchemaGenerator;
 use Mcp\Capability\Discovery\SchemaValidator;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -52,15 +51,18 @@ final class InputSchemaValidationTest extends TestCase
     public static function guideSearchArgumentProvider(): array
     {
         return [
+            // Omitting an optional enum is the only way to ask for "no filter".
             'no arguments at all' => [[], true],
-            'null for a nullable enum' => [['category' => null], true],
             'a valid enum value' => [['category' => 'archetypes'], true],
             'maxResults at the lower bound' => [['maxResults' => 1], true],
             'maxResults at the upper bound' => [['maxResults' => 50], true],
 
             // BREAKING: the empty-string sentinel used to mean "no filter". Clients must now
-            // omit the argument or send null. Paired plugin PR depends on this.
-            'empty string for a nullable enum' => [['category' => ''], false, ['category', 'enum']],
+            // omit the argument. Paired plugin PR depends on this.
+            'empty string for an optional enum' => [['category' => ''], false, ['category', 'enum']],
+            // BREAKING (REQ-N9, #28): optional enums are published as strings only, so an
+            // explicit null is rejected rather than read as "no filter".
+            'explicit null for an optional enum' => [['category' => null], false, ['category']],
             'an unknown enum value' => [['category' => 'nonsense'], false, ['category']],
 
             // BREAKING: out-of-range numbers used to be silently clamped in-method; they are
@@ -92,7 +94,8 @@ final class InputSchemaValidationTest extends TestCase
      */
     private function validate(string $class, string $method, array $arguments): array
     {
-        $schema = (new SchemaGenerator(new DocBlockParser()))->generate(new ReflectionMethod($class, $method));
+        // The schema the server publishes, so the payloads are checked against what clients see.
+        $schema = (new OptionalEnumSchemaGenerator())->generate(new ReflectionMethod($class, $method));
 
         return (new SchemaValidator())->validateAgainstJsonSchema($arguments, $schema);
     }

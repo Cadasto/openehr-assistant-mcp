@@ -85,7 +85,9 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
 `CliOptions` (transport option parsing), `Map` (data shaping),
 `TerminologyXmlLoader` (loads the bundled openEHR terminology XML),
 `SearchTokenizer` (the one query tokenizer shared by `guide_search` and
-`examples_search`, so the two cannot rank the same query differently).
+`examples_search`, so the two cannot rank the same query differently),
+`OptionalEnumSchemaGenerator` (wraps the SDK schema generator so optional enum
+parameters are published as strings only, with no `null`; REQ-N9).
 
 ### Static content: `resources/`
 `guides/`, `examples/`, `bmm/` (BMM JSON for type specs), `terminology/`,
@@ -108,7 +110,7 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
   arguments against the generated `inputSchema` before a method runs, but return
   values are never checked against `outputSchema`. The asymmetry is why the
   contract is pinned in CI from both sides: `InputSchemaGuardTest` reflects every
-  `#[McpTool]` method for closed, self-consistent inputs, and
+  `#[McpTool]` method for closed inputs and strings-only optional enums, and
   `OutputSchemaConformanceTest` is the *only* enforcement the output half has
   anywhere. The authoring rules that satisfy this live in
   [conventions.md](conventions.md#mcp-capabilities-authoring).
