@@ -9,19 +9,21 @@ Instructions for AI agents (Claude Code, Cursor, and others) working in the **op
 
 ## Documentation map
 
-This repo follows a lightweight **Specification-Driven Development** paradigm. The spec set under [`docs/`](docs/README.md) is the source of truth; AGENTS.md is the rules layer that links into it. Keep detail in the owning doc and point to it.
+This repo follows **Specification-Driven Development** on the sdd plugin's `formal` profile, in its 0.15.0 scaffold layout. The spec set under [`docs/`](docs/README.md) is the source of truth; AGENTS.md is the rules layer that links into it. Keep detail in the owning doc and point to it.
 
 | Document | Owns |
 |----------|------|
-| [`docs/requirements.md`](docs/requirements.md) | `REQ-#` functional and non-functional requirements (the *what*) |
-| [`docs/architecture.md`](docs/architecture.md) | Components mapped to requirements (the *how*) |
+| [`docs/requirements/`](docs/requirements/README.md) | `REQ-F-NNN` functional and `REQ-N-NNN` non-functional requirements, one file each, with a generated index (the *what*) |
+| [`docs/specifications/`](docs/specifications/README.md) | RFC-2119 topic specs, one canonical `§` per requirement (the binding *how*) |
 | [`docs/decisions/`](docs/decisions/README.md) | Architecture Decision Records (the *why*) |
-| [`docs/traceability.md`](docs/traceability.md) | REQ, code, test, ADR matrix; the machine-checked source is [`docs/traceability.yaml`](docs/traceability.yaml), validated by `make spec-check` ([ADR-0006](docs/decisions/0006-machine-checked-traceability.md)); SDD settings in [`docs/.sdd.yaml`](docs/.sdd.yaml) |
+| [`docs/specifications/traceability.yaml`](docs/specifications/traceability.yaml) | REQ → spec § → code → test map, validated by `make spec-check` (the vendored `scripts/sdd-check.py`); SDD settings in [`docs/.sdd.yaml`](docs/.sdd.yaml) |
+| [`docs/development-process.md`](docs/development-process.md) | SDD process: document kinds, lanes, the PR body; the agent loop is in [`docs/ai-workflow.md`](docs/ai-workflow.md), CI in [`docs/ci.md`](docs/ci.md) |
+| [`docs/architecture.md`](docs/architecture.md) | Component map: where each capability lives and the requirements it serves |
 | [`docs/conventions.md`](docs/conventions.md) | **Canonical** coding and MCP authoring conventions: PSR-12, namespaces, tools, prompts (incl. the prompt policy split), resources, completion providers |
 | [`docs/development.md`](docs/development.md) | Docker dev environment, services, transports, env vars, discovery cache, Makefile targets |
 | [`docs/testing.md`](docs/testing.md) | Tests, PHPStan, coverage, conformance, drift gate |
 | [`docs/install.md`](docs/install.md) | Hosted and local setup, MCP client configurations (user-facing) |
-| [`CONTRIBUTING.md`](CONTRIBUTING.md) | PR checklist, branch naming, release housekeeping |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Contributor workflow, branch naming, release housekeeping; the PR body is [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md) |
 
 ## Domain Context
 
@@ -46,7 +48,7 @@ When adding or changing guidance on archetypes, templates, or clinical modelling
 
 - `public/index.php`: entrypoint; registers MCP capabilities, selects the transport, and uses a file-based discovery cache for fast startup.
 - `src/Tools`, `src/Prompts`, `src/Resources`, `src/CompletionProviders`: MCP capabilities; how to author each is in [`docs/conventions.md`](docs/conventions.md).
-- `src/Apis`: internal API clients (CKM). `src/Helpers`: internal helpers. `src/Sdd`: the `spec-check` drift gate. `src/templates`: guide and spec-digest authoring templates. `src/constants.php`: env loading and defaults (incl. `APP_VERSION`). `scripts/`: CLI entrypoints (`spec-check.php`).
+- `src/Apis`: internal API clients (CKM). `src/Helpers`: internal helpers. `src/templates`: guide and spec-digest authoring templates. `src/constants.php`: env loading and defaults (incl. `APP_VERSION`). `scripts/`: repo tooling, among it `sdd-check.py`, the vendored sdd drift gate (never edit it by hand).
 - `resources/`: guides, examples, BMM JSON, terminology, prompt bodies, `server-instructions.md`.
 - `tests/`: PHPUnit tests (mirroring `src/`) and the PHPUnit/PHPStan configs.
 - `.docker/`: compose files, multi-stage `Dockerfile`, `Caddyfile`. `.github/workflows/`: `pr-validation.yml`, `release.yml`.
@@ -66,7 +68,7 @@ make conformance  # MCP conformance suite (stack must be up)
 - Full `docker compose … exec` invocations: [`docs/testing.md`](docs/testing.md).
 - **Transports:** `streamable-http` (default; dev port `:8343`) and `stdio` (`php public/index.php --transport=stdio`, or `make run-stdio`).
 - **Configuration:** env vars and their code defaults (which can differ from `.env.example`) are in [`docs/development.md`](docs/development.md#configuration).
-- When you add or move a `REQ-*`, a capability class, or its test, update [`docs/traceability.yaml`](docs/traceability.yaml) in the same change, or `spec-check` fails.
+- When you add or move a `REQ-*`, a capability class, or its test, update [`docs/specifications/traceability.yaml`](docs/specifications/traceability.yaml) in the same change and regenerate the indexes (`python3 scripts/sdd-check.py generate --root .` in the dev container), or `spec-check` fails.
 
 ### CHANGELOG style
 
@@ -99,4 +101,4 @@ Feature branches off `main` plus pull requests (naming in [`CONTRIBUTING.md`](CO
 
 ## Learned Workspace Facts
 
-- Repo tooling that can be implemented in PHP should live as classes in `src/` with CLI entrypoints (e.g. `scripts/*.php`) and `composer.json` script entries; update AGENTS.md and related docs when changing such tooling.
+- Repo tooling that can be implemented in PHP should live as classes in `src/` with CLI entrypoints (e.g. `scripts/*.php`) and `composer.json` script entries; update AGENTS.md and related docs when changing such tooling. Vendored third-party tooling is the exception: the sdd drift gate `scripts/sdd-check.py` is re-vendored from the plugin, never ported.

@@ -1,10 +1,16 @@
+---
+kind: guide
+---
+
 # openEHR Assistant MCP Server architecture
 
-This page describes *how* the server satisfies [requirements.md](requirements.md),
-for contributors who need to know where a capability lives before changing it. It
-is part of the [Specification-Driven Development docs](README.md): each component
-notes the `REQ-#` it serves, the full mapping is in [traceability.md](traceability.md),
-and design choices are recorded as [decision records](decisions/).
+This page maps the server's components to the [requirements](requirements/README.md)
+they serve, for contributors who need to know where a capability lives before
+changing it. It is part of the [Specification-Driven Development docs](README.md)
+and binds nothing itself: the binding behaviour is in the
+[specifications](specifications/README.md), the full REQ → code → test mapping is in
+[traceability.yaml](specifications/traceability.yaml), and design choices are recorded
+as [decision records](decisions/README.md).
 
 ## Overview
 
@@ -118,7 +124,8 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
 - **Spec alignment (REQ-N-001).** Standards content is retrieved from authoritative
   sources, cheapest representation first.
   → [ADR-0005](decisions/0005-spec-aligned-content-retrieval.md)
-- **Test mirror (REQ-N-002).** Each `src/` class has a parallel `tests/…/*Test`.
+- **Test mirror (REQ-N-002).** `src/` classes have a parallel `tests/…/*Test`
+  wherever a class carries its own behaviour.
   Extra guard tests cross-check invariants, among them `PromptCompositionTest`
   (prompt size baselines in `tests/fixtures/prompt_lengths_before_shared.json`) and
   `PromptPolicySeparationTest`; [testing.md](testing.md#guard-tests) lists them.

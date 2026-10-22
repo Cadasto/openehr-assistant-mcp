@@ -9,9 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - SDD: REQ-N-010 and ADR-0007 record that the public website lives in its own repository and consumes `docs/install.md` from here.
-- SDD: topped up the scaffold to sdd 0.15.0 (descriptor keys and a vendored `sdd-check`); CI still runs the PHP gate.
+- SDD: topped up the scaffold to sdd 0.15.0 (descriptor keys and a vendored `sdd-check`).
 
 ### Changed
+
+- SDD: adopted the sdd 0.15.0 docs layout (one file per requirement, normative topic specs, process docs) with requirement ids renumbered to `REQ-F-NNN` and `REQ-N-NNN`.
+- SDD: the vendored `sdd-check` replaced the PHP `spec-check` gate in `make ci` and PR validation.
 
 - Docs: restructured the README and line-edited the contributor docs, correcting stale `make ci` and configuration details.
 - Dependencies: upgrade `mcp/sdk` to `^0.9` — **breaking** for browser clients connecting from another origin (see [development.md](docs/development.md#configuration)).

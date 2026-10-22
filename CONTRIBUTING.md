@@ -67,12 +67,8 @@ Before adding or changing a capability, read:
 - One logical change per PR; split large changes.
 - Link related issues with keywords (for example `Fixes #123`).
 
-**PR checklist**
-
-- [ ] Tests added/updated
-- [ ] Docs updated if needed (incl. `CHANGELOG.md`)
-- [ ] No debug code or leftover comments
-- [ ] `make ci` passes locally and CI is green
+**PR body and checklist**: the [pull request template](.github/PULL_REQUEST_TEMPLATE.md),
+explained in [docs/development-process.md](docs/development-process.md#the-pr-body).
 
 ## Branching and versioning
 

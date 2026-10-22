@@ -122,3 +122,6 @@ mcpServers:
 **Settings → Tools → Junie → MCP Servers** (wording varies by version). Add a
 **Streamable HTTP** URL (hosted or `http://host.docker.internal:8343/`) or the
 **stdio** Docker command, then refresh or restart Junie so tools are discovered.
+
+<!-- No frontmatter: the public website copies this file verbatim and drops its leading heading (REQ-N-010). -->
+<!-- sdd-check: allow doc-kinds -->
