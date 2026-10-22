@@ -276,10 +276,12 @@ final class GuideService
         $name = $this->validateGuideSegment($name, 'name');
 
         $path = $this->guidePath($category, $name);
-        $this->assertPathWithinGuides($path);
+        // realpath() is false for a missing file, so the containment check runs only once
+        // the file is known to exist; otherwise every unknown guide reads as "outside".
         if (!is_file($path) || !is_readable($path)) {
             throw new ToolCallException(sprintf('Guide not found: %s/%s', $category, $name));
         }
+        $this->assertPathWithinGuides($path);
 
         $content = (string)file_get_contents($path);
         if (!$content) {

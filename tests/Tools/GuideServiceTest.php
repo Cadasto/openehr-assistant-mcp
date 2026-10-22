@@ -124,6 +124,24 @@ final class GuideServiceTest extends TestCase
         $this->service->get('openehr://guides/../secrets/anything');
     }
 
+    public function test_guideGet_reports_an_unknown_guide_as_not_found(): void
+    {
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('Guide not found: archetypes/no-such-guide');
+
+        $this->service->get('', 'archetypes', 'no-such-guide');
+    }
+
+    public function test_guideGet_refuses_an_existing_file_outside_the_guides_directory(): void
+    {
+        // `..` passes the segment check and resources/server-instructions.md exists,
+        // so only the containment check stops this read.
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('Guide path is outside guides directory.');
+
+        $this->service->get('', '..', 'server-instructions');
+    }
+
     public function test_guideSearch_is_case_insensitive_for_query_tokens(): void
     {
         $lower = $this->service->search('aql');
