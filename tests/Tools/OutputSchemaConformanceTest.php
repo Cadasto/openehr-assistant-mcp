@@ -28,8 +28,6 @@ use Psr\Log\NullLogger;
 #[AllowMockObjectsWithoutExpectations]
 final class OutputSchemaConformanceTest extends TestCase
 {
-    private const string TOOLS_NAMESPACE = 'Cadasto\\OpenEHR\\MCP\\Assistant\\Tools\\';
-
     public function test_guide_search_result_matches_output_schema(): void
     {
         $service = new GuideService(new NullLogger());
@@ -119,8 +117,9 @@ final class OutputSchemaConformanceTest extends TestCase
 
     /**
      * Every `#[McpTool]` that declares an `outputSchema` must have a case above. The list of
-     * tools is discovered by reflection rather than hand-maintained, so adding a ninth
-     * structured tool fails here instead of silently going unvalidated.
+     * tools is discovered by reflection rather than hand-maintained, over the same directories
+     * the server discovers ({@see InputSchemaGuardTest::mcpToolMethodProvider()}), so adding a
+     * ninth structured tool, wherever it lives, fails here instead of silently going unvalidated.
      */
     public function test_every_structured_tool_has_a_conformance_case(): void
     {
@@ -133,24 +132,20 @@ final class OutputSchemaConformanceTest extends TestCase
         $coveredSource = implode("\n", $covered);
 
         $structuredTools = [];
-        foreach (glob(__DIR__ . '/../../src/Tools/*.php') ?: [] as $path) {
-            $className = self::TOOLS_NAMESPACE . basename($path, '.php');
-            if (!class_exists($className)) {
+        foreach (InputSchemaGuardTest::mcpToolMethodProvider() as [$className, $methodName]) {
+            // A class-level #[McpTool] publishes its __invoke, so the attribute sits on the class.
+            $attributes = (new \ReflectionMethod($className, $methodName))->getAttributes(McpTool::class, \ReflectionAttribute::IS_INSTANCEOF);
+            if ($attributes === []) {
+                $attributes = (new \ReflectionClass($className))->getAttributes(McpTool::class, \ReflectionAttribute::IS_INSTANCEOF);
+            }
+            $this->assertNotEmpty($attributes, sprintf('%s::%s was discovered as a tool but carries no #[McpTool]', $className, $methodName));
+
+            /** @var McpTool $mcpTool */
+            $mcpTool = $attributes[0]->newInstance();
+            if ($mcpTool->outputSchema === null) {
                 continue;
             }
-
-            foreach ((new \ReflectionClass($className))->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-                $attributes = $method->getAttributes(McpTool::class);
-                if ($attributes === []) {
-                    continue;
-                }
-                /** @var McpTool $mcpTool */
-                $mcpTool = $attributes[0]->newInstance();
-                if ($mcpTool->outputSchema === null) {
-                    continue;
-                }
-                $structuredTools[] = (string) $mcpTool->name;
-            }
+            $structuredTools[] = (string) $mcpTool->name;
         }
 
         $this->assertNotEmpty($structuredTools);
