@@ -68,7 +68,7 @@ conformance: ## Run MCP conformance tests against server (requires make up-dev; 
 
 ##@ Quality & CI
 
-spec-check: ## Validate the SDD traceability map against the tree (drift gate)
+spec-check: ## Run the SDD drift gate (sdd-check) over the docs
 	$(DOCKER_COMPOSE_DEV) run --rm -u 1000:1000 app composer check:spec
 
 ci: ## Run CI checks in dev container (spec-check + PHPStan + tests)

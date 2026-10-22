@@ -1,9 +1,13 @@
+---
+kind: guide
+---
+
 # Coding and MCP authoring conventions
 
 This page holds the canonical conventions for code in this repository, for human
 contributors and AI agents alike: the coding standard, namespaces, and how to author
 MCP tools, prompts, resources, and completion providers. Architecture (components, layers) is in
-[architecture.md](architecture.md), the test and validation workflow in
+[components.md](components.md), the test and validation workflow in
 [testing.md](testing.md), and the dev environment in [development.md](development.md).
 
 ## Coding standard
@@ -30,8 +34,9 @@ register; see [development.md](development.md#gotcha-mcp-discovery-cache).
   - **Schemas are a contract, and the SDK enforces the input half.**
     `CallToolHandler` validates arguments against the generated `inputSchema`
     *before* your method runs, so a published constraint rejects bad calls rather
-    than clamping them. [REQ-N9](requirements.md) states normatively *what* must
-    hold and is the single canonical home for it; the four steps below are only
+    than clamping them. The [constitution](architecture.md#contracts) states the
+    binding part (closed schemas, `null` in null-defaulted enums, conforming output),
+    and [REQ-N9](requirements.md) describes the whole capability; the four steps below are only
     *how* to satisfy it in this codebase, guarded by
     `tests/Tools/InputSchemaGuardTest.php`:
     1. Add method-level `#[Schema(additionalProperties: false)]` so unknown
