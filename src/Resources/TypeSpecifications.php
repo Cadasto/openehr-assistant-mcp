@@ -46,11 +46,11 @@ final class TypeSpecifications
         // Basic input validation
         $component = strtoupper(trim($component));
         if (!\preg_match('/^[\w-]+$/', $component)) {
-            throw new \InvalidArgumentException(\sprintf('Invalid component: %s', $component));
+            throw new ResourceReadException(\sprintf('Invalid component: %s', $component));
         }
         $name = strtoupper(trim($name));
         if (!\preg_match('/^[\w-]+$/', $name)) {
-            throw new \InvalidArgumentException(\sprintf('Invalid type specification name: %s', $name));
+            throw new ResourceReadException(\sprintf('Invalid type specification name: %s', $name));
         }
 
         $path = self::DIR . "/$component/$name.bmm.json";
