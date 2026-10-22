@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Tools;
 
+use Cadasto\OpenEHR\MCP\Assistant\Helpers\OptionalEnumSchemaGenerator;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Capability\Discovery\DocBlockParser;
 use Mcp\Capability\Discovery\SchemaGenerator;
@@ -13,56 +14,85 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 
 /**
- * CI guard: reflects every `#[McpTool]` method through the SDK's own {@see SchemaGenerator}
- * (the same code path the server uses to publish input schemas) and asserts two
- * wire-visible invariants that are easy to silently regress when adding a parameter:
+ * CI guard (REQ-N9): reflects every `#[McpTool]` method through the server's production
+ * {@see OptionalEnumSchemaGenerator} (the generator `public/index.php` publishes input
+ * schemas with) and asserts two wire-visible invariants that are easy to silently regress
+ * when adding a parameter:
  *
- * - The generated input schema is closed (`additionalProperties: false`) at the
+ * - The published input schema is closed (`additionalProperties: false`) at the
  *   method/object level, so clients can't silently pass unknown arguments.
  * - Optional (`?string $x = null`) parameters constrained by `#[Schema(enum: [...])]`
- *   advertise `null` as an allowed enum value, matching the nullable type the
- *   generator also infers — a self-consistent schema instead of a type/enum mismatch.
+ *   are published as plain string enums: `type: "string"`, no `null` in `enum`, no
+ *   `default`, and not `required`. Clients that decode `enum` as a list of strings reject
+ *   the whole `tools/list` when one holds `null` (issue #28), so omitting the argument is
+ *   the only way to ask for "no filter".
  */
 #[CoversNothing]
 final class InputSchemaGuardTest extends TestCase
 {
-    private static ?SchemaGenerator $generator = null;
+    /**
+     * The optional enum parameters the raw SDK generator renders as nullable today. The
+     * provider below must find at least these, or the guard is checking nothing.
+     */
+    private const array KNOWN_OPTIONAL_ENUM_PARAMETERS = [
+        'Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::get($component)',
+        'Cadasto\OpenEHR\MCP\Assistant\Tools\ExamplesService::search($kind)',
+        'Cadasto\OpenEHR\MCP\Assistant\Tools\ExamplesService::get($kind)',
+        'Cadasto\OpenEHR\MCP\Assistant\Tools\GuideService::search($category)',
+        'Cadasto\OpenEHR\MCP\Assistant\Tools\GuideService::get($category)',
+    ];
+
+    private static ?SchemaGenerator $rawGenerator = null;
+
+    private static ?OptionalEnumSchemaGenerator $publishedGenerator = null;
 
     #[DataProvider('mcpToolMethodProvider')]
     public function test_input_schema_declares_additional_properties_false(string $class, string $method): void
     {
-        $schema = $this->generateSchema($class, $method);
+        $schema = self::publishedGenerator()->generate(new ReflectionMethod($class, $method));
 
         $this->assertArrayHasKey('additionalProperties', $schema, sprintf('%s::%s input schema must declare additionalProperties', $class, $method));
         $this->assertFalse($schema['additionalProperties'], sprintf('%s::%s input schema must set additionalProperties: false', $class, $method));
     }
 
-    /**
-     * @param array<string, mixed> $paramSchema
-     */
-    #[DataProvider('nullableEnumParameterProvider')]
-    public function test_nullable_enum_parameters_advertise_null_in_enum(string $label, array $paramSchema): void
+    #[DataProvider('optionalEnumParameterProvider')]
+    public function test_optional_enum_parameters_publish_strings_only(string $class, string $method, string $param): void
     {
-        $this->assertContains(
-            null,
-            $paramSchema['enum'],
-            sprintf('%s allows null but its enum list omits null, so the published schema is self-inconsistent', $label),
-        );
+        $label = sprintf('%s::%s parameter "%s"', $class, $method, $param);
+        $schema = self::publishedGenerator()->generate(new ReflectionMethod($class, $method));
+
+        $this->assertIsArray($schema['properties'], sprintf('%s: published schema has no properties', $label));
+        $this->assertArrayHasKey($param, $schema['properties'], sprintf('%s: missing from the published schema', $label));
+        $property = $schema['properties'][$param];
+        $this->assertIsArray($property);
+
+        $this->assertArrayHasKey('enum', $property, sprintf('%s: lost its enum', $label));
+        $this->assertIsArray($property['enum']);
+        $this->assertNotContains(null, $property['enum'], sprintf('%s: publishes null in enum, which clients that decode enum as strings reject (#28)', $label));
+        $this->assertContainsOnlyString($property['enum'], sprintf('%s: enum must hold strings only', $label));
+        $this->assertSame('string', $property['type'] ?? null, sprintf('%s: an optional enum must publish type "string", not a nullable type', $label));
+        $this->assertArrayNotHasKey('default', $property, sprintf('%s: an optional enum must publish no default', $label));
+        $this->assertNotContains($param, $schema['required'] ?? [], sprintf('%s: an optional enum must not be required', $label));
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    private function generateSchema(string $class, string $method): array
+    public function test_optional_enum_provider_finds_the_known_parameters(): void
     {
-        $reflection = new ReflectionMethod($class, $method);
+        $found = array_keys(self::optionalEnumParameterProvider());
 
-        return self::schemaGenerator()->generate($reflection);
+        $this->assertNotSame([], $found, 'The raw SDK generator yields no optional enum parameter, so the strings-only guard checks nothing');
+        foreach (self::KNOWN_OPTIONAL_ENUM_PARAMETERS as $known) {
+            $this->assertContains($known, $found, sprintf('%s is no longer selected as an optional enum parameter', $known));
+        }
     }
 
-    private static function schemaGenerator(): SchemaGenerator
+    private static function rawGenerator(): SchemaGenerator
     {
-        return self::$generator ??= new SchemaGenerator(new DocBlockParser());
+        return self::$rawGenerator ??= new SchemaGenerator(new DocBlockParser());
+    }
+
+    private static function publishedGenerator(): OptionalEnumSchemaGenerator
+    {
+        return self::$publishedGenerator ??= new OptionalEnumSchemaGenerator();
     }
 
     /**
@@ -95,28 +125,34 @@ final class InputSchemaGuardTest extends TestCase
     }
 
     /**
-     * Yields exactly the nullable parameters that carry an `enum`, so the guard above always
-     * has something real to assert. If the SDK ever stops rendering nullable types as a
-     * `["null", ...]` union this provider empties out and PHPUnit fails the test rather than
-     * reporting a vacuous pass.
+     * Selects the cases from the RAW SDK generator, not the production one: an optional
+     * parameter that carries an `enum` and that the SDK renders as nullable (a `null` in
+     * `type`, in `enum`, or as the `default`). The raw generator keeps rendering
+     * `?string $x = null` that way, so this provider stays non-empty however well the
+     * production generator does its job.
      *
-     * @return array<string, array{0: string, 1: array<string, mixed>}>
+     * @return array<string, array{0: class-string, 1: string, 2: string}>
      */
-    public static function nullableEnumParameterProvider(): array
+    public static function optionalEnumParameterProvider(): array
     {
         $cases = [];
         foreach (self::mcpToolMethodProvider() as [$class, $method]) {
-            $schema = self::schemaGenerator()->generate(new ReflectionMethod($class, $method));
-            foreach ($schema['properties'] ?? [] as $paramName => $paramSchema) {
-                $type = $paramSchema['type'] ?? null;
-                $allowsNull = (is_array($type) && in_array('null', $type, true)) || $type === 'null';
-                if (!$allowsNull || !isset($paramSchema['enum'])) {
+            $schema = self::rawGenerator()->generate(new ReflectionMethod($class, $method));
+            $required = $schema['required'] ?? [];
+            $properties = is_array($schema['properties']) ? $schema['properties'] : [];
+            foreach ($properties as $paramName => $paramSchema) {
+                $paramName = (string) $paramName;
+                if (!is_array($paramSchema) || !isset($paramSchema['enum']) || in_array($paramName, $required, true)) {
                     continue;
                 }
-                $cases[sprintf('%s::%s($%s)', $class, $method, (string) $paramName)] = [
-                    sprintf('%s::%s parameter "%s"', $class, $method, (string) $paramName),
-                    $paramSchema,
-                ];
+                $type = $paramSchema['type'] ?? null;
+                $nullable = (is_array($type) && in_array('null', $type, true))
+                    || (is_array($paramSchema['enum']) && in_array(null, $paramSchema['enum'], true))
+                    || (array_key_exists('default', $paramSchema) && $paramSchema['default'] === null);
+                if (!$nullable) {
+                    continue;
+                }
+                $cases[sprintf('%s::%s($%s)', $class, $method, $paramName)] = [$class, $method, $paramName];
             }
         }
 
