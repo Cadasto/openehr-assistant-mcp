@@ -22,8 +22,9 @@ it serves, is in [components.md](components.md).
 ## Contracts
 
 - Every published MCP tool MUST declare a closed input schema (`additionalProperties: false`). A published
-  input `enum` MUST NOT hold `null`, and an optional enum parameter MUST be published with `type: string`
-  and no `default`, so a client omits it for "no filter" and an explicit `null` is rejected.
+  input `enum` MUST NOT hold `null`, and an optional enum filter declared `?string $x = null` MUST be
+  published with `type: string` and no `default`, so a client omits it for "no filter" and an explicit
+  `null` is rejected. An enum parameter with a real default, such as `format = 'adl'`, keeps it.
 - Every tool's output MUST conform to the `outputSchema` it declares.
 - The full global tool-usage policy MUST live in `resources/server-instructions.md`. Task prompts under
   `resources/prompts/` MUST NOT restate it; the shared policy block prepended to every prompt MAY restate a
