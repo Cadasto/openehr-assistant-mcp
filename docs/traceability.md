@@ -40,8 +40,9 @@ the Implementation column is either dead code or an undocumented requirement.
 | **REQ-F8** | Argument auto-completion | `src/CompletionProviders/{Examples,Guides,SpecificationComponents}.php` | `tests/CompletionProviders/{GuidesTest,SpecificationComponentsTest}.php` | — |
 | **REQ-F9** | Dual transport (http / stdio) | `public/index.php`, `src/Helpers/CliOptions.php` | (covered via startup / conformance) | 0001 |
 | **REQ-F10** | Global server instructions | `resources/server-instructions.md` | `tests/Prompts/PromptPolicySeparationTest.php` | 0003 |
+| **REQ-F11** | Archetype Designer repository read access | `src/Tools/ArchetypeDesignerService.php`, `src/Apis/ArchetypeDesignerClient.php` | `tests/Tools/ArchetypeDesignerServiceTest.php`, `tests/Clients/ArchetypeDesignerClientTest.php` | 0008 |
 | **REQ-N1** | Authoritative spec retrieval | `resources/guides/howto/spec-lookup.md`, content under `resources/` | `tests/Content/SpecLookupAndReadmeClaimsTest.php` + content review | 0005 |
-| **REQ-N2** | Test mirror + mocked HTTP | all `tests/`, `CkmClient` mocking | whole suite (`composer test`) | 0002 |
+| **REQ-N2** | Test mirror + mocked HTTP | all `tests/`, `CkmClient` / `ArchetypeDesignerClient` mocking | whole suite (`composer test`) | 0002, 0008 |
 | **REQ-N3** | PSR-12 + PHPStan | `phpstan.*`, CS config | `composer check:phpstan` | — |
 | **REQ-N4** | Cached discovery / fast startup | `public/index.php` (Symfony Cache), `src/constants.php` | `tests/Content/DiscoveryCacheNamespaceTest.php` + startup | 0001 |
 | **REQ-N5** | Docker-only runtime | `.docker/`, `Makefile` | CI / `make` targets | 0004 |

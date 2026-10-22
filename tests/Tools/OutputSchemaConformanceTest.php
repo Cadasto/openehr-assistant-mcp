@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Tools;
 
+use Cadasto\OpenEHR\MCP\Assistant\Apis\ArchetypeDesignerClient;
 use Cadasto\OpenEHR\MCP\Assistant\Apis\CkmClient;
 use Cadasto\OpenEHR\MCP\Assistant\Tests\Helpers\OutputSchemaValidator;
+use Cadasto\OpenEHR\MCP\Assistant\Tools\ArchetypeDesignerService;
 use Cadasto\OpenEHR\MCP\Assistant\Tools\CkmService;
 use Cadasto\OpenEHR\MCP\Assistant\Tools\ExamplesService;
 use Cadasto\OpenEHR\MCP\Assistant\Tools\GuideService;
 use Cadasto\OpenEHR\MCP\Assistant\Tools\TerminologyService;
 use Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Mcp\Capability\Attribute\McpTool;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -92,6 +97,42 @@ final class OutputSchemaConformanceTest extends TestCase
      * tools is discovered by reflection rather than hand-maintained, so adding a ninth
      * structured tool fails here instead of silently going unvalidated.
      */
+    public function test_designer_repository_list_result_matches_output_schema(): void
+    {
+        $service = $this->designerService(['[{"id":"r1","name":"Repo","type":"github","owner":"ian"}]']);
+        $this->assertConforms($service, 'repositoryList', []);
+    }
+
+    public function test_designer_entry_list_result_matches_output_schema(): void
+    {
+        $service = $this->designerService(['[{"type":"archetype","path":"local/bp.adls","name":"Blood pressure","archetypeId":"openEHR-EHR-OBSERVATION.blood_pressure.v2","rmType":"OBSERVATION","status":"valid"}]']);
+        $this->assertConforms($service, 'entryList', []);
+    }
+
+    public function test_designer_search_result_matches_output_schema(): void
+    {
+        $service = $this->designerService(['{"hits":[{"path":"local/bp.adls","class":"archetype"}]}']);
+        $this->assertConforms($service, 'search', ['blood']);
+    }
+
+    /**
+     * @param list<string> $bodies
+     */
+    private function designerService(array $bodies): ArchetypeDesignerService
+    {
+        $responses = array_map(fn(string $body) => new Response(200, [], $body), $bodies);
+        $client = new ArchetypeDesignerClient(
+            new NullLogger(),
+            new Client(['handler' => HandlerStack::create(new MockHandler($responses))]),
+            'user',
+            'secret',
+            'repo-1',
+            '',
+        );
+
+        return new ArchetypeDesignerService($client, new NullLogger());
+    }
+
     public function test_every_structured_tool_has_a_conformance_case(): void
     {
         $covered = [];

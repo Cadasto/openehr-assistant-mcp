@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Tools: read-only Archetype Designer tools (`designer_*`) for browsing, searching, exporting and validating archetypes and templates in Designer repositories.
 - SDD: REQ-N10 and ADR-0007 record that the public website lives in its own repository and consumes `docs/install.md` from here.
 
 ### Changed

@@ -152,13 +152,18 @@ Environment variables are read from `.env` (template in `.env.example`):
 | `APP_ENV` | `development` / `testing` / `production` | `production` |
 | `LOG_LEVEL` | Monolog level (`debug`, `info`, `warning`, `error`, …) | `info` |
 | `CKM_API_BASE_URL` | CKM REST API base URL | `https://ckm.openehr.org/ckm/rest` |
+| `ARCHETYPE_DESIGNER_BASE_URL` | Archetype Designer server base URL (`designer_*` tools) | `https://tools.openehr.org/designer` |
+| `ARCHETYPE_DESIGNER_USERNAME` / `ARCHETYPE_DESIGNER_PASSWORD` | Designer *local* account (HTTP Basic); unset = `designer_*` tools return a "not configured" error | empty |
+| `ARCHETYPE_DESIGNER_REPOSITORY_ID` | Default repository when a tool call names none (Designer repo list → "…" → Info) | empty |
+| `ARCHETYPE_DESIGNER_REPOSITORY_TOKEN` | Sent as `Repository-Token`: the repository host's token, e.g. a GitHub token | empty |
 | `HTTP_TIMEOUT` | Guzzle client timeout, seconds (float) | `10.0`; `.env.example` sets `3.0` |
 | `HTTP_SSL_VERIFY` | `false` to disable, or a CA bundle path | `true` |
 | `XDG_DATA_HOME` | App data dir (cache + sessions, incl. MCP discovery cache) | `/tmp` |
 | `MCP_ALLOWED_HOSTS` | `streamable-http` DNS-rebinding allow-list (SDK ≥ 0.6); comma-separated hostnames. Set to the reverse-proxy host / public domain in deployments. | `localhost,127.0.0.1,[::1]` |
 
-> **Auth:** no authorization headers are required or configured by default. To add
-> auth to an upstream openEHR/CKM server, extend the HTTP client in `src/Apis/`.
+> **Auth:** CKM needs no authorization headers. The Archetype Designer client sends
+> HTTP Basic credentials and `Repository-Token` from the variables above
+> ([ADR-0008](decisions/0008-archetype-designer-client.md)); they are never logged.
 
 <a id="gotcha--mcp-discovery-cache"></a>
 

@@ -77,6 +77,12 @@ CKM (Clinical Knowledge Manager):
 - `ckm_archetype_get`: get a CKM archetype by its identifier
 - `ckm_template_search`: list templates (OET/OPT) from CKM matching search criteria
 - `ckm_template_get`: get a CKM template (OET/OPT) by its identifier
+- `designer_repository_list`: list the Archetype Designer repositories the configured account can access
+- `designer_entry_list`: list archetypes, templates and folders in a Designer repository
+- `designer_search`: full-text search a Designer repository
+- `designer_archetype_get`: get a Designer archetype (ADL/JSON)
+- `designer_template_get`: get a Designer template (OET/OPT/Web Template/JSON)
+- `designer_analyze`: run the Designer's validation on an archetype or template
 
 openEHR terminology:
 

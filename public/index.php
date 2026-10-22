@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
+use Cadasto\OpenEHR\MCP\Assistant\Apis\ArchetypeDesignerClient;
 use Cadasto\OpenEHR\MCP\Assistant\Apis\CkmClient;
 use Cadasto\OpenEHR\MCP\Assistant\Helpers\CliOptions;
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Examples;
@@ -49,6 +50,7 @@ try {
 
     // Initialize API clients, resources, etc.
     $container->set(CkmClient::class, new CkmClient($logger));
+    $container->set(ArchetypeDesignerClient::class, new ArchetypeDesignerClient($logger));
     $container->set(Guides::class, new Guides());
     $container->set(Terminologies::class, new Terminologies());
 

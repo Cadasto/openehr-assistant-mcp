@@ -24,6 +24,7 @@ referenced from [requirements.md](../requirements.md),
 | [0005](0005-spec-aligned-content-retrieval.md) | Authoritative, cheapest-first specification retrieval | Accepted | REQ-N1 |
 | [0006](0006-machine-checked-traceability.md) | Machine-checked traceability with a `spec-check` drift gate | Accepted | REQ-N8 |
 | [0007](0007-website-in-separate-repository.md) | The public website lives in its own repository | Accepted | REQ-N10 |
+| [0008](0008-archetype-designer-client.md) | A second HTTP boundary for the Archetype Designer API, configured per deployment | Proposed | REQ-F11, REQ-N2 |
 
 ## Writing a new ADR
 
