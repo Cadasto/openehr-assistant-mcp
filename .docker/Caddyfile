@@ -30,7 +30,17 @@
     }
     error @ignored_files 204
 
-    # 3. Explicitly wire PHP-FPM ping path
+    # 3. Refuse multipart bodies, which PHP-FPM parses before the server's code runs
+    # (CVE-2026-109618, CVE-2026-109619). MCP clients send JSON, so none is legitimate here.
+    @multipart header_regexp Content-Type (?i)multipart
+    respond @multipart 415
+
+    # 4. Cap request bodies, also those sent without a Content-Length; matches post_max_size
+    request_body {
+        max_size 8MB
+    }
+
+    # 5. Explicitly wire PHP-FPM ping path
     reverse_proxy /health/status app:9000 {
         transport fastcgi {
             split .php
