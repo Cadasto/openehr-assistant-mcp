@@ -24,18 +24,16 @@ final class PromptPolicySeparationTest extends TestCase
 
     public function test_prompts_no_longer_duplicate_generic_no_guessing_rules(): void
     {
-        $promptFiles = [
-            'guide_explorer.md',
-            'terminology_explorer.md',
-            'type_specification_explorer.md',
-            'ckm_explorer.md',
-        ];
+        // Every task prompt; the shared policy block under shared/ is the allowed exception (ADR-0003).
+        $promptFiles = glob(__DIR__ . '/../../resources/prompts/*.md');
+        $this->assertNotFalse($promptFiles);
+        $this->assertGreaterThanOrEqual(14, count($promptFiles), 'expected every task prompt under resources/prompts/');
 
         foreach ($promptFiles as $promptFile) {
-            $content = file_get_contents(__DIR__ . '/../../resources/prompts/' . $promptFile);
+            $content = file_get_contents($promptFile);
             $this->assertIsString($content);
-            $this->assertStringNotContainsString('Never invent or guess', $content, $promptFile);
-            $this->assertStringNotContainsString('Use tools; do not invent', $content, $promptFile);
+            $this->assertStringNotContainsString('Never invent or guess', $content, basename($promptFile));
+            $this->assertStringNotContainsString('Use tools; do not invent', $content, basename($promptFile));
         }
     }
 

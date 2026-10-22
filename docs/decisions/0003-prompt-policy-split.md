@@ -1,8 +1,16 @@
+---
+kind: adr
+id: ADR-0003
+title: "Split global policy from task-specific prompt content"
+status: accepted
+date: 2026-06-08
+---
+
 # ADR-0003 — Split global policy from task-specific prompt content
 
-- **Status:** Accepted
-- **Requirements:** REQ-F6 (prompts), REQ-F10 (server instructions), REQ-N7 (context economy)
-- **Related:** [architecture.md](../architecture.md)
+## Status
+
+Accepted
 
 ## Context
 
@@ -44,3 +52,8 @@ truth — see the **Resilience exception** under Consequences for the bounds.
   with no global policy at all. `server-instructions.md` remains the single
   canonical source for full global policy — the shared block is a fallback,
   not a second source of truth, and must not grow beyond a short restatement.
+
+## Traceability
+
+- Amends: REQ-F6 (prompts), REQ-F10 (server instructions), REQ-N7 (context economy)
+- Related: [architecture.md](../architecture.md)

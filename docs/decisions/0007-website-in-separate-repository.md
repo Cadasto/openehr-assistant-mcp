@@ -1,10 +1,16 @@
+---
+kind: adr
+id: ADR-0007
+title: "The public website lives in its own repository"
+status: accepted
+date: 2026-08-07
+---
+
 # ADR-0007 — The public website lives in its own repository
 
-- **Status:** Accepted
-- **Requirements:** REQ-N10 (install documentation is consumable without duplication)
-- **Related:** [install.md](../install.md), [cadasto/openehr-assistant](https://github.com/cadasto/openehr-assistant)
-  — the consuming site; which document it takes from here, and at which ref, is
-  declared in its [`sources.json`](https://github.com/cadasto/openehr-assistant/blob/main/sources.json)
+## Status
+
+Accepted
 
 ## Context
 
@@ -54,3 +60,8 @@ That is the irreversible part. Two things follow from it:
   where the edit happens. Cross-repository changes now need two pull requests.
 - **Neutral:** the website's own build, theme and publishing pipeline are that
   repository's concern and are documented in its `AGENTS.md`.
+
+## Traceability
+
+- Amends: REQ-N10 (install documentation is consumable without duplication)
+- Related: [install.md](../install.md), [cadasto/openehr-assistant](https://github.com/cadasto/openehr-assistant) — the consuming site; which document it takes from here, and at which ref, is declared in its [`sources.json`](https://github.com/cadasto/openehr-assistant/blob/main/sources.json)

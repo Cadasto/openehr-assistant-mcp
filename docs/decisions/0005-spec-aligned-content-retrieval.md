@@ -1,8 +1,16 @@
+---
+kind: adr
+id: ADR-0005
+title: "Authoritative, cheapest-first specification retrieval"
+status: accepted
+date: 2026-06-08
+---
+
 # ADR-0005 — Authoritative, cheapest-first specification retrieval
 
-- **Status:** Accepted
-- **Requirements:** REQ-N1 (spec alignment, no guessing)
-- **Related:** [AGENTS.md — spec lookup](../../AGENTS.md), `resources/guides/howto/spec-lookup.md`
+## Status
+
+Accepted
 
 ## Context
 
@@ -44,3 +52,8 @@ This policy is surfaced to agents three ways: server `instructions`
   than answering from memory — slower, but correct by construction.
 - The full fall-through order and failure modes live in the `spec-lookup` how-to
   guide, which is the operational source of truth.
+
+## Traceability
+
+- Amends: REQ-N1 (spec alignment, no guessing)
+- Related: [AGENTS.md — spec lookup](../../AGENTS.md), `resources/guides/howto/spec-lookup.md`
