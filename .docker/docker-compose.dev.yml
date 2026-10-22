@@ -36,11 +36,10 @@ services:
 
   # MCP Inspector UI (v2) — on-demand (not started by `make up-dev`; see profile).
   #
-  # Built from the `inspector` stage rather than pulled: the upstream v2 image
-  # needs an OS keyring it cannot reach in a container. Stage and digest pin live
-  # in .docker/Dockerfile. HOST, CLIENT_PORT and DANGEROUSLY_BIND_ALL_INTERFACES
-  # are already set in the upstream image, so they are not repeated here; the v1
-  # proxy port 6277 no longer exists in v2.
+  # The upstream image, pinned by digest; bump it deliberately. HOST, CLIENT_PORT
+  # and DANGEROUSLY_BIND_ALL_INTERFACES are already set in it, so they are not
+  # repeated here; the v1 proxy port 6277 no longer exists in v2. The container has
+  # no OS keychain, so per-server secrets are kept in memory and die with it.
   #
   # v2 takes its server list from a file. `--config` is a read-only session file
   # (never rewritten, seeded or migrated), so the targets below stay under version
@@ -48,11 +47,7 @@ services:
   # Inspector's backend dials the server from inside this container, so the targets
   # use compose-network names; both are in the app's MCP_ALLOWED_HOSTS allow-list.
   inspector:
-    image: cadasto/openehr-assistant-mcp-inspector:latest
-    build:
-      context: ..
-      dockerfile: .docker/Dockerfile
-      target: inspector
+    image: ghcr.io/modelcontextprotocol/inspector:2.12.0@sha256:37856880200651eab70a8b9ce2649d86beabea5447a8c64a8fe5b407907462fe
     profiles: ["inspector"]
     command: ["--web", "--config", "/config/inspector-servers.json"]
     # The Inspector accepts only loopback by default, twice over: its web server refuses
@@ -64,6 +59,7 @@ services:
     environment:
       ALLOWED_ORIGINS: "http://localhost:6274,http://127.0.0.1:6274,http://[::1]:6274,http://openehr-assistant-mcp.${DOMAIN:-local}:6274"
       MCP_INSPECTOR_ALLOWED_HOSTS: "openehr-assistant-mcp.${DOMAIN:-local}"
+      MCP_INSPECTOR_SECRET_STORE: memory
     volumes:
       - ./inspector-servers.json:/config/inspector-servers.json:ro
     ports:

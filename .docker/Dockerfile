@@ -79,26 +79,3 @@ USER www-data
 FROM node:22-alpine AS node
 RUN apk add --no-cache curl
 WORKDIR /app
-
-#
-# MCP Inspector v2 + an OS keyring (dev only)
-#
-# Pinned by digest; bump it deliberately (`:latest` moved to the v2 rewrite on
-# 2026-07-28). v2 keeps per-server secrets in an OS keychain, which the upstream
-# image cannot reach in a container — see .docker/inspector-entrypoint.sh for the
-# failure and the fix.
-#
-FROM ghcr.io/modelcontextprotocol/inspector:2.12.0@sha256:37856880200651eab70a8b9ce2649d86beabea5447a8c64a8fe5b407907462fe AS inspector
-USER root
-RUN set -eux \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-      dbus-x11 \
-      gnome-keyring \
-      libsecret-1-0 \
-    && rm -rf /var/lib/apt/lists/*
-COPY .docker/inspector-entrypoint.sh /usr/local/bin/inspector-entrypoint
-RUN chmod +x /usr/local/bin/inspector-entrypoint
-USER node
-ENTRYPOINT ["/usr/local/bin/inspector-entrypoint"]
-CMD ["--web"]
