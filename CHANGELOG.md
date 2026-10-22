@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Docs: restructured the README and line-edited the contributor docs, correcting stale `make ci` and configuration details.
 - Dependencies: upgrade `mcp/sdk` to `^0.9` — **breaking** for browser clients connecting from another origin (see [development.md](docs/development.md#configuration)).
+- Dependencies: upgrade Guzzle to `^8.3` (with `guzzlehttp/psr7` and `guzzlehttp/promises` 3.x).
 
 ### Security
 

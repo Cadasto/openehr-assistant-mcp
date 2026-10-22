@@ -6,22 +6,36 @@ namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Tools;
 
 use Cadasto\OpenEHR\MCP\Assistant\Apis\CkmClient;
 use Cadasto\OpenEHR\MCP\Assistant\Tools\CkmService;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Mcp\Exception\ToolCallException;
 use Mcp\Schema\Content\TextContent;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\NullLogger;
 
 // The CkmClient double is used purely as a stub (return values, no call-count expectations) in the
 // scoring/search tests; opt out of PHPUnit's mock-without-expectations notice for the whole class.
+// The "OverGuzzle" tests instead run the real CkmClient over a Guzzle MockHandler.
 #[CoversClass(CkmService::class)]
+#[UsesClass(CkmClient::class)]
 #[AllowMockObjectsWithoutExpectations]
 final class CkmServiceTest extends TestCase
 {
+    /** Shaped like the production CKM_API_BASE_URL (trailing slash); never dialled. */
+    private const string MOCK_CKM_BASE_URI = 'https://ckm.example.test/ckm/rest/';
+
     private CkmClient $client;
     private NullLogger $logger;
 
@@ -380,8 +394,10 @@ final class CkmServiceTest extends TestCase
         $this->assertSame(0, (int) ($capturedQuery['offset'] ?? -1));
     }
 
-    public function testExceptionsAreWrappedAsRuntimeException(): void
+    public function testArchetypeSearchWrapsAClientExceptionAsToolCallException(): void
     {
+        // The double extends \RuntimeException, and so does ToolCallException; expecting the
+        // narrower ToolCallException, chained to the original, is what makes the wrap observable.
         $exception = new class('boom') extends \RuntimeException implements ClientExceptionInterface {
         };
 
@@ -392,8 +408,95 @@ final class CkmServiceTest extends TestCase
             ->willThrowException($exception);
 
         $svc = new CkmService($this->client, $this->logger);
-        $this->expectException(\RuntimeException::class);
-        $svc->archetypeSearch('x');
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('Failed to search for CKM Archetypes: boom');
+        try {
+            $svc->archetypeSearch('x');
+        } catch (ToolCallException $e) {
+            $this->assertSame($exception, $e->getPrevious());
+            throw $e;
+        }
+    }
+
+    public function testArchetypeSearchOverGuzzleSendsItsQueryAndAcceptHeader(): void
+    {
+        $payload = [
+            ['cid' => '1013.1.7850', 'resourceMainId' => 'openEHR-EHR-OBSERVATION.blood_pressure.v1', 'resourceMainDisplayName' => 'Blood pressure', 'projectName' => 'Common resources', 'status' => 'PUBLISHED'],
+        ];
+        $history = [];
+        $svc = $this->serviceOverMockedGuzzle([
+            new Response(200, ['Content-Type' => 'application/json', 'X-Total-Count' => '42'], json_encode($payload, JSON_THROW_ON_ERROR)),
+        ], $history);
+
+        $result = $svc->archetypeSearch('blood pressure', 10, false);
+
+        $this->assertCount(1, $history, 'Exactly one request should reach the transport');
+        $request = $history[0]['request'];
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertSame('/ckm/rest/v1/archetypes', $request->getUri()->getPath());
+        $this->assertSame('application/json', $request->getHeaderLine('Accept'));
+        $this->assertStringContainsString('search-text=blood%20pressure', $request->getUri()->getQuery(), 'The query is RFC 3986 encoded');
+        $this->assertSame([
+            'offset' => '0',
+            'require-all-search-words' => 'false',
+            'restrict-search-to-main-data' => 'true',
+            'search-text' => 'blood pressure',
+            'size' => '30',
+            'sort-key' => 'RELEVANCE',
+        ], $this->sortedQuery($request));
+
+        $this->assertSame('1013.1.7850', $result['items'][0]['cid']);
+        $this->assertSame(42, $result['total']);
+    }
+
+    public function testTemplateSearchOverGuzzleSendsItsQueryAndAcceptHeader(): void
+    {
+        $payload = [
+            ['cid' => '1013.26.244', 'resourceMainDisplayName' => 'Vital signs', 'projectName' => 'Common resources', 'status' => 'PUBLISHED'],
+        ];
+        $history = [];
+        $svc = $this->serviceOverMockedGuzzle([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode($payload, JSON_THROW_ON_ERROR)),
+        ], $history);
+
+        $result = $svc->templateSearch('vital', 10);
+
+        $this->assertCount(1, $history, 'Exactly one request should reach the transport');
+        $request = $history[0]['request'];
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertSame('/ckm/rest/v1/templates', $request->getUri()->getPath());
+        $this->assertSame('application/json', $request->getHeaderLine('Accept'));
+        $this->assertSame([
+            'offset' => '0',
+            'require-all-search-words' => 'true',
+            'restrict-search-to-main-data' => 'true',
+            'search-text' => 'vital',
+            'size' => '30',
+            'sort-key' => 'RELEVANCE',
+            'template-type' => 'NORMAL',
+        ], $this->sortedQuery($request));
+
+        $this->assertSame('1013.26.244', $result['items'][0]['cid']);
+    }
+
+    public function testArchetypeSearchOverGuzzleWrapsAConnectFailureAsToolCallException(): void
+    {
+        $connectFailure = new ConnectException(
+            'cURL error 7: Failed to connect to ckm.example.test',
+            new Request('GET', self::MOCK_CKM_BASE_URI . 'v1/archetypes'),
+        );
+        $history = [];
+        $svc = $this->serviceOverMockedGuzzle([$connectFailure], $history);
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('Failed to search for CKM Archetypes: cURL error 7');
+        try {
+            $svc->archetypeSearch('blood');
+        } catch (ToolCallException $e) {
+            $this->assertSame($connectFailure, $e->getPrevious());
+            throw $e;
+        }
     }
 
     public function testTemplateSearchSendsQueryAndDecodesJson(): void
@@ -627,5 +730,36 @@ final class CkmServiceTest extends TestCase
         $this->assertSame('SOEP', $result['items'][0]['name'], 'SOAP↔SOEP scoring alias should make the SOEP-named item an exact-concept match and rank it first');
         // The SOEP item earns the exact-concept bonus purely via the alias; the decoy earns no keyword score.
         $this->assertGreaterThan($result['items'][1]['score'], $result['items'][0]['score']);
+    }
+
+    /**
+     * The service over the real CkmClient and a real Guzzle client whose transport is a
+     * MockHandler, so CkmService's request options go through Guzzle as they do in production.
+     * Every request is recorded in $history; nothing reaches the network.
+     *
+     * @param list<ResponseInterface|\Throwable> $queue
+     * @param array<int, array{request: RequestInterface, response: ?ResponseInterface, error: mixed, options: array<string, mixed>}> $history
+     */
+    private function serviceOverMockedGuzzle(array $queue, array &$history): CkmService
+    {
+        $stack = HandlerStack::create(new MockHandler($queue));
+        $stack->push(Middleware::history($history));
+        $guzzle = new Client(['handler' => $stack, 'base_uri' => self::MOCK_CKM_BASE_URI]);
+
+        return new CkmService(new CkmClient(new NullLogger(), $guzzle), $this->logger);
+    }
+
+    /**
+     * The request's query string decoded and sorted by key, so the assertion pins what CKM
+     * receives without depending on parameter order.
+     *
+     * @return array<string, mixed>
+     */
+    private function sortedQuery(RequestInterface $request): array
+    {
+        parse_str($request->getUri()->getQuery(), $query);
+        ksort($query);
+
+        return $query;
     }
 }
