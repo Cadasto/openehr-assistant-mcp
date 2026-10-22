@@ -175,7 +175,7 @@ requirements:
     implementation: landed
     packages: [src/Tools/CkmService.php, src/Tools/GuideService.php, src/Tools/ExamplesService.php, src/Tools/TerminologyService.php, src/Tools/TypeSpecificationService.php]
     tests: [tests/Tools/InputSchemaGuardTest.php, tests/Tools/InputSchemaValidationTest.php, tests/Tools/OutputSchemaConformanceTest.php, tests/Helpers/OutputSchemaValidatorTest.php, tests/Tools/SearchEnvelopeTotalTest.php]
-    verification: composer test (the SDK validates tool input but never tool output)
+    verification: composer test (catches output drift before the SDK's runtime check turns it into an isError result)
 
   - id: REQ-N10
     title: Install docs canonical and externally consumable
