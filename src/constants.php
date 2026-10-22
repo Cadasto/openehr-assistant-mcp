@@ -16,7 +16,15 @@ define('APP_DATA_DIR', (getenv('XDG_DATA_HOME') ?: '/tmp') . '/app');
 
 define('CKM_API_BASE_URL', trim(getenv('CKM_API_BASE_URL') ?: 'https://ckm.openehr.org/ckm/rest', "\/ \t\n\r\0\x0B") . '/');
 
-$httpSslVerify = filter_var((string)getenv('HTTP_SSL_VERIFY'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+// openEHR Archetype Designer server API. Credentials are a Designer *local* account
+// (HTTP Basic); the repository token is the repository host's token (e.g. GitHub).
+define('ARCHETYPE_DESIGNER_BASE_URL', trim(getenv('ARCHETYPE_DESIGNER_BASE_URL') ?: 'https://tools.openehr.org/designer', "\/ \t\n\r\0\x0B") . '/');
+define('ARCHETYPE_DESIGNER_USERNAME', (string)getenv('ARCHETYPE_DESIGNER_USERNAME'));
+define('ARCHETYPE_DESIGNER_PASSWORD', (string)getenv('ARCHETYPE_DESIGNER_PASSWORD'));
+define('ARCHETYPE_DESIGNER_REPOSITORY_ID', (string)getenv('ARCHETYPE_DESIGNER_REPOSITORY_ID'));
+define('ARCHETYPE_DESIGNER_REPOSITORY_TOKEN', (string)getenv('ARCHETYPE_DESIGNER_REPOSITORY_TOKEN'));
+
+$httpSslVerify =filter_var((string)getenv('HTTP_SSL_VERIFY'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 define('HTTP_SSL_VERIFY', $httpSslVerify ?? true);
 define('HTTP_TIMEOUT', (float)getenv('HTTP_TIMEOUT') ?: 10.0);
 

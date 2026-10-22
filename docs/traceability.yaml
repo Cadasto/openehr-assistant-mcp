@@ -105,15 +105,25 @@ requirements:
     verification: content review against ground_truth (see .sdd.yaml)
     adr: ["0005"]
 
+  - id: REQ-F11
+    title: Archetype Designer repository read access
+    canonical: docs/requirements.md
+    status: draft
+    implementation: partial
+    packages: [src/Tools/ArchetypeDesignerService.php, src/Apis/ArchetypeDesignerClient.php]
+    tests: [tests/Tools/ArchetypeDesignerServiceTest.php, tests/Clients/ArchetypeDesignerClientTest.php]
+    adr: ["0008"]
+    verification: read-only scope; write tools deferred (issue #36)
+
   - id: REQ-N2
     title: Mirrored tests + mocked external HTTP
     canonical: docs/requirements.md
     status: draft
     implementation: landed
-    packages: [src/Apis/CkmClient.php]
-    tests: [tests/Tools/CkmServiceTest.php]
+    packages: [src/Apis/CkmClient.php, src/Apis/ArchetypeDesignerClient.php]
+    tests: [tests/Tools/CkmServiceTest.php, tests/Tools/ArchetypeDesignerServiceTest.php]
     verification: whole suite — composer test
-    adr: ["0002"]
+    adr: ["0002", "0008"]
 
   - id: REQ-N3
     title: PSR-12 + PHPStan clean before merge

@@ -23,7 +23,8 @@ MCP client ──(streamable-http :8343 | stdio)──▶ public/index.php
               (src/Tools)     (src/Prompts)  (src/Resources)  (src/Completion…)   (resources/)
                     │
                     ▼
-              Apis/CkmClient ──HTTP──▶ CKM REST API   (the only external boundary)
+              Apis/CkmClient ──HTTP──▶ CKM REST API
+              Apis/ArchetypeDesignerClient ──HTTP──▶ Archetype Designer API
                     │
               resources/  (guides · examples · bmm · terminology)
 ```
@@ -37,7 +38,7 @@ a file-based discovery cache (Symfony Cache, under `XDG_DATA_HOME`, default
 `/tmp`) so attribute scanning is not repeated on every boot.
 → [ADR-0001](decisions/0001-attribute-driven-discovery.md)
 
-### Tools: `src/Tools/` · REQ-F1–F5, REQ-N9
+### Tools: `src/Tools/` · REQ-F1–F5, REQ-F11, REQ-N9
 Service classes whose public methods are annotated `#[McpTool(name: '…')]`. Each
 is the MCP-facing surface for one knowledge domain:
 
@@ -48,6 +49,7 @@ is the MCP-facing surface for one knowledge domain:
 | `ExamplesService` | `examples_search`, `examples_get` | REQ-F3 |
 | `TerminologyService` | `terminology_resolve` | REQ-F4 |
 | `TypeSpecificationService` | `type_specification_search`, `type_specification_get` | REQ-F5 |
+| `ArchetypeDesignerService` | `designer_repository_list`, `designer_entry_list`, `designer_search`, `designer_archetype_get`, `designer_template_get`, `designer_analyze` | REQ-F11 |
 
 ### Prompts: `src/Prompts/` · REQ-F6
 All extend `AbstractPrompt`, which loads message bodies from markdown under
@@ -76,10 +78,14 @@ Guide categories: `archetypes`, `templates`, `aql`, `simplified_formats`,
 `Mcp\Capability\Completion\ProviderInterface`, annotated `#[CompletionProvider]`,
 to suggest argument values for prompts/resource templates.
 
-### External boundary: `src/Apis/CkmClient` · REQ-F1, REQ-N2
-The **only** outbound HTTP client (Guzzle). `request` / `requestAsync` wrap the
-CKM REST API. Every CKM-touching test mocks this client; live CKM is never hit
-in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
+### External boundaries: `src/Apis/` · REQ-F1, REQ-F11, REQ-N2
+One Guzzle-based client per upstream API; tool services never use Guzzle directly.
+`CkmClient` wraps the CKM REST API
+([ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)).
+`ArchetypeDesignerClient` wraps the Archetype Designer server API and carries its
+credentials (HTTP Basic plus `Repository-Token`) from the environment
+([ADR-0008](decisions/0008-archetype-designer-client.md)). Tests mock both; no live
+call is ever made.
 
 ### Helpers: `src/Helpers/`
 `CliOptions` (transport option parsing), `Map` (data shaping),
