@@ -3,7 +3,7 @@
 [![PR validation](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/pr-validation.yml/badge.svg)](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/pr-validation.yml)
 [![Release Docker image (GHCR)](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/release.yml/badge.svg)](https://github.com/cadasto/openehr-assistant-mcp/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-0.20.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.21.0-blue)](CHANGELOG.md)
 [![PHP Version](https://img.shields.io/badge/php-8.4-blue.svg)](https://www.php.net/)
 [![MCP](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-orange.svg)](https://modelcontextprotocol.io/)
 [![openEHR](https://img.shields.io/badge/openEHR-compatible-009688)](https://openehr.org)
