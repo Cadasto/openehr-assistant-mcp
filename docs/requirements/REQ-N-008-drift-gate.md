@@ -15,7 +15,7 @@ artefact, a dangling path, or an index/map disagreement fails the build, so the 
 
 ## Acceptance criteria
 
-- [x] PR validation and `make ci` run the vendored drift gate's self-test and check.
+- [x] PR validation and `make ci` fail when the drift gate fails.
 - [x] A record whose cited path is missing, or whose canonical anchor does not resolve, fails the gate.
 - [x] A requirement file without a map record, or a record without an index row, fails the gate.
 
@@ -29,5 +29,6 @@ artefact, a dangling path, or an index/map disagreement fails the build, so the 
 
 ## Notes
 
+- Formerly `REQ-N8`; renumbered once, in the move to the sdd 0.15.0 layout.
 - [ADR-0006](../decisions/0006-machine-checked-traceability.md) records the first, PHP implementation of this
   gate; it is deprecated now that the sdd plugin's gate covers the same checks.

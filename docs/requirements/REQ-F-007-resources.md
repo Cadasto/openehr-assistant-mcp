@@ -26,3 +26,7 @@ Expose retrievable resources for guides, examples, type specifications, and term
 ## Canonical specification
 
 - [SPEC-SURFACE §2](../specifications/mcp-surface.md#resources-req-f-007)
+
+## Notes
+
+- Formerly `REQ-F7`; renumbered once, in the move to the sdd 0.15.0 layout.

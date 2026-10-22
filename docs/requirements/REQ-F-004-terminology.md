@@ -25,3 +25,7 @@ it.
 ## Canonical specification
 
 - [SPEC-TOOLS §4](../specifications/knowledge-tools.md#terminology-req-f-004)
+
+## Notes
+
+- Formerly `REQ-F4`; renumbered once, in the move to the sdd 0.15.0 layout.

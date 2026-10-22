@@ -18,8 +18,9 @@ translation, so a client can start a well-scoped openEHR task in one step.
 
 - [x] A client lists and invokes each of the fourteen prompts the specification names.
 - [x] Each prompt substitutes its arguments into its message bodies.
-- [x] Prompt bodies carry task-specific guidance only; global policy stays in the
-  [server instructions](REQ-F-010-server-instructions.md).
+- [x] Prompt bodies carry task-specific guidance; global policy stays in the
+  [server instructions](REQ-F-010-server-instructions.md), apart from the shared policy block the
+  specification allows.
 
 ## Out of scope
 
@@ -31,4 +32,5 @@ translation, so a client can start a well-scoped openEHR task in one step.
 
 ## Notes
 
+- Formerly `REQ-F6`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Decision: [ADR-0003](../decisions/0003-prompt-policy-split.md), global policy split from task prompts.

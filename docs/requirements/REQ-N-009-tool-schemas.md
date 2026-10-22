@@ -32,4 +32,5 @@ it ships.
 
 ## Notes
 
+- Formerly `REQ-N9`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Authoring recipe: [conventions.md](../conventions.md#mcp-capabilities-authoring).

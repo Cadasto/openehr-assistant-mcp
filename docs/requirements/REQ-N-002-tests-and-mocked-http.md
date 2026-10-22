@@ -17,7 +17,6 @@ suite is deterministic and runs offline.
 
 - [x] The whole suite passes with no network access.
 - [x] Every test that touches CKM mocks the one CKM client.
-- [x] A new application class arrives with its mirrored test.
 
 ## Out of scope
 
@@ -29,4 +28,5 @@ suite is deterministic and runs offline.
 
 ## Notes
 
+- Formerly `REQ-N2`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Decision: [ADR-0002](../decisions/0002-single-ckmclient-http-boundary.md), one CKM HTTP boundary.

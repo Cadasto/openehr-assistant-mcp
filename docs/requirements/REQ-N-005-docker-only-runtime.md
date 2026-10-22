@@ -28,4 +28,5 @@ The runtime is Docker-only and reproducible; no host PHP, Composer, or Python is
 
 ## Notes
 
+- Formerly `REQ-N5`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Decision: [ADR-0004](../decisions/0004-docker-only-runtime.md), Docker-only runtime.

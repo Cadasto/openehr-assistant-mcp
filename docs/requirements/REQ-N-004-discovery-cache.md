@@ -28,4 +28,5 @@ MCP capability discovery is cached at startup to keep server boot fast under rep
 
 ## Notes
 
+- Formerly `REQ-N4`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Decision: [ADR-0001](../decisions/0001-attribute-driven-discovery.md), attribute-driven discovery.

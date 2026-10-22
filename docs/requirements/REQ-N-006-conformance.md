@@ -14,7 +14,7 @@ The server passes the official MCP conformance suite over HTTP, so it interopera
 
 ## Acceptance criteria
 
-- [x] `make conformance` passes against the running dev stack.
+- [x] The conformance suite passes against the running server over HTTP.
 - [x] Every expected failure is listed in the baseline with its reason, and a scenario that starts passing
   leaves the baseline.
 
@@ -25,3 +25,7 @@ The server passes the official MCP conformance suite over HTTP, so it interopera
 ## Canonical specification
 
 - [SPEC-SURFACE §7](../specifications/mcp-surface.md#conformance-req-n-006)
+
+## Notes
+
+- Formerly `REQ-N6`; renumbered once, in the move to the sdd 0.15.0 layout.

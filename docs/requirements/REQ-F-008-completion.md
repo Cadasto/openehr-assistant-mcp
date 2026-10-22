@@ -24,3 +24,7 @@ a valid value instead of typing one from memory.
 ## Canonical specification
 
 - [SPEC-SURFACE §3](../specifications/mcp-surface.md#completion-req-f-008)
+
+## Notes
+
+- Formerly `REQ-F8`; renumbered once, in the move to the sdd 0.15.0 layout.

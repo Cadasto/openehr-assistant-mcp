@@ -29,4 +29,5 @@ function, and invariant detail, so an agent checks a class against the published
 
 ## Notes
 
+- Formerly `REQ-F5`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Decision: [ADR-0005](../decisions/0005-spec-aligned-content-retrieval.md), spec-aligned content retrieval.

@@ -17,7 +17,7 @@ from the project's curated modelling guidance instead of its own recollection.
 
 - [x] An agent searches the guides and fetches one by category and name.
 - [x] An agent looks up the ADL idiom snippets for a modelling pattern.
-- [x] Guide search and example search rank the same query the same way.
+- [x] Guide search and example search split a query into the same search terms.
 
 ## Out of scope
 
@@ -26,3 +26,7 @@ from the project's curated modelling guidance instead of its own recollection.
 ## Canonical specification
 
 - [SPEC-TOOLS §2](../specifications/knowledge-tools.md#guides-req-f-002)
+
+## Notes
+
+- Formerly `REQ-F2`; renumbered once, in the move to the sdd 0.15.0 layout.

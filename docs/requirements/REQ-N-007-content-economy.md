@@ -28,4 +28,5 @@ under token budgets.
 
 ## Notes
 
+- Formerly `REQ-N7`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Decision: [ADR-0003](../decisions/0003-prompt-policy-split.md), global policy split from task prompts.

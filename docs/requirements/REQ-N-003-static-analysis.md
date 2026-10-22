@@ -23,3 +23,7 @@ Code follows PSR-12 and passes PHPStan static analysis before merge, so it stays
 ## Canonical specification
 
 - [SPEC-ENGINEERING §2](../specifications/engineering.md#static-analysis-req-n-003)
+
+## Notes
+
+- Formerly `REQ-N3`; renumbered once, in the move to the sdd 0.15.0 layout.

@@ -30,4 +30,5 @@ rename, a dropped hosted-endpoint section, or a dangling link ships a broken pag
 
 ## Notes
 
+- Formerly `REQ-N10`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Decision: [ADR-0007](../decisions/0007-website-in-separate-repository.md), website in its own repository.

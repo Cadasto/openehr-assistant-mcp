@@ -8,7 +8,8 @@ CI is *operational process*, not part of the normative contract, but it is where
 mechanically. Two enabling policies:
 
 1. **One set of checks.** PR validation runs the same `composer` scripts that `make ci` runs in the dev
-   container, so a green `make ci` predicts a green pull request. The full PR gate is `make ci`.
+   container, so a green `make ci` predicts a green pull request. `make ci` covers every PR-validation
+   step except the production image build, which `make build` runs.
 2. **Reproducible toolchain.** Locally every check runs in the dev container ([development.md](development.md));
    in CI the workflow pins PHP 8.4 (`setup-php`) and Python 3.12 (`setup-python`, for the drift gate).
 

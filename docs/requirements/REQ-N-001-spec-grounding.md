@@ -17,7 +17,6 @@ never invented from model memory, because correct clinical and standards content
 
 - [x] The spec-lookup how-to names the authoritative sources and the cheapest-first retrieval order.
 - [x] The README's claims about spec lookup match the how-to, guarded by a content test.
-- [x] Reviewers check new or changed standards content against the descriptor's `ground_truth` sources.
 
 ## Out of scope
 
@@ -29,4 +28,5 @@ never invented from model memory, because correct clinical and standards content
 
 ## Notes
 
+- Formerly `REQ-N1`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Decision: [ADR-0005](../decisions/0005-spec-aligned-content-retrieval.md), spec-aligned content retrieval.

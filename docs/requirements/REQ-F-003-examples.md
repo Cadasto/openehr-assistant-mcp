@@ -26,3 +26,7 @@ so an agent imitates a known-good artefact rather than inventing a shape.
 ## Canonical specification
 
 - [SPEC-TOOLS §3](../specifications/knowledge-tools.md#examples-req-f-003)
+
+## Notes
+
+- Formerly `REQ-F3`; renumbered once, in the move to the sdd 0.15.0 layout.

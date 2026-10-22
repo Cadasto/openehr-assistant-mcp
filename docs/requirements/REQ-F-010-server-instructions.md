@@ -30,4 +30,5 @@ Digest-First, Examples-First), so every client session starts with the same disc
 
 ## Notes
 
+- Formerly `REQ-F10`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Decision: [ADR-0003](../decisions/0003-prompt-policy-split.md), global policy split from task prompts.

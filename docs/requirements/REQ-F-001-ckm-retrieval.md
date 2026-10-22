@@ -31,4 +31,5 @@ scoring and result sizing, so an agent reuses published models before it authors
 
 ## Notes
 
+- Formerly `REQ-F1`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Decision: [ADR-0002](../decisions/0002-single-ckmclient-http-boundary.md), one CKM HTTP boundary.

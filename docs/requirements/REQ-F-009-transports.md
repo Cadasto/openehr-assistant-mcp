@@ -30,4 +30,5 @@ same server runs hosted or locally.
 
 ## Notes
 
+- Formerly `REQ-F9`; renumbered once, in the move to the sdd 0.15.0 layout.
 - Decision: [ADR-0001](../decisions/0001-attribute-driven-discovery.md), attribute-driven discovery.
