@@ -156,6 +156,27 @@ final class OptionalEnumSchemaGeneratorTest extends TestCase
         ], $schema);
     }
 
+    public function test_boolean_subschema_passes_through(): void
+    {
+        // JSON Schema allows `true`/`false` as a property's schema; a method-level
+        // `#[Schema(definition: ...)]` can publish one, and it has no enum to rewrite.
+        $definition = [
+            'type' => 'object',
+            'properties' => [
+                'anything' => true,
+                'kind' => ['type' => ['null', 'string'], 'default' => null, 'enum' => ['a', null]],
+            ],
+            'additionalProperties' => false,
+        ];
+        $inner = $this->createStub(SchemaGeneratorInterface::class);
+        $inner->method('generate')->willReturn($definition);
+
+        $schema = (new OptionalEnumSchemaGenerator($inner))->generate(new \ReflectionFunction(static fn (): null => null));
+
+        $this->assertTrue($schema['properties']['anything']);
+        $this->assertSame(['type' => 'string', 'enum' => ['a']], $schema['properties']['kind']);
+    }
+
     /**
      * @return array<string, array{0: array<string, mixed>|null}>
      */

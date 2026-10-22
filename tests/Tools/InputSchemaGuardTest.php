@@ -27,7 +27,9 @@ use ReflectionMethod;
  *   the whole `tools/list` when one holds `null` (issue #28), so omitting the argument is
  *   the only way to ask for "no filter". Every other key, such as `description`, is
  *   published as the SDK renders it.
- * - No published `enum` holds `null`, whether its parameter is required or optional.
+ * - No published `enum` holds `null`, at any depth, whether its parameter is required or
+ *   optional.
+ * - `public/index.php` hands this generator to the builder, and sets no other after it.
  */
 #[CoversNothing]
 final class InputSchemaGuardTest extends TestCase
@@ -45,6 +47,9 @@ final class InputSchemaGuardTest extends TestCase
     ];
 
     private const string WIRING_PATTERN = '/->setSchemaGenerator\(\s*new OptionalEnumSchemaGenerator\(\)\s*\)/';
+
+    /** JSON Schema keywords whose keys name subschemas. */
+    private const array SUBSCHEMA_MAPS = ['properties', 'patternProperties', '$defs', 'definitions'];
 
     private static ?SchemaGenerator $rawGenerator = null;
 
@@ -91,20 +96,21 @@ final class InputSchemaGuardTest extends TestCase
 
     public function test_no_published_enum_holds_null(): void
     {
-        // Every parameter, required or optional: issue #28's symptom is a null in any enum.
+        // Every enum at any depth, required parameter or optional: issue #28's symptom is a
+        // null in any enum, such as one under an array parameter's `items`.
         $enumParameters = [];
         $enumsWithNull = [];
         foreach (self::mcpToolMethodProvider() as [$class, $method]) {
             $schema = self::publishedGenerator()->generate(new ReflectionMethod($class, $method));
             $properties = is_array($schema['properties']) ? $schema['properties'] : [];
             foreach ($properties as $param => $property) {
-                if (!is_array($property) || !array_key_exists('enum', $property)) {
-                    continue;
+                if (is_array($property) && array_key_exists('enum', $property)) {
+                    $enumParameters[] = sprintf('%s::%s($%s)', $class, $method, $param);
                 }
-                $label = sprintf('%s::%s($%s)', $class, $method, $param);
-                $enumParameters[] = $label;
-                if (is_array($property['enum']) && in_array(null, $property['enum'], true)) {
-                    $enumsWithNull[] = $label;
+            }
+            foreach (self::enumsIn($schema, '#') as $pointer => $enum) {
+                if (in_array(null, $enum, true)) {
+                    $enumsWithNull[] = sprintf('%s::%s %s', $class, $method, $pointer);
                 }
             }
         }
@@ -113,6 +119,24 @@ final class InputSchemaGuardTest extends TestCase
             $this->assertContains($known, $enumParameters, sprintf('%s publishes no enum, so this check no longer sees it', $known));
         }
         $this->assertSame([], $enumsWithNull, 'These published enums hold null, which clients that decode enum as a list of strings reject, dropping every tool (#28)');
+    }
+
+    public function test_enum_walk_reaches_nested_enums(): void
+    {
+        $schema = [
+            'type' => 'object',
+            'properties' => [
+                'kind' => ['type' => 'string', 'enum' => ['a', 'b']],
+                'tags' => ['type' => 'array', 'items' => ['type' => ['null', 'string'], 'enum' => ['x', null]]],
+                'enum' => ['type' => 'string', 'enum' => ['y', null]],
+            ],
+        ];
+
+        $this->assertSame([
+            '#/properties/kind' => ['a', 'b'],
+            '#/properties/tags/items' => ['x', null],
+            '#/properties/enum' => ['y', null],
+        ], self::enumsIn($schema, '#'));
     }
 
     public function test_optional_enum_provider_finds_the_known_parameters(): void
@@ -131,11 +155,17 @@ final class InputSchemaGuardTest extends TestCase
         // the entrypoint really hands it to the builder.
         $entrypoint = file_get_contents(__DIR__ . '/../../public/index.php');
         $this->assertIsString($entrypoint);
+        $liveCode = self::liveCode($entrypoint);
 
         $this->assertMatchesRegularExpression(
             self::WIRING_PATTERN,
-            self::liveCode($entrypoint),
+            $liveCode,
             'public/index.php must publish input schemas with OptionalEnumSchemaGenerator, or optional enums reach clients with null in enum (#28)',
+        );
+        $this->assertSame(
+            1,
+            preg_match_all('/->setSchemaGenerator\(/', $liveCode),
+            'public/index.php must set the schema generator once: the SDK builder keeps the last one it is given, so a second call would replace OptionalEnumSchemaGenerator',
         );
     }
 
@@ -159,6 +189,35 @@ final class InputSchemaGuardTest extends TestCase
         $this->assertMatchesRegularExpression(self::WIRING_PATTERN, $source, 'Fixture precondition: the raw text holds the call');
 
         $this->assertDoesNotMatchRegularExpression(self::WIRING_PATTERN, self::liveCode($source), 'A call that is commented out or quoted does not wire the generator');
+    }
+
+    /**
+     * Every `enum` keyword in a JSON Schema, at any depth, keyed by its JSON Pointer.
+     *
+     * The keys of a subschema map such as `properties` are names, not keywords, so a
+     * parameter called `enum` is walked into rather than read as the keyword.
+     *
+     * @return array<string, array<mixed>>
+     */
+    private static function enumsIn(mixed $schema, string $pointer, bool $keysAreNames = false): array
+    {
+        if (!is_array($schema)) {
+            return [];
+        }
+
+        $enums = [];
+        foreach ($schema as $key => $child) {
+            if (!$keysAreNames && $key === 'enum') {
+                if (is_array($child)) {
+                    $enums[$pointer] = $child;
+                }
+                continue;
+            }
+            $childKeysAreNames = !$keysAreNames && in_array($key, self::SUBSCHEMA_MAPS, true);
+            $enums += self::enumsIn($child, $pointer . '/' . $key, $childKeysAreNames);
+        }
+
+        return $enums;
     }
 
     /**
