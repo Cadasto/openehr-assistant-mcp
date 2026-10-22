@@ -17,29 +17,38 @@ use PHPUnit\Framework\TestCase;
 final class OptionalEnumSchemaGeneratorTest extends TestCase
 {
     /**
-     * @return array<string, array{0: \Closure}>
+     * @return array<string, array{0: \Closure, 1: array<string, mixed>}>
      */
     public static function optionalNullableEnumProvider(): array
     {
         return [
             'enum lists null' => [
                 static fn (#[Schema(enum: ['a', 'b', null])] ?string $x = null): null => null,
+                ['type' => 'string', 'enum' => ['a', 'b']],
             ],
             'enum lists strings only' => [
                 static fn (#[Schema(enum: ['a', 'b'])] ?string $x = null): null => null,
+                ['type' => 'string', 'enum' => ['a', 'b']],
+            ],
+            'enum with a description' => [
+                static fn (#[Schema(enum: ['a', 'b'], description: 'd')] ?string $x = null): null => null,
+                ['type' => 'string', 'description' => 'd', 'enum' => ['a', 'b']],
             ],
         ];
     }
 
+    /**
+     * @param array<string, mixed> $expected
+     */
     #[DataProvider('optionalNullableEnumProvider')]
-    public function test_REQ_N9_optional_nullable_enum_is_published_as_strings_only(\Closure $fixture): void
+    public function test_REQ_N9_optional_nullable_enum_is_published_as_strings_only(\Closure $fixture, array $expected): void
     {
         $raw = self::rawSchema($fixture);
         $this->assertSame(['null', 'string'], $raw['properties']['x']['type'], 'Fixture precondition: the SDK renders the parameter as nullable');
 
         $schema = (new OptionalEnumSchemaGenerator())->generate(new \ReflectionFunction($fixture));
 
-        $this->assertSame(['type' => 'string', 'enum' => ['a', 'b']], $schema['properties']['x']);
+        $this->assertSame($expected, $schema['properties']['x'], 'The rewrite changes only type, enum and default; every other key, such as description, must survive');
         $this->assertArrayNotHasKey('required', $schema);
     }
 

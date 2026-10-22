@@ -16,7 +16,7 @@ use ReflectionMethod;
 /**
  * CI guard (REQ-N9): reflects every `#[McpTool]` method through the server's production
  * {@see OptionalEnumSchemaGenerator} (the generator `public/index.php` publishes input
- * schemas with) and asserts two wire-visible invariants that are easy to silently regress
+ * schemas with) and asserts wire-visible invariants that are easy to silently regress
  * when adding a parameter:
  *
  * - The published input schema is closed (`additionalProperties: false`) at the
@@ -25,7 +25,9 @@ use ReflectionMethod;
  *   are published as plain string enums: `type: "string"`, no `null` in `enum`, no
  *   `default`, and not `required`. Clients that decode `enum` as a list of strings reject
  *   the whole `tools/list` when one holds `null` (issue #28), so omitting the argument is
- *   the only way to ask for "no filter".
+ *   the only way to ask for "no filter". Every other key, such as `description`, is
+ *   published as the SDK renders it.
+ * - No published `enum` holds `null`, whether its parameter is required or optional.
  */
 #[CoversNothing]
 final class InputSchemaGuardTest extends TestCase
@@ -41,6 +43,8 @@ final class InputSchemaGuardTest extends TestCase
         'Cadasto\OpenEHR\MCP\Assistant\Tools\GuideService::search($category)',
         'Cadasto\OpenEHR\MCP\Assistant\Tools\GuideService::get($category)',
     ];
+
+    private const string WIRING_PATTERN = '/->setSchemaGenerator\(\s*new OptionalEnumSchemaGenerator\(\)\s*\)/';
 
     private static ?SchemaGenerator $rawGenerator = null;
 
@@ -73,6 +77,42 @@ final class InputSchemaGuardTest extends TestCase
         $this->assertSame('string', $property['type'] ?? null, sprintf('%s: an optional enum must publish type "string", not a nullable type', $label));
         $this->assertArrayNotHasKey('default', $property, sprintf('%s: an optional enum must publish no default', $label));
         $this->assertNotContains($param, $schema['required'] ?? [], sprintf('%s: an optional enum must not be required', $label));
+
+        $rawSchema = self::rawGenerator()->generate(new ReflectionMethod($class, $method));
+        $this->assertIsArray($rawSchema['properties']);
+        $rawProperty = $rawSchema['properties'][$param] ?? null;
+        $this->assertIsArray($rawProperty);
+        $this->assertSame(
+            self::withoutRewrittenKeys($rawProperty),
+            self::withoutRewrittenKeys($property),
+            sprintf('%s: the rewrite may change only type, enum and default; every other key, such as the description that tells clients to omit the argument, must be published as the SDK renders it', $label),
+        );
+    }
+
+    public function test_REQ_N9_no_published_enum_holds_null(): void
+    {
+        // Every parameter, required or optional: issue #28's symptom is a null in any enum.
+        $enumParameters = [];
+        $enumsWithNull = [];
+        foreach (self::mcpToolMethodProvider() as [$class, $method]) {
+            $schema = self::publishedGenerator()->generate(new ReflectionMethod($class, $method));
+            $properties = is_array($schema['properties']) ? $schema['properties'] : [];
+            foreach ($properties as $param => $property) {
+                if (!is_array($property) || !array_key_exists('enum', $property)) {
+                    continue;
+                }
+                $label = sprintf('%s::%s($%s)', $class, $method, $param);
+                $enumParameters[] = $label;
+                if (is_array($property['enum']) && in_array(null, $property['enum'], true)) {
+                    $enumsWithNull[] = $label;
+                }
+            }
+        }
+
+        foreach (self::KNOWN_OPTIONAL_ENUM_PARAMETERS as $known) {
+            $this->assertContains($known, $enumParameters, sprintf('%s publishes no enum, so this check no longer sees it', $known));
+        }
+        $this->assertSame([], $enumsWithNull, 'These published enums hold null, which clients that decode enum as a list of strings reject, dropping every tool (#28)');
     }
 
     public function test_optional_enum_provider_finds_the_known_parameters(): void
@@ -93,10 +133,61 @@ final class InputSchemaGuardTest extends TestCase
         $this->assertIsString($entrypoint);
 
         $this->assertMatchesRegularExpression(
-            '/->setSchemaGenerator\(\s*new OptionalEnumSchemaGenerator\(\)\s*\)/',
-            $entrypoint,
+            self::WIRING_PATTERN,
+            self::liveCode($entrypoint),
             'public/index.php must publish input schemas with OptionalEnumSchemaGenerator, or optional enums reach clients with null in enum (#28)',
         );
+    }
+
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function wiringOutsideLiveCodeProvider(): array
+    {
+        return [
+            'line comment' => ["<?php\n\$builder\n    // ->setSchemaGenerator(new OptionalEnumSchemaGenerator())\n    ->build();\n"],
+            'hash comment' => ["<?php\n\$builder\n    # ->setSchemaGenerator(new OptionalEnumSchemaGenerator())\n    ->build();\n"],
+            'block comment' => ["<?php\n\$builder\n    /* ->setSchemaGenerator(new OptionalEnumSchemaGenerator()) */\n    ->build();\n"],
+            'doc comment' => ["<?php\n/** ->setSchemaGenerator(new OptionalEnumSchemaGenerator()) */\n\$builder->build();\n"],
+            'string literal' => ["<?php\n\$note = '->setSchemaGenerator(new OptionalEnumSchemaGenerator())';\n\$builder->build();\n"],
+        ];
+    }
+
+    #[DataProvider('wiringOutsideLiveCodeProvider')]
+    public function test_REQ_N9_wiring_check_ignores_a_call_outside_live_code(string $source): void
+    {
+        $this->assertMatchesRegularExpression(self::WIRING_PATTERN, $source, 'Fixture precondition: the raw text holds the call');
+
+        $this->assertDoesNotMatchRegularExpression(self::WIRING_PATTERN, self::liveCode($source), 'A call that is commented out or quoted does not wire the generator');
+    }
+
+    /**
+     * The PHP source without its comments and string literals, so that only code that runs
+     * can satisfy a pattern.
+     */
+    private static function liveCode(string $source): string
+    {
+        $ignored = [T_COMMENT, T_DOC_COMMENT, T_CONSTANT_ENCAPSED_STRING, T_ENCAPSED_AND_WHITESPACE, T_INLINE_HTML];
+        $code = '';
+        foreach (token_get_all($source) as $token) {
+            if (is_array($token) && in_array($token[0], $ignored, true)) {
+                continue;
+            }
+            $code .= is_array($token) ? $token[1] : $token;
+        }
+
+        return $code;
+    }
+
+    /**
+     * A property without the keys the production generator may rewrite.
+     *
+     * @param array<mixed> $property
+     * @return array<mixed>
+     */
+    private static function withoutRewrittenKeys(array $property): array
+    {
+        return array_diff_key($property, array_flip(['type', 'enum', 'default']));
     }
 
     private static function rawGenerator(): SchemaGenerator
