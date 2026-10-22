@@ -19,9 +19,10 @@ services:
       target: development
     tty: true
     # Allow the dev reverse-proxy host so the streamable-http transport's DNS-rebinding
-    # protection (SDK >= 0.6) accepts requests proxied via the `ingress` service.
+    # protection (SDK >= 0.6) accepts requests proxied via the `ingress` service, and
+    # host.docker.internal so clients in other containers (docs/install.md) can connect.
     environment:
-      MCP_ALLOWED_HOSTS: "localhost,127.0.0.1,[::1],ingress,app,openehr-assistant-mcp.${DOMAIN:-local}"
+      MCP_ALLOWED_HOSTS: "localhost,127.0.0.1,[::1],ingress,app,host.docker.internal,openehr-assistant-mcp.${DOMAIN:-local}"
     volumes:
       - ../:/app
       - composer-cache:/data/.cache/composer

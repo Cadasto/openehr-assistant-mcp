@@ -94,10 +94,10 @@ DNS-rebinding check (SDK ≥ 0.6) accepts them. `ingress` is the compose service
 is independent of `DOMAIN`; the vhost form additionally needs
 `openehr-assistant-mcp.local` in your hosts file.
 
-Host-side addresses **do not** work from the container and fail in distinct ways:
-`host.docker.internal:8343` resolves but is rejected with
-`403 Forbidden: Invalid Host header` (not in the allow-list), and `127.0.0.1:8343`
-is the Inspector container's own loopback, so the connection is refused.
+`host.docker.internal:8343` also works: the dev stack allow-lists it so clients in
+other containers (such as LibreChat, see [install.md](install.md)) can connect.
+`127.0.0.1:8343` does **not** work: it is the Inspector container's own loopback, so
+the connection is refused.
 
 ### CLI and TUI
 
