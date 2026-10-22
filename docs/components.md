@@ -79,7 +79,7 @@ Guide categories: `archetypes`, `templates`, `aql`, `simplified_formats`,
 ### Completion providers: `src/CompletionProviders/` · REQ-F8
 `Examples`, `Guides`, and `SpecificationComponents` implement
 `Mcp\Capability\Completion\ProviderInterface`, annotated `#[CompletionProvider]`,
-to suggest argument values for prompts/resource templates.
+to suggest argument values for resource-template parameters (`src/Resources/*.php`).
 
 ### External boundary: `src/Apis/CkmClient` · REQ-F1, REQ-N2
 The **only** outbound HTTP client (Guzzle). `request` / `requestAsync` wrap the
@@ -154,4 +154,4 @@ source, deliberately not restated here. It also namespaces the discovery cache, 
 a release bump invalidates stale capability entries
 ([ADR-0001](decisions/0001-attribute-driven-discovery.md)).
 Release process and CHANGELOG conventions live in
-[AGENTS.md](../AGENTS.md) (Conventions) and `CHANGELOG.md`.
+[CONTRIBUTING.md](../CONTRIBUTING.md#branching-and-versioning) and `CHANGELOG.md`.

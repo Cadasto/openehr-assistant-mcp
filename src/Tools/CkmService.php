@@ -236,7 +236,9 @@ final readonly class CkmService
      *   The Archetype definition in the chosen format in a text content code block.
      *
      * @throws ToolCallException
-     *   If the CKM API request fails (invalid CID, unsupported format mapping, upstream error).
+     *   If the identifier cannot be resolved to a CID, CKM fails while resolving an
+     *   archetype-id (unreachable, or an error status), or the CKM API request fails
+     *   (invalid CID, unsupported format mapping, upstream error).
      */
     #[Schema(additionalProperties: false)]
     #[McpTool(
@@ -287,6 +289,10 @@ final readonly class CkmService
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to retrieve the CKM Archetype', ['error' => $e->getMessage(), 'identifier' => $identifier, 'cid' => $cid, 'format' => $format]);
             throw new ToolCallException('Failed to retrieve the CKM Archetype: ' . $e->getMessage(), previous: $e);
+        } catch (\InvalidArgumentException $e) {
+            // Map::archetypeFormat() rejects a format the schema enum also refuses; a caller that
+            // skips schema validation still gets the ToolCallException promised above.
+            throw new ToolCallException($e->getMessage(), previous: $e);
         }
     }
 
@@ -308,9 +314,10 @@ final readonly class CkmService
      * @param bool $requireAllSearchWords
      *   Determines if the search should match all provided keywords (true) or any of them (false); defaults to true.
      *
-     * @return array<string,mixed>
-     *   A list of CKM Template metadata entries.
-     *   Entries usually include a Template CID identifier, display name, status, and other descriptive fields.
+     * @return array{items: list<array<string, string|int>>, total: int}
+     *   A list of CKM Template metadata entries — each with a Template CID identifier, and
+     *   usually display name, status and other descriptive fields — plus `total` (see the
+     *   `total` note in the outputSchema).
      *
      * @throws ToolCallException
      *   If the CKM API request fails (network error, upstream outage, invalid response).
@@ -444,7 +451,7 @@ final readonly class CkmService
      *   The Template definition in the chosen format in a text content code block.
      *
      * @throws ToolCallException
-     *   If the CKM API request fails.
+     *   If the identifier is not exactly one URL path segment, or the CKM API request fails.
      */
     #[Schema(additionalProperties: false)]
     #[McpTool(
@@ -460,24 +467,35 @@ final readonly class CkmService
     {
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $identifier = trim($identifier);
-        $cid = $identifier; // Simplification, CKM templates usually use CID or template name in URL
+        // CKM takes the template CID (or a template name) as one path segment.
+        $segment = $this->pathSegment($identifier);
+        if ($segment === null) {
+            throw new ToolCallException(sprintf(
+                'Invalid CKM template identifier: "%s". Pass one template CID (e.g. "1013.26.244", as returned by ckm_template_search); it must not be empty, "." or "..", or contain "/", "\\", "?", "#", "%%" or control characters.',
+                $identifier,
+            ));
+        }
 
         try {
             // Mapping format to CKM expected format string and content-type
             $templateFormat = Map::templateFormat($format);
             $contentType = Map::contentType($templateFormat);
 
-            $response = $this->apiClient->get("v1/templates/{$cid}/{$templateFormat}", [
+            $response = $this->apiClient->get("v1/templates/{$segment}/{$templateFormat}", [
                 RequestOptions::HEADERS => [
                     'Accept' => $contentType,
                 ],
             ]);
             $data = trim($response->getBody()->getContents());
-            $this->logger->info('CKM Template retrieved successfully', ['cid' => $cid, 'format' => $templateFormat, 'status' => $response->getStatusCode()]);
+            $this->logger->info('CKM Template retrieved successfully', ['cid' => $identifier, 'format' => $templateFormat, 'status' => $response->getStatusCode()]);
             return TextContent::code($data);
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to retrieve the CKM Template', ['error' => $e->getMessage(), 'identifier' => $identifier, 'format' => $format]);
             throw new ToolCallException('Failed to retrieve the CKM Template: ' . $e->getMessage(), previous: $e);
+        } catch (\InvalidArgumentException $e) {
+            // Map::templateFormat() rejects a format the schema enum also refuses; a caller that
+            // skips schema validation still gets the ToolCallException promised above.
+            throw new ToolCallException($e->getMessage(), previous: $e);
         }
     }
 
@@ -626,28 +644,61 @@ final readonly class CkmService
     }
 
     /**
-     * Resolve a full archetype-id to its CKM citeable identifier, or null if it cannot be.
+     * Resolve a full archetype-id to its CKM citeable identifier.
      *
-     * Returns null (rather than a guess) for every failure mode, so the caller can name the
-     * resolution step in the error instead of issuing a request built from a mangled path.
+     * Returns null (rather than a guess) when the archetype-id is unknown: it is not exactly
+     * one URL path segment (no request is sent), CKM answers 404, or a 200 body is not a CID.
+     * The caller then names the resolution step in the error instead of issuing a request
+     * built from a mangled path. A CKM failure is not an unknown id, so it throws: telling
+     * the model to "pass a CID" during an outage sends it after the wrong fix.
+     *
+     * @throws ToolCallException
+     *   If CKM cannot be reached (the transport exception is chained), or answers a status
+     *   other than 200 or 404 (named in the message).
      */
     private function resolveCitableIdentifier(string $archetypeId): ?string
     {
-        try {
-            $response = $this->apiClient->get("v1/archetypes/citeable-identifier/$archetypeId");
-        } catch (ClientExceptionInterface $e) {
-            $this->logger->error('Failed to resolve CID identifier', ['error' => $e->getMessage(), 'identifier' => $archetypeId]);
+        $segment = $this->pathSegment($archetypeId);
+        if ($segment === null) {
+            $this->logger->error('Archetype-id is not one URL path segment; not resolved', ['identifier' => $archetypeId]);
 
             return null;
         }
 
-        if ($response->getStatusCode() !== 200) {
-            $this->logger->error('CID resolution returned a non-200 status', [
-                'identifier' => $archetypeId,
-                'status' => $response->getStatusCode(),
+        try {
+            // Only a 404 means "unknown archetype-id". Guzzle's default `http_errors` would
+            // throw on every 4xx/5xx before the status could be read, so it is off here.
+            $response = $this->apiClient->get("v1/archetypes/citeable-identifier/{$segment}", [
+                RequestOptions::HTTP_ERRORS => false,
             ]);
+        } catch (ClientExceptionInterface $e) {
+            $this->logger->error('Failed to resolve CID identifier', ['error' => $e->getMessage(), 'identifier' => $archetypeId]);
+
+            throw new ToolCallException(sprintf(
+                'CKM could not be reached while resolving "%s" to a citeable identifier (CID): %s',
+                $archetypeId,
+                $e->getMessage(),
+            ), previous: $e);
+        }
+
+        $status = $response->getStatusCode();
+        if ($status === 404) {
+            $this->logger->info('CKM does not know the archetype-id', ['identifier' => $archetypeId]);
 
             return null;
+        }
+
+        if ($status !== 200) {
+            $this->logger->error('CID resolution returned an error status', [
+                'identifier' => $archetypeId,
+                'status' => $status,
+            ]);
+
+            throw new ToolCallException(sprintf(
+                'CKM answered HTTP %d while resolving "%s" to a citeable identifier (CID); this is a CKM failure, not an unknown archetype-id, so retry later.',
+                $status,
+                $archetypeId,
+            ));
         }
 
         // A 200 with an empty body used to survive the `??` fallback as '' and produce the
@@ -670,6 +721,31 @@ final readonly class CkmService
     private function looksLikeCid(string $value): bool
     {
         return preg_match('/^\d+(\.\d+)*$/', $value) === 1;
+    }
+
+    /**
+     * Percent-encode a caller-supplied identifier as exactly one URL path segment, or return
+     * null when it cannot be one.
+     *
+     * Put into a request path as given, `/`, `\` or a dot-segment lets Guzzle resolve the
+     * path against `base_uri` to another page on the CKM host, and `?` or `#` replaces the
+     * query or cuts the path short. `%` is refused so a pre-encoded sequence such as `%2e%2e`
+     * cannot become a dot-segment once CKM decodes it. Every documented form passes: a CID
+     * (`1013.26.244`), a template name (spaces are encoded, not refused) and an archetype-id
+     * (`openEHR-EHR-OBSERVATION.blood_pressure.v1.0.2`, which encodes to itself).
+     */
+    private function pathSegment(string $value): ?string
+    {
+        if (
+            trim($value) === ''
+            || $value === '.'
+            || $value === '..'
+            || preg_match('~[/\\\\?#%\x00-\x1F\x7F]~', $value) === 1
+        ) {
+            return null;
+        }
+
+        return rawurlencode($value);
     }
 
     /** Validate/uppercase an RM-class filter token; throws ToolCallException on a malformed non-empty value. */

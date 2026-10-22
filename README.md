@@ -119,7 +119,7 @@ Optional prompts that guide AI assistants through common openEHR and CKM workflo
 
 ### Completion providers
 
-Parameter suggestions in MCP clients when invoking tools or resources:
+Argument suggestions in MCP clients when reading resource templates:
 
 - `Guides`: guide `{name}` values per category (`openehr://guides/{category}/{name}`)
 - `Examples`: example `{name}` values per kind (`openehr://examples/{kind}/{name}`)
@@ -156,7 +156,7 @@ make ci          # spec-check + PHPStan + tests
 - [docs/development.md](docs/development.md): Docker dev environment, Makefile, configuration, MCP Inspector
 - [docs/conventions.md](docs/conventions.md): coding standard and MCP authoring conventions
 - [docs/testing.md](docs/testing.md): tests, static analysis, MCP conformance
-- [docs/](docs/README.md): the Specification-Driven Development spec set (requirements, architecture, decisions, traceability)
+- [docs/](docs/README.md): the Specification-Driven Development spec set (requirements, architecture, decisions)
 - [CONTRIBUTING.md](CONTRIBUTING.md): how to contribute
 - [AGENTS.md](AGENTS.md): repository instructions for AI coding agents
 

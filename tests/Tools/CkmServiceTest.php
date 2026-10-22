@@ -78,6 +78,34 @@ final class CkmServiceTest extends TestCase
         $this->assertSame($payload[0]['resourceMainId'], $result['items'][0]['archetypeId']);
     }
 
+    public function testArchetypeGetTurnsAnUnknownFormatIntoToolCallException(): void
+    {
+        $this->client->expects($this->never())->method('get');
+        $svc = new CkmService($this->client, $this->logger);
+
+        try {
+            $svc->archetypeGet('123.45', 'docx');
+            $this->fail('expected a ToolCallException for an unknown archetype format');
+        } catch (ToolCallException $e) {
+            $this->assertSame('Invalid archetype format: docx', $e->getMessage());
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e->getPrevious());
+        }
+    }
+
+    public function testTemplateGetTurnsAnUnknownFormatIntoToolCallException(): void
+    {
+        $this->client->expects($this->never())->method('get');
+        $svc = new CkmService($this->client, $this->logger);
+
+        try {
+            $svc->templateGet('123.45', 'docx');
+            $this->fail('expected a ToolCallException for an unknown template format');
+        } catch (ToolCallException $e) {
+            $this->assertSame('Invalid template format: docx', $e->getMessage());
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e->getPrevious());
+        }
+    }
+
     public function testArchetypeGetRespectsFormatAndReturnsTextContent(): void
     {
         // format "adl" -> Map::archetypeFormat('adl') returns 'adl' and contentType 'text/plain' via Map::contentType
@@ -156,6 +184,136 @@ final class CkmServiceTest extends TestCase
         $content = $svc->archetypeGet('openEHR-EHR-OBSERVATION.blood_pressure.v1', 'adl');
 
         $this->assertStringContainsString('resolved ADL', $content->text);
+    }
+
+    /**
+     * Archetype-ids that are not exactly one path segment. Put into the resolution path as
+     * given, each one made Guzzle resolve the request against `base_uri` to another page on
+     * the CKM host, e.g. `openEHR-/../../../../admin?x=1` fetched `/ckm/rest/admin?x=1`.
+     *
+     * @return array<string, array{string}>
+     */
+    public static function archetypeIdsThatAreNotOnePathSegmentProvider(): array
+    {
+        return [
+            'parent traversal and query' => ['openEHR-/../../../../admin?x=1'],
+            'query' => ['openEHR-EHR-OBSERVATION.blood_pressure.v1?evil=1'],
+            'fragment' => ['openEHR-EHR-OBSERVATION.blood_pressure.v1#top'],
+            'slash' => ['openEHR-EHR-OBSERVATION/blood_pressure.v1'],
+            'backslash' => ['openEHR-EHR-OBSERVATION.blood_pressure.v1\\..\\..'],
+            'percent escape' => ['openEHR-%2e%2e%2fadmin'],
+            'inner control character' => ["openEHR-EHR-OBSERVATION.blood\x01pressure.v1"],
+        ];
+    }
+
+    #[DataProvider('archetypeIdsThatAreNotOnePathSegmentProvider')]
+    public function testArchetypeGetRejectsAnArchetypeIdThatIsNotOnePathSegment(string $archetypeId): void
+    {
+        $this->client->expects($this->never())->method('get');
+        $svc = new CkmService($this->client, $this->logger);
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage(sprintf('Could not resolve "%s" to a CKM citeable identifier (CID).', $archetypeId));
+        $svc->archetypeGet($archetypeId, 'adl');
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function archetypeIdFormProvider(): array
+    {
+        return [
+            'major version' => ['openEHR-EHR-OBSERVATION.blood_pressure.v1'],
+            'full version' => ['openEHR-EHR-OBSERVATION.blood_pressure.v1.0.2'],
+            'specialisation' => ['openEHR-EHR-OBSERVATION.lab_test-blood_glucose.v1'],
+        ];
+    }
+
+    #[DataProvider('archetypeIdFormProvider')]
+    public function testArchetypeGetOverGuzzleResolvesEachArchetypeIdFormUnchanged(string $archetypeId): void
+    {
+        $history = [];
+        $svc = $this->serviceOverMockedGuzzle([
+            new Response(200, [], '"1013.1.7850"'),
+            new Response(200, ['Content-Type' => 'text/plain'], 'resolved ADL'),
+        ], $history);
+
+        $content = $svc->archetypeGet($archetypeId, 'adl');
+
+        $this->assertCount(2, $history);
+        $this->assertSame('/ckm/rest/v1/archetypes/citeable-identifier/' . $archetypeId, $history[0]['request']->getUri()->getPath());
+        $this->assertSame('', $history[0]['request']->getUri()->getQuery());
+        $this->assertSame('/ckm/rest/v1/archetypes/1013.1.7850/adl', $history[1]['request']->getUri()->getPath());
+        $this->assertStringContainsString('resolved ADL', $content->text);
+    }
+
+    public function testArchetypeGetOverGuzzleTreatsA404AsAnUnknownArchetypeId(): void
+    {
+        $history = [];
+        $svc = $this->serviceOverMockedGuzzle([new Response(404, [], 'Not Found')], $history);
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('Could not resolve "openEHR-EHR-OBSERVATION.unknown.v1" to a CKM citeable identifier (CID).');
+        try {
+            $svc->archetypeGet('openEHR-EHR-OBSERVATION.unknown.v1', 'adl');
+        } catch (ToolCallException $e) {
+            $this->assertCount(1, $history, 'No archetype request follows an unknown archetype-id');
+            throw $e;
+        }
+    }
+
+    /**
+     * Statuses that say CKM failed, not that the archetype-id is unknown.
+     *
+     * @return array<string, array{int}>
+     */
+    public static function cidResolutionErrorStatusProvider(): array
+    {
+        return [
+            'service unavailable' => [503],
+            'internal server error' => [500],
+            'bad gateway' => [502],
+            'too many requests' => [429],
+            'unauthorized' => [401],
+        ];
+    }
+
+    #[DataProvider('cidResolutionErrorStatusProvider')]
+    public function testArchetypeGetOverGuzzleNamesTheStatusWhenCidResolutionFails(int $status): void
+    {
+        $history = [];
+        $svc = $this->serviceOverMockedGuzzle([new Response($status)], $history);
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage(sprintf(
+            'CKM answered HTTP %d while resolving "openEHR-EHR-OBSERVATION.blood_pressure.v1" to a citeable identifier (CID)',
+            $status,
+        ));
+        try {
+            $svc->archetypeGet('openEHR-EHR-OBSERVATION.blood_pressure.v1', 'adl');
+        } catch (ToolCallException $e) {
+            $this->assertCount(1, $history, 'No archetype request follows a failed resolution');
+            throw $e;
+        }
+    }
+
+    public function testArchetypeGetOverGuzzleReportsAnUnreachableCkmDuringCidResolution(): void
+    {
+        $connectFailure = new ConnectException(
+            'cURL error 7: Failed to connect to ckm.example.test',
+            new Request('GET', self::MOCK_CKM_BASE_URI . 'v1/archetypes/citeable-identifier/openEHR-EHR-OBSERVATION.blood_pressure.v1'),
+        );
+        $history = [];
+        $svc = $this->serviceOverMockedGuzzle([$connectFailure], $history);
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('CKM could not be reached while resolving "openEHR-EHR-OBSERVATION.blood_pressure.v1" to a citeable identifier (CID): cURL error 7');
+        try {
+            $svc->archetypeGet('openEHR-EHR-OBSERVATION.blood_pressure.v1', 'adl');
+        } catch (ToolCallException $e) {
+            $this->assertSame($connectFailure, $e->getPrevious());
+            throw $e;
+        }
     }
 
     public function testArchetypeSearchFetchesMoreThenSlicesToMaxResults(): void
@@ -643,6 +801,72 @@ final class CkmServiceTest extends TestCase
         $this->assertStringContainsString('```', $content->text);
     }
 
+    /**
+     * Template identifiers that are not exactly one path segment. Put into the request path
+     * as given, each one made Guzzle resolve the request against `base_uri` to another page
+     * on the CKM host, e.g. `../../../admin/secret` fetched `/ckm/admin/secret/oet`.
+     *
+     * @return array<string, array{string}>
+     */
+    public static function templateIdentifiersThatAreNotOnePathSegmentProvider(): array
+    {
+        return [
+            'parent traversal' => ['../../../admin/secret'],
+            'query' => ['x?evil=1'],
+            'query and empty fragment' => ['x?evil=1#'],
+            'fragment' => ['x#top'],
+            'slash' => ['1013.26.244/opt'],
+            'backslash' => ['..\\admin'],
+            'percent escape' => ['%2e%2e'],
+            'dot' => ['.'],
+            'dot dot' => ['..'],
+            'empty' => [''],
+            'whitespace only' => ["  \t "],
+            'inner control character' => ["my\x00template"],
+            'inner newline' => ["my\ntemplate"],
+        ];
+    }
+
+    #[DataProvider('templateIdentifiersThatAreNotOnePathSegmentProvider')]
+    public function testTemplateGetRejectsAnIdentifierThatIsNotOnePathSegment(string $identifier): void
+    {
+        $this->client->expects($this->never())->method('get');
+        $svc = new CkmService($this->client, $this->logger);
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('Invalid CKM template identifier');
+        $svc->templateGet($identifier, 'oet');
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function templateIdentifierPathProvider(): array
+    {
+        return [
+            'CID' => ['1013.26.244', '/ckm/rest/v1/templates/1013.26.244/oet'],
+            'CID with surrounding whitespace' => [" 1013.26.244\n", '/ckm/rest/v1/templates/1013.26.244/oet'],
+            'template name' => ['my_template', '/ckm/rest/v1/templates/my_template/oet'],
+            'template name with spaces and parentheses' => ['Vital signs (encounter)', '/ckm/rest/v1/templates/Vital%20signs%20%28encounter%29/oet'],
+        ];
+    }
+
+    #[DataProvider('templateIdentifierPathProvider')]
+    public function testTemplateGetOverGuzzleRequestsTheIdentifierAsOneEncodedSegment(string $identifier, string $expectedPath): void
+    {
+        $history = [];
+        $svc = $this->serviceOverMockedGuzzle([
+            new Response(200, ['Content-Type' => 'application/xml'], '<template/>'),
+        ], $history);
+
+        $content = $svc->templateGet($identifier, 'oet');
+
+        $this->assertCount(1, $history);
+        $this->assertSame($expectedPath, $history[0]['request']->getUri()->getPath());
+        $this->assertSame('', $history[0]['request']->getUri()->getQuery());
+        $this->assertStringContainsString('<template/>', $content->text);
+    }
+
     public function testArchetypeSearchRmClassFilterKeepsMatchingDropsOthers(): void
     {
         $payload = [
@@ -663,15 +887,33 @@ final class CkmServiceTest extends TestCase
         $this->assertNotContains('openEHR-EHR-OBSERVATION.body_weight.v1', $ids, 'OBSERVATION item must be filtered out');
     }
 
-    public function testArchetypeSearchRejectsMalformedRmClass(): void
+    /**
+     * Digits, punctuation and inner spaces are not a valid RM class token.
+     *
+     * @return array<string, array{string}>
+     */
+    public static function malformedRmClassProvider(): array
     {
+        return [
+            'dash and punctuation' => ['comp-osition!'],
+            'dash and digit' => ['OBS-1'],
+            'leading digit' => ['1OBSERVATION'],
+            'inner space' => ['OBS ERVATION'],
+        ];
+    }
+
+    #[DataProvider('malformedRmClassProvider')]
+    public function testArchetypeSearchRejectsMalformedRmClass(string $rmClass): void
+    {
+        // The format check runs before the search; a malformed filter sends no request.
+        $this->client->expects($this->never())->method('get');
         $svc = new CkmService($this->client, $this->logger);
         // ToolCallException, not InvalidArgumentException: `CallToolHandler` maps only the
         // former to a tool-level error carrying its message, and replaces everything else
         // with a generic protocol error that most clients never show the model.
         $this->expectException(ToolCallException::class);
-        // digits/punctuation are not a valid RM class token
-        $svc->archetypeSearch('summary', 10, true, 'comp-osition!');
+        $this->expectExceptionMessage('Invalid RM class filter');
+        $svc->archetypeSearch('summary', 10, true, $rmClass);
     }
 
     public function testArchetypeSearchExactConceptBoostRanksConceptMatchFirst(): void

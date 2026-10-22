@@ -13,8 +13,7 @@ constitution sections the change touches, if any.>
 - can-fail proof: <the guards removed and the tests that then failed>
 - per-task review: <tasks reviewed; findings fixed in-task, by severity>
 
-## Notes for review
-<!-- omit when there is nothing to say -->
+## Notes for review                  <!-- omit when there is nothing to say -->
 - <at most three bullets: where to look hardest, what is out of scope, a known gap left on purpose>
 
 ## Checklist

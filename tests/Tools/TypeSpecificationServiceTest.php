@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Tools;
 
 use Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService;
-use Mcp\Schema\Content\TextContent;
+use Mcp\Exception\ToolCallException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -20,9 +21,6 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->logger = new NullLogger();
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::getCandidateFiles
-     */
     public function test_getCandidateFiles_matches_exact_file(): void
     {
         $svc = new TypeSpecificationService($this->logger);
@@ -34,9 +32,6 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->assertEquals(APP_RESOURCES_DIR . '/bmm/RM/LOCATABLE.bmm.json', $results[0]->getPathname());
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::getCandidateFiles
-     */
     public function test_getCandidateFiles_ignores_non_matching_files(): void
     {
 
@@ -47,9 +42,6 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->assertCount(0, $results);
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::getCandidateFiles
-     */
     public function test_getCandidateFiles_handles_empty_directory(): void
     {
         $svc = new TypeSpecificationService($this->logger);
@@ -60,9 +52,6 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->assertGreaterThan(0, count($results));
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::search
-     */
     public function test_list_with_pattern_returns_array_of_items(): void
     {
         $svc = new TypeSpecificationService($this->logger);
@@ -80,9 +69,6 @@ final class TypeSpecificationServiceTest extends TestCase
         }
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::search
-     */
     public function test_list_with_keyword_filters_content(): void
     {
         $svc = new TypeSpecificationService($this->logger);
@@ -92,9 +78,51 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->assertIsArray($results['items']);
     }
 
+    public function test_search_ignores_a_dot_in_the_pattern_as_get_does(): void
+    {
+        $svc = new TypeSpecificationService($this->logger);
+
+        $this->assertSame(['DV_QUANTITY'], array_column($svc->search('DV_QUANTITY.')['items'], 'name'));
+        $this->assertSame('DV_QUANTITY', $svc->get('DV_QUANTITY.')['name'] ?? null);
+    }
+
     /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::search
+     * @return array<string, array{string}>
      */
+    public static function dottedNamesGetDoesNotFind(): array
+    {
+        return [
+            'component prefix' => ['rm.DV_QUANTITY'],
+            'package-qualified name' => ['org.openehr.rm.datatypes.DV_TEXT'],
+        ];
+    }
+
+    #[DataProvider('dottedNamesGetDoesNotFind')]
+    public function test_search_with_a_dotted_pattern_raises_no_warning_and_agrees_with_get(string $pattern): void
+    {
+        $svc = new TypeSpecificationService($this->logger);
+        $warnings = [];
+        set_error_handler(static function (int $errno, string $errstr) use (&$warnings): bool {
+            $warnings[] = $errstr;
+
+            return true;
+        });
+        try {
+            $result = $svc->search($pattern);
+        } finally {
+            restore_error_handler();
+        }
+
+        // One entry per distinct message: a broken pattern warns once per BMM file.
+        $this->assertSame([], array_values(array_unique($warnings)));
+        $this->assertSame(['items' => [], 'total' => 0], $result);
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('not found');
+
+        $svc->get($pattern);
+    }
+
     public function test_list_with_short_pattern_returns_empty_items_shape(): void
     {
         $svc = new TypeSpecificationService($this->logger);
@@ -102,9 +130,6 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->assertSame(['items' => [], 'total' => 0], $results);
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::search
-     */
     public function test_list_composition_returns_single(): void
     {
         $svc = new TypeSpecificationService($this->logger);
@@ -124,9 +149,6 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->assertSame('openehr://spec/type/RM/COMPOSITION', $first['resourceUri']);
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::get
-     */
     public function test_get_by_identifier_returns_json_content(): void
     {
         $svc = new TypeSpecificationService($this->logger);
@@ -135,9 +157,6 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->assertSame('COMPOSITION', $content['name'] ?? null);
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::get
-     */
     public function test_get_by_identifier_accepts_lowercase_component(): void
     {
         $svc = new TypeSpecificationService($this->logger);
@@ -145,9 +164,6 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->assertSame('COMPOSITION', $content['name'] ?? null);
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::get
-     */
     public function test_get_by_nonexistent_identifier_throws_exception(): void
     {
         $svc = new TypeSpecificationService($this->logger);
@@ -155,9 +171,6 @@ final class TypeSpecificationServiceTest extends TestCase
         $content = $svc->get('this_type_does_not_exist');
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::get
-     */
     public function test_get_synthesises_the_declared_resource_uri(): void
     {
         // `resourceUri` is declared `required` in the outputSchema but appears in none of the
@@ -167,9 +180,6 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->assertSame('openehr://spec/type/RM/COMPOSITION', $svc->get('COMPOSITION')['resourceUri'] ?? null);
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::get
-     */
     public function test_get_and_search_agree_on_the_resource_uri_for_the_same_type(): void
     {
         // `get()` derived the component with bare basename() while `search()` upper-cased it;
@@ -182,9 +192,6 @@ final class TypeSpecificationServiceTest extends TestCase
         $this->assertSame($fromSearch, $fromGet);
     }
 
-    /**
-     * @covers \Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService::get
-     */
     public function test_get_always_returns_the_schema_required_keys(): void
     {
         // The outputSchema declares `name` and `resourceUri` required. `name` comes from the

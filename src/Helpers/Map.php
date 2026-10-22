@@ -31,7 +31,7 @@ readonly final class Map
     public static function archetypeFormat(string $format): string
     {
         $archetypeFormat = strtolower($format);
-        if (!in_array($archetypeFormat, ['adl', 'xml', 'mindmap'])) {
+        if (!in_array($archetypeFormat, ['adl', 'xml', 'mindmap'], true)) {
             throw new \InvalidArgumentException("Invalid archetype format: {$format}");
         }
         return $archetypeFormat;
@@ -40,7 +40,7 @@ readonly final class Map
     public static function templateFormat(string $format): string
     {
         $templateFormat = strtolower($format);
-        if (!in_array($templateFormat, ['opt', 'oet'])) {
+        if (!in_array($templateFormat, ['opt', 'oet'], true)) {
             throw new \InvalidArgumentException("Invalid template format: {$format}");
         }
         return $templateFormat;

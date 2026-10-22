@@ -19,6 +19,7 @@ readonly final class TerminologyService
 
     public function __construct(
         private readonly LoggerInterface $logger,
+        private readonly string $filePath = self::FILE_PATH,
     )
     {
     }
@@ -108,15 +109,15 @@ readonly final class TerminologyService
     private function loadXml(): SimpleXMLElement
     {
         try {
-            return TerminologyXmlLoader::load(self::FILE_PATH);
+            return TerminologyXmlLoader::load($this->filePath);
         } catch (RuntimeException $e) {
             // Narrowed from `\Throwable`, which was wider than the loader's contract: an
-            // `\Error` from inside it (a TypeError after a refactor, a missing class) was
-            // relabelled "Error parsing terminology XML", sending the reader to inspect a
-            // perfectly valid file. `previous` and the full exception are kept so the
-            // original stack trace survives.
-            $this->logger->error('Error parsing terminology XML', ['exception' => $e]);
-            throw new ToolCallException('Error parsing terminology XML: ' . $e->getMessage(), previous: $e);
+            // `\Error` from inside it (a TypeError after a refactor, a missing class) is a
+            // bug, not a load failure, so it is not relabelled. The loader's message already
+            // says what failed (a parse error carries its own prefix), so it reaches the client
+            // unchanged. `previous` and the full exception keep the original stack trace.
+            $this->logger->error('Could not load terminology XML', ['exception' => $e]);
+            throw new ToolCallException($e->getMessage(), previous: $e);
         }
     }
 }

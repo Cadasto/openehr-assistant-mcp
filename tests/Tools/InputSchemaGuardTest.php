@@ -48,6 +48,14 @@ final class InputSchemaGuardTest extends TestCase
 
     private const string WIRING_PATTERN = '/->setSchemaGenerator\(\s*new OptionalEnumSchemaGenerator\(\)\s*\)/';
 
+    /** The discovery call in public/index.php; group 1 is its list of directories. */
+    private const string DISCOVERY_PATTERN = '/->setDiscovery\(\s*APP_DIR\s*,\s*\[([^\]]*)\]/';
+
+    /** The composer.json PSR-4 mapping for application classes. */
+    private const string PSR4_PREFIX = 'Cadasto\\OpenEHR\\MCP\\Assistant\\';
+
+    private const string PSR4_DIRECTORY = 'src';
+
     /** JSON Schema keywords whose keys name subschemas. */
     private const array SUBSCHEMA_MAPS = ['properties', 'patternProperties', '$defs', 'definitions'];
 
@@ -260,32 +268,108 @@ final class InputSchemaGuardTest extends TestCase
     }
 
     /**
+     * Every method the server publishes as a tool, found the way the SDK discovers them: each
+     * class under the directories `public/index.php` passes to `setDiscovery()`, searched
+     * recursively, that is not abstract, an interface, a trait or an enum. A class carrying
+     * `#[McpTool]` publishes its `__invoke`; otherwise each public, non-static method it
+     * declares itself and that carries `#[McpTool]` is a tool.
+     *
      * @return array<string, array{0: class-string, 1: string}>
      */
     public static function mcpToolMethodProvider(): array
     {
-        // Discovered, not hardcoded: public/index.php registers src/Tools by directory, so a
-        // new service is published to clients whether or not it is listed here.
-        $classes = [];
-        foreach (glob(__DIR__ . '/../../src/Tools/*.php') ?: [] as $path) {
-            $class = 'Cadasto\\OpenEHR\\MCP\\Assistant\\Tools\\' . basename($path, '.php');
-            if (class_exists($class)) {
-                $classes[] = $class;
-            }
-        }
-        self::assertNotEmpty($classes, 'No tool classes discovered under src/Tools');
+        // Discovered, not hardcoded: a new tool is published to clients whether or not it is
+        // listed here, so a tool outside src/Tools must not escape these checks either.
+        $classes = self::discoveredClasses();
+        self::assertNotEmpty($classes, 'No classes discovered under the directories public/index.php passes to setDiscovery()');
 
         $cases = [];
         foreach ($classes as $class) {
-            foreach ((new \ReflectionClass($class))->getMethods(ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
-                if ($reflectionMethod->getAttributes(McpTool::class) === []) {
+            $reflectionClass = new \ReflectionClass($class);
+            if ($reflectionClass->isAbstract() || $reflectionClass->isInterface() || $reflectionClass->isTrait() || $reflectionClass->isEnum()) {
+                continue;
+            }
+            if ($reflectionClass->hasMethod('__invoke') && $reflectionClass->getAttributes(McpTool::class, \ReflectionAttribute::IS_INSTANCEOF) !== []) {
+                $cases[$class . '::__invoke'] = [$class, '__invoke'];
+                continue;
+            }
+            foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
+                if ($reflectionMethod->getDeclaringClass()->getName() !== $class || $reflectionMethod->isStatic()) {
+                    continue;
+                }
+                if ($reflectionMethod->getAttributes(McpTool::class, \ReflectionAttribute::IS_INSTANCEOF) === []) {
                     continue;
                 }
                 $cases[$class . '::' . $reflectionMethod->getName()] = [$class, $reflectionMethod->getName()];
             }
         }
+        self::assertNotEmpty($cases, 'No #[McpTool] methods discovered; every check fed by this provider would be vacuous');
 
         return $cases;
+    }
+
+    /**
+     * The classes under the directories `public/index.php` hands to `setDiscovery()`, searched
+     * recursively and mapped to class names through the PSR-4 prefix for `src/`, sorted.
+     *
+     * @return list<class-string>
+     */
+    private static function discoveredClasses(): array
+    {
+        $entrypoint = file_get_contents(__DIR__ . '/../../public/index.php');
+        self::assertIsString($entrypoint);
+        self::assertSame(
+            1,
+            preg_match(self::DISCOVERY_PATTERN, self::withoutComments($entrypoint), $call),
+            'public/index.php no longer calls ->setDiscovery(APP_DIR, [...]); update this provider so it scans what the server discovers',
+        );
+        preg_match_all('/[\'"]([^\'"]+)[\'"]/', $call[1], $directories);
+        self::assertNotEmpty($directories[1], 'public/index.php passes no directory to setDiscovery()');
+
+        $classes = [];
+        foreach ($directories[1] as $directory) {
+            $directory = trim($directory, '/');
+            self::assertStringStartsWith(
+                self::PSR4_DIRECTORY . '/',
+                $directory . '/',
+                sprintf('setDiscovery() scans "%s", outside the PSR-4 root %s/, so this provider cannot map its files to classes', $directory, self::PSR4_DIRECTORY),
+            );
+            $root = APP_DIR . '/' . $directory;
+            self::assertDirectoryExists($root);
+
+            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS));
+            /** @var \SplFileInfo $file */
+            foreach ($files as $file) {
+                if (!$file->isFile() || $file->getExtension() !== 'php') {
+                    continue;
+                }
+                $relative = substr($file->getPathname(), strlen(APP_DIR . '/' . self::PSR4_DIRECTORY . '/'), -strlen('.php'));
+                $class = self::PSR4_PREFIX . str_replace('/', '\\', $relative);
+                if (class_exists($class)) {
+                    $classes[] = $class;
+                }
+            }
+        }
+        $classes = array_values(array_unique($classes));
+        sort($classes);
+
+        return $classes;
+    }
+
+    /**
+     * The PHP source without its comments, so a commented-out call cannot be read as live.
+     */
+    private static function withoutComments(string $source): string
+    {
+        $code = '';
+        foreach (token_get_all($source) as $token) {
+            if (is_array($token) && in_array($token[0], [T_COMMENT, T_DOC_COMMENT], true)) {
+                continue;
+            }
+            $code .= is_array($token) ? $token[1] : $token;
+        }
+
+        return $code;
     }
 
     /**

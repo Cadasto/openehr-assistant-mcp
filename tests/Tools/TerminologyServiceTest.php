@@ -15,9 +15,21 @@ final class TerminologyServiceTest extends TestCase
 {
     private TerminologyService $service;
 
+    private ?string $dir = null;
+
     protected function setUp(): void
     {
         $this->service = new TerminologyService(new NullLogger());
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->dir !== null) {
+            foreach (glob($this->dir . '/*') ?: [] as $file) {
+                unlink($file);
+            }
+            rmdir($this->dir);
+        }
     }
 
     public function test_resolve_id_to_rubric(): void
@@ -72,6 +84,14 @@ final class TerminologyServiceTest extends TestCase
         $this->service->resolve('433', 'invalid_group');
     }
 
+    public function test_resolve_rejects_a_group_id_that_would_change_the_xpath_query(): void
+    {
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('Invalid terminology group ID');
+
+        $this->service->resolve('433', 'x"] | //*[@id="');
+    }
+
     public function test_resolve_not_found(): void
     {
         $this->expectException(ToolCallException::class);
@@ -84,5 +104,37 @@ final class TerminologyServiceTest extends TestCase
     {
         $this->expectException(ToolCallException::class);
         $this->service->resolve('');
+    }
+
+    public function test_resolve_reports_an_unparseable_terminology_file_once(): void
+    {
+        $path = $this->temporaryFile('broken.xml', 'not xml');
+        // Matched whole: the loader's message already names the parse failure.
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessageMatches('/^Error parsing terminology XML: String could not be parsed as XML$/');
+
+        (new TerminologyService(new NullLogger(), $path))->resolve('433');
+    }
+
+    public function test_resolve_reports_a_missing_terminology_file_as_such(): void
+    {
+        $path = $this->temporaryFile('unused.xml', '') . '.missing';
+
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessageMatches('/^Terminology file not found or not readable\.$/');
+
+        (new TerminologyService(new NullLogger(), $path))->resolve('433');
+    }
+
+    private function temporaryFile(string $name, string $content): string
+    {
+        $this->dir ??= sys_get_temp_dir() . '/terminology-service-' . bin2hex(random_bytes(6));
+        if (!is_dir($this->dir)) {
+            mkdir($this->dir);
+        }
+        $path = $this->dir . '/' . $name;
+        file_put_contents($path, $content);
+
+        return $path;
     }
 }

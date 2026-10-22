@@ -24,7 +24,8 @@ docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-c
 Conventions:
 
 - Tests live under `tests/`, namespace `Cadasto\OpenEHR\MCP\Assistant\Tests\`,
-  files named `*Test.php`, mirroring the `src/` layout 1:1.
+  files named `*Test.php`, mirroring the `src/` layout by convention (one `*Test` per class;
+  [architecture.md](architecture.md) lists the classes that have none).
 - **Mock external HTTP to CKM** via `CkmClient`; never hit live APIs
   ([ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)).
 - Run a subset with the filter: `composer test -- --filter CkmServiceTest` (the PHPUnit config lives at `tests/phpunit.xml`, so a bare `vendor/bin/phpunit` does not find it).

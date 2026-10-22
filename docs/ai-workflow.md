@@ -19,10 +19,10 @@ profile.
 1. Specify: /sdd-specify — record the capability as a REQ, the normative behaviour as a SPEC § (RFC-2119),
    and any irreversible decision as an ADR (formal); amend the constitution (informative).
 2. Look up ground truth before editing — the source named in .sdd.yaml (ground_truth); never guess.
-   For a requirement already in the map, `sdd-check context <REQ>` prints its bundle.
+   (Formal profile only: for a requirement in the map, `sdd-check context <REQ>` prints its bundle.)
 3. Deliver: /sdd-deliver — preconditions (formal) or a clear task (informative), workers per task, the
    per-task gate, the first review pass into the findings file, the PR.
-4. Don't decide open questions in code — surface a STRAND or record an ADR (/sdd-specify), or ask.
+4. Don't decide open questions in code — record an ADR or amend the constitution (/sdd-specify), or ask.
 5. Review: /sdd-review writes the findings file and mirrors to the PR; /sdd-triage works the open lines;
    `sdd-pr status` says what is open, whether it is mergeable and what to run next.
 6. Close out in the same PR: /sdd-close; after the merge, /sdd-close again cleans up. Now and then,
@@ -95,8 +95,9 @@ restate the PR body.
 ## Modes and lanes
 
 - **New behaviour** → *spec-first*: `/sdd-specify` → `/sdd-deliver`.
-- **Hardening shipped code** → *implementation-aligned*: change the code, then update the spec § and guide
-  in the **same** change.
+- **Hardening shipped code** → *implementation-aligned*: change the code, then bring the pages that
+  describe it up to date in the **same** change; amend the constitution (through `/sdd-specify`) only
+  when one of its binding sentences no longer holds.
 - **Lane** (formal profile) is answered in one PR-body line: does this change alter any normative
   statement? If not, it is the maintenance lane and owes no normative bookkeeping. The informative profile
   has one lane. See [development-process.md](development-process.md).
@@ -112,7 +113,7 @@ restate the PR body.
 | Review pass into the findings file | `/sdd-review` |
 | Work the open findings; after the maintainer's review, one scoped re-review; now and then, the backlog harvest | `/sdd-triage` (`--backlog`) |
 | What is open, mergeable, next | `sdd-pr status` |
-| A REQ's context bundle; drift in session | `/sdd-trace` |
+| Drift in session (a REQ's context bundle on the formal profile) | `/sdd-trace` |
 | Regenerate the derived indexes and status lines | `sdd-check generate` |
 | Drift, links, prose lints | `make spec-check` (`sdd-check`) |
 | Close out the requirement and write the PR body; after the merge, clean up | `/sdd-close` |

@@ -51,7 +51,8 @@ final class Examples
     ): string
     {
         foreach ([$kind, $name] as $segment) {
-            if ($segment === '' || !\preg_match('/^[\w.-]+$/', $segment)) {
+            // A segment of dots only (`.`, `..`) would step out of the examples directory.
+            if (!\preg_match('/^[\w.-]+$/', $segment) || \trim($segment, '.') === '') {
                 throw new ResourceReadException(\sprintf('Invalid example resource identifier: %s', $segment));
             }
         }

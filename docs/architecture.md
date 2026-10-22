@@ -47,8 +47,8 @@ it serves, is in [components.md](components.md).
 
 - Published tool, prompt and resource names, transport selection and the `MCP_ALLOWED_HOSTS` default are
   stable by convention; no test pins them yet, so they are not bound here.
-- The test mirror (one `tests/…/*Test` per `src/` class) is a convention: `CliOptions`, `SearchTokenizer`,
-  `TerminologyXmlLoader` and `CompletionProviders\Examples` have none.
+- The test mirror (one `tests/…/*Test` per `src/` class) is a convention: `CliOptions`, `SearchTokenizer`
+  and `CompletionProviders\Examples` have none.
 - Deriving openEHR standards content (guides, digests, prompts, examples, terminology, type specifications)
   from authoritative sources (the specifications' `development` branch, CKM, the published BMM schemas)
   rather than model memory is the rule of [ADR-0005](decisions/0005-spec-aligned-content-retrieval.md);

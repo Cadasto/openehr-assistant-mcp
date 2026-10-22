@@ -45,7 +45,8 @@ final class Guides
     ): string
     {
         foreach ([$category, $name] as $segment) {
-            if ($segment === '' || !\preg_match('/^[\w.-]+$/', $segment)) {
+            // A segment of dots only (`.`, `..`) would step out of the guides directory.
+            if (!\preg_match('/^[\w.-]+$/', $segment) || \trim($segment, '.') === '') {
                 throw new ResourceReadException(\sprintf('Invalid guide resource identifier: %s', $segment));
             }
         }

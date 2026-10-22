@@ -34,6 +34,7 @@ readonly final class TypeSpecificationService
      * Matching behavior:
      * - The `namePattern` is transformed into a case-insensitive regular expression.
      * - The pattern supports `*` as a wildcard for multiple characters.
+     * - Dots are ignored, as `get()` ignores them.
      * - Only files with the `.bmm.json` naming pattern are considered.
      * - Files must be readable and non-empty to be included in the results.
      *
@@ -48,9 +49,10 @@ readonly final class TypeSpecificationService
      */
     public function getCandidateFiles(string $namePattern): Generator
     {
-        // prepare glob-like regex from the pattern (supports * wildcard)
-        $namePattern = strtoupper(trim($namePattern));
-        $namePattern = str_replace(['\\*', '\\?', '.', '\\/'], ['[\w-]*', '[\w-]', '', ''], preg_quote($namePattern, '/'));
+        // prepare glob-like regex from the pattern (supports * wildcard). Dots are removed
+        // before quoting, as get() removes them; after preg_quote() each is already `\.`.
+        $namePattern = str_replace('.', '', strtoupper(trim($namePattern)));
+        $namePattern = str_replace(['\\*', '\\?', '\\/'], ['[\w-]*', '[\w-]', ''], preg_quote($namePattern, '/'));
         $regex = '/^' . $namePattern . '\.bmm\.json$/i';
 
         $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(self::BMM_DIR, \FilesystemIterator::SKIP_DOTS));

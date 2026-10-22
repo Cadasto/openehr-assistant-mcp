@@ -10,7 +10,7 @@ Guides are available as resource template `openehr://guides/{category}/{name}` a
 - Anti-patterns to avoid in design phase
 - Terminology integration guidance
 - Checklists for review and validation
-- Spec digests (`specs/`) — per-document summaries of openEHR specs (RM, AM, SM, BASE, QUERY, TERM, LANG, CDS, ITS-REST) with purpose, key classes, relations, canonical URLs
+- Spec digests (`specs/`) — per-document summaries of openEHR specs (RM, AM, AM2, SM, BASE, QUERY, TERM, LANG, CDS, PROC, CNF, ITS-REST) with purpose, key classes, relations, canonical URLs
 - Toolchain how-to (`howto/`) — e.g. `spec-lookup` for efficient upstream retrieval
 
 Short workflow (follow strictly):

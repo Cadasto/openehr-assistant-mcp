@@ -9,12 +9,13 @@ use SimpleXMLElement;
 
 final class TerminologyXmlLoader
 {
-    private static ?SimpleXMLElement $xml = null;
+    /** @var array<string, SimpleXMLElement> Parsed documents by the path they were read from. */
+    private static array $documents = [];
 
     public static function load(string $path): SimpleXMLElement
     {
-        if (self::$xml !== null) {
-            return self::$xml;
+        if (isset(self::$documents[$path])) {
+            return self::$documents[$path];
         }
 
         if (!file_exists($path) || !is_readable($path)) {
@@ -26,10 +27,16 @@ final class TerminologyXmlLoader
             throw new RuntimeException('Unable to read terminology file.');
         }
 
+        // Collect libxml errors instead of letting each one surface as a PHP warning: on the
+        // stdio transport a warning printed to stdout would corrupt the JSON-RPC stream.
+        $previousMode = libxml_use_internal_errors(true);
         try {
             $xml = new SimpleXMLElement($content);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             throw new RuntimeException('Error parsing terminology XML: ' . $e->getMessage(), previous: $e);
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previousMode);
         }
 
         $groups = $xml->xpath('/terminology/group');
@@ -37,8 +44,6 @@ final class TerminologyXmlLoader
             throw new RuntimeException('No terminology groups found.');
         }
 
-        self::$xml = $xml;
-
-        return self::$xml;
+        return self::$documents[$path] = $xml;
     }
 }
