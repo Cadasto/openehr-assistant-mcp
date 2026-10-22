@@ -1,8 +1,16 @@
+---
+kind: adr
+id: ADR-0003
+title: "Split global policy from task-specific prompt content"
+status: accepted
+date: 2026-06-08
+---
+
 # ADR-0003 — Split global policy from task-specific prompt content
 
-- **Status:** Accepted
-- **Requirements:** REQ-F6 (prompts), REQ-F10 (server instructions), REQ-N7 (context economy)
-- **Related:** [architecture.md](../architecture.md)
+## Status
+
+Accepted
 
 ## Context
 
@@ -27,7 +35,7 @@ truth — see the **Resilience exception** under Consequences for the bounds.
 ## Consequences
 
 - **Positive:** policy is stated once; prompt bodies stay short and scannable,
-  honouring the AI context-economy goal (REQ-N7).
+  honouring the AI context-economy goal (REQ-N-007).
 - **Positive:** changing global policy is a one-file edit with project-wide effect.
 - **Enforcement:** `PromptPolicySeparationTest` guards the split (global policy
   must not reappear in individual prompt files); `PromptCompositionTest` guards
@@ -44,3 +52,8 @@ truth — see the **Resilience exception** under Consequences for the bounds.
   with no global policy at all. `server-instructions.md` remains the single
   canonical source for full global policy — the shared block is a fallback,
   not a second source of truth, and must not grow beyond a short restatement.
+
+## Traceability
+
+- Amends: REQ-F-006 (prompts), REQ-F-010 (server instructions), REQ-N-007 (context economy)
+- Related: [architecture.md](../architecture.md)

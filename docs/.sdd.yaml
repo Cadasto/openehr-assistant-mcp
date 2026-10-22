@@ -2,14 +2,14 @@
 # Declares this repo's SDD conventions so tooling (and the sdd-* skills) stay
 # repo-agnostic. Schema: cadasto/sdd references/traceability-schema.md.
 #
-# This repo runs a deliberately *lightweight* rung-2 (spec-anchored) SDD: the
-# requirements index and the design narrative carry the normative prose; the
-# machine-readable map below is validated against the tree by `make spec-check`.
+# Layout follows the sdd plugin's 0.15.0 scaffold: one file per requirement under
+# docs/requirements/, normative topic specs under docs/specifications/, and the
+# traceability map beside them, validated by the vendored gate (`make spec-check`).
 sdd:
   profile: formal                   # formal | informative (methodology §1a)
 
-  # Requirement identifiers are area-prefixed: REQ-F# (functional) and
-  # REQ-N# (non-functional). Never switch styles — it would renumber published IDs.
+  # Requirement identifiers are area-prefixed: REQ-F-NNN (functional) and
+  # REQ-N-NNN (non-functional). Published ids are immutable; never renumber one.
   req_style: area-prefixed
   req_areas: [F, N]
   req_gap: 1
@@ -21,11 +21,11 @@ sdd:
   default_mode: spec-first          # the mode a specification has when its frontmatter names none
 
   paths:
-    requirements: docs/requirements.md   # single-file index (not a per-REQ directory)
-    specifications: docs/architecture.md # design narrative; requirements.md owns the normative one-liners
-    adr: docs/decisions                  # ADRs live under decisions/, MADR-lite
+    requirements: docs/requirements      # one REQ-*.md per requirement; README.md is the generated index
+    specifications: docs/specifications  # normative topic specs (SPEC-* §N)
+    adr: docs/decisions                  # ADRs keep their published path
 
-  traceability: docs/traceability.yaml   # machine-readable map, beside the human docs/traceability.md
+  traceability: docs/specifications/traceability.yaml   # machine-readable REQ → spec → code → test map
 
   forge: auto                       # auto | github | azure-devops | none — how sdd-pr reaches the pull request
 
@@ -38,7 +38,7 @@ sdd:
 
   upstream: ""                           # no sibling SDD repo consumed
 
-  # Domain facts MUST be looked up here, never guessed (see ADR-0005 and REQ-N1).
+  # Domain facts MUST be looked up here, never guessed (see ADR-0005 and REQ-N-001).
   ground_truth: "specifications.openehr.org (development branch), CKM, and bundled BMM/terminology — via resources/guides/howto/spec-lookup.md"
 
   check:

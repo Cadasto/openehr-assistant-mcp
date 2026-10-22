@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Guards the MCP discovery-cache namespacing (REQ-N4).
+ * Guards the MCP discovery-cache namespacing (REQ-N-004).
  *
  * The capability set — tool schemas, prompt argument lists, resource templates — is cached
  * by Symfony Cache under a pool name, and a stale pool serves capability advertisements

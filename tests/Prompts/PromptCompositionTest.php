@@ -51,7 +51,7 @@ final class PromptCompositionTest extends TestCase
     }
 
     /**
-     * Per-prompt size ceilings (REQ-N7). The fixture is a budget, not a record of a past
+     * Per-prompt size ceilings (REQ-N-007). The fixture is a budget, not a record of a past
      * reduction: four budgets were raised when the review prompts gained `{{placeholder}}`
      * scaffolding and conditional-output wording. Raising one is a deliberate act — state why
      * in the commit, and keep the remaining slack small enough that the ceiling still bites.

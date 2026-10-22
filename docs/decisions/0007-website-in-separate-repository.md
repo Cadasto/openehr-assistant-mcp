@@ -1,10 +1,16 @@
+---
+kind: adr
+id: ADR-0007
+title: "The public website lives in its own repository"
+status: accepted
+date: 2026-08-07
+---
+
 # ADR-0007 — The public website lives in its own repository
 
-- **Status:** Accepted
-- **Requirements:** REQ-N10 (install documentation is consumable without duplication)
-- **Related:** [install.md](../install.md), [cadasto/openehr-assistant](https://github.com/cadasto/openehr-assistant)
-  — the consuming site; which document it takes from here, and at which ref, is
-  declared in its [`sources.json`](https://github.com/cadasto/openehr-assistant/blob/main/sources.json)
+## Status
+
+Accepted
 
 ## Context
 
@@ -34,7 +40,7 @@ That is the irreversible part. Two things follow from it:
 
 1. **Documentation stays with the product it describes.** Contributor docs, the
    SDD set and the README remain here; only user-facing presentation moves. The
-   site keeps no copy of this repository's install instructions — REQ-N10 states
+   site keeps no copy of this repository's install instructions — REQ-N-010 states
    the contract that makes reuse possible instead of duplication.
 2. **Consumers pin a released tag, not `main`.** Work in progress here therefore
    cannot change a published page, and a breaking edit is visible as a deliberate
@@ -50,7 +56,12 @@ That is the irreversible part. Two things follow from it:
   its hosted-endpoint section without breaking a published page. The consuming
   site cannot be relied on to notice — it frames the fetched document with prose
   of its own, so its checks can pass while the fetched content is impoverished.
-  `tests/Content/InstallDocContractTest.php` therefore enforces REQ-N10 *here*,
+  `tests/Content/InstallDocContractTest.php` therefore enforces REQ-N-010 *here*,
   where the edit happens. Cross-repository changes now need two pull requests.
 - **Neutral:** the website's own build, theme and publishing pipeline are that
   repository's concern and are documented in its `AGENTS.md`.
+
+## Traceability
+
+- Amends: REQ-N-010 (install documentation is consumable without duplication)
+- Related: [install.md](../install.md), [cadasto/openehr-assistant](https://github.com/cadasto/openehr-assistant) — the consuming site; which document it takes from here, and at which ref, is declared in its [`sources.json`](https://github.com/cadasto/openehr-assistant/blob/main/sources.json)

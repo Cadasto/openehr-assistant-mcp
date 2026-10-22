@@ -1,8 +1,16 @@
+---
+kind: adr
+id: ADR-0001
+title: "Attribute-driven capability discovery with startup cache"
+status: accepted
+date: 2026-06-08
+---
+
 # ADR-0001 — Attribute-driven capability discovery with startup cache
 
-- **Status:** Accepted
-- **Requirements:** REQ-N4 (fast startup), supports REQ-F1–F8
-- **Related:** [architecture.md](../architecture.md)
+## Status
+
+Accepted
 
 ## Context
 
@@ -32,3 +40,8 @@ the cache.
   Clear the cache directory under `XDG_DATA_HOME` (see [development.md](../development.md)).
 - Attribute names (`name:` arguments) become part of the public MCP contract —
   renaming one is a breaking change for clients.
+
+## Traceability
+
+- Amends: REQ-N-004 (fast startup), supports REQ-F-001 to REQ-F-008
+- Related: [architecture.md](../architecture.md)

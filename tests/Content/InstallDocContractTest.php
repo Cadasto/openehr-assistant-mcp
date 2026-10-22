@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Guards the install-documentation contract with the public website (REQ-N10, ADR-0007).
+ * Guards the install-documentation contract with the public website (REQ-N-010, ADR-0007).
  *
  * The website at cadasto/openehr-assistant does not keep its own copy of the install
  * instructions — it fetches this repository's `docs/install.md` at a released tag and

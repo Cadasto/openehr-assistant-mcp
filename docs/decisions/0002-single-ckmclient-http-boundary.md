@@ -1,8 +1,16 @@
+---
+kind: adr
+id: ADR-0002
+title: "Single CkmClient external HTTP boundary, mocked in tests"
+status: accepted
+date: 2026-06-08
+---
+
 # ADR-0002 — Single `CkmClient` external HTTP boundary, mocked in tests
 
-- **Status:** Accepted
-- **Requirements:** REQ-F1 (CKM access), REQ-N2 (deterministic, offline tests)
-- **Related:** [architecture.md](../architecture.md)
+## Status
+
+Accepted
 
 ## Context
 
@@ -28,4 +36,9 @@ performs a live network call.
 - **Negative:** all CKM interaction must route through this client; a service
   that bypassed it would break the testability invariant and should be rejected
   in review.
-- Reinforced by REQ-N2: "mock external HTTP to CKM — never hit live APIs."
+- Reinforced by REQ-N-002: "mock external HTTP to CKM — never hit live APIs."
+
+## Traceability
+
+- Amends: REQ-F-001 (CKM access), REQ-N-002 (deterministic, offline tests)
+- Related: [architecture.md](../architecture.md)

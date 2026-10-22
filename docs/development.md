@@ -3,7 +3,7 @@
 This page is for contributors who run and change the server locally: the
 Docker-only runtime, the dev services and transports, the MCP Inspector,
 configuration, the discovery-cache gotcha, and the Makefile shortcuts. It is the
-operational companion to the [SDD docs](README.md) and satisfies REQ-N5 (Docker-only
+operational companion to the [SDD docs](README.md) and satisfies REQ-N-005 (Docker-only
 runtime; see [ADR-0004](decisions/0004-docker-only-runtime.md)). Coding conventions
 are canonical in [conventions.md](conventions.md), and [AGENTS.md](../AGENTS.md)
 summarises them for AI agents.
@@ -54,7 +54,7 @@ Cursor: add the dev-plugin repository under **Settings → Plugins** (Git URL or
 | `node` | Dev-only: Node and curl, used by `make conformance` and other npx/curl tooling. |
 | `inspector` | Dev-only, on-demand (`inspector` profile): MCP Inspector v2 UI; see [below](#testing-with-the-mcp-inspector-ui). |
 
-## Transports (REQ-F9)
+## Transports (REQ-F-009)
 
 - **`streamable-http`**: default; SSE endpoint on `:8343` in dev.
 - **`stdio`**: for CLI and desktop clients: `php public/index.php --transport=stdio`

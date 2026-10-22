@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- SDD: REQ-N10 and ADR-0007 record that the public website lives in its own repository and consumes `docs/install.md` from here.
+- SDD: REQ-N-010 and ADR-0007 record that the public website lives in its own repository and consumes `docs/install.md` from here.
 - SDD: topped up the scaffold to sdd 0.15.0 (descriptor keys and a vendored `sdd-check`); CI still runs the PHP gate.
 
 ### Changed

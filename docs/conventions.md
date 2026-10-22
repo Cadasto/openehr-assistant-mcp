@@ -30,7 +30,7 @@ register; see [development.md](development.md#gotcha-mcp-discovery-cache).
   - **Schemas are a contract, and the SDK enforces the input half.**
     `CallToolHandler` validates arguments against the generated `inputSchema`
     *before* your method runs, so a published constraint rejects bad calls rather
-    than clamping them. [REQ-N9](requirements.md) states normatively *what* must
+    than clamping them. [REQ-N-009](requirements.md) states normatively *what* must
     hold and is the single canonical home for it; the four steps below are only
     *how* to satisfy it in this codebase, guarded by
     `tests/Tools/InputSchemaGuardTest.php`:

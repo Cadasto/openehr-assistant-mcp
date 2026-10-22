@@ -2,15 +2,15 @@
 
 This page is for contributors checking a change before they push: how to run the
 PHPUnit suite, PHPStan, coverage, the MCP conformance suite, and the SDD drift gate.
-It is the operational companion to the [SDD docs](README.md) and satisfies REQ-N2,
-REQ-N3, and REQ-N6. Tests are the verification end of the
+It is the operational companion to the [SDD docs](README.md) and satisfies REQ-N-002,
+REQ-N-003, and REQ-N-006. Tests are the verification end of the
 [traceability chain](traceability.md): each `src/` class has a mirrored
 `tests/…/*Test`.
 
 All commands run **inside the dev container** (see [development.md](development.md)).
 Start the stack first with `make up-dev && make install`.
 
-## Test suite (PHPUnit, REQ-N2)
+## Test suite (PHPUnit, REQ-N-002)
 
 ```bash
 docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml \
@@ -29,13 +29,13 @@ Conventions:
 
 | Test | Guards |
 |------|--------|
-| `tests/Prompts/PromptCompositionTest.php` | Prompt size vs baselines in `tests/fixtures/prompt_lengths_before_shared.json` (REQ-N7) |
-| `tests/Prompts/PromptPolicySeparationTest.php` | Global policy stays in `server-instructions.md`, not prompt files (REQ-F10) |
-| `tests/Tools/InputSchemaGuardTest.php` | Every `#[McpTool]` input schema is closed and self-consistent (REQ-N9) |
-| `tests/Tools/OutputSchemaConformanceTest.php` | Tool output conforms to its declared `outputSchema`, also through the SDK's runtime check, which turns a mismatch into an `isError` result (REQ-N9) |
-| `tests/Content/InstallDocContractTest.php` | `docs/install.md` keeps the path, hosted-endpoint section, and relative links the website relies on (REQ-N10) |
+| `tests/Prompts/PromptCompositionTest.php` | Prompt size vs baselines in `tests/fixtures/prompt_lengths_before_shared.json` (REQ-N-007) |
+| `tests/Prompts/PromptPolicySeparationTest.php` | Global policy stays in `server-instructions.md`, not prompt files (REQ-F-010) |
+| `tests/Tools/InputSchemaGuardTest.php` | Every `#[McpTool]` input schema is closed and self-consistent (REQ-N-009) |
+| `tests/Tools/OutputSchemaConformanceTest.php` | Tool output conforms to its declared `outputSchema`, also through the SDK's runtime check, which turns a mismatch into an `isError` result (REQ-N-009) |
+| `tests/Content/InstallDocContractTest.php` | `docs/install.md` keeps the path, hosted-endpoint section, and relative links the website relies on (REQ-N-010) |
 
-## Static analysis (PHPStan, REQ-N3)
+## Static analysis (PHPStan, REQ-N-003)
 
 ```bash
 docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-compose.dev.yml \
@@ -52,7 +52,7 @@ docker compose --env-file .env -f .docker/docker-compose.yml -f .docker/docker-c
 Coverage requires Xdebug; the `test:coverage` script sets `XDEBUG_MODE`
 automatically. HTML output is written to `var/phpunit/code-coverage`.
 
-## MCP conformance (REQ-N6)
+## MCP conformance (REQ-N-006)
 
 The server must pass the official MCP conformance suite over HTTP. The stack must
 be up (`make up-dev`); the suite runs via the dev-only `node` service:
@@ -64,7 +64,7 @@ make conformance
 Results are written to `conformance/`; expected/known failures are listed in
 `tests/conformance-baseline.yml`.
 
-## SDD drift gate (REQ-N8)
+## SDD drift gate (REQ-N-008)
 
 `make spec-check` (`composer check:spec` in the container) validates
 [traceability.yaml](traceability.yaml) against the tree and fails on a missing
@@ -78,13 +78,13 @@ make spec-check
 
 `scripts/sdd-check.py` is the sdd plugin's own gate, vendored and version-pinned in
 [.sdd.yaml](.sdd.yaml) so the `/sdd-*` skills run a known copy. Neither `make ci` nor
-PR validation runs it: it does not yet accept this repo's `REQ-F1` identifier style
+PR validation runs it: it does not yet accept this repo's `REQ-F-001` identifier style
 or map format, so the PHP gate above remains the CI gate.
 
 ## Before pushing
 
 Run **`make ci`**, which runs `composer check:spec`, `composer check:phpstan`, and
-`composer test` in the dev container, as PR validation does (REQ-N2, REQ-N3,
-REQ-N8). Use
+`composer test` in the dev container, as PR validation does (REQ-N-002, REQ-N-003,
+REQ-N-008). Use
 [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/); keep
 `## [Unreleased]` CHANGELOG entries short and high-level (see [AGENTS.md](../AGENTS.md)).
