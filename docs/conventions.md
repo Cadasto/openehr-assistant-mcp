@@ -35,7 +35,7 @@ register; see [development.md](development.md#gotcha-mcp-discovery-cache).
     `CallToolHandler` validates arguments against the generated `inputSchema`
     *before* your method runs, so a published constraint rejects bad calls rather
     than clamping them. The [constitution](architecture.md#contracts) states the
-    binding part (closed schemas, `null` in null-defaulted enums, conforming output),
+    binding part (closed schemas, strings-only optional enums, conforming output),
     and [REQ-N9](requirements.md) describes the whole capability; the four steps below are only
     *how* to satisfy it in this codebase, guarded by
     `tests/Tools/InputSchemaGuardTest.php`:
