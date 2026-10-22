@@ -289,6 +289,10 @@ final readonly class CkmService
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to retrieve the CKM Archetype', ['error' => $e->getMessage(), 'identifier' => $identifier, 'cid' => $cid, 'format' => $format]);
             throw new ToolCallException('Failed to retrieve the CKM Archetype: ' . $e->getMessage(), previous: $e);
+        } catch (\InvalidArgumentException $e) {
+            // Map::archetypeFormat() rejects a format the schema enum also refuses; a caller that
+            // skips schema validation still gets the ToolCallException promised above.
+            throw new ToolCallException($e->getMessage(), previous: $e);
         }
     }
 
@@ -488,6 +492,10 @@ final readonly class CkmService
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Failed to retrieve the CKM Template', ['error' => $e->getMessage(), 'identifier' => $identifier, 'format' => $format]);
             throw new ToolCallException('Failed to retrieve the CKM Template: ' . $e->getMessage(), previous: $e);
+        } catch (\InvalidArgumentException $e) {
+            // Map::templateFormat() rejects a format the schema enum also refuses; a caller that
+            // skips schema validation still gets the ToolCallException promised above.
+            throw new ToolCallException($e->getMessage(), previous: $e);
         }
     }
 

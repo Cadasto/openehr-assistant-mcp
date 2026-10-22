@@ -78,6 +78,34 @@ final class CkmServiceTest extends TestCase
         $this->assertSame($payload[0]['resourceMainId'], $result['items'][0]['archetypeId']);
     }
 
+    public function testArchetypeGetTurnsAnUnknownFormatIntoToolCallException(): void
+    {
+        $this->client->expects($this->never())->method('get');
+        $svc = new CkmService($this->client, $this->logger);
+
+        try {
+            $svc->archetypeGet('123.45', 'docx');
+            $this->fail('expected a ToolCallException for an unknown archetype format');
+        } catch (ToolCallException $e) {
+            $this->assertSame('Invalid archetype format: docx', $e->getMessage());
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e->getPrevious());
+        }
+    }
+
+    public function testTemplateGetTurnsAnUnknownFormatIntoToolCallException(): void
+    {
+        $this->client->expects($this->never())->method('get');
+        $svc = new CkmService($this->client, $this->logger);
+
+        try {
+            $svc->templateGet('123.45', 'docx');
+            $this->fail('expected a ToolCallException for an unknown template format');
+        } catch (ToolCallException $e) {
+            $this->assertSame('Invalid template format: docx', $e->getMessage());
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e->getPrevious());
+        }
+    }
+
     public function testArchetypeGetRespectsFormatAndReturnsTextContent(): void
     {
         // format "adl" -> Map::archetypeFormat('adl') returns 'adl' and contentType 'text/plain' via Map::contentType
