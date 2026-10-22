@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/ITS-REST/development/overview.html
 **Markdown URL:** N/A
-**Last updated:** 2026-04-20
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/sm-openehr_platform, openehr://guides/specs/rm-ehr, openehr://guides/specs/its-rest-simplified_formats, openehr://guides/specs/its-rest-smart_app_launch
 **Keywords:** REST, HTTP, API, OpenAPI, EHR API, Query API, Definition API, Demographic API, Admin API, JSON
 
@@ -28,15 +28,15 @@ The REST surface is partitioned into six functional areas; each per-endpoint doc
 - `System API` — service capabilities, version, and infrastructure discovery → https://specifications.openehr.org/releases/ITS-REST/development/system.html
 - `EHR API` — EHRs, `COMPOSITION`, `FOLDER`/directory, `EHR_STATUS`, `CONTRIBUTION`, versioned object access → https://specifications.openehr.org/releases/ITS-REST/development/ehr.html
 - `Query API` — ad-hoc AQL execution and stored-query invocation; `RESULT_SET` shape → https://specifications.openehr.org/releases/ITS-REST/development/query.html
-- `Definition API` — ADL2/ADL1.4 archetypes, OPTs/templates, example generation, stored queries → https://specifications.openehr.org/releases/ITS-REST/development/definition.html
-- `Demographic API` — parties, relationships, identities (status: development) → https://specifications.openehr.org/releases/ITS-REST/development/demographic.html
+- `Definition API` — ADL 1.4 and ADL2 templates (upload, list, retrieve, example generation) and stored AQL queries; no archetype endpoints → https://specifications.openehr.org/releases/ITS-REST/development/definition.html
+- `Demographic API` — parties (person, organisation, group, agent, role), versioned parties, contributions, tags (status: development) → https://specifications.openehr.org/releases/ITS-REST/development/demographic.html
 - `Admin API` — EHR physical delete, administrative lifecycle operations (status: development) → https://specifications.openehr.org/releases/ITS-REST/development/admin.html
 
 Cross-cutting constructs defined in `overview.html`: custom headers `openehr-version`, `openehr-audit-details`, `openehr-template-id`, `openehr-uri`, `openehr-item-tag`; `Prefer: return={minimal|identifier|representation}`; simplified-format MIME types `application/openehr.wt.flat+json`, `application/openehr.wt.structured+json`, `application/openehr.wt+json`; ISO 8601 datetime rules; structured error body with `message`, `code`, coded-text array.
 
 ## Relations to Other Specs
 
-- Binds: `SM/openehr_platform` abstract services to HTTP; operations map 1:1 to `I_EHR_SERVICE`, `I_EHR_COMPOSITION`, `I_QUERY_SERVICE`, `I_DEFINITION_ADL2`, `I_DEMOGRAPHIC_SERVICE`, `I_ADMIN_SERVICE`.
+- Binds: `SM/openehr_platform` abstract services to HTTP; endpoints correspond to interfaces such as `I_EHR_SERVICE`, `I_EHR_COMPOSITION`, `I_QUERY_SERVICE`, `I_DEFINITION_ADL2`, `I_DEMOGRAPHIC_SERVICE`, `I_ADMIN_SERVICE`.
 - Serialises: `RM/ehr`, `RM/common` (`VERSIONED_OBJECT`, `ORIGINAL_VERSION`, `CONTRIBUTION`), `RM/data_types` via `ITS-JSON`/`ITS-XML` canonical schemas, plus `its-rest-simplified_formats` for Flat/Structured/Web-Template payloads.
 - Executes: `QUERY` (AQL) via the Query API; returns AQL `RESULT_SET`.
 - Composes with: `its-rest-smart_app_launch` for SMART-on-openEHR OAuth2/OIDC launch and scope framework.

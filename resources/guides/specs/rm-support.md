@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/RM/development/support.html
 **Markdown URL:** https://specifications.openehr.org/releases/RM/development/support.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/rm-common, openehr://guides/specs/rm-data_types
 **Keywords:** TERMINOLOGY_SERVICE, TERMINOLOGY_ACCESS, CODE_SET_ACCESS, MEASUREMENT_SERVICE, EXTERNAL_ENVIRONMENT_ACCESS, code sets, terminology access, identifiers (relocated to BASE), assumed types (relocated to BASE)
 
@@ -38,11 +38,11 @@ Defines the cross-cutting service-access types that every other Reference Model 
 
 ## Architectural Placement
 
-Sits at the bottom of the RM stack: every other RM, AM and service-model package imports it, and it imports nothing from openEHR itself. It is the boundary across which identifier syntax, reference semantics, and terminology/measurement service contracts are fixed, isolating the rest of the model from concrete identifier registries and terminology products.
+Sits at the bottom of the RM stack, directly above BASE (whose foundation and base types it imports); the other RM packages, AM and the service model rely on its service interfaces. It is the boundary across which terminology/measurement service contracts are fixed, isolating the rest of the model from concrete terminology products; identifier syntax and reference semantics are now fixed in `BASE/base_types`.
 
 ## When to Read the Full Spec
 
-Open the full document when wiring a concrete terminology/measurement back-end to the `TERMINOLOGY_SERVICE` / `MEASUREMENT_SERVICE` proxy contract, when resolving which openEHR code sets and terminology groups the RM requires (`OPENEHR_CODE_SET_IDENTIFIERS`, `OPENEHR_TERMINOLOGY_GROUP_IDENTIFIERS`), or when checking how terms and codes are meant to be used inside RM data. For identifier parsing and minting (`OBJECT_VERSION_ID` three-part form, `VERSION_TREE_ID` branch numbering, `UID_BASED_ID` subtypes) consult `BASE/base_types`, where those classes now live.
+Open the full document when wiring a concrete terminology/measurement back-end to the `TERMINOLOGY_SERVICE` / `MEASUREMENT_SERVICE` proxy contract, when resolving which openEHR code sets and terminology groups the RM requires (`OPENEHR_CODE_SET_IDENTIFIERS`, `OPENEHR_TERMINOLOGY_GROUP_IDENTIFIERS`), or when checking how terms and codes are meant to be used inside RM data. For identifier parsing and minting (`OBJECT_VERSION_ID` three-part form, `VERSION_TREE_ID` branch numbering, `UID_BASED_ID` subtypes) consult `BASE/base_types`, where those classes now live. For per-class attribute, function, and invariant detail use the BMM-backed `type_specification_get` tool rather than the rendered HTML.
 
 ## References
 

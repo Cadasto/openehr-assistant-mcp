@@ -6,8 +6,8 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/AM/development/Identification.html
 **Markdown URL:** https://specifications.openehr.org/releases/AM/development/Identification.md
-**Last updated:** 2026-04-20
-**Related:** openehr://guides/specs/am-Overview, openehr://guides/specs/am-ADL1.4, openehr://guides/specs/am2-ADL2, openehr://guides/specs/base-resource, openehr://guides/specs/rm-support
+**Last updated:** 2026-10-22
+**Related:** openehr://guides/specs/am-Overview, openehr://guides/specs/am-ADL1.4, openehr://guides/specs/am2-ADL2, openehr://guides/specs/base-resource, openehr://guides/specs/base-base_types
 **Keywords:** archetype id, template id, HRID, MRID, physical id, version, lifecycle, namespace, ADL 2 semver, ADL 1.4
 
 ---
@@ -18,18 +18,18 @@ Defines the normative identification scheme that lets archetypes, templates, and
 
 ## Scope
 
-- In: the `ARCHETYPE_HRID` human-readable identifier; its syntactic components (`namespace`, `rm_publisher`, `rm_closure`, `rm_class`, `concept_id`, `release_version`, `build_uid`, `uid`); the three reference forms — interface (`ihrid_ref`, major only), specific interface (`sihrid_ref`, major+minor), and physical (`phrid_ref`, full `M.N.P[-modifier.B]`); semantic versioning rules with `-alpha` and `-rc` modifiers; the `lifecycle_state` property and its state set; namespace policy (reverse-DNS) and ontology-sourced concept ids; and the identification of derived operational artefacts via configuration structures.
+- In: the human-readable identifier (HRID) grammar (`namespace`, `rm_publisher`, `rm_closure`, `rm_class`, `concept_id`, version) and the machine `uid`; the three reference forms — interface (`ihrid_ref`, major only), specific interface (`sihrid_ref`, major+minor), and physical (`phrid_ref`, full `M.N.P[-modifier.B]`); semantic versioning rules with `-alpha` and `-rc` modifiers; the `lifecycle_state` property and its state set; namespace policy (reverse-DNS) and ontology-sourced concept ids; and the identification of derived operational artefacts via configuration structures.
 - Out: ADL grammar (`AM/ADL1.4`, `AM/ADL2`); the archetype object models (`AM/AOM1.4`, `AM/AOM2`); Reference Model class and attribute definitions (`RM/*`); governance workflow in CKM; AQL surface syntax; and REST resource URI design, all of which consume but do not redefine these identifiers.
 
 ## Key Classes / Constructs
 
-- `ARCHETYPE_HRID` — human-readable id; carries `namespace`, `rm_publisher`, `rm_closure`, `rm_class`, `concept_id`, `release_version`, `build_uid`, `uid`.
-- `ARCHETYPE_ID` — legacy/base identifier type referenced from `BASE` and used by `LOCATABLE.archetype_node_id`.
+- `ARCHETYPE_HRID` (AOM2) — human-readable id; attributes `namespace`, `rm_publisher`, `rm_package` (the grammar's `rm_closure`), `rm_class`, `concept_id`, `release_version`, `version_status`, `build_count`.
+- `ARCHETYPE_ID` — `BASE/base_types` identifier whose grammar the HRID simplifies; typed by `ARCHETYPED.archetype_id` in RM data (a root `LOCATABLE.archetype_node_id` holds its string form).
 - `qualified_rm_class_name` — the `rm_publisher '-' rm_closure '-' rm_class` triple (e.g. `openEHR-EHR-OBSERVATION`, `ISO-ISO13606-ENTRY`).
-- `release_version` — semver `M.N.P` with optional `-alpha` or `-rc.B` modifier and `build_uid` (GUID assigned once per artefact, stable across revisions).
+- `release_version` — semver `M.N.P`; non-release ids add `-alpha` or `-rc.B`, where the build number B increments at every commit; `AUTHORED_ARCHETYPE.build_uid` is a UUID reassigned on every content change.
 - `ihrid_ref` / `sihrid_ref` / `phrid_ref` — interface (major-only), specific-interface (major+minor), and physical (full-version) reference forms selecting latest matching release vs. exact artefact.
 - `lifecycle_state` — macro-states `unmanaged`, `development`, `release_candidate`, `published`, `deprecated`, `rejected`; drives version-modifier derivation (`-alpha`, `-rc`).
-- `uid` — GUID-form machine identifier, assigned at creation and immutable across edits.
+- `uid` — GUID machine identifier (`AUTHORED_RESOURCE.uid`), assigned when a custodian organisation takes the artefact under management; replaced when transfer or forking changes the HRID.
 - Configuration structures (`archetype_config`, `template_config`, `subset_config`, `rm_release`) — operational-form manifests recording the concrete source-artefact revisions compiled in.
 
 Exact attribute signatures and invariants are best retrieved via `type_specification_get` rather than duplicated here.
@@ -37,7 +37,7 @@ Exact attribute signatures and invariants are best retrieved via `type_specifica
 ## Relations to Other Specs
 
 - Consumed by: `AM/ADL1.4` and `AM/ADL2` (archetype header syntax), `AM/AOM1.4` and `AM/AOM2` (identifier fields on `ARCHETYPE` and `AUTHORED_RESOURCE`), `RM/common` (resource metadata), CKM (governance and publication states), AQL (`archetype_id` predicates), and openEHR REST (resource paths and ETag semantics).
-- Depends on: `BASE/foundation_types` and `RM/support` for primitive string and GUID types.
+- Depends on: `BASE/base_types` (prerequisite; `ARCHETYPE_ID` grammar) and `BASE/resource` (`AUTHORED_RESOURCE`).
 - Aligns with: semantic versioning 2.0 conventions for the `M.N.P[-modifier.B]` form.
 
 ## Architectural Placement
@@ -50,6 +50,6 @@ Read the full specification when designing archetype or template repositories, i
 
 ## References
 
-- openEHR AM Identification (development): https://specifications.openehr.org/releases/AM/development/Identification.html
-- openEHR AM Overview: https://specifications.openehr.org/releases/AM/development/Overview.html
-- openEHR BASE Base Types: https://specifications.openehr.org/releases/BASE/development/base_types.html
+- Full spec (HTML): https://specifications.openehr.org/releases/AM/development/Identification.html
+- Full spec (Markdown): https://specifications.openehr.org/releases/AM/development/Identification.md
+- Related digests: specs/am-Overview, specs/am2-AOM2, specs/base-base_types, specs/base-resource

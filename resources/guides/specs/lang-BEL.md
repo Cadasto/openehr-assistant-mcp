@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/LANG/development/BEL.html
 **Markdown URL:** https://specifications.openehr.org/releases/LANG/development/BEL.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/lang-EL, openehr://guides/specs/am2-ADL2
 **Keywords:** BEL, expression language, rules, archetype rules, constraints, assertions, BEOM, first-order logic, quantifiers, bound variables
 
@@ -18,7 +18,7 @@ BEL defines a compact, strongly typed formalism for authoring rules, constraints
 
 ## Scope
 
-- In: primitive and container type system (Boolean, Integer, Real, Date/Time/Duration, String, Uri, Terminology_code, List, Set, Hash); lexical conventions (identifiers, ODIN-style literals, keywords); declarations, assignments, and Boolean-valued assertions; unary/binary operators with precedence; variable references (local and path-bound); path expressions into archetyped data; conditional expressions; universal (`for_all`) and existential (`there_exists`) quantifiers over containers; built-in and external function calls; the BEOM class hierarchy that underlies the grammar.
+- In: primitive and container type system (Boolean, Integer, Real, Date/Time/Duration, String, Uri, Terminology_code, List, Set, Hash); lexical conventions (identifiers, ODIN-style literals, keywords); declarations, assignments, and Boolean-valued assertions; unary/binary operators with precedence; variable references (local and path-bound); path expressions into archetyped data; constants and interval literals; `exists` checks on bound variables; universal (`for_all`) and existential (`there_exists`) quantifiers over containers; built-in and external function calls; the BEOM class hierarchy that underlies the grammar.
 - Out: concrete integration with a specific archetype parser (covered by `AM/ADL2`); the broader Expression Language / BMM expression model that now supersedes BEL for platform-level use (`LANG/EL`); execution-engine semantics beyond the abstract evaluation contract; decision-support service APIs (`PROC`, `CDS`); terminology value-set resolution; and choice of serialised carrier format for rules.
 
 ## Key Classes / Constructs
@@ -28,7 +28,7 @@ BEL defines a compact, strongly typed formalism for authoring rules, constraints
 - Variable references — `$name`-prefixed local and bound variables; bound variables are resolved against an external data context and may raise an undefined-value exception when their backing path is absent.
 - Function calls — built-ins (`current_date_time`, aggregates such as `sum`, `mean`, `min`, `max`) and externally declared functions whose BEOM leaf node treats the callee as an opaque black box with a typed signature.
 - Path references — XPath-like navigation (`$event/data[id4]/items[id7]/value/magnitude`) that binds variables to locations within archetyped compositional trees and drives constraint evaluation.
-- Conditional expressions — `if/then/else` and equivalent constructs that combine Boolean predicates with typed branches while respecting the type-promotion rules (Integer to Real).
+- Bound-variable validity — a bound variable whose data is absent raises an 'undefined value' exception; `exists $var` guards dependent logic. BEL has no `if/then/else`: conditional assertions use `implies` ("if p then q").
 - Quantified expressions — `for_all` and `there_exists` (with ∀/∃ synonyms) iterate over `List`, `Set`, and `Hash` containers to produce Boolean results, enabling collection-level invariants.
 - Assertions and statements — declarations (`name: Type [:= expr]`), assignments (`:=`), and tagged Boolean assertions grouped into `STATEMENT_SET` instances that form the top-level rule blocks.
 

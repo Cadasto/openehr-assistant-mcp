@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/QUERY/development/AQL.html
 **Markdown URL:** https://specifications.openehr.org/releases/QUERY/development/AQL.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/am2-ADL2, openehr://guides/specs/sm-openehr_platform
 **Keywords:** AQL, query, archetype path, containment, WHERE, SELECT, CONTAINS, stored query
 
@@ -26,15 +26,15 @@ Defines a declarative query language for openEHR data that is independent of any
 - `SELECT` — projection list of paths, RM variables, literals, or aggregates; supports `DISTINCT` and column aliases.
 - `FROM` / `CONTAINS` — declares the root class expression (typically `EHR` or `COMPOSITION`; any RM class or a `VERSION` expression is permitted) and hierarchical containment between variables.
 - Archetype paths — locate nodes using `/data[at0001]/items[at0004]/value` plus archetype predicates like `[openEHR-EHR-OBSERVATION.blood_pressure.v2]`.
-- RM type variables — single-letter bindings (e.g., `e`, `c`, `o`) that anchor paths and appear in SELECT/WHERE.
-- Predicates — archetype (`[archetype_id=...]`), standard (`[name/value='Systolic']`), and node (`[at-code]`) filters applied inline.
+- RM type variables — names declared in `FROM` (an initial letter, then any alphanumerics or underscores; case-insensitive; e.g. `e`, `c`, `obs_bp`) that anchor paths and appear in SELECT/WHERE.
+- Predicates — archetype (a bare archetype id such as `[openEHR-EHR-COMPOSITION.encounter.v1]`, `FROM` clause only), standard (`[name/value='Systolic']`), and node (`[at-code]`) filters applied inline.
 - `WHERE` — boolean expression using comparison operators, `LIKE`, `MATCHES {...}` for value sets, `EXISTS`, `NOT`, `AND`/`OR`.
 - Aggregation — `COUNT`, `MIN`, `MAX`, `SUM`, `AVG` over projected paths.
 - `ORDER BY` / `LIMIT` / `OFFSET` — deterministic ordering and result windowing; parameters (`$var`) enable reusable queries, shareable as registered queries via the platform Definition service (`SM`).
 
 ## Relations to Other Specs
 
-- Depends on: `RM/ehr` and `RM/demographic` (classes navigated by queries), `RM/data_structures` and `RM/data_types` (leaf-value structure), `AM` (archetype identifiers and node codes embedded in paths/predicates), `TERM/openehr_terminology` and external terminology services (value-set resolution via `TERMINOLOGY()` and `MATCHES`).
+- Depends on: `RM/ehr` and `RM/demographic` (classes navigated by queries), `RM/data_structures` and `RM/data_types` (leaf-value structure), `AM` (archetype identifiers and node codes embedded in paths/predicates), `TERM/SupportTerminology` (openEHR codes used in criteria) and external terminology services (value-set resolution via `TERMINOLOGY()` and `MATCHES`).
 - Consumed by: `SM/openehr_platform` (Query Service interface, stored-query registry), `ITS-REST` (query endpoints, request/response bindings), tooling such as query builders and composition finders.
 - Companion: formal ANTLR4 lexer/parser grammars published alongside the specification.
 
@@ -44,7 +44,7 @@ AQL is the query-layer counterpart to the ADL archetype formalism: where ADL con
 
 ## When to Read the Full Spec
 
-Consult the full specification for the authoritative ANTLR4 grammar, precedence and associativity of operators, exact semantics of path shortening and name-predicate disambiguation, rules for null handling and three-valued logic, the complete list of reserved words and functions, parameter binding semantics, temporal-version query forms (`VERSION` class expressions with `LATEST_VERSION` / `ALL_VERSIONS` predicates), and conformance requirements for query engines.
+Consult the full specification for the authoritative ANTLR4 grammar, precedence and associativity of operators, the name-based forms of node predicates, `NULL` handling in functions and aggregates, the complete list of reserved words and functions, parameter syntax and resolution, `TERMINOLOGY()` operations, temporal-version query forms (`VERSION` class expressions with `LATEST_VERSION` / `ALL_VERSIONS` predicates), and the result structure.
 
 ## References
 

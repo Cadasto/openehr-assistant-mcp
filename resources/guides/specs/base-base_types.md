@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/BASE/development/base_types.html
 **Markdown URL:** https://specifications.openehr.org/releases/BASE/development/base_types.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/base-foundation_types, openehr://guides/specs/base-resource
 **Keywords:** UID, UUID, OBJECT_ID, OBJECT_VERSION_ID, ARCHETYPE_ID, TEMPLATE_ID, OBJECT_REF, VERSION_TREE_ID, identifiers, definitions, builtins, base types
 
@@ -29,13 +29,13 @@ Defines the `org.openehr.base_types` package: a minimal set of identifier classe
 - `ARCHETYPE_ID` / `TEMPLATE_ID` — structured, human-readable identifiers for archetypes and templates.
 - `OBJECT_REF` — typed `{namespace, type, id}` reference; specialised as `PARTY_REF`, `LOCATABLE_REF`.
 - `BASIC_DEFINITIONS` / `OPENEHR_DEFINITIONS` — holders of symbolic constants used across the models.
-- `VALIDITY_KIND` / `VERSION_STATUS` — enumerations for optionality and version lifecycle state.
+- `VALIDITY_KIND` / `VERSION_STATUS` — enumerations for optionality and artefact release status (alpha, beta, release_candidate, released, build).
 - `Env` / `Locale` / `Math` / `Quantity_converter` — built-in interfaces giving models uniform access to host services.
 
 ## Relations to Other Specs
 
 - Depends on: `BASE/foundation_types` (assumed primitive and container types).
-- Consumed by: `BASE/resource` (authored resource packaging), `RM/support` (wraps these identifiers in service-facing classes such as `TERMINOLOGY_SERVICE`), `RM/common`, `RM/ehr`, `RM/demographic`, `RM/data_structures`, `RM/data_types`, `AM/ADL2` / `AM/AOM2` (archetype and template identifier syntax), `TERM` (terminology identifiers), `QUERY/AQL` (identifier literals), and all `ITS-*` serialisations.
+- Consumed by: `BASE/resource` (authored resource packaging), `RM/support` (which formerly defined these identifiers and now only points here), `RM/common`, `RM/ehr`, `RM/demographic`, `RM/data_structures`, `RM/data_types`, `AM/ADL2` / `AM/AOM2` (archetype and template identifier syntax), `TERM` (terminology identifiers), `QUERY/AQL` (identifier literals), and all `ITS-*` serialisations.
 
 ## Architectural Placement
 

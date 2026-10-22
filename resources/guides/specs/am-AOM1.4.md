@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/AM/development/AOM1.4.html
 **Markdown URL:** https://specifications.openehr.org/releases/AM/development/AOM1.4.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/am-ADL1.4, openehr://guides/specs/am2-AOM2
 **Keywords:** AOM, AOM 1.4, archetype object model, C_OBJECT, constraint, legacy
 
@@ -31,7 +31,7 @@ Defines the normative, syntax-independent object model for archetypes as authore
 - `ARCHETYPE_SLOT` — reference constraint allowing other archetypes matching include/exclude assertions to fill a slot at runtime.
 - `ARCHETYPE_ONTOLOGY` — terminology section: `at`/`ac` term definitions, translations, term/constraint bindings to external terminologies.
 
-Domain and assertion classes (`C_DOMAIN_TYPE`, `C_ORDINAL`, `C_CODED_TEXT`, `C_QUANTITY`, `ASSERTION`, `ARCHETYPE_INTERNAL_REF`, `CONSTRAINT_REF`, `CARDINALITY`) are defined in the spec. Per-class attribute, invariant, and function detail is best retrieved via `type_specification_get` (BMM-backed) rather than duplicated here.
+Domain and assertion classes (`C_DOMAIN_TYPE`, `ASSERTION`, `ARCHETYPE_INTERNAL_REF`, `CONSTRAINT_REF`, `CARDINALITY`) are defined in the spec. `C_ORDINAL`, `C_CODED_TEXT` and `C_QUANTITY` appear only in the non-normative Domain-specific Extension Example; the actual openEHR additions are in the openEHR Archetype Profile. Per-class attribute, invariant, and function detail is best retrieved via `type_specification_get` (BMM-backed) rather than duplicated here.
 
 ## Relations to Other Specs
 

@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/AM/development/ADL1.4.html
 **Markdown URL:** https://specifications.openehr.org/releases/AM/development/ADL1.4.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/am-AOM1.4, openehr://guides/specs/am2-ADL2
 **Keywords:** ADL, ADL 1.4, archetype syntax, legacy, cADL, dADL, slot, specialisation
 
@@ -18,8 +18,8 @@ Defines the concrete, human-readable textual syntax used to serialise openEHR (a
 
 ## Scope
 
-- In: outer archetype structure (header, identifier, `specialise`, language, description, definition, ontology, revision history); cADL constraint syntax (`matches`/`∈`, `occurrences`, `existence`, `cardinality`, interval and regex primitives, leaf primitive constraints, `use_node` internal references, `allow_archetype` slot include/exclude expressions); dADL serialisation of primitive, interval, container, coded-term, and typed-object values; path syntax compatible with XPath; term and constraint code conventions; ontology section layout (`term_definitions`, `constraint_definitions`, `term_bindings`, `constraint_bindings`).
-- Out: the abstract Archetype Object Model (see `AM/AOM1.4`); the later ADL 2 / AOM 2 family (see `AM2/ADL2`); operational template and OPT formats; runtime archetype validation rules beyond syntactic well-formedness; reference-model class definitions being constrained (see `RM/*`); archetype governance, identification, and lifecycle policy.
+- In: outer archetype structure (`archetype` header with `adl_version` and optional `controlled` flag, identifier, `specialise`, `concept`, language, description, definition, `invariant`, ontology, revision history); cADL constraint syntax (`matches`/`∈`, `occurrences`, `existence`, `cardinality`, interval and regex primitives, leaf primitive constraints, `use_node` internal references, `allow_archetype` slot include/exclude expressions); dADL serialisation of primitive, interval, container, coded-term, and typed-object values; path syntax compatible with XPath; term and constraint code conventions; ontology section layout (`term_definitions`, `constraint_definitions`, `term_bindings`, `constraint_bindings`).
+- Out: the abstract Archetype Object Model (see `AM/AOM1.4`); the later ADL 2 / AOM 2 family (see `AM/ADL2`); operational template and OPT formats; runtime archetype validation rules beyond syntactic well-formedness; reference-model class definitions being constrained (see `RM/*`); archetype governance, identification, and lifecycle policy.
 
 ## Key Classes / Constructs
 
@@ -35,7 +35,7 @@ Defines the concrete, human-readable textual syntax used to serialise openEHR (a
 ## Relations to Other Specs
 
 - Depends on: `AM/AOM1.4` (ADL 1.4 is a serialisation of that abstract model), `RM/common` (legacy `AUTHORED_RESOURCE` descriptors surfaced in `description`), `RM/support` (archetype identifiers, terminology identifiers), and the RM packages whose classes the `definition` section constrains.
-- Consumed by: archetype repositories and CKM mirrors, ADL 1.4 parsers/validators in AWB and Archie, OPT 1.4 template builders, and migration tooling that lifts 1.4 artefacts into ADL 2 (`AM2/ADL2`) form.
+- Consumed by: archetype repositories and CKM mirrors, ADL 1.4 parsers/validators in AWB and Archie, OPT 1.4 template builders, and migration tooling that lifts 1.4 artefacts into ADL 2 (`AM/ADL2`) form.
 
 ## Architectural Placement
 

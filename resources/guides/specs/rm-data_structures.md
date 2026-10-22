@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/RM/development/data_structures.html
 **Markdown URL:** https://specifications.openehr.org/releases/RM/development/data_structures.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-data_types, openehr://guides/specs/rm-common
 **Keywords:** ITEM_TREE, ITEM_LIST, ITEM_TABLE, ITEM_SINGLE, HISTORY, EVENT, INTERVAL_EVENT, POINT_EVENT, CLUSTER, ELEMENT, time-series, representation
 
@@ -38,7 +38,7 @@ Defines the generic, archetypable container classes used to shape the `data`, `s
 
 ## Relations to Other Specs
 
-- Depends on: `RM/support` (identifiers, terminology interface), `RM/data_types` (values inside `ELEMENT`, timing types, durations, multimedia), `RM/common` (`LOCATABLE`, `PATHABLE`, archetype-node wiring), and openEHR terminology (null flavours, event math function codes).
+- Depends on: `RM/support` (terminology interface), `BASE/base_types` (identifiers), `RM/data_types` (values inside `ELEMENT`, timing types, durations, multimedia), `RM/common` (`LOCATABLE`, `PATHABLE`, archetype-node wiring), and openEHR terminology (null flavours, event math function codes).
 - Consumed by: `RM/ehr` (Entries use `ITEM_STRUCTURE` for `data`/`state`/`protocol`; `OBSERVATION.data` is a `HISTORY`), `RM/demographic` (party details use item structures), `AM` (archetypes constrain these shapes via C_COMPLEX_OBJECT), `QUERY` (AQL paths traverse `ITEM_TREE`/`HISTORY` hierarchies), and `ITS-*` serialisations.
 
 ## Architectural Placement
@@ -47,7 +47,7 @@ This package sits immediately above `RM/data_types` and below the clinical-conte
 
 ## When to Read the Full Spec
 
-Consult the full spec when selecting the correct `ITEM_STRUCTURE` shape for an archetype slot, modelling periodic versus ad-hoc observations (`HISTORY.period`, `INTERVAL_EVENT.width`), choosing interval `math_function` codes, designing summary events, or when implementing path resolution, `as_hierarchy` traversal, or AQL navigation over time-series and tree-shaped content.
+Consult the full spec when selecting the correct `ITEM_STRUCTURE` shape for an archetype slot, modelling periodic versus ad-hoc observations (`HISTORY.period`, `INTERVAL_EVENT.width`), choosing interval `math_function` codes, designing summary events, or when implementing path resolution, `as_hierarchy` traversal, or AQL navigation over time-series and tree-shaped content. For per-class attribute, function, and invariant detail use the BMM-backed `type_specification_get` tool rather than the rendered HTML.
 
 ## References
 

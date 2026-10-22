@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/ITS-REST/development/smart_app_launch.html
 **Markdown URL:** https://specifications.openehr.org/releases/ITS-REST/development/smart_app_launch.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/its-rest-api, openehr://guides/specs/sm-openehr_platform
 **Keywords:** SMART, OAuth2, launch, authorisation, scopes, service discovery, well-known, FHIR
 
@@ -19,7 +19,7 @@ Specifies how third-party "substitutable" applications authenticate users, acqui
 ## Scope
 
 - In: service discovery via `.well-known/smart-configuration`; standalone and embedded (EHR/iFrame) launch flows; Authorization Code with PKCE, confidential-client, client-credentials, and JWT-bearer grants; openEHR-specific scope syntax (`compartment/resource.permissions`); launch-context parameters (`ehrId`, `patient`, experimental `episodeId`); capability advertisement.
-- Out: the openEHR REST resource APIs themselves (defined in `ITS-REST/openehr_api`); concrete user-authentication UX; deprecated flows (implicit grant, ROPC) are explicitly prohibited; FHIR resource semantics (delegated to HL7 SMART).
+- Out: the openEHR REST resource APIs themselves (defined in `ITS-REST/overview` and the per-area documents such as `ITS-REST/ehr`); concrete user-authentication UX; deprecated flows (implicit grant, ROPC) are explicitly prohibited; FHIR resource semantics (delegated to HL7 SMART).
 
 ## Key Classes / Constructs
 
@@ -27,7 +27,7 @@ Specifies how third-party "substitutable" applications authenticate users, acqui
 - `authorization_endpoint` / `token_endpoint` — OAuth 2.0 endpoints issuing authorisation codes and access/refresh/ID tokens.
 - `launch` parameter — opaque handle (or experimental base64-JSON token) binding an embedded launch to its clinical context.
 - `services.org.openehr.rest` — service-discovery entry exposing the openEHR REST base URL (reverse-DNS keyed, alongside `org.fhir.rest`).
-- SMART scopes — `patient/*.read`, `user/template-*.crud`, `system/aql-*.s`; `<compartment>/<resource>.<crud+s>` pattern with namespace wildcards.
+- SMART scopes — e.g. `patient/composition-*.rs`, `user/template-*.crud`, `system/aql-*.rs`; `<compartment>/<resource>.<crud+s>` pattern with namespace wildcards.
 - Launch-context scopes — `launch`, `launch/patient`, experimental `launch/episode`; drive context selection at the authorisation server.
 - `ehrId` / `episodeId` token-response claims — openEHR-specific context returned alongside `access_token` and `id_token`.
 - `capabilities[]` — platform-declared features such as `launch-ehr`, `permission-patient`, `context-openehr-ehr`, `openehr-permission-v1`.
@@ -35,7 +35,7 @@ Specifies how third-party "substitutable" applications authenticate users, acqui
 ## Relations to Other Specs
 
 - Depends on: IETF OAuth 2.0 (RFC 6749), PKCE (RFC 7636), JWT (RFC 7519), OpenID Connect Core, and the HL7 FHIR SMART App Launch framework it profiles.
-- Binds to: `ITS-REST/openehr_api` (scope resource types map to REST resources: compositions, templates, AQL), `SM/openehr_platform` (authorised calls land on the platform service interfaces), `QUERY/AQL` (for `aql-*` scopes).
+- Binds to: the ITS-REST resource APIs (`ITS-REST/ehr`, `definition`, `query`; scope resource types `composition-`, `template-`, `aql-` map to them), `SM/openehr_platform` (authorised calls land on the platform service interfaces), `QUERY/AQL` (for `aql-*` scopes).
 - Peers with: HL7 SMART on FHIR — a dual-stack platform typically advertises both `org.openehr.rest` and `org.fhir.rest` from the same discovery document and shares the authorisation server.
 
 ## Architectural Placement

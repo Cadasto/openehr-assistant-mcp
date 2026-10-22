@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/RM/development/integration.html
 **Markdown URL:** https://specifications.openehr.org/releases/RM/development/integration.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-common, openehr://guides/specs/rm-data_structures
 **Keywords:** integration, GENERIC_ENTRY, legacy data, FEEDER_AUDIT, import, HL7v2, CDA
 
@@ -20,21 +20,21 @@ The Integration Information Model is the RM's dedicated boundary for migrating l
 - Out: designed clinical archetypes; strongly-typed observation/evaluation/instruction/action semantics (covered in the EHR RM, `openehr://guides/specs/rm-ehr`); terminology binding logic; transformation rules themselves (an implementation concern); long-term storage strategy for legacy-shaped data.
 
 ## Key Classes / Constructs
-- `GENERIC_ENTRY` — the sole class defined by the package; an archetypable entry whose only hard-wired attribute is `data` (an `ITEM_TREE` or comparable generic structure), intended to hold externally sourced content while its shape is governed by integration-specific archetypes.
+- `GENERIC_ENTRY` — the sole class defined by the package; a `CONTENT_ITEM` subtype (not an `ENTRY`) whose only attribute is `data: ITEM` (any `CLUSTER`/`ELEMENT` structure), intended to hold externally sourced content while its shape is governed by integration-specific archetypes.
 
-Note: this package is deliberately minimal. The specification defines exactly one class; all additional behaviour is inherited from `ENTRY`, `CONTENT_ITEM`, and `LOCATABLE` in other RM packages.
+Note: this package is deliberately minimal. The specification defines exactly one class; all additional behaviour is inherited from `CONTENT_ITEM` and `LOCATABLE` in other RM packages.
 
 ## Relations to Other Specs
-- Depends on: the EHR RM (`openehr://guides/specs/rm-ehr`) — `GENERIC_ENTRY` is a sibling of `SECTION` and the archetyped `ENTRY` subtypes, and is a legal value for `COMPOSITION.content`.
+- Depends on: the EHR RM (`openehr://guides/specs/rm-ehr`) — `GENERIC_ENTRY` is a sibling of `SECTION` and `ENTRY` under `CONTENT_ITEM`, and is a legal value for `COMPOSITION.content`.
 - Depends on: `RM/common` — `FEEDER_AUDIT` (inherited via `LOCATABLE`) carries source-system identifiers, original content references, and originating-system-item IDs, preserving provenance across the import boundary.
-- Depends on: `RM/data_structures` — the `data` payload is typically an `ITEM_TREE` (or other generic structure), letting integration archetypes model arbitrary externally sourced shapes without inventing new RM primitives.
+- Depends on: `RM/data_structures` — the `data` payload is typed `ITEM` (a `CLUSTER` or `ELEMENT`, so any structural representation), letting integration archetypes model arbitrary externally sourced shapes without inventing new RM primitives.
 - Consumed by: ingestion gateways, HL7v2/CDA/FHIR-to-openEHR mapping pipelines, EHR Extract import flows, and any system staging legacy clinical data prior to semantic harmonisation.
 
 ## Architectural Placement
 This package is the explicit integration boundary of the Reference Model: everything entering an openEHR repository from a non-openEHR source is expected to pass through `GENERIC_ENTRY` unless it can already be produced as a properly archetyped `ENTRY` subtype. It sits between external feeders and the clinical RM proper, preserving provenance via `FEEDER_AUDIT` while keeping legacy data structurally valid but semantically opaque.
 
 ## When to Read the Full Spec
-Read the full specification when designing an HL7v2, CDA, FHIR, or CSV-to-openEHR ingestion pipeline; when authoring integration archetypes that shape the `data` payload of a `GENERIC_ENTRY`; when deciding which `FEEDER_AUDIT` fields (originating system IDs, original content, feeder-system item IDs) must be populated for traceability; or when planning a staged migration where legacy content lives as `GENERIC_ENTRY` today and is progressively rewritten into archetyped `OBSERVATION`, `EVALUATION`, `INSTRUCTION`, or `ACTION` entries. A standing caveat from the spec is worth internalising: a repository composed solely of `GENERIC_ENTRY` instances is not a reliable or interoperable record — it supports neither robust clinical computation nor AQL-driven querying at the level that designed archetypes enable. The long-term trajectory is therefore always toward properly archetyped entries; `GENERIC_ENTRY` is an intentional bridge, not a destination.
+Read the full specification when designing an HL7v2, CDA, FHIR, or CSV-to-openEHR ingestion pipeline; when authoring integration archetypes that shape the `data` payload of a `GENERIC_ENTRY`; when deciding which `FEEDER_AUDIT` fields (originating system IDs, original content, feeder-system item IDs) must be populated for traceability; or when planning a staged migration where legacy content lives as `GENERIC_ENTRY` today and is progressively rewritten into archetyped `OBSERVATION`, `EVALUATION`, `INSTRUCTION`, or `ACTION` entries. A standing caveat from the spec is worth internalising: a repository composed solely of `GENERIC_ENTRY` instances is not a reliable or interoperable record — it supports neither robust clinical computation nor AQL-driven querying at the level that designed archetypes enable. The long-term trajectory is therefore always toward properly archetyped entries; `GENERIC_ENTRY` is an intentional bridge, not a destination. For per-class attribute, function, and invariant detail use the BMM-backed `type_specification_get` tool rather than the rendered HTML.
 
 ## References
 - Full spec (HTML): https://specifications.openehr.org/releases/RM/development/integration.html

@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/LANG/development/bmm.html
 **Markdown URL:** https://specifications.openehr.org/releases/LANG/development/bmm.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/lang-bmm3, openehr://guides/specs/lang-bmm_persistence, openehr://guides/specs/lang-odin
 **Keywords:** BMM, basic meta-model, object model, RM, AM, type specification, computable model, P_BMM, schema
 
@@ -36,7 +36,7 @@ BMM is itself a meta-model, so the entities below are meta-classes whose instanc
 ## Relations to Other Specs
 
 - Depends on: `LANG/odin` (historical default persistence syntax for serialised schemas — JSON, YAML, or XML may also be used), foundational `BASE` type taxonomy (Any, primitive types).
-- Consumed by: `LANG/bmm_persistence` (P_BMM serialisation format), `AM/AOM2` and `AM/ADL2` (archetype constraints are typed against a BMM model), `RM/*` (each Reference Model package is distributed as a BMM schema set), `QUERY/AQL` (path and type resolution against the RM's BMM), and tooling such as the `type_specification_get` MCP resource that resolves type queries against BMM instances.
+- Consumed by: `LANG/bmm_persistence` (P_BMM serialisation format), `AM/AOM2` and `AM/ADL2` (archetype constraints are typed against a BMM model), `RM/*` (each Reference Model package is distributed as a BMM schema set), `QUERY/AQL` (path and type resolution against the RM's BMM), and tooling such as the `type_specification_get` MCP tool that resolves type queries against BMM instances.
 - Succeeded by (in development): `LANG/bmm3` — the BMM v3 line restructures core into model/entity/feature/literal_value/expression sub-packages and adds an expression meta-model; its status is PAUSED.
 
 ## Architectural Placement

@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/BASE/development/architecture_overview.html
 **Markdown URL:** https://specifications.openehr.org/releases/BASE/development/architecture_overview.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/sm-openehr_platform
 **Keywords:** BASE, architecture, two-level modelling, reference model, archetype, template, composition, platform, deployment, RM/ODP, specification program
 
@@ -41,7 +41,7 @@ This is an overview, so the section is *concepts*, not classes:
 ## Relations to Other Specs
 
 - Depends on: `BASE/foundation_types`, `BASE/base_types` (primitives, identifiers, assumed_types used throughout the tour).
-- Introduces: `RM/*` (EHR, common, data_structures, data_types, demographic, support, integration), `AM/*` (ADL 1.4, ADL 2, AOM, OPT), `SM/openehr_platform` (EHR, definitions, query, terminology, admin services), `QUERY/AQL`, `TERM` (openEHR Terminology + external bindings), `LANG/BMM`, `LANG/ODIN`, `LANG/Expression_Language`, `ITS-REST`, `ITS-JSON`, `ITS-XML`, `CNF`, `PROC/Task_Planning`, `CDS/GDL`.
+- Introduces: `RM/*` (EHR, common, data_structures, data_types, demographic, support, integration), `AM/*` (ADL 1.4, ADL 2, AOM, OPT), `SM/openehr_platform` (EHR, definitions, query, terminology, admin services), `QUERY/AQL`, `TERM` (openEHR Terminology + external bindings), `LANG/bmm`, `LANG/odin`, `LANG/EL`, `ITS-REST`, `ITS-JSON`, `ITS-XML`, `CNF`, `PROC/task_planning`, `CDS/GDL`.
 - External profiles / alignments: ISO 13606, ISO 18308, ISO 13940 (continuity of care), HL7 CDA, ISO RM/ODP five viewpoints.
 
 ## Architectural Placement

@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/TERM/development/SupportTerminology.html
 **Markdown URL:** https://specifications.openehr.org/releases/TERM/development/SupportTerminology.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/rm-common, openehr://guides/specs/rm-ehr
 **Keywords:** terminology, vocabulary, code set, lifecycle state, ISM, attestation, external terminology, ISO
 
@@ -14,7 +14,7 @@
 
 ## Purpose
 
-Defines the non-clinical, informational vocabulary that openEHR models assume exists: the closed code sets and coded terms consumed by RM attributes such as `COMPOSITION.category`, `AUDIT_DETAILS.change_type`, `ENTRY.subject.relationship`, `INSTRUCTION.narrative` / `ISM_TRANSITION`, `ATTESTATION.reason`, `ELEMENT.null_flavour`, and `DV_MULTIMEDIA.media_type` / `character_set`. The specification is explicit that this is not an ontology of clinical reality — it is the minimum classifier vocabulary the models themselves need to be interoperable, with richer clinical coding delegated to SNOMED CT, LOINC, ICD and similar external terminologies.
+Defines the non-clinical, informational vocabulary that openEHR models assume exists: the closed code sets and coded terms consumed by RM attributes such as `COMPOSITION.category`, `AUDIT_DETAILS.change_type`, `ENTRY.subject.relationship`, `ISM_TRANSITION.current_state` / `transition`, `ATTESTATION.reason`, `ELEMENT.null_flavour`, and `DV_MULTIMEDIA.media_type` / `charset`. The specification is explicit that this is not an ontology of clinical reality — it is the minimum classifier vocabulary the models themselves need to be interoperable, with richer clinical coding delegated to SNOMED CT, LOINC, ICD and similar external terminologies.
 
 ## Scope
 
@@ -24,9 +24,9 @@ Defines the non-clinical, informational vocabulary that openEHR models assume ex
 ## Key Classes / Constructs
 
 - `openehr/composition_category` — persistent / episodic / event / report classification for `COMPOSITION.category`.
-- `openehr/version_lifecycle_state` — complete, incomplete, inactive, abandoned states carried on `VERSION`/`VERSIONED_OBJECT`.
-- `openehr/instruction_states` and `openehr/instruction_transitions` — the ISM state machine (planned, scheduled, active, suspended, completed, aborted, cancelled) and its legal transitions for `INSTRUCTION` / `ACTION`.
-- `openehr/attestation_reason` and `openehr/audit_change_type` — reasons for signing/witnessing and the enumerated change kinds (creation, amendment, modification, deleted, attestation, synthesis) on `AUDIT_DETAILS`.
+- `openehr/version_lifecycle_state` — complete, incomplete, deleted, inactive, abandoned; values of `ORIGINAL_VERSION.lifecycle_state`.
+- `openehr/instruction_states` and `openehr/instruction_transitions` — the ISM states (initial, planned, postponed, scheduled, active, suspended, completed, aborted, cancelled, expired) and transitions, recorded in `ACTION.ism_transition`.
+- `openehr/attestation_reason` and `openehr/audit_change_type` — signed/witnessed, and the change kinds on `AUDIT_DETAILS` (creation, amendment, modification, synthesis, deleted, attestation, restoration, format conversion, unknown).
 - `openehr/null_flavours`, `openehr/subject_relationship`, `openehr/participation_function` / `participation_mode`, `openehr/setting` — classifier vocabularies used across `ENTRY`, `PARTICIPATION` and care-context attributes.
 - `openehr/property`, `openehr/event_math_function`, `openehr/term_mapping_purpose` — physical property vocabulary for `DV_QUANTITY` constraints, statistical function labels, and term-mapping provenance.
 - External bindings (code sets, not translated): `languages` (ISO 639-1), `countries` (ISO 3166-1), `character_sets` and `media_types` (IANA), `compression_algorithms`, `integrity_check_algorithms`, `normal_statuses` (HL7).
@@ -36,8 +36,8 @@ For concrete code-to-rubric lookup do not paste content here — call the server
 
 ## Relations to Other Specs
 
-- Consumed by: `RM/common` (audit, attestation, change-control), `RM/ehr` (composition category, ISM, null flavour, subject relationship), `RM/data_types` (`DV_CODED_TEXT`, `DV_MULTIMEDIA`, `DV_QUANTITY` property binding), `RM/demographic` (participation mode/function, settings), `AM` (validation of coded constraints against openEHR terminology groups), `SM`/ITS (extract types, update triggers).
-- Depends on: `RM/support` (`TERMINOLOGY_ID`, `CODE_PHRASE`, `TERMINOLOGY_SERVICE`, `CODE_SET_ACCESS`); external ISO / IANA / HL7 registries for the bound code sets.
+- Consumed by: `RM/common` (attestation reason, audit change type, version lifecycle state, participation function/mode, subject relationship), `RM/ehr` (composition category, territory, language, ISM, setting), `RM/data_structures` (null flavour, event math function), `RM/data_types` (`DV_MULTIMEDIA` codes, normal status, `DV_QUANTITY` property, term-mapping purpose), `RM/ehr_extract` (extract types, actions, update triggers), `AM` (validation of coded constraints against openEHR terminology groups).
+- Depends on: `RM/support` (`TERMINOLOGY_SERVICE`, `CODE_SET_ACCESS`), `RM/data_types` (`CODE_PHRASE`), `BASE/base_types` (`TERMINOLOGY_ID`); external ISO / IANA / HL7 registries for the bound code sets.
 
 ## Architectural Placement
 

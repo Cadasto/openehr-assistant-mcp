@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/RM/development/ehr_extract.html
 **Markdown URL:** https://specifications.openehr.org/releases/RM/development/ehr_extract.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-common, openehr://guides/specs/rm-demographic
 **Keywords:** EHR_EXTRACT, X_VERSIONED_COMPOSITION, EXTRACT_CHAPTER, EXTRACT_FOLDER, transmission, provenance, demographic extract, messaging
 
@@ -24,8 +24,7 @@ The `ehr_extract` package formalises the concepts of *extract request*, *extract
 - `EXTRACT_SPEC` — detailed specification, embedded in the request, of what subset of a target repository is required.
 - `EXTRACT_ACTION_REQUEST` — re-executes a previously persisted extract specification (standing-request pattern).
 - `EXTRACT` — reply envelope carrying the retrieved content and metadata.
-- `EXTRACT_ENTITY_CHAPTER` — groups all content associated with a single entity (typically one patient / EHR subject).
-- `EXTRACT_CHAPTER` — container holding a folder tree of content items within an entity chapter.
+- `EXTRACT_CHAPTER` / `EXTRACT_ENTITY_CHAPTER` — the content units in `EXTRACT.chapters`, each holding a folder tree of items; the entity subtype carries all content of a single entity (typically one patient), so one extract can span several patients.
 - `EXTRACT_FOLDER` — organisational sub-tree mirroring `FOLDER` structures inside an extract.
 - `EXTRACT_CONTENT_ITEM` — abstract parent for payload items (metadata + serialised content reference).
 - `X_VERSIONED_OBJECT<T>` — serialisable form of a versioned object, flattening `VERSIONED_OBJECT<T>` and its `ORIGINAL_VERSION` history for transport.
@@ -35,14 +34,14 @@ The `ehr_extract` package formalises the concepts of *extract request*, *extract
 - `MESSAGE` — lightweight point-to-point envelope around an `EXTRACT_REQUEST` or `EXTRACT`.
 
 ## Relations to Other Specs
-- Depends on: `RM/ehr` (references `COMPOSITION`, `EHR_ACCESS`, `EHR_STATUS`, `VERSIONED_OBJECT<T>`); `RM/common` (generic `PARTICIPATION`, `PARTY_PROXY`, `PARTY_SELF`, `PARTY_IDENTIFIED`, `LOCATABLE`; change-control `ORIGINAL_VERSION`, `CONTRIBUTION`, audit types); `RM/demographic` (`PARTY` subtypes serialised into dedicated demographic chapters); `RM/support` (`OBJECT_REF`, `HIER_OBJECT_ID`, `OBJECT_ID` for rewritten external references); `RM/data_types` (`DV_PARSABLE`, `DV_TEXT`, `DV_CODED_TEXT`, `DV_EHR_URI`, `DV_LINK`, `DV_MULTIMEDIA`, `DV_URI`).
+- Depends on: `RM/ehr` (references `COMPOSITION`, `EHR_ACCESS`, `EHR_STATUS`); `RM/common` (generic `PARTICIPATION`, `PARTY_PROXY`, `PARTY_SELF`, `PARTY_IDENTIFIED`, `LOCATABLE`, `LINK`; change-control `VERSIONED_OBJECT<T>`, `ORIGINAL_VERSION`, `CONTRIBUTION`, audit types); `RM/demographic` (`PARTY` subtypes serialised into dedicated demographic chapters); `BASE/base_types` (`OBJECT_REF`, `HIER_OBJECT_ID`, `OBJECT_ID` for rewritten external references); `RM/data_types` (`DV_PARSABLE`, `DV_TEXT`, `DV_CODED_TEXT`, `DV_EHR_URI`, `DV_MULTIMEDIA`, `DV_URI`).
 - Consumed by: `ITS-XML` and `ITS-JSON` (concrete serialisations of the extract graph); `SM/openehr_platform` (extract and messaging service interfaces); FHIR bridges and CDA gateways that translate extracts into other standards; replication / synchronisation tooling.
 
 ## Architectural Placement
 The EHR Extract model sits *above* the core EHR and demographic information models as a transmission layer: it does not redefine clinical semantics but re-projects existing RM objects into shapes that are self-contained, address-rewritten, and serialisable. It is the canonical bridge between live repository APIs and any ITS-level wire representation.
 
 ## When to Read the Full Spec
-Read it when you need to (a) implement or consume an extract producer/consumer and must understand `EXTRACT_SPEC` filters; (b) reason about the relationship between `VERSIONED_COMPOSITION` in an EHR and its `X_VERSIONED_COMPOSITION` serialised counterpart, including audit-trail preservation; (c) decide how far the demographic graph should be walked and how `PARTY_REF` rewriting affects downstream consumers; or (d) design synchronisation flows where `EXTRACT_ACTION_REQUEST` standing queries trigger recurring transfers.
+Read it when you need to (a) implement or consume an extract producer/consumer and must understand `EXTRACT_SPEC` filters; (b) reason about the relationship between `VERSIONED_COMPOSITION` in an EHR and its `X_VERSIONED_COMPOSITION` serialised counterpart, including audit-trail preservation; (c) decide how far the demographic graph should be walked and how `PARTY_REF` rewriting affects downstream consumers; or (d) design synchronisation flows where `EXTRACT_ACTION_REQUEST` standing queries trigger recurring transfers. For per-class attribute, function, and invariant detail use the BMM-backed `type_specification_get` tool rather than the rendered HTML.
 
 ## References
 - Full spec (HTML): https://specifications.openehr.org/releases/RM/development/ehr_extract.html
