@@ -10,7 +10,7 @@ mechanically. Two enabling policies:
 1. **One set of checks.** PR validation runs the same `composer` scripts that `make ci` runs in the dev
    container, so a green `make ci` predicts a green pull request. The full PR gate is `make ci`.
 2. **Reproducible toolchain.** Locally every check runs in the dev container ([development.md](development.md));
-   in CI the runner provides PHP 8.4 (`setup-php`) and Python 3 for the drift gate.
+   in CI the workflow pins PHP 8.4 (`setup-php`) and Python 3.12 (`setup-python`, for the drift gate).
 
 ## Jobs
 
