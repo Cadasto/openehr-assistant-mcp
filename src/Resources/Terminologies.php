@@ -6,18 +6,26 @@ namespace Cadasto\OpenEHR\MCP\Assistant\Resources;
 use Cadasto\OpenEHR\MCP\Assistant\Helpers\TerminologyXmlLoader;
 use Mcp\Capability\Attribute\McpResource;
 use Mcp\Exception\ResourceReadException;
+use RuntimeException;
 use SimpleXMLElement;
 
 final class Terminologies
 {
     public const string FILE_PATH = APP_RESOURCES_DIR . '/terminology/openehr_terminology.xml';
 
+    public function __construct(
+        private readonly string $filePath = self::FILE_PATH,
+    ) {
+    }
+
     private function loadXml(): SimpleXMLElement
     {
         try {
-            return TerminologyXmlLoader::load(self::FILE_PATH);
-        } catch (\Throwable $e) {
-            throw new ResourceReadException($e->getMessage());
+            return TerminologyXmlLoader::load($this->filePath);
+        } catch (RuntimeException $e) {
+            // The loader reports every failure as a RuntimeException. An \Error is a bug,
+            // not a read failure, so it is left to reach the process boundary unrelabelled.
+            throw new ResourceReadException($e->getMessage(), previous: $e);
         }
     }
 

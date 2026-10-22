@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Resources;
 
+use Cadasto\OpenEHR\MCP\Assistant\Helpers\TerminologyXmlLoader;
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Terminologies;
 use Mcp\Exception\ResourceReadException;
 use Mcp\Server;
@@ -45,5 +46,23 @@ final class TerminologiesTest extends TestCase
         $firstGroup = $result['groups'][0];
         $this->assertEquals('attestation_reason', $firstGroup['openehr_id']);
         $this->assertArrayHasKey('group', $firstGroup);
+    }
+
+    public function test_a_loader_failure_keeps_its_cause(): void
+    {
+        // The loader caches the parsed file whatever path it is given, so empty the cache
+        // to make it read the missing file below. It throws before caching anything.
+        (new \ReflectionProperty(TerminologyXmlLoader::class, 'xml'))->setValue(null, null);
+        $terminologies = new Terminologies(APP_RESOURCES_DIR . '/terminology/no-such-file.xml');
+
+        try {
+            $terminologies->readAll();
+            $this->fail('Expected a ResourceReadException for a missing terminology file.');
+        } catch (ResourceReadException $e) {
+            $previous = $e->getPrevious();
+            $this->assertSame('Terminology file not found or not readable.', $e->getMessage());
+            $this->assertInstanceOf(\RuntimeException::class, $previous);
+            $this->assertSame($e->getMessage(), $previous->getMessage());
+        }
     }
 }
