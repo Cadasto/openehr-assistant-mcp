@@ -35,15 +35,18 @@ register; see [development.md](development.md#gotcha-mcp-discovery-cache).
     `CallToolHandler` validates arguments against the generated `inputSchema`
     *before* your method runs, so a published constraint rejects bad calls rather
     than clamping them. The [constitution](architecture.md#contracts) states the
-    binding part (closed schemas, `null` in null-defaulted enums, conforming output),
+    binding part (closed schemas, strings-only optional enums, conforming output),
     and [REQ-N9](requirements.md) describes the whole capability; the four steps below are only
     *how* to satisfy it in this codebase, guarded by
     `tests/Tools/InputSchemaGuardTest.php`:
     1. Add method-level `#[Schema(additionalProperties: false)]` so unknown
        arguments are rejected instead of silently ignored.
     2. Constrain closed sets with `#[Schema(enum: [...])]`. For an **optional**
-       enum use `?string $x = null` and include `null` **in** the enum list;
-       never `string $x = ''` with `''` as a "no filter" sentinel.
+       enum use `?string $x = null` and list only the string values: never put
+       `null` in the enum, and never use `string $x = ''` with `''` as a "no filter"
+       sentinel. The server's `Helpers\OptionalEnumSchemaGenerator` publishes such a
+       parameter as a plain string enum with no default, so clients omit it for
+       "no filter" and an explicit `null` is rejected.
     3. Bound numeric parameters with `#[Schema(minimum:, maximum:)]`, and say
        "rejected, not clamped" in the description; an in-method `max(min(...))`
        is now only a defence against non-validating callers.

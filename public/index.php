@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 use Cadasto\OpenEHR\MCP\Assistant\Apis\CkmClient;
 use Cadasto\OpenEHR\MCP\Assistant\Helpers\CliOptions;
+use Cadasto\OpenEHR\MCP\Assistant\Helpers\OptionalEnumSchemaGenerator;
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Examples;
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Guides;
 use Cadasto\OpenEHR\MCP\Assistant\Resources\Terminologies;
@@ -77,6 +78,8 @@ try {
     $builder = Server::builder()
         ->setServerInfo(APP_TITLE, APP_VERSION, APP_DESCRIPTION, [new Icon(APP_ICON)])
         ->setDiscovery(APP_DIR, ['src/Prompts', 'src/Tools', 'src/Resources'], cache: $cache)
+        // Publish optional enums as strings only, never with null in enum (constitution § Contracts, #28).
+        ->setSchemaGenerator(new OptionalEnumSchemaGenerator())
         // mcp/sdk 0.7.0 makes element loading lazy by default. Force eager
         // loading so a broken capability fails at build() (on every request
         // under php-fpm, and at startup under stdio) rather than on first use —

@@ -94,7 +94,7 @@ final readonly class ExamplesService
     )]
     public function search(
         string $query = '',
-        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes', null])]
+        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes'])]
         ?string $kind = null,
         #[Schema(minimum: 1, maximum: self::MAX_RESULTS_LIMIT)]
         int $maxResults = self::DEFAULT_MAX_RESULTS,
@@ -166,7 +166,7 @@ final readonly class ExamplesService
     )]
     public function get(
         string $uri = '',
-        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes', null])]
+        #[Schema(enum: ['aql', 'flat', 'structured', 'archetypes'])]
         ?string $kind = null,
         string $name = '',
     ): EmbeddedResource

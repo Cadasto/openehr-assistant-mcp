@@ -90,7 +90,9 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
 `CliOptions` (transport option parsing), `Map` (data shaping),
 `TerminologyXmlLoader` (loads the bundled openEHR terminology XML),
 `SearchTokenizer` (the one query tokenizer shared by `guide_search` and
-`examples_search`, so the two cannot rank the same query differently).
+`examples_search`, so the two cannot rank the same query differently),
+`OptionalEnumSchemaGenerator` (wraps the SDK schema generator so optional enum
+parameters are published as strings only, with no `null`; REQ-N9).
 
 ### Static content: `resources/`
 `guides/`, `examples/`, `bmm/` (BMM JSON for type specs), `terminology/`,
@@ -118,8 +120,8 @@ the constitution disagree, the constitution's MUST sentences win.
   return value that fails its `outputSchema` is replaced by a failed
   (`isError`) tool result, so output drift that ships breaks the tool for
   every caller. The contract is therefore pinned in CI from both sides:
-  `InputSchemaGuardTest` reflects every `#[McpTool]` method for closed,
-  self-consistent inputs, and `OutputSchemaConformanceTest` checks each tool's
+  `InputSchemaGuardTest` reflects every `#[McpTool]` method for closed
+  inputs and strings-only optional enums, and `OutputSchemaConformanceTest` checks each tool's
   output, also through the SDK's own validator on the value as sent, before it
   can reach a client. The authoring rules that satisfy this live in
   [conventions.md](conventions.md#mcp-capabilities-authoring).

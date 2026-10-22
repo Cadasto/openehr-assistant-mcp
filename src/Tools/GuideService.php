@@ -101,7 +101,7 @@ final class GuideService
     )]
     public function search(
         string $query = '',
-        #[Schema(enum: ['archetypes', 'templates', 'aql', 'simplified_formats', 'specs', 'howto', null])]
+        #[Schema(enum: ['archetypes', 'templates', 'aql', 'simplified_formats', 'specs', 'howto'])]
         ?string $category = null,
         ?string $taskType = null,
         #[Schema(minimum: 1, maximum: self::MAX_RESULTS_LIMIT)]
@@ -254,7 +254,7 @@ final class GuideService
     )]
     public function get(
         string $uri = '',
-        #[Schema(enum: ['archetypes', 'templates', 'aql', 'simplified_formats', 'specs', 'howto', null])]
+        #[Schema(enum: ['archetypes', 'templates', 'aql', 'simplified_formats', 'specs', 'howto'])]
         ?string $category = null,
         string $name = '',
     ): EmbeddedResource
