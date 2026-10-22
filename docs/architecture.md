@@ -104,13 +104,16 @@ in tests. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)
   remains the sole canonical source for full global policy.
   → [ADR-0003](decisions/0003-prompt-policy-split.md)
 - **Schemas are the wire contract (REQ-N9).** Tool schemas are published to
-  clients, and the SDK enforces only the input half: `CallToolHandler` validates
-  arguments against the generated `inputSchema` before a method runs, but return
-  values are never checked against `outputSchema`. The asymmetry is why the
-  contract is pinned in CI from both sides: `InputSchemaGuardTest` reflects every
-  `#[McpTool]` method for closed, self-consistent inputs, and
-  `OutputSchemaConformanceTest` is the *only* enforcement the output half has
-  anywhere. The authoring rules that satisfy this live in
+  clients, and the SDK checks both halves at runtime, but differently:
+  `CallToolHandler` validates arguments against the generated `inputSchema`
+  before a method runs and refuses a bad call, while since `mcp/sdk` 0.9 a
+  return value that fails its `outputSchema` is replaced by a failed
+  (`isError`) tool result, so output drift that ships breaks the tool for
+  every caller. The contract is therefore pinned in CI from both sides:
+  `InputSchemaGuardTest` reflects every `#[McpTool]` method for closed,
+  self-consistent inputs, and `OutputSchemaConformanceTest` checks each tool's
+  output, also through the SDK's own validator on the value as sent, before it
+  can reach a client. The authoring rules that satisfy this live in
   [conventions.md](conventions.md#mcp-capabilities-authoring).
 - **Spec alignment (REQ-N1).** Standards content is retrieved from authoritative
   sources, cheapest representation first.
