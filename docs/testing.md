@@ -76,6 +76,11 @@ change.
 make spec-check
 ```
 
+`scripts/sdd-check.py` is the sdd plugin's own gate, vendored and version-pinned in
+[.sdd.yaml](.sdd.yaml) so the `/sdd-*` skills run a known copy. Neither `make ci` nor
+PR validation runs it: it does not yet accept this repo's `REQ-F1` identifier style
+or map format, so the PHP gate above remains the CI gate.
+
 ## Before pushing
 
 Run **`make ci`**, which runs `composer check:spec`, `composer check:phpstan`, and

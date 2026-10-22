@@ -1,3 +1,7 @@
+---
+kind: plan
+---
+
 # MCP audit remediation — design
 
 **Date:** 2026-07-28  

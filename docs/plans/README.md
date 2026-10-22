@@ -1,3 +1,7 @@
+---
+kind: plan
+---
+
 # Plans
 
 Implementation plans — the **only** place checkbox task lists live in this SDD
