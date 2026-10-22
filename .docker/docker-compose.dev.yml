@@ -50,15 +50,11 @@ services:
     image: ghcr.io/modelcontextprotocol/inspector:2.12.0@sha256:37856880200651eab70a8b9ce2649d86beabea5447a8c64a8fe5b407907462fe
     profiles: ["inspector"]
     command: ["--web", "--config", "/config/inspector-servers.json"]
-    # The Inspector accepts only loopback by default, twice over: its web server refuses
-    # any other `Host` (2.12+), and its API refuses calls (connect, send) from any other
-    # browser `Origin` — the server list still loads, as same-origin GETs carry no
-    # Origin. Admit the dev vhost so the UI also works at openehr-assistant-mcp.local:6274.
-    # ALLOWED_ORIGINS replaces the defaults, so the loopback origins are repeated;
-    # MCP_INSPECTOR_ALLOWED_HOSTS adds to them.
+    # Open the UI at localhost:6274 (the URL `make inspector` prints). The Inspector
+    # admits only loopback hosts and origins by default, and over plain http only
+    # loopback is a secure context, which the UI needs (crypto.randomUUID); so another
+    # address, such as the .local vhost, cannot run it even if admitted.
     environment:
-      ALLOWED_ORIGINS: "http://localhost:6274,http://127.0.0.1:6274,http://[::1]:6274,http://openehr-assistant-mcp.${DOMAIN:-local}:6274"
-      MCP_INSPECTOR_ALLOWED_HOSTS: "openehr-assistant-mcp.${DOMAIN:-local}"
       MCP_INSPECTOR_SECRET_STORE: memory
     volumes:
       - ./inspector-servers.json:/config/inspector-servers.json:ro
