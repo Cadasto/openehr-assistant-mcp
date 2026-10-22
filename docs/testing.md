@@ -38,7 +38,7 @@ Conventions:
 | `tests/Tools/InputSchemaGuardTest.php` | Every `#[McpTool]` input schema is closed and self-consistent (REQ-N9) |
 | `tests/Tools/OutputSchemaConformanceTest.php` | Tool output conforms to its declared `outputSchema`, also through the SDK's runtime check, which turns a mismatch into an `isError` result (REQ-N9) |
 | `tests/Content/InstallDocContractTest.php` | `docs/install.md` keeps the path, hosted-endpoint section, and relative links the website relies on (REQ-N10) |
-| `tests/Content/HttpBoundaryTest.php` | No code outside `src/Apis/CkmClient` builds an HTTP transport or opens a network stream (constitution § Boundaries, ADR-0002) |
+| `tests/Content/HttpBoundaryTest.php` | No PHP under `src/` or `public/` other than `src/Apis/CkmClient` builds an HTTP transport or opens a network stream (constitution § Boundaries, ADR-0002) |
 | `tests/Content/DiscoveryCacheNamespaceTest.php` | The discovery cache is namespaced by `APP_VERSION` (REQ-N4, ADR-0001) |
 | `tests/Content/SpecLookupAndReadmeClaimsTest.php` | The spec-lookup guide points at the `development` branch; the README's guide claims match (REQ-N1) |
 

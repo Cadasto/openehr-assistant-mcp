@@ -47,7 +47,6 @@ it serves, is in [components.md](components.md).
   stable by convention; no test pins them yet, so they are not bound here.
 - The test mirror (one `tests/…/*Test` per `src/` class) is a convention: `CliOptions`, `SearchTokenizer`,
   `TerminologyXmlLoader` and `CompletionProviders\Examples` have none.
-- `PromptPolicySeparationTest` checks only the four explorer prompts for restated global policy.
 - Deriving openEHR standards content (guides, digests, prompts, examples, terminology, type specifications)
   from authoritative sources (the specifications' `development` branch, CKM, the published BMM schemas)
   rather than model memory is the rule of [ADR-0005](decisions/0005-spec-aligned-content-retrieval.md);
