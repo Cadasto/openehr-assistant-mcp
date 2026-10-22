@@ -226,7 +226,7 @@ composer check:phpstan
 |--------|---------|
 | `make up-dev` / `make up` | Start dev (live mounts, port 8343) / production-like containers |
 | `make install` | Install Composer deps in the dev container |
-| `make spec-check` | SDD traceability drift gate |
+| `make spec-check` | SDD drift gate (`sdd-check` over the docs) |
 | `make ci` | spec-check, PHPStan, and tests (mirrors PR validation) |
 | `make conformance` | MCP conformance suite (stack must be up) |
 | `make inspector` / `make inspector-stop` | Start / stop the MCP Inspector UI |

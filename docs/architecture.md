@@ -12,9 +12,10 @@ it serves, is in [components.md](components.md).
 
 ## Boundaries
 
-- Outbound network access MUST go only through the API client layer in `src/Apis/`, which today holds one
-  client, `CkmClient`. Classes outside `src/Apis/`, and code under `public/`, MUST NOT construct an HTTP
-  client or open a network stream ([ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)).
+- Outbound network access MUST go only through `src/Apis/CkmClient`
+  ([ADR-0002](decisions/0002-single-ckmclient-http-boundary.md)). Every other class under `src/`, and code
+  under `public/`, MUST NOT construct an HTTP transport (a Guzzle or PSR-18 client, Symfony HttpClient,
+  cURL) or open a network stream; they reach CKM by calling `CkmClient`.
 - The discovery cache MUST be namespaced by `APP_VERSION`, so a release never serves capabilities cached by
   an earlier one ([ADR-0001](decisions/0001-attribute-driven-discovery.md)).
 
@@ -27,7 +28,7 @@ it serves, is in [components.md](components.md).
   `resources/prompts/` MUST NOT restate it; the shared policy block prepended to every prompt MAY restate a
   subset, for clients that drop the MCP `instructions` field
   ([ADR-0003](decisions/0003-prompt-policy-split.md)).
-- Each prompt's message length MUST stay within its baseline in
+- Each prompt template under `resources/prompts/` MUST stay within its character and word budget in
   `tests/fixtures/prompt_lengths_before_shared.json`.
 - `docs/install.md` MUST stay at that path, keep a section that offers the hosted endpoint and names its
   URL, and keep every relative link resolving: the public website fetches the file at a released tag
@@ -35,9 +36,8 @@ it serves, is in [components.md](components.md).
 
 ## Data
 
-- openEHR standards content (guides, specification digests, prompts, examples, terminology, type
-  specifications) MUST be derived from authoritative sources: `specifications.openehr.org` on its
-  `development` branch, CKM, and the published BMM schemas. It MUST NOT be written from model memory
+- The spec-lookup how-to (`resources/guides/howto/spec-lookup.md`) MUST direct specification lookups to
+  the `development` branch of `specifications.openehr.org`
   ([ADR-0005](decisions/0005-spec-aligned-content-retrieval.md)).
 - The server holds no patient or EHR data; it serves knowledge content only.
 
@@ -48,3 +48,7 @@ it serves, is in [components.md](components.md).
 - The test mirror (one `tests/…/*Test` per `src/` class) is a convention: `CliOptions`, `SearchTokenizer`,
   `TerminologyXmlLoader` and `CompletionProviders\Examples` have none.
 - `PromptPolicySeparationTest` checks only the four explorer prompts for restated global policy.
+- Deriving openEHR standards content (guides, digests, prompts, examples, terminology, type specifications)
+  from authoritative sources (the specifications' `development` branch, CKM, the published BMM schemas)
+  rather than model memory is the rule of [ADR-0005](decisions/0005-spec-aligned-content-retrieval.md);
+  review enforces it, since no test can, so it is not bound here.

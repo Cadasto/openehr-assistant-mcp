@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
 
-      - name: Validate SDD traceability (spec-check)
+      - name: SDD drift gate (spec-check)
         run: composer check:spec
 
       - name: Run PHPStan

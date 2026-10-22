@@ -58,11 +58,11 @@ sdd:
       map-to-tree: error
       index-sync: error
       tree-to-map: warn
-      doc-kinds: warn
+      doc-kinds: error
       rfc2119: warn                # the per-kind table in sdd-check.md still errors for requirement/adr/reference
       one-home: error
       links: error
-      changelog: warn
+      changelog: error
       generated: error
       draft-reason: off
 

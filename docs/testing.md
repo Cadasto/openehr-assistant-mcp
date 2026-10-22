@@ -8,8 +8,8 @@ This page is for contributors checking a change before they push: how to run the
 PHPUnit suite, PHPStan, coverage, the MCP conformance suite, and the SDD drift gate.
 It is the operational companion to the [SDD docs](README.md) and satisfies REQ-N2,
 REQ-N3, and REQ-N6. Tests are what make the [constitution](architecture.md) bind:
-each of its MUST sentences has a test that fails when the rule breaks, and `src/`
-classes have a mirrored `tests/…/*Test`.
+each of its MUST sentences has a test that fails when the rule breaks (the Guard tests
+below), and most `src/` classes have a mirrored `tests/…/*Test`.
 
 All commands run **inside the dev container** (see [development.md](development.md)).
 Start the stack first with `make up-dev && make install`.
@@ -38,6 +38,9 @@ Conventions:
 | `tests/Tools/InputSchemaGuardTest.php` | Every `#[McpTool]` input schema is closed and self-consistent (REQ-N9) |
 | `tests/Tools/OutputSchemaConformanceTest.php` | Tool output conforms to its declared `outputSchema`, also through the SDK's runtime check, which turns a mismatch into an `isError` result (REQ-N9) |
 | `tests/Content/InstallDocContractTest.php` | `docs/install.md` keeps the path, hosted-endpoint section, and relative links the website relies on (REQ-N10) |
+| `tests/Content/HttpBoundaryTest.php` | No code outside `src/Apis/CkmClient` builds an HTTP transport or opens a network stream (constitution § Boundaries, ADR-0002) |
+| `tests/Content/DiscoveryCacheNamespaceTest.php` | The discovery cache is namespaced by `APP_VERSION` (REQ-N4, ADR-0001) |
+| `tests/Content/SpecLookupAndReadmeClaimsTest.php` | The spec-lookup guide points at the `development` branch; the README's guide claims match (REQ-N1) |
 
 ## Static analysis (PHPStan, REQ-N3)
 
