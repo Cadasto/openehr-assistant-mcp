@@ -39,11 +39,11 @@ ps: ## List running containers for this project
 
 ##@ Build images
 
-build: ## Build production image
-	$(DOCKER_COMPOSE) build
+build: ## Build production image (pulls the latest PHP base)
+	$(DOCKER_COMPOSE) build --pull
 
-build-dev: ## Build dev image
-	$(DOCKER_COMPOSE_DEV) build
+build-dev: ## Build dev image (pulls the latest PHP base)
+	$(DOCKER_COMPOSE_DEV) build --pull
 
 ##@ Development Workflow
 

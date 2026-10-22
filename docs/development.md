@@ -29,7 +29,9 @@ make install     # install Composer dev dependencies (inside the container)
 
 The dev override mounts the source and exposes the `streamable-http` SSE endpoint
 on port **8343** (via the Caddy `ingress` reverse proxy). PHP 8.4 is provided by
-the multi-stage `.docker/Dockerfile`.
+the multi-stage `.docker/Dockerfile`, whose build fails on a PHP base older than the
+release that fixes CVE-2026-109618 and CVE-2026-109619 (8.4.27); `make build-dev`
+pulls the latest base. An image built before that release must be rebuilt.
 
 ## Maintainer tooling (Claude Code / Cursor)
 
@@ -54,7 +56,7 @@ Cursor: add the dev-plugin repository under **Settings → Plugins** (Git URL or
 | Service | Role |
 |---------|------|
 | `app` | Application container, for production-like and (with dev overrides) development runs. |
-| `ingress` | Caddy reverse proxy. |
+| `ingress` | Caddy reverse proxy. Refuses multipart bodies (`415`), which an MCP client never sends, and bodies over 8 MB. |
 | `node` | Dev-only: Node and curl, used by `make conformance` and other npx/curl tooling. |
 | `inspector` | Dev-only, on-demand (`inspector` profile): MCP Inspector v2 UI; see [below](#testing-with-the-mcp-inspector-ui). |
 
@@ -234,7 +236,7 @@ composer check:phpstan
 | `make sh` | Shell into the dev container |
 | `make logs` / `make ps` | Tail logs / list containers |
 | `make down` / `make clean` | Stop / stop and remove volumes |
-| `make build` / `make build-dev` | Build prod / dev images |
+| `make build` / `make build-dev` | Build prod / dev images, pulling the latest PHP base |
 | `make env` | Create `.env` from `.env.example` |
 
 ## Project structure
@@ -250,7 +252,7 @@ composer check:phpstan
   - `templates/`: guide and spec-digest authoring conventions and templates
   - `constants.php`: loads env and defaults (incl. `APP_VERSION`)
 - `resources/`: guides, examples, BMM JSON, terminology, prompt bodies, `server-instructions.md`
-- `.docker/`: `docker-compose.yml` (`app`, `ingress`), `docker-compose.dev.yml` (port 8343, `node`), multi-stage `Dockerfile`, `Caddyfile`, PHP config
+- `.docker/`: `docker-compose.yml` (`app`, `ingress`), `docker-compose.dev.yml` (port 8343, `node`), multi-stage `Dockerfile`, `Caddyfile`, PHP config (`php/zz-security.ini` holds the hardening from PHP's CVE-2026-109618/109619 advisory)
 - `tests/`: PHPUnit tests and PHPStan config
 - `scripts/`: repo tooling, among it `sdd-check.py`, the sdd plugin's drift gate (vendored; never edit it by hand)
 - `docs/`: Specification-Driven Development docs (see [README](README.md))

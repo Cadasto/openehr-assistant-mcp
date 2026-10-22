@@ -4,6 +4,13 @@ ARG PHP_VERSION=8.4
 # Application base
 #
 FROM php:${PHP_VERSION}-fpm-alpine AS base
+# Refuse a base image without the fix for CVE-2026-109618 and CVE-2026-109619 (PHP 8.4.27, 8.5.12),
+# such as a stale local copy of the floating tag: rebuild with --pull.
+RUN php -r '$fixed = ["8.4" => "8.4.27", "8.5" => "8.5.12"][PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION] ?? null; \
+    if ($fixed !== null && version_compare(PHP_VERSION, $fixed, "<")) { \
+        fwrite(STDERR, "PHP " . PHP_VERSION . " lacks the fix for CVE-2026-109618 and CVE-2026-109619; it needs " . $fixed . ". Rebuild with --pull.\n"); \
+        exit(1); \
+    }'
 # Install extensions and tools
 RUN set -eux \
     && apk update && apk upgrade --no-cache \
@@ -14,6 +21,7 @@ RUN set -eux \
 # Add production PHP INI overlays (keep extension configs clean in .docker/php)
 COPY .docker/php/opcache.ini /usr/local/etc/php/conf.d/
 COPY .docker/php/zz-overwrites.ini /usr/local/etc/php/conf.d/
+COPY .docker/php/zz-security.ini /usr/local/etc/php/conf.d/
 COPY .docker/php-fpm.d/docker.conf /usr/local/etc/php-fpm.d/
 ENV APP_ENV=production
 # Source code location
