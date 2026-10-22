@@ -1,5 +1,7 @@
 <?php /** @noinspection PhpDefineCanBeReplacedWithConstInspection */
 
+declare(strict_types=1);
+
 define('APP_NAME', 'openehr-assistant-mcp');
 define('APP_TITLE', 'openEHR Assistant');
 define('APP_DESCRIPTION', 'MCP Server to assist with various openEHR specifications or modeling related tasks.');
