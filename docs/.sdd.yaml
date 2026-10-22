@@ -2,14 +2,14 @@
 # Declares this repo's SDD conventions so tooling (and the sdd-* skills) stay
 # repo-agnostic. Schema: cadasto/sdd references/traceability-schema.md.
 #
-# This repo runs a deliberately *lightweight* rung-2 (spec-anchored) SDD: the
-# requirements index and the design narrative carry the normative prose; the
-# machine-readable map below is validated against the tree by `make spec-check`.
+# This repo runs the sdd plugin's *informative* profile: the code leads, docs/ is a
+# knowledge base that describes it, and only the constitution (docs/architecture.md)
+# binds. The vendored gate checks the documents (`make spec-check`).
 sdd:
-  profile: formal                   # formal | informative (methodology §1a)
+  profile: informative              # formal | informative (methodology §1a)
 
-  # Requirement identifiers are area-prefixed: REQ-F# (functional) and
-  # REQ-N# (non-functional). Never switch styles — it would renumber published IDs.
+  # Capability identifiers keep their published form: REQ-F# (functional) and
+  # REQ-N# (non-functional), catalogued in docs/requirements.md. Never renumber one.
   req_style: area-prefixed
   req_areas: [F, N]
   req_gap: 1
@@ -21,17 +21,14 @@ sdd:
   default_mode: spec-first          # the mode a specification has when its frontmatter names none
 
   paths:
-    requirements: docs/requirements.md   # single-file index (not a per-REQ directory)
-    specifications: docs/architecture.md # design narrative; requirements.md owns the normative one-liners
+    constitution: docs/architecture.md   # the one binding document (informative profile)
     adr: docs/decisions                  # ADRs live under decisions/, MADR-lite
-
-  traceability: docs/traceability.yaml   # machine-readable map, beside the human docs/traceability.md
 
   forge: auto                       # auto | github | azure-devops | none — how sdd-pr reaches the pull request
 
   build_entrypoint: make
   ci_target: ci                          # `make ci` — the full PR gate
-  spec_check_target: spec-check          # `make spec-check` — the traceability drift gate
+  spec_check_target: spec-check          # `make spec-check` — the documentation drift gate
 
   use_probes: false                      # MCP conformance is covered by `make conformance`, not PROBE-* ids
   use_strands: false

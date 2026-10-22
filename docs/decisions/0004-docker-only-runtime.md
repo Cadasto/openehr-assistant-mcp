@@ -1,8 +1,16 @@
+---
+kind: adr
+id: ADR-0004
+title: "Docker-only runtime; no host PHP/Composer"
+status: accepted
+date: 2026-06-08
+---
+
 # ADR-0004 — Docker-only runtime; no host PHP/Composer
 
-- **Status:** Accepted
-- **Requirements:** REQ-N5 (reproducible runtime)
-- **Related:** [development.md](../development.md), [testing.md](../testing.md)
+## Status
+
+Accepted
 
 ## Context
 
@@ -31,3 +39,8 @@ otherwise).
   the documented default.
 - Conformance testing relies on the dev-only `node` service (Node + curl) over
   HTTP — see [testing.md](../testing.md).
+
+## Traceability
+
+- Amends: REQ-N5 (reproducible runtime)
+- Related: [development.md](../development.md), [testing.md](../testing.md)
