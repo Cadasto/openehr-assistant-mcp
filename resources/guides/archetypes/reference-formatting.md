@@ -47,7 +47,7 @@
 | Author/editor section | Period |
 | Title | Period (or `?`/`!`) |
 | Journal title | Period |
-| Publication info (place, publisher) | Parentheses + semicolon: `(Place: Publisher);` |
+| Publication info (place, publisher) | Colon + semicolon: `Place: Publisher;` |
 | Date before volume/issue | Semicolon |
 | Brackets | Translations `[text]`, article types `[Letter]`, access dates `[cited 2024 Jan 15]` |
 | Parentheses | Edition `(2nd ed.)`, issue `(Suppl 2)` |
@@ -79,7 +79,7 @@
 
 ## G. Page Numbers
 
-- Inclusive ranges: `123-145`.
+- Inclusive ranges: `123-45`.
 - Omit repeated digits: `123-5` (not `123-125`).
 - Journal articles: no `p.`/`pp.` prefix; direct numbers.
 - Books: total pages with `p.`: `660 p.` or `viii, 660 p.`
@@ -95,7 +95,7 @@ Optional elements: article type `[Letter]`, author affiliations, language note, 
 
 ```text
 Smith, J. A., Jones, M. K., and Williams, R. L. Efficacy of novel therapeutic intervention
-in acute myocardial infarction. Journal of the American Medical Association. 2024 Jan 15;148(3):123-145.
+in acute myocardial infarction. Journal of the American Medical Association. 2024 Jan 15;148(3):123-45.
 doi: 10.1001/jama.2024.123456
 ```
 
@@ -121,7 +121,7 @@ Boston, Massachusetts: Harvard University Press; 2024. 660 p.
 ```text
 Williams, R. L. Management of acute complications. In: Smith, J. A., and Jones, M. K., eds.
 The comprehensive guide to cardiovascular disease. 2nd ed. Boston, Massachusetts:
-Harvard University Press; 2024. pp. 123-145.
+Harvard University Press; 2024. pp. 123-45.
 ```
 
 ---
@@ -169,7 +169,7 @@ Harvard Medical School; 2024. 250 p. Advisor: Prof. J. A. Smith.
 Smith, J. A., and Jones, M. K. Novel therapeutics in acute myocardial infarction.
 In: Proceedings of the International Conference on Cardiovascular Medicine;
 held in Boston, Massachusetts, USA; June 15-18, 2024. Boston: American Heart Association; 2024.
-pp. 234-245.
+pp. 234-45.
 ```
 
 ---

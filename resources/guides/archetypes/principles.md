@@ -30,7 +30,7 @@ Archetypes are terminology-neutral; external code systems (SNOMED CT, LOINC) can
 
 ## Unique Identification, Paths, and Locatability
 
-Each archetype node has a **stable identifier** (at-code) and a **unique semantic path**, enabling AQL querying and unambiguous data access. Paths are a public API; stability across compatible versions is mandatory.
+Each LOCATABLE archetype node (not DV_* data-type nodes) has a **stable identifier** (at-code) and a **unique semantic path**, enabling AQL querying and unambiguous data access. Paths are a public API; stability across compatible versions is mandatory.
 
 ---
 

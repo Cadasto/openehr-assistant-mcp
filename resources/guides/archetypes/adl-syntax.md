@@ -29,7 +29,7 @@ An archetype constrains RM classes, attributes, occurrences/cardinalities, and d
 - **C_COMPLEX_OBJECT** — complex RM type with attributes
 - **C_PRIMITIVE_OBJECT** — primitive types (String, Integer, Date, etc.)
 - **C_ATTRIBUTE** — attribute constraint; has `rm_attribute_name`, `existence`
-    - **C_SINGLE_ATTRIBUTE** — single-valued (one child)
+    - **C_SINGLE_ATTRIBUTE** — single-valued; its children are alternatives (one occurs in data)
     - **C_MULTIPLE_ATTRIBUTE** — container with `cardinality`
 - **ARCHETYPE_SLOT** — placeholder via `include`/`exclude` assertions
 - **ARCHETYPE_INTERNAL_REF** — reuse constraint from elsewhere in same archetype via `target_path` (ADL: `use_node`)
@@ -107,16 +107,17 @@ value matches { DV_TEXT matches {*} }
 - **occurrences** — object nodes; how many times object may appear; default when unstated is `{1..1}`
 - **cardinality** — container attributes; how many children allowed
 
-> Never confuse occurrences with cardinality. They must be mutually consistent: the sum of sibling occurrences ranges must fit inside the container cardinality (validator-tooling check `VCOC`).
+> Never confuse occurrences with cardinality. They must be mutually consistent: the sum of sibling occurrences ranges must fit inside the container cardinality (ADL 1.4 validity rule `VCOC`).
 
 ### Internal References (use_node)
 
 Reuse constraints from elsewhere in same archetype:
 ```adl
-use_node CLUSTER[at0010] /items[at0005]
+use_node CLUSTER /items[at0005]
 ```
 
-- The stated RM type must be the same as, or a supertype of, the target node's type (validator-tooling check `VUNT`)
+- ADL 1.4 grammar: `use_node TYPE [occurrences] path`, with no node id after the type
+- The stated RM type must be the same as, or a supertype of, the target node's type (ADL 1.4 validity rule `VUNT`)
 - An `occurrences` constraint on the reference overrides the target node's occurrences; if absent, the target's occurrences apply
 
 ### Leaf Nodes
@@ -151,9 +152,7 @@ Slots (allow_archetype, include, exclude) must:
 
 ## Versioning
 
-- Syntax-only changes → patch
-- Constraint changes → minor/major
-- Structural refactoring → major
+See `openehr://guides/archetypes/rules` §G (major/minor/patch rules per the AM Identification spec).
 
 ---
 
@@ -162,7 +161,7 @@ Slots (allow_archetype, include, exclude) must:
 - Invalid RM attribute names
 - Missing term definitions
 - Unconstrained DV_* everywhere
-- `matches {*}` as default
+- `matches {*}` as default where a universal constraint exists (open `DV_TEXT matches {*}` for free text is fine)
 - Template logic in archetypes
 
 ---

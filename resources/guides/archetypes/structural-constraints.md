@@ -22,7 +22,7 @@ Archetypes optimise for reuse and safety, not local workflows.
 
 - Allowed values (ADL 1.4): `{0}`/`{0..0}` (attribute prohibited), `{0..1}` (optional), `{1}`/`{1..1}` (mandatory); default when unstated is `{1..1}`
 - Mandatory only when intrinsic to the concept
-- Optional by default
+- Otherwise state `{0..1}` explicitly (the unstated default is mandatory)
 
 **Note:** Existence applies to attributes. For object-level optionality, use **occurrences**.
 
@@ -32,14 +32,13 @@ Archetypes optimise for reuse and safety, not local workflows.
 
 **Cardinality** (on container attributes like `items`, `events`) defines how many children the container may hold.
 
-- **Default for containers:** `1..*` (at least one child; empty containers are semantically invalid)
+- Container cardinality (no ADL 1.4 default; prefer `1..*`; `ITEM_TREE` exception): see `openehr://guides/archetypes/rules` §C2
 - Single vs repeating reflects real-world semantics
-- Avoid `0..*` defaults (an empty container has no meaning)
 - Upper bounds must be clinically justified
 
 **Occurrences** (on object nodes) defines how many times an object may appear in its parent; separate from cardinality. Default when unstated (ADL 1.4) is `{1..1}`; `{0}`/`{0..0}` prohibits the node.
 
-**Consistency:** the interval (sum of sibling occurrences minima)..(sum of sibling occurrences maxima) must lie inside the container's cardinality interval (validator-tooling check `VCOC`).
+**Consistency:** the interval (sum of sibling occurrences minima)..(sum of sibling occurrences maxima) must lie inside the container's cardinality interval (ADL 1.4 validity rule `VCOC`).
 
 ---
 

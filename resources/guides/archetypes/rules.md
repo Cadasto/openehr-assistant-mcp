@@ -25,7 +25,7 @@
 ## C. Structural Modelling
 
 - **C1:** RM structures SHALL be used as intended; do not compensate for missing application features.
-- **C2:** Cardinalities SHALL be justified by clinical reality, not UI convenience. Container cardinality defaults to `1..*`; empty containers are invalid. **Exception:** `ITEM_TREE.items {0..*}` is idiomatic when a contained ELEMENT is mandatory (e.g. `ecg_result.v1`) — flag only genuinely empty/all-optional containers.
+- **C2:** Cardinalities SHALL be justified by clinical reality, not UI convenience. ADL 1.4 has **no default cardinality** (an attribute without one is read as single-valued), so state it on container attributes; prefer `1..*`, since an empty container has no meaning. **Exception:** `ITEM_TREE.items {0..*}` is idiomatic when a contained ELEMENT is mandatory (e.g. `ecg_result.v1`) — flag only genuinely empty/all-optional containers.
 - **C3:** Maximise optionality in archetypes; restriction belongs in templates.
 - **C4:** Leaf nodes SHALL use appropriate RM data types (DV_QUANTITY, DV_CODED_TEXT, etc.).
 - **C5:** Repeating structures SHALL use RM repetition, not duplicated nodes.
@@ -61,7 +61,7 @@
 
 ## F. Paths and Identifiers
 
-- **F1:** All nodes SHALL have stable identifiers (at-codes) unchanged across compatible versions.
+- **F1:** All LOCATABLE nodes (not DV_* data-type nodes) SHALL have stable identifiers (at-codes) unchanged across compatible versions.
 - **F2:** Archetype paths SHALL remain stable for AQL query compatibility.
 - **F3:** Path design SHOULD support intuitive semantic querying.
 
@@ -70,7 +70,7 @@
 ## G. Versioning
 
 - **G1:** Semantic or data-invalidating changes SHALL trigger a major version increment.
-- **G2:** Additive, backward-compatible changes MAY increment minor or patch versions.
+- **G2:** Additive, backward-compatible changes to the formal definition (new nodes, widened constraints, new bindings) SHALL increment at least the minor version; changes to informal parts only (metadata, translations, term wording) SHALL increment at least the patch version.
 - **G3:** Deprecated elements SHOULD be retained and marked, not removed.
 - **G4:** Versioning decisions SHALL be based on semantic impact.
 
@@ -94,15 +94,13 @@
 
 ---
 
-## J. Archetype Validity Codes (Tooling)
+## J. Archetype Validity Codes
 
-These codes are emitted by archetype **validator tooling** (ADL Workbench,
-`archie`, CKM) — they are **not** defined in the ADL 1.4 or AOM 1.4
-specification text. The formal mnemonic validity-code framework is an **AOM2**
-construct (AOM2 defines the normative superset, e.g. `VARID`, `VARCN`,
-`VARDT`, `VATDF`, `VACDF`); tooling adds further codes beyond it (e.g. `VUNT`
-in `archie`, `VCOC` in ADL Workbench). They are useful to recognise in tool
-output:
+Normative **ADL 1.4 validity rules** (ADL 1.4 "Validity Rules" section; `VCOC`
+under occurrences, `VUNT` under internal references); the spec recommends that
+tools report errors by these codes. AOM2 keeps `VARID`, `VARCN`, `VARDT`,
+`VATDF`, `VACDF`, `VDFAI`, `VUNT`; `VARDF`, `VARON`, `VDFPT`, `VCOC` are
+ADL 1.4 only (AOM2's analogue of `VCOC` is `VACMCU`).
 
 - **VARID:** Valid `archetype_id` per openEHR specification
 - **VARCN:** `concept` references a term in ontology
@@ -121,8 +119,9 @@ output:
 ## K. AOM 1.4 Structural Invariants
 
 - C_ATTRIBUTE: `Rm_attribute_name_valid`, `Existence_set`, `Children_validity`
-- C_MULTIPLE_ATTRIBUTE: `Cardinality_valid`, `Members_valid`
+- C_SINGLE_ATTRIBUTE: `Members_valid` (each alternative's occurrences upper ≤ 1)
+- C_MULTIPLE_ATTRIBUTE: none (`cardinality` is a mandatory attribute)
 - ARCHETYPE_SLOT: `Includes_valid`, `Excludes_valid`, `Validity`
-- ARCHETYPE_INTERNAL_REF: `target_path`
+- ARCHETYPE_INTERNAL_REF: `Consistency`, `Target_path_valid`
 
 ---

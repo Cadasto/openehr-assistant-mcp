@@ -42,15 +42,15 @@ Never substitute a more "convenient" RM type.
 
 **ADL 1.4 defaults:** unstated `occurrences` = `{1..1}`; unstated `existence` = `{1..1}`.
 
-**Consistency rule:** the sum of sibling occurrences ranges must fit inside the container's cardinality interval (validator-tooling check `VCOC`).
+**Consistency rule:** the sum of sibling occurrences ranges must fit inside the container's cardinality interval (ADL 1.4 validity rule `VCOC`).
 
-**Container Cardinality Default:** Containers (CLUSTER, ITEM_LIST, items/events) should default to `1..*` (at least one child) — empty containers have no semantic meaning. Constrain only when clinically justified.
+**Container cardinality:** ADL 1.4 has no default; see `openehr://guides/archetypes/rules` §C2.
 
 ---
 
-## 4. Optionality: Prefer Existence Over Structure
-- Optional: `existence = 0..1`
-- Mandatory: `existence = 1..1`
+## 4. Optionality: Prefer Existence/Occurrences Over Structure
+- Optional attribute: `existence matches {0..1}`; mandatory: `existence matches {1..1}`
+- Optional object node (e.g. an ELEMENT in `items`): `occurrences matches {0..1}`
 
 Avoid encoding optionality through structural contortions.
 
@@ -76,21 +76,22 @@ Ordered rating scale, coded `symbol` per rung (codes from `term_definitions`). P
 - **DV_ORDINAL** — integer rungs (`value` Integer): Apgar, pain `0/+/++/+++`.
 - **DV_SCALE** (RM ≥ 1.1.0) — non-integer rungs (`value` Real): modified Borg CR10 with a `0.5` step.
 
-**Idiom:** value/symbol pairs as a `<value>|[local::<at-code>]` list.
+**Idiom:** value/symbol pairs as a bare `<value>|[local::<at-code>]` list directly under `value matches` (no `DV_ORDINAL matches` wrapper).
 
 ```cadl
-value matches { DV_ORDINAL matches {            -- integer rungs
-    0|[local::at0010], 1|[local::at0011], 2|[local::at0012], 3|[local::at0013] } }
-value matches { DV_SCALE matches {              -- Real rungs, incl. 0.5
-    0.0|[local::at0020], 0.5|[local::at0021], 1.0|[local::at0022] } }   -- ...
+value matches {                                 -- DV_ORDINAL: integer rungs
+    0|[local::at0010], 1|[local::at0011], 2|[local::at0012], 3|[local::at0013] }
+value matches {                                 -- DV_SCALE: Real rungs, incl. 0.5
+    0.0|[local::at0020], 0.5|[local::at0021], 1.0|[local::at0022] }   -- ...
 ```
 
 > ADL 1.4 has no profiled `C_DV_SCALE`; the form mirrors DV_ORDINAL with Real values — confirm your toolchain's serialization. **Caveat:** DV_SCALE needs RM 1.1.0-aware tooling; keep DV_ORDINAL for integer-only scales and existing data.
 
 ---
 
-## 6. Value Sets (ac-codes)
+## 6. Value Sets
 
+- ADL 1.4: local value sets are inline at-code lists (`[local::at0010, at0011]`); an ac-code stands only for an external terminology constraint (`constraint_definitions` + `constraint_bindings`). ADL 2 uses ac-codes for all value sets.
 - Define value sets explicitly
 - Reference them consistently from coded nodes
 - Never mix free text and coded semantics
@@ -100,7 +101,7 @@ value matches { DV_SCALE matches {              -- Real rungs, incl. 0.5
 ## 7. Path Stability Is Sacred
 
 - Do not restructure for aesthetics
-- Path changes usually imply a **major version bump**
+- Removing or moving paths requires a **major version bump** (see `openehr://guides/archetypes/rules` §G)
 
 ---
 
