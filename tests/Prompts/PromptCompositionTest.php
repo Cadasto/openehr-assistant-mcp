@@ -59,13 +59,25 @@ final class PromptCompositionTest extends TestCase
     public function testPromptMarkdownStaysWithinItsSizeBudget(): void
     {
         $fixturesPath = APP_DIR . '/tests/fixtures/prompt_lengths_before_shared.json';
-        $fixtures = json_decode((string)file_get_contents($fixturesPath), true, 512, JSON_THROW_ON_ERROR);
+        $budgets = json_decode((string)file_get_contents($fixturesPath), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertIsArray($budgets);
 
-        foreach ($fixtures as $file => $baseline) {
-            $currentPath = APP_DIR . '/resources/prompts/' . $file;
-            $current = (string)file_get_contents($currentPath);
-            $this->assertLessThan($baseline['chars'], strlen($current), sprintf('%s exceeds its char budget', $file));
-            $this->assertLessThan($baseline['words'], str_word_count($current), sprintf('%s exceeds its word budget', $file));
+        // Every template on disk, not every entry in the fixture: a new prompt with no budget
+        // must fail here rather than go unmeasured. shared/policy.md is not a task template; its
+        // own cap is in PromptPolicySeparationTest.
+        $promptFiles = glob(APP_DIR . '/resources/prompts/*.md') ?: [];
+        $this->assertNotEmpty($promptFiles, 'expected prompt templates under resources/prompts/');
+        $names = array_map(basename(...), $promptFiles);
+
+        $this->assertSame([], array_values(array_diff($names, array_keys($budgets))), 'These prompt templates have no budget in tests/fixtures/prompt_lengths_before_shared.json');
+        $this->assertSame([], array_values(array_diff(array_keys($budgets), $names)), 'These budgets name no prompt template under resources/prompts/; rename or remove them');
+
+        foreach ($promptFiles as $path) {
+            $file = basename($path);
+            $budget = $budgets[$file];
+            $current = (string)file_get_contents($path);
+            $this->assertLessThan($budget['chars'], strlen($current), sprintf('%s exceeds its char budget', $file));
+            $this->assertLessThan($budget['words'], str_word_count($current), sprintf('%s exceeds its word budget', $file));
         }
     }
 }
