@@ -155,7 +155,14 @@ Environment variables are read from `.env` (template in `.env.example`):
 | `HTTP_TIMEOUT` | Guzzle client timeout, seconds (float) | `10.0`; `.env.example` sets `3.0` |
 | `HTTP_SSL_VERIFY` | `false` to disable, or a CA bundle path | `true` |
 | `XDG_DATA_HOME` | App data dir (cache + sessions, incl. MCP discovery cache) | `/tmp` |
-| `MCP_ALLOWED_HOSTS` | `streamable-http` DNS-rebinding allow-list (SDK ≥ 0.6); comma-separated hostnames. Set to the reverse-proxy host / public domain in deployments. | `localhost,127.0.0.1,[::1]` |
+| `MCP_ALLOWED_HOSTS` | `streamable-http` DNS-rebinding allow-list for the `Host` header (SDK ≥ 0.6); comma-separated hostnames. Set to the reverse-proxy host / public domain in deployments. | `localhost,127.0.0.1,[::1]` |
+
+> **Browser clients (SDK ≥ 0.9):** `MCP_ALLOWED_HOSTS` no longer admits an `Origin`.
+> A request that carries one is accepted only when it matches the server's own
+> origin (scheme, host and port as PHP sees them), so a browser client on another
+> origin, such as the Inspector in direct mode, gets `403 Forbidden: Invalid Origin header`.
+> Behind a TLS-terminating proxy PHP sees `http`, so a same-site `https` page is
+> refused too. Desktop, CLI and server-side clients send no `Origin` and are unaffected.
 
 > **Auth:** no authorization headers are required or configured by default. To add
 > auth to an upstream openEHR/CKM server, extend the HTTP client in `src/Apis/`.

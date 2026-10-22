@@ -13,6 +13,7 @@ use Cadasto\OpenEHR\MCP\Assistant\Tools\TerminologyService;
 use Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService;
 use GuzzleHttp\Psr7\Response;
 use Mcp\Capability\Attribute\McpTool;
+use Mcp\Capability\Discovery\SchemaValidator;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
@@ -87,6 +88,35 @@ final class OutputSchemaConformanceTest extends TestCase
         $this->assertConforms($service, 'get', ['COMPOSITION']);
     }
 
+    public function test_type_specification_get_passes_the_sdk_runtime_check_for_every_bundled_type(): void
+    {
+        // This tool returns the bundled BMM document itself, so one representative call is not
+        // enough: a corpus refresh that writes an empty member as `{}` decodes to `[]`, which the
+        // SDK's runtime check rejects for an object-typed member — for that one type only.
+        $service = new TypeSpecificationService(new NullLogger());
+        $schema = $this->outputSchemaOf($service, 'get');
+
+        $failures = [];
+        $checked = 0;
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(TypeSpecificationService::BMM_DIR, \FilesystemIterator::SKIP_DOTS));
+        /** @var \SplFileInfo $file */
+        foreach ($files as $file) {
+            if (!str_ends_with($file->getFilename(), '.bmm.json')) {
+                continue;
+            }
+            $component = basename($file->getPath());
+            $name = substr($file->getFilename(), 0, -strlen('.bmm.json'));
+            $errors = $this->sdkRuntimeErrors($service->get($name, $component), $schema);
+            $checked++;
+            if ($errors !== []) {
+                $failures[$component . '/' . $name] = $errors;
+            }
+        }
+
+        $this->assertGreaterThan(0, $checked, 'No bundled BMM types found; the corpus check would be vacuous');
+        $this->assertSame([], $failures, 'BMM types whose output fails the SDK runtime check: ' . json_encode($failures));
+    }
+
     /**
      * Every `#[McpTool]` that declares an `outputSchema` must have a case above. The list of
      * tools is discovered by reflection rather than hand-maintained, so adding a ninth
@@ -159,5 +189,36 @@ final class OutputSchemaConformanceTest extends TestCase
         }
 
         OutputSchemaValidator::assertValid($result, $mcpTool->outputSchema);
+
+        $errors = $this->sdkRuntimeErrors($result, $mcpTool->outputSchema);
+        $this->assertSame([], $errors, sprintf('%s::%s output fails the SDK runtime check: %s', $service::class, $method, json_encode($errors)));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function outputSchemaOf(object $service, string $method): array
+    {
+        $attributes = (new \ReflectionMethod($service, $method))->getAttributes(McpTool::class);
+        $this->assertNotEmpty($attributes, sprintf('%s::%s is not annotated with #[McpTool]', $service::class, $method));
+        $outputSchema = $attributes[0]->newInstance()->outputSchema;
+        $this->assertNotNull($outputSchema, sprintf('%s::%s does not declare an outputSchema', $service::class, $method));
+
+        return $outputSchema;
+    }
+
+    /**
+     * SDK >= 0.9 validates `structuredContent` against the `outputSchema` at runtime and turns
+     * a mismatch into an `isError` result. It checks the value as sent, so this mirrors
+     * CallToolHandler's JSON round trip: an empty PHP array arrives as `[]`, never `{}`.
+     *
+     * @param array<string, mixed> $schema
+     * @return list<array<string, mixed>>
+     */
+    private function sdkRuntimeErrors(mixed $result, array $schema): array
+    {
+        $sent = json_decode(json_encode($result, JSON_THROW_ON_ERROR), false, 512, JSON_THROW_ON_ERROR);
+
+        return (new SchemaValidator())->validateAgainstJsonSchema($sent, $schema);
     }
 }
