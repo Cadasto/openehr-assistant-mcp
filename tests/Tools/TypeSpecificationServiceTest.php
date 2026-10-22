@@ -6,7 +6,6 @@ namespace Cadasto\OpenEHR\MCP\Assistant\Tests\Tools;
 
 use Cadasto\OpenEHR\MCP\Assistant\Tools\TypeSpecificationService;
 use Mcp\Exception\ToolCallException;
-use Mcp\Schema\Content\TextContent;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
