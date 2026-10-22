@@ -9,11 +9,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - SDD: REQ-N10 and ADR-0007 record that the public website lives in its own repository and consumes `docs/install.md` from here.
-- SDD: topped up the scaffold to sdd 0.15.0 (descriptor keys and a vendored `sdd-check`); CI still runs the PHP gate.
+- SDD: topped up the scaffold to sdd 0.15.0 (descriptor keys and a vendored `sdd-check`).
 
 ### Changed
 
+- SDD: moved to the sdd informative profile, where the code leads and only the `docs/architecture.md` constitution binds; the traceability map and its matrix are retired.
+- SDD: the vendored `sdd-check` replaced the PHP `spec-check` gate in `make ci` and PR validation.
+
 - Docs: restructured the README and line-edited the contributor docs, correcting stale `make ci` and configuration details.
+- Dependencies: upgrade `mcp/sdk` to `^0.9` — **breaking** for browser clients connecting from another origin (see [development.md](docs/development.md#configuration)).
+- Dependencies: upgrade Guzzle to `^8.3` (with `guzzlehttp/psr7` and `guzzlehttp/promises` 3.x).
 
 ### Fixed
 

@@ -1,11 +1,15 @@
+---
+kind: guide
+---
+
 # Testing and validation
 
 This page is for contributors checking a change before they push: how to run the
 PHPUnit suite, PHPStan, coverage, the MCP conformance suite, and the SDD drift gate.
 It is the operational companion to the [SDD docs](README.md) and satisfies REQ-N2,
-REQ-N3, and REQ-N6. Tests are the verification end of the
-[traceability chain](traceability.md): each `src/` class has a mirrored
-`tests/…/*Test`.
+REQ-N3, and REQ-N6. Tests are what make the [constitution](architecture.md) bind:
+each of its MUST sentences has a test that fails when the rule breaks (the Guard tests
+below), and most `src/` classes have a mirrored `tests/…/*Test`.
 
 All commands run **inside the dev container** (see [development.md](development.md)).
 Start the stack first with `make up-dev && make install`.
@@ -32,8 +36,11 @@ Conventions:
 | `tests/Prompts/PromptCompositionTest.php` | Prompt size vs baselines in `tests/fixtures/prompt_lengths_before_shared.json` (REQ-N7) |
 | `tests/Prompts/PromptPolicySeparationTest.php` | Global policy stays in `server-instructions.md`, not prompt files (REQ-F10) |
 | `tests/Tools/InputSchemaGuardTest.php` | Every `#[McpTool]` input schema is closed, and no published `enum` holds `null`: optional enums are strings only (REQ-N9) |
-| `tests/Tools/OutputSchemaConformanceTest.php` | Tool output conforms to its declared `outputSchema`, which the SDK never checks (REQ-N9) |
+| `tests/Tools/OutputSchemaConformanceTest.php` | Tool output conforms to its declared `outputSchema`, also through the SDK's runtime check, which turns a mismatch into an `isError` result (REQ-N9) |
 | `tests/Content/InstallDocContractTest.php` | `docs/install.md` keeps the path, hosted-endpoint section, and relative links the website relies on (REQ-N10) |
+| `tests/Content/HttpBoundaryTest.php` | No PHP under `src/` or `public/` other than `src/Apis/CkmClient` builds an HTTP transport or opens a network stream (constitution § Boundaries, ADR-0002) |
+| `tests/Content/DiscoveryCacheNamespaceTest.php` | The discovery cache is namespaced by `APP_VERSION` (REQ-N4, ADR-0001) |
+| `tests/Content/SpecLookupAndReadmeClaimsTest.php` | The spec-lookup guide points at the `development` branch; the README's guide claims match (REQ-N1) |
 
 ## Static analysis (PHPStan, REQ-N3)
 
@@ -66,20 +73,20 @@ Results are written to `conformance/`; expected/known failures are listed in
 
 ## SDD drift gate (REQ-N8)
 
-`make spec-check` (`composer check:spec` in the container) validates
-[traceability.yaml](traceability.yaml) against the tree and fails on a missing
-artefact, a dangling path, or a disagreement with the requirements index. When you
-add or move a `REQ-*`, a capability class, or its test, update the map in the same
-change.
+`make spec-check` (`composer check:spec` in the container) runs
+`scripts/sdd-check.py`, the sdd plugin's gate, vendored and version-pinned in
+[.sdd.yaml](.sdd.yaml): first its self-test, then the check. On the informative
+profile the check covers the documents: the descriptor, every page's `kind:`
+frontmatter, relative links and anchors, CHANGELOG bullets, and generated indexes
+(the ADR index; regenerate it with `python3 scripts/sdd-check.py generate --root .`
+in the dev container).
 
 ```bash
 make spec-check
 ```
 
-`scripts/sdd-check.py` is the sdd plugin's own gate, vendored and version-pinned in
-[.sdd.yaml](.sdd.yaml) so the `/sdd-*` skills run a known copy. Neither `make ci` nor
-PR validation runs it: it does not yet accept this repo's `REQ-F1` identifier style
-or map format, so the PHP gate above remains the CI gate.
+Never edit `scripts/sdd-check.py` by hand; upgrade it by re-vendoring with
+`/sdd-scaffold --upgrade`, which also bumps the pin.
 
 ## Before pushing
 

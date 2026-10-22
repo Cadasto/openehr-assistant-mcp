@@ -1,9 +1,13 @@
+---
+kind: guide
+---
+
 # Coding and MCP authoring conventions
 
 This page holds the canonical conventions for code in this repository, for human
 contributors and AI agents alike: the coding standard, namespaces, and how to author
 MCP tools, prompts, resources, and completion providers. Architecture (components, layers) is in
-[architecture.md](architecture.md), the test and validation workflow in
+[components.md](components.md), the test and validation workflow in
 [testing.md](testing.md), and the dev environment in [development.md](development.md).
 
 ## Coding standard
@@ -30,8 +34,9 @@ register; see [development.md](development.md#gotcha-mcp-discovery-cache).
   - **Schemas are a contract, and the SDK enforces the input half.**
     `CallToolHandler` validates arguments against the generated `inputSchema`
     *before* your method runs, so a published constraint rejects bad calls rather
-    than clamping them. [REQ-N9](requirements.md) states normatively *what* must
-    hold and is the single canonical home for it; the four steps below are only
+    than clamping them. The [constitution](architecture.md#contracts) states the
+    binding part (closed schemas, `null` in null-defaulted enums, conforming output),
+    and [REQ-N9](requirements.md) describes the whole capability; the four steps below are only
     *how* to satisfy it in this codebase, guarded by
     `tests/Tools/InputSchemaGuardTest.php`:
     1. Add method-level `#[Schema(additionalProperties: false)]` so unknown
@@ -47,10 +52,12 @@ register; see [development.md](development.md#gotcha-mcp-discovery-cache).
        is now only a defence against non-validating callers.
     4. Search tools return the `{items, total}` envelope, with top-level
        `required` + `additionalProperties: false` and the same on each item.
-  - **Output schemas have no runtime enforcement.** The SDK does *not* validate
-    return values against `outputSchema`, so `tests/Tools/OutputSchemaConformanceTest.php`
-    is the only thing holding that contract. Add a case there for every new
-    structured tool.
+  - **Output schemas are enforced at runtime.** Since `mcp/sdk` 0.9 a return value
+    that fails its `outputSchema` reaches the client as a failed (`isError`) tool call,
+    so `tests/Tools/OutputSchemaConformanceTest.php` must catch it first. Add a case
+    there for every new structured tool. The check runs on the value as sent: an empty
+    PHP array goes out as `[]`, so return `new \stdClass()` where the schema declares
+    an object.
 - **Prompts**: `src/Prompts/`; annotate classes with `#[McpPrompt(name: '...')]` and
   extend `AbstractPrompt`, which loads the **Markdown** body from `resources/prompts/`
   and renders it via

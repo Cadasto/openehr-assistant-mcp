@@ -35,6 +35,7 @@ RUN set -eux \
     && adduser -S -u 1000 -G www-data local-user \
     && apk add --no-cache \
       git \
+      python3 \
     && install-php-extensions \
       xdebug \
       @composer \

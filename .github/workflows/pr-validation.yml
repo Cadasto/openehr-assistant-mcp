@@ -21,10 +21,15 @@ jobs:
           extensions: curl, json, simplexml
           coverage: none
 
+      - name: Set up Python (for the sdd-check drift gate)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
 
-      - name: Validate SDD traceability (spec-check)
+      - name: SDD drift gate (spec-check)
         run: composer check:spec
 
       - name: Run PHPStan

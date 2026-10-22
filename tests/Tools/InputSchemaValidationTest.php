@@ -97,6 +97,8 @@ final class InputSchemaValidationTest extends TestCase
         // The schema the server publishes, so the payloads are checked against what clients see.
         $schema = (new OptionalEnumSchemaGenerator())->generate(new ReflectionMethod($class, $method));
 
-        return (new SchemaValidator())->validateAgainstJsonSchema($arguments, $schema);
+        // Mirror CallToolHandler: arguments are always a JSON object, but an empty one
+        // decodes to `[]`, which the validator (SDK >= 0.9) no longer accepts as an object.
+        return (new SchemaValidator())->validateAgainstJsonSchema([] === $arguments ? new \stdClass() : $arguments, $schema);
     }
 }

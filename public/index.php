@@ -17,7 +17,6 @@ use Mcp\Server;
 use Mcp\Server\Session\FileSessionStore;
 use Mcp\Server\Transport\Http\Middleware\CorsMiddleware;
 use Mcp\Server\Transport\Http\Middleware\DnsRebindingProtectionMiddleware;
-use Mcp\Server\Transport\Http\Middleware\ProtocolVersionMiddleware;
 use Mcp\Server\Transport\StdioTransport;
 use Mcp\Server\Transport\StreamableHttpTransport;
 use Monolog\Handler\StreamHandler;
@@ -89,6 +88,10 @@ try {
         ->setLazyLoading(false)
         ->setSession(new FileSessionStore(APP_DATA_DIR . '/sessions', ttl: 10 * 60))
         ->setProtocolVersion(ProtocolVersion::V2025_03_26)
+        // mcp/sdk 0.9 also serves the stateless 2026-07-28 revision by default. Stay on the
+        // initialize handshake until that revision can be verified by the conformance suite;
+        // a modern client's `server/discover` probe gets -32022 and falls back to initialize.
+        ->withoutModernEra()
         ->setContainer($container)
         ->setInstructions($instructions)
         ->setLogger($logger);
@@ -125,9 +128,11 @@ try {
         $request = $request->withHeader('Host', trim(explode(',', $hostLine)[0]));
     }
 
-    // Create the Streamable HTTP transport. SDK >= 0.6 enables CORS, DNS-rebinding,
-    // and protocol-version middleware by default; we keep those but configure the
-    // DNS-rebinding allow-list from MCP_ALLOWED_HOSTS (the server runs behind a reverse proxy).
+    // Create the Streamable HTTP transport. We keep the SDK's default CORS and DNS-rebinding
+    // middleware but configure the DNS-rebinding allow-list from MCP_ALLOWED_HOSTS (the
+    // server runs behind a reverse proxy). ProtocolVersionMiddleware is deliberately absent:
+    // SDK >= 0.9 applies it to handshake-era traffic itself, and listing it here would
+    // reject every 2026-07-28 request before the transport can classify its era.
     $allowedHosts = array_values(array_filter(array_map('trim', explode(',', MCP_ALLOWED_HOSTS))));
 
     $transport = new StreamableHttpTransport(
@@ -138,7 +143,6 @@ try {
         [
             new CorsMiddleware(),
             new DnsRebindingProtectionMiddleware($allowedHosts),
-            new ProtocolVersionMiddleware(),
         ]
     );
 

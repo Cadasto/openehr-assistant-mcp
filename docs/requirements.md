@@ -1,11 +1,15 @@
-# Requirements — openEHR Assistant MCP Server
+---
+kind: reference
+---
 
-> Part of the [Specification-Driven Development docs](README.md). Each requirement
-> has a stable ID (`REQ-F#` functional, `REQ-N#` non-functional). IDs are
-> referenced by [architecture.md](architecture.md), the
-> [decision records](decisions/), and the [traceability matrix](traceability.md).
-> When behaviour changes, update the requirement here **first**, then the design,
-> code, and tests that cite it.
+# Capabilities — openEHR Assistant MCP Server
+
+> Part of the [SDD docs](README.md). This catalogue describes what the server does
+> today and why; it binds nothing (only the [constitution](architecture.md) does).
+> Each capability keeps its stable ID (`REQ-F#` functional, `REQ-N#` non-functional),
+> cited by [components.md](components.md), the [decision records](decisions/README.md),
+> commits, and test docblocks. The code leads: when behaviour changes, update the
+> matching row in the same change.
 
 ## Purpose
 
@@ -36,14 +40,14 @@ repository and stores no patient data.
 | ID | Requirement | Rationale |
 |----|-------------|-----------|
 | **REQ-N1** | All openEHR-standard content must be grounded in authoritative sources (`specifications.openehr.org`, CKM, BMM); never invented from model memory. | Correctness of clinical/standards content is the product's core value. → [ADR-0005](decisions/0005-spec-aligned-content-retrieval.md) |
-| **REQ-N2** | Every application class has a mirrored `*Test`; external HTTP (CKM) is mocked, never called live in tests. | Deterministic, offline-capable test suite. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md) |
+| **REQ-N2** | Application classes have a mirrored `*Test` wherever they carry behaviour of their own (the [constitution](architecture.md#known-gaps) lists the exceptions); external HTTP (CKM) is mocked, never called live in tests. | Deterministic, offline-capable test suite. → [ADR-0002](decisions/0002-single-ckmclient-http-boundary.md) |
 | **REQ-N3** | Code follows PSR-12 and passes PHPStan static analysis before merge. | Maintainability and reviewability. |
 | **REQ-N4** | MCP capability discovery is cached at startup to keep server boot fast. | Responsiveness under repeated client connections. → [ADR-0001](decisions/0001-attribute-driven-discovery.md) |
 | **REQ-N5** | The runtime is Docker-only and reproducible; no host PHP/Composer is assumed. | Consistent environment across maintainers (WSL2 on Windows). → [ADR-0004](decisions/0004-docker-only-runtime.md) |
 | **REQ-N6** | The server passes the official MCP conformance suite over HTTP. | Interoperability with arbitrary MCP clients. |
 | **REQ-N7** | Guide and prompt content is concise and scannable, optimised for AI context economy. | Content is consumed by agents under token budgets. → [ADR-0003](decisions/0003-prompt-policy-split.md) |
-| **REQ-N8** | The requirement↔code↔test↔decision traceability map is machine-validated in CI; a missing artefact, dangling path, or index/map disagreement fails the build. | Keeps the SDD chain from silently rotting. → [ADR-0006](decisions/0006-machine-checked-traceability.md) |
-| **REQ-N9** | Every published MCP tool schema is validated in CI: closed input schemas (`additionalProperties: false`; optional enums published as strings only, with no `null` in `enum`, no nullable `type` and no `null` default, so omitting the argument means "no filter" and an explicit `null` is rejected; numbers bounded so out-of-range values are rejected rather than clamped), search results returned in a `{items, total}` envelope that is itself closed and `required`, and output payloads conforming to their declared `outputSchema`. Authoring recipe: [conventions.md](conventions.md#mcp-capabilities-authoring). | The SDK validates tool *input* against `inputSchema` but never validates tool *output*, so the output contract has no runtime enforcement — CI is the only thing standing between a schema edit and a broken wire contract. Optional enums list strings only because clients that decode `enum` as a list of strings reject the whole `tools/list` when one holds `null` ([#28](https://github.com/Cadasto/openehr-assistant-mcp/issues/28)). |
+| **REQ-N8** | The documentation is machine-checked in CI by the vendored `sdd-check` gate: the SDD descriptor, document kinds, relative links and anchors, CHANGELOG bullets, and generated indexes; a finding fails the build. | Keeps the docs from silently rotting while the code leads. → [ADR-0006](decisions/0006-machine-checked-traceability.md) (deprecated: the earlier PHP traceability gate) |
+| **REQ-N9** | Every published MCP tool schema is validated in CI: closed input schemas (`additionalProperties: false`; optional enums published as strings only, with no `null` in `enum`, no nullable `type` and no `null` default, so omitting the argument means "no filter" and an explicit `null` is rejected; result limits bounded so out-of-range values are rejected rather than clamped), search results returned in a `{items, total}` envelope that is itself closed and `required`, and output payloads conforming to their declared `outputSchema`. Authoring recipe: [conventions.md](conventions.md#mcp-capabilities-authoring). | Since `mcp/sdk` 0.9 the SDK also validates tool *output* against `outputSchema` at runtime, but it does so by answering the client with a failed (`isError`) tool call, so drift that reaches production breaks the tool for every caller. CI catches it before it ships. |
 | **REQ-N10** | `docs/install.md` is the single source for installing this server: it stays at that path, keeps a section offering the hosted endpoint and naming its URL, and every relative link in it resolves inside the repository. External documentation consumes the file rather than holding a copy. | The public website publishes it by fetching this file at a released tag, so a rename, a dropped hosted-endpoint section, or a dangling link ships a broken page. → [ADR-0007](decisions/0007-website-in-separate-repository.md) |
 
 ## Out of scope

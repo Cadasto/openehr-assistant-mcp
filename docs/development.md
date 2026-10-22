@@ -1,3 +1,7 @@
+---
+kind: guide
+---
+
 # Development environment
 
 This page is for contributors who run and change the server locally: the
@@ -155,7 +159,14 @@ Environment variables are read from `.env` (template in `.env.example`):
 | `HTTP_TIMEOUT` | Guzzle client timeout, seconds (float) | `10.0`; `.env.example` sets `3.0` |
 | `HTTP_SSL_VERIFY` | `false` to disable, or a CA bundle path | `true` |
 | `XDG_DATA_HOME` | App data dir (cache + sessions, incl. MCP discovery cache) | `/tmp` |
-| `MCP_ALLOWED_HOSTS` | `streamable-http` DNS-rebinding allow-list (SDK ≥ 0.6); comma-separated hostnames. Set to the reverse-proxy host / public domain in deployments. | `localhost,127.0.0.1,[::1]` |
+| `MCP_ALLOWED_HOSTS` | `streamable-http` DNS-rebinding allow-list for the `Host` header (SDK ≥ 0.6); comma-separated hostnames. Set to the reverse-proxy host / public domain in deployments. | `localhost,127.0.0.1,[::1]` |
+
+> **Browser clients (SDK ≥ 0.9):** `MCP_ALLOWED_HOSTS` no longer admits an `Origin`.
+> A request that carries one is accepted only when it matches the server's own
+> origin (scheme, host and port as PHP sees them), so a browser client on another
+> origin, such as the Inspector in direct mode, gets `403 Forbidden: Invalid Origin header`.
+> Behind a TLS-terminating proxy PHP sees `http`, so a same-site `https` page is
+> refused too. Desktop, CLI and server-side clients send no `Origin` and are unaffected.
 
 > **Auth:** no authorization headers are required or configured by default. To add
 > auth to an upstream openEHR/CKM server, extend the HTTP client in `src/Apis/`.
@@ -215,7 +226,7 @@ composer check:phpstan
 |--------|---------|
 | `make up-dev` / `make up` | Start dev (live mounts, port 8343) / production-like containers |
 | `make install` | Install Composer deps in the dev container |
-| `make spec-check` | SDD traceability drift gate |
+| `make spec-check` | SDD drift gate (`sdd-check` over the docs) |
 | `make ci` | spec-check, PHPStan, and tests (mirrors PR validation) |
 | `make conformance` | MCP conformance suite (stack must be up) |
 | `make inspector` / `make inspector-stop` | Start / stop the MCP Inspector UI |
@@ -236,19 +247,18 @@ composer check:phpstan
   - `CompletionProviders/`: argument completion providers
   - `Helpers/`: internal helpers (for example content-type and ADL mapping, terminology XML loading, the search tokenizer, CLI options)
   - `Apis/`: internal API clients (CKM)
-  - `Sdd/`: the `spec-check` traceability drift gate (`SpecCheck`)
   - `templates/`: guide and spec-digest authoring conventions and templates
   - `constants.php`: loads env and defaults (incl. `APP_VERSION`)
 - `resources/`: guides, examples, BMM JSON, terminology, prompt bodies, `server-instructions.md`
 - `.docker/`: `docker-compose.yml` (`app`, `ingress`), `docker-compose.dev.yml` (port 8343, `node`), multi-stage `Dockerfile`, `Caddyfile`, PHP config
 - `tests/`: PHPUnit tests and PHPStan config
-- `scripts/`: CLI entry points for repo tooling (for example `spec-check.php`)
+- `scripts/`: repo tooling, among it `sdd-check.py`, the sdd plugin's drift gate (vendored; never edit it by hand)
 - `docs/`: Specification-Driven Development docs (see [README](README.md))
 
 For the component-level architecture (layers, the single CKM HTTP boundary, the
-test mirror), see [architecture.md](architecture.md).
+test mirror), see [components.md](components.md).
 
 ## Next
 
 - Running and validating the suite → [testing.md](testing.md)
-- What the components are → [architecture.md](architecture.md)
+- What the components are → [components.md](components.md); the rules every change keeps → [architecture.md](architecture.md)
