@@ -57,8 +57,8 @@ final class GuideServiceTest extends TestCase
 
     public function test_guideSearch_ranking_consistent_across_candidate_pool_sizes(): void
     {
-        $default = $this->service->search('cardinality occurrences constraints', 'archetypes', null, 5, 220, 20);
-        $expandedPool = $this->service->search('cardinality occurrences constraints', 'archetypes', null, 5, 220, 40);
+        $default = $this->service->search('cardinality occurrences constraints', 'archetypes', '', 5, 220, 20);
+        $expandedPool = $this->service->search('cardinality occurrences constraints', 'archetypes', '', 5, 220, 40);
 
         $defaultUris = array_map(static fn(array $item): string => (string)$item['resourceUri'], $default['items']);
         $expandedUris = array_map(static fn(array $item): string => (string)$item['resourceUri'], $expandedPool['items']);
@@ -75,7 +75,7 @@ final class GuideServiceTest extends TestCase
             $this->assertLessThanOrEqual(220, mb_strlen((string)$item['snippet']));
         }
 
-        $expanded = $this->service->search('aql', null, null, 12, 500, 30);
+        $expanded = $this->service->search('aql', null, '', 12, 500, 30);
         $this->assertLessThanOrEqual(12, count($expanded['items']));
         $this->assertNotEmpty($expanded['items']);
         $this->assertLessThanOrEqual(500, mb_strlen((string)$expanded['items'][0]['snippet']));

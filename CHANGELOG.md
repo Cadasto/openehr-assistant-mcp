@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Fixed
 
 - Tools: optional enum filters publish strings only, so JetBrains AI Assistant loads the tools again (#28) — **breaking** for clients that send an explicit `null`.
+- Tools: `guide_search` publishes `taskType` as a plain string, which single-`type` schema dialects accept — **breaking** for clients that send an explicit `null`.
 - Tools: CKM lookups validate identifiers before they reach the request URL, and a CKM outage during archetype-id resolution is reported as one.
 - Tools/resources: guide, example and type-spec lookups refuse dot-only names and report not-found, invalid-name and decode errors accurately.
 - Dev: the dev stack accepts `host.docker.internal`, the URL the install guide gives clients in other containers.

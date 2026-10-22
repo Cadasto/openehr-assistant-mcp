@@ -51,8 +51,8 @@ final class GuideService
      * @param string|null $category
      *   Optional guide category filter. Categories: authoring guides for archetypes/templates/AQL/simplified_formats, plus "specs" (per-document openEHR spec digests) and "howto" (toolchain how-to guides). Omit to search all categories.
      *
-     * @param string|null $taskType
-     *   Optional task hint (e.g. "lint", "review", "refactor", "author"). When supplied it adds a small ranking boost to guides whose title, abstract, or indexed headings mention it. It only reorders guides the query already matched: it never filters, and never makes a guide the query did not match appear in the results.
+     * @param string $taskType
+     *   Optional task hint (e.g. "lint", "review", "refactor", "author"); omit it for no hint. When supplied it adds a small ranking boost to guides whose title, abstract, or indexed headings mention it. It only reorders guides the query already matched: it never filters, and never makes a guide the query did not match appear in the results.
      *
      * @param int $maxResults
      *   The maximum number of guides to return; defaults to 10 and must be between 1 and 50 (values outside that range are rejected, not clamped). `total` reports how many guides matched before this cap.
@@ -104,7 +104,8 @@ final class GuideService
         string $query = '',
         #[Schema(enum: ['archetypes', 'templates', 'aql', 'simplified_formats', 'specs', 'howto'])]
         ?string $category = null,
-        ?string $taskType = null,
+        #[Schema(type: 'string')]
+        string $taskType = '',
         #[Schema(minimum: 1, maximum: self::MAX_RESULTS_LIMIT)]
         int $maxResults = self::DEFAULT_MAX_RESULTS,
         #[Schema(minimum: 80, maximum: self::MAX_SNIPPET_CHARS)]
@@ -120,7 +121,7 @@ final class GuideService
         $this->logger->debug('called ' . __METHOD__, func_get_args());
         $query = trim($query);
         $category = trim((string)($category ?? ''));
-        $taskType = trim((string)($taskType ?? ''));
+        $taskType = trim($taskType);
         $maxResults = max(1, min($maxResults, self::MAX_RESULTS_LIMIT));
         $snippetChars = max(80, min($snippetChars, self::MAX_SNIPPET_CHARS));
 
