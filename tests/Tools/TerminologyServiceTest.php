@@ -72,6 +72,14 @@ final class TerminologyServiceTest extends TestCase
         $this->service->resolve('433', 'invalid_group');
     }
 
+    public function test_resolve_rejects_a_group_id_that_would_change_the_xpath_query(): void
+    {
+        $this->expectException(ToolCallException::class);
+        $this->expectExceptionMessage('Invalid terminology group ID');
+
+        $this->service->resolve('433', 'x"] | //*[@id="');
+    }
+
     public function test_resolve_not_found(): void
     {
         $this->expectException(ToolCallException::class);
