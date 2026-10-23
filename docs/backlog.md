@@ -6,6 +6,14 @@ harvested_through: 2026-10-22T23:22:49Z
 
 Leftovers of merged branches: defects outside their change, suggestions, and findings the maintainer deferred here. Each line is a lead, not a finding: verify it before acting. Themes group what one delivery takes, defects first; `sdd-pr harvest` and `sdd-pr flip --carry` add lines under Unsorted, and `/sdd-triage --backlog` sorts them, merges duplicates and drops what is settled. Line numbers are as of the pull request in `from:`. Edit freely.
 
+## Return -32602 for a missing prompt argument (REQ-F6)
+The MCP prompts spec (2025-06-18, § Error Handling) says a server SHOULD answer a missing required argument with `-32602`; this server answers `-32603`.
+- src/Prompts/AbstractPrompt.php:128 · A missing or blank required argument throws PromptGetException, which the SDK's GetPromptHandler maps to -32603 (internal error) for every PromptGetException, so the fix needs an upstream SDK change or a different exception · from: live check of 0.21.0
+
+## Normalise CKM artefact text (REQ-F1)
+CKM serves ADL with a UTF-8 byte-order mark and CRLF line endings, and the tools pass both through.
+- src/Tools/CkmService.php:288 · ckm_archetype_get (and ckm_template_get at :491) return the CKM body unchanged, so the code block opens with U+FEFF and every line ends in \r; stripping a leading BOM and normalising line endings would remove the noise · from: live check of 0.21.0
+
 ## Decide whether a dotted type name is a qualified name (REQ-F5)
 The type-specification tools ignore dots, so a package-qualified name finds nothing; reading it by its last segment is a behaviour change that needs a product decision first.
 - src/Tools/TypeSpecificationService.php:54 · Dotted inputs such as rm.DV_QUANTITY or org.openehr.rm.datatypes.DV_TEXT find nothing in type_specification_get or _search; reading them as qualified names (last segment) would help clients but changes the published parameter descriptions, so it is a product decision · from: #43
