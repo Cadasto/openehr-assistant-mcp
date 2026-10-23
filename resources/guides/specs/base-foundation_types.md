@@ -1,12 +1,12 @@
 # openEHR Foundation Types — Digest
 
-**Scope:** BASE package defining the assumed primitive, structural, interval, temporal, terminology, and root built-in types every other openEHR specification builds on.
+**Scope:** BASE package defining the assumed primitive, structural, interval, temporal, terminology, functional, and root built-in types every other openEHR specification builds on.
 **Component:** BASE
 **Document:** foundation_types
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/BASE/development/foundation_types.html
 **Markdown URL:** https://specifications.openehr.org/releases/BASE/development/foundation_types.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/base-base_types
 **Keywords:** foundation types, primitive types, Any, Ordered, Interval, List, Set, Hash, Iso8601, Terminology_code, Cardinality, BASE
 
@@ -14,11 +14,11 @@
 
 ## Purpose
 
-Fixes the names and minimal semantics of the built-in and library types every other openEHR specification — RM, AM, QUERY, TERM, SM, and the serialisation ITS documents — silently assumes to exist. It defines the root type `Any` with equality semantics, the primitive numeric and character types, container abstractions, the generic `Interval` family used throughout cardinality and constraint expressions, ISO 8601 date/time classes, and the abstract `Terminology_code` / `Terminology_term` pair that standardises how coded concepts flow through the model. The document deliberately gives only the minimum surface needed to anchor downstream semantics; concrete implementation mapping (Java, C#, Python, schema technologies) is expected to be done per deployment.
+Fixes the names and minimal semantics of the built-in and library types every other openEHR specification — RM, AM, QUERY, TERM, SM, and the serialisation ITS documents — silently assumes to exist. It defines the root type `Any` with equality semantics, the primitive numeric and character types, container abstractions, the generic `Interval` family used throughout cardinality and constraint expressions, ISO 8601 date/time classes, functional meta-types, and the concrete `Terminology_code` / `Terminology_term` leaf types that standardise references to terminology concepts. The document deliberately gives only the minimum surface needed to anchor downstream semantics; concrete implementation mapping (Java, C#, Python, schema technologies) is expected to be done per deployment.
 
 ## Scope
 
-- In: root type `Any`; ordering mix-ins `Ordered` and `Ordered_numeric`; primitive types `Octet`, `Character`, `Boolean`, `Integer`, `Integer64`, `Real`, `Double`, `String`; structural generics `Array`, `List`, `Set`, `Hash`; interval family `Interval`, `Point_interval`, `Proper_interval`, `Multiplicity_interval`, `Cardinality`; ISO 8601 temporal types `Iso8601_date`, `Iso8601_time`, `Iso8601_date_time`, `Iso8601_duration`; terminology value types `Terminology_code`, `Terminology_term`.
+- In: root type `Any`; ordering mix-ins `Ordered` and `Ordered_numeric`; primitive types `Octet`, `Character`, `Boolean`, `Integer`, `Integer64`, `Real`, `Double`, `String`; structural generics `Array`, `List`, `Set`, `Hash`; interval family `Interval`, `Point_interval`, `Proper_interval`, `Multiplicity_interval`, `Cardinality`; ISO 8601 temporal types `Iso8601_date`, `Iso8601_time`, `Iso8601_date_time`, `Iso8601_duration`; terminology value types `Terminology_code`, `Terminology_term`; functional meta-types `Routine`, `Function`, `Procedure`, `Tuple`.
 - Out: concrete implementation bindings for any target language, schema, or wire format; identifier and reference types (`OBJECT_ID`, `OBJECT_REF`, see `BASE/base_types`); data-type value classes such as `CODE_PHRASE`, `DV_CODED_TEXT`, `DV_QUANTITY` (in `RM/data_types`); terminology-service contracts and code-set registries; archetype-specific constraint constructs such as C_OBJECT.
 
 ## Key Classes / Constructs
@@ -26,10 +26,10 @@ Fixes the names and minimal semantics of the built-in and library types every ot
 - `Any` — ultimate ancestor; equality, inequality, and type-identity operations every foundation type inherits.
 - `Ordered` / `Ordered_numeric` — ordering mix-ins enabling comparison and arithmetic substitutability across numeric primitives.
 - `Interval<T>` with `Point_interval<T>` and `Proper_interval<T>` — generic open/closed interval abstraction underpinning every range constraint in RM and AOM.
-- `Multiplicity_interval` and `Cardinality` — integer-interval specialisations used for occurrences and container cardinality in AOM2.
+- `Multiplicity_interval` / `Cardinality` — integer `Proper_interval` specialisation for occurrences; `Cardinality` is not an interval but wraps one (`interval`) with `is_ordered` / `is_unique` for container attributes in AOM2.
 - `List<T>` / `Set<T>` / `Array<T>` / `Hash<K,V>` — the four container generics referenced by RM and AM attribute definitions.
 - `Iso8601_date`, `Iso8601_time`, `Iso8601_date_time`, `Iso8601_duration` — partial-date-aware temporal types used by `DV_DATE_TIME` and friends.
-- `Terminology_code` / `Terminology_term` — abstract coded-concept pair consumed by `CODE_PHRASE` and terminology bindings.
+- `Terminology_code` / `Terminology_term` — concrete code reference and code-plus-rubric pair, used by `BASE/resource` language codes and AOM2 `C_TERMINOLOGY_CODE` (the RM's `CODE_PHRASE` is a separate class).
 - Primitives `Octet`, `Character`, `Boolean`, `Integer`, `Integer64`, `Real`, `Double`, `String` — the assumed scalar value space.
 
 ## Relations to Other Specs

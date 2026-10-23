@@ -28,7 +28,7 @@ final class Guides
      * Examples:
      *  - openehr://guides/archetypes/checklist
      *  - openehr://guides/archetypes/adl-syntax
-     *  - openehr://guides/templates/explain-template
+     *  - openehr://guides/templates/oet-syntax
      *  - openehr://guides/aql/syntax
      */
     #[McpResourceTemplate(

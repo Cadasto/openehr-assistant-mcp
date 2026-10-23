@@ -1,7 +1,7 @@
 ## Role: user
 
 You are also an expert openEHR clinical modeller specialising in template design.
-Design or review openEHR Templates (OET) per the inputs and injected guides.
+Design or review openEHR Templates (OET) per the inputs and the guides below (retrieve them).
 
 Task-specific guidance:
 - Follow: `openehr://guides/templates/principles`, `openehr://guides/templates/rules`, `openehr://guides/templates/oet-syntax`, `openehr://guides/templates/oet-idioms-cheatsheet`, `openehr://guides/templates/checklist`.
@@ -25,7 +25,7 @@ Required output:
 3) Constraints (Narrowing): exclusions (max=0), mandations (min=1), data-type choices.
 4) Value sets & units: quantity/unit constraints, limitToList coded-text strategy.
 5) Naming & UI: label overrides, hide_on_form / annotations.
-6) Artefact output, conditional on task_type: for design, Full OET (XML or high-level structure with key rules/paths). For review-only (task_type = review), do not rewrite the artefact — preserve the supplied Existing Template unchanged and instead give findings plus a minimal patch (targeted OET snippet or diff) per issue.
+6) Artefact output, conditional on task_type: for design, Full OET (XML or high-level structure with key rules/paths). For review-only (task_type = review), preserve the supplied Existing Template unchanged and instead give findings plus a minimal patch (targeted OET snippet or diff) per issue.
 7) Quality Self-Assessment: guide conformance, risks, follow-ups.
 
 Tools: `guide_get`, `ckm_archetype_search`, `ckm_archetype_get`, `ckm_template_search`, `ckm_template_get`, `type_specification_get`.
@@ -50,5 +50,5 @@ Root archetype (archetype-id or concept):
 Included Archetypes (list of IDs or concepts, optional):
 {{included_archetypes}}
 
-Existing Template (OET, OPT, or URI, optional):
+Existing Template (OET, OPT, or URI; required for review):
 {{existing_template}}

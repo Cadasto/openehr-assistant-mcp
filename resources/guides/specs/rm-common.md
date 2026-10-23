@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/RM/development/common.html
 **Markdown URL:** https://specifications.openehr.org/releases/RM/development/common.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-data_types, openehr://guides/specs/rm-support
 **Keywords:** LOCATABLE, PATHABLE, PARTY_PROXY, VERSIONED_OBJECT, CONTRIBUTION, AUDIT_DETAILS, ATTESTATION, FEEDER_AUDIT, change control, authored resource
 
@@ -23,23 +23,17 @@ Defines the abstract patterns reused across every higher-level openEHR Reference
 
 ## Key Classes / Constructs
 
-- `PATHABLE` — abstract ancestor providing parent navigation and path-based child lookup within compositional trees.
-- `LOCATABLE` — adds archetype-node identity, runtime `name`, optional `archetype_details`, `feeder_audit`, and `links` to any locatable node.
+- `PATHABLE` / `LOCATABLE` — abstract ancestor providing parent navigation and path-based child lookup; its subtype adds archetype-node identity, runtime `name`, optional `archetype_details`, `feeder_audit`, and `links`.
 - `ARCHETYPED` — marks a `LOCATABLE` as the root of an archetyped structure; carries `archetype_id`, `template_id`, and `rm_version`.
 - `LINK` — typed, named semantic link between two `LOCATABLE` instances, referenced by `DV_EHR_URI`.
 - `FEEDER_AUDIT` / `FEEDER_AUDIT_DETAILS` — preserves the origin system, provider, subject, version, and original content of data imported from non-openEHR feeders.
-- `PARTY_PROXY` — abstract reference to a demographic party, optionally carrying an `external_ref` into the demographic system.
-- `PARTY_IDENTIFIED` — proxy with a human-readable `name` and a list of formal `identifiers` for non-subject parties.
-- `PARTY_SELF` — proxy denoting the record subject; identity is normally carried only via `EHR_STATUS`.
-- `PARTY_RELATED` — `PARTY_IDENTIFIED` extended with a coded `relationship` to the subject of care.
+- `PARTY_PROXY` / `PARTY_IDENTIFIED` / `PARTY_RELATED` — abstract reference to a demographic party with optional `external_ref`; `PARTY_IDENTIFIED` adds a `name` and formal `identifiers` for non-subject parties; `PARTY_RELATED` adds a coded `relationship` to the subject of care.
+- `PARTY_SELF` — proxy denoting the record subject; three schemes are supported: `external_ref` set nowhere, set once in `EHR_STATUS.subject`, or set on every instance.
 - `PARTICIPATION` — generic model of a party's involvement in an activity (function, mode, time) where the participation kind is not fixed at design time.
 - `FOLDER` / `VERSIONED_FOLDER` (directory package) — versioned, archetypable folder structures whose items are references to other versioned objects, enabling multiple classification (episodes, problem groups).
 - Tags package — lightweight key/optional-value annotations associated with previously committed items to support tag-based search and AQL querying.
-- `VERSIONED_OBJECT` — top-level change-control container owning an ordered history of `VERSION` instances for one logical item.
-- `ORIGINAL_VERSION` / `IMPORTED_VERSION` — concrete `VERSION` subtypes for locally authored versus copied-in content; `ORIGINAL_VERSION` owns optional `attestations` and a `lifecycle_state`.
-- `CONTRIBUTION` — atomic commit bundle grouping the `VERSION` references created in a single change act, with its own `audit`.
-- `AUDIT_DETAILS` — system id, committer (`PARTY_PROXY`), time-committed, change-type, and description for every commit.
-- `ATTESTATION` — specialised `AUDIT_DETAILS` carrying digital signature, proof, reason, and attested view reference.
+- `VERSIONED_OBJECT` / `ORIGINAL_VERSION` / `IMPORTED_VERSION` — change-control container owning the version history of one logical item; concrete `VERSION` subtypes for locally authored versus copied-in content (`ORIGINAL_VERSION` owns optional `attestations` and a `lifecycle_state`).
+- `CONTRIBUTION` / `AUDIT_DETAILS` / `ATTESTATION` — atomic commit bundle grouping the `VERSION` references of one change act; each commit's `AUDIT_DETAILS` records system id, committer, time, change type, and description; `ATTESTATION` specialises it with proof (signature), reason, and attested view.
 - `AUTHORED_RESOURCE`, `RESOURCE_DESCRIPTION`, `RESOURCE_DESCRIPTION_ITEM`, `TRANSLATION_DETAILS` — metadata descriptors for ADL 1.4 authored artefacts (original language, translations, lifecycle, IP, purpose).
 
 ## Relations to Other Specs
@@ -49,11 +43,11 @@ Defines the abstract patterns reused across every higher-level openEHR Reference
 
 ## Architectural Placement
 
-Sits one layer above `support` and `data_types` and one layer below the domain packages (`ehr`, `demographic`, `data_structures`, `ehr_extract`). It is the canonical place where cross-cutting concerns — pathing, archetyping, provenance, and versioning — are normalised, so that every committable object in the RM inherits the same change-control and locatability contract.
+One of the generic RM packages (with `data_structures`, `data_types`, and `support`): it sits above `support` and `data_types` and below the domain packages (`ehr`, `demographic`, `ehr_extract`, `integration`). It is the canonical place where cross-cutting concerns — pathing, archetyping, provenance, and versioning — are normalised, so that every committable object in the RM inherits the same change-control and locatability contract.
 
 ## When to Read the Full Spec
 
-Consult the full document when implementing commit pipelines (`CONTRIBUTION` + `VERSION` ordering, `preceding_version_uid`, `lifecycle_state`), designing attestation or digital-signature flows, mapping a non-openEHR feeder into `FEEDER_AUDIT`, or deciding between `PARTY_SELF`, `PARTY_IDENTIFIED`, and `PARTY_RELATED` for subject/participation references.
+Consult the full document when implementing commit pipelines (`CONTRIBUTION` + `VERSION` ordering, `preceding_version_uid`, `lifecycle_state`), designing attestation or digital-signature flows, mapping a non-openEHR feeder into `FEEDER_AUDIT`, or deciding between `PARTY_SELF`, `PARTY_IDENTIFIED`, and `PARTY_RELATED` for subject/participation references. For per-class attribute, function, and invariant detail use the BMM-backed `type_specification_get` tool rather than the rendered HTML.
 
 ## References
 

@@ -72,9 +72,9 @@ Dutch, like the other West-Germanic languages, is a compound-rich language where
   - Example: "onderzoeksbevindingen" (examination findings) — compound of "onderzoek" + "bevindingen".
 
 - **B2.2:** When combining nouns into compounds, the first noun may receive a linking element (**tussenletter**):
-  - **-s- linking:** "onderzoek" + "detail" = "onderzoeksdetails"; "onderzoek" + "bevindingen" = "onderzoeksbevindingen".
+  - **-s- linking:** "onderzoek" + "detail" = "onderzoeksdetails"; "onderzoek" + "bevindingen" = "onderzoeksbevindingen"; "lichaam" + "houding" = "lichaamshouding".
   - **-en- linking:** common where the first element has a plural in -en (verify per word; do not generalize).
-  - **Null linking:** "lichaamshouding", "lichaamslocatie" use the connective -s- on "lichaam" (lichaam**s**…); confirm the established form rather than inventing one.
+  - **Null linking:** "bloed" + "druk" = "bloeddruk"; "hart" + "slag" = "hartslag" (no tussenletter); confirm the established form rather than inventing one.
   - Do not invent new linking patterns; consult Nictiz/SNOMED CT NL for established precedent.
 
 - **B2.3:** Compounds SHALL be written as a single unhyphenated closed word, except where the official spelling (Het Groene Boekje / Woordenlijst Nederlandse Taal) prescribes a hyphen, for example:
@@ -323,7 +323,7 @@ Semantic equivalence in archetypes is maintained through internal archetype code
 
 - **G1:** Each language's archetype translation MUST use the same internal at-codes (e.g., "at0001", "at0002") as the English original.
 
-- **G2:** The textual descriptions of at-codes (in the Description section) form the primary semantic definition. Translations must preserve the meaning of these descriptions even when terminology differs.
+- **G2:** The textual descriptions of at-codes (`description` in `ontology` → `term_definitions`) form the primary semantic definition. Translations must preserve the meaning of these descriptions even when terminology differs.
 
 - **G3:** Document in this guide when Dutch terminology differs significantly from a literal translation (e.g., "Lichaamshouding" rather than "Positie"), and explain the clinical reasoning.
 

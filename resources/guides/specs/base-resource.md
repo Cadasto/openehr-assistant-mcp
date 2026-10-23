@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/BASE/development/resource.html
 **Markdown URL:** https://specifications.openehr.org/releases/BASE/development/resource.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/base-foundation_types, openehr://guides/specs/am-Identification
 **Keywords:** AUTHORED_RESOURCE, RESOURCE_DESCRIPTION, RESOURCE_DESCRIPTION_ITEM, TRANSLATION_DETAILS, RESOURCE_ANNOTATIONS, original_language, translations, copyright, licence, ip_acknowledgements, annotations, authored resource
 
@@ -19,7 +19,7 @@ Defines the abstract structure and metadata contract for any openEHR "authored r
 ## Scope
 
 - In: the abstract `AUTHORED_RESOURCE` container; its `original_language`, `translations`, `description`, `is_controlled`, and `annotations` attributes; language-keyed descriptive meta-data (`RESOURCE_DESCRIPTION`, `RESOURCE_DESCRIPTION_ITEM`) including purpose, use, misuse, keywords, `copyright`, `licence`, `ip_acknowledgements`, and custodian details; translator provenance and QA (`TRANSLATION_DETAILS`); and path-keyed annotation overlays (`RESOURCE_ANNOTATIONS`).
-- Out: concrete archetype, template, or terminology-subset formalisms (covered by `AM/ADL2`, `AM/OPT2`, `AM/aom2`, and terminology specs); identifiers and globally unique archetype IDs (covered by `AM/Identification`); the underlying foundation types (`Interval`, `List`, `ISO8601_DATE`); and change-control of authored artefacts (covered by `RM/common` versioning and by repository/CKM tooling).
+- Out: concrete archetype, template, or terminology-subset formalisms (covered by `AM/ADL2`, `AM/OPT2`, `AM/AOM2`, and terminology specs); identifiers and globally unique archetype IDs (covered by `AM/Identification`); the underlying foundation types (`Interval`, `List`, `ISO8601_DATE`); and change-control of authored artefacts (covered by `RM/common` versioning and by repository/CKM tooling).
 
 ## Key Classes / Constructs
 
@@ -31,8 +31,8 @@ Defines the abstract structure and metadata contract for any openEHR "authored r
 
 ## Relations to Other Specs
 
-- Depends on: `BASE/foundation_types` (for `Hash`, `List`, `String` primitives) and `BASE/base_types` (identifiers, `TERMINOLOGY_CODE`-style support consumed by lifecycle and language codes).
-- Consumed by: `AM/ADL2` and `AM/aom2` (archetypes inherit `AUTHORED_RESOURCE`), `AM/OPT2` (operational templates), terminology subset / refset specifications, and any CKM-style governance tooling that surfaces description/IP metadata. Legacy `RM/common` retains an ADL 1.4 mirror of these descriptors for backward compatibility.
+- Depends on: `BASE/foundation_types` (`Hash`, `List`, `String` primitives, and `Terminology_code` for `original_language` and translation languages; `lifecycle_state` is a plain `String`) and `BASE/base_types` (identifiers such as `UUID`).
+- Consumed by: `AM/ADL2` and `AM/AOM2` (archetypes inherit `AUTHORED_RESOURCE`), `AM/OPT2` (operational templates), terminology subset / refset specifications, and any CKM-style governance tooling that surfaces description/IP metadata. Legacy `RM/common` retains an ADL 1.4 mirror of these descriptors for backward compatibility.
 
 ## Architectural Placement
 

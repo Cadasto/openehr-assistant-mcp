@@ -6,8 +6,8 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/CDS/development/GDL2.html
 **Markdown URL:** https://specifications.openehr.org/releases/CDS/development/GDL2.md
-**Last updated:** 2026-07-18
-**Related:** openehr://guides/specs/lang-EL, openehr://guides/specs/am2-ADL2
+**Last updated:** 2026-10-22
+**Related:** openehr://guides/specs/proc-decision_language, openehr://guides/specs/am2-ADL2
 **Keywords:** GDL, GDL 2, guideline, CDS, decision support, archetype path, rules
 
 ---
@@ -35,12 +35,13 @@ GDL 2 (Guideline Definition Language 2) defines a formal, platform- and terminol
 
 ## Relations to Other Specs
 
-- Depends on: `BASE/foundation_types`, `RM/common` and `RM/data_types` (for value semantics when bound to openEHR sources), `AM/ADL2` and `AM/AOM2` (archetype/template path model that bindings reference), the openEHR Expression Language (`LANG/EL`) and the ADL assertion syntax (which GDL 2 expressions are loosely based on), and `BASE/resource` plus openEHR ODIN for serialisation.
+- Depends on: `BASE/foundation_types`, `RM/common` and `RM/data_types` (for value semantics when bound to openEHR sources), `AM/ADL2` and `AM/AOM2` (archetype/template path model that bindings reference), the ADL assertion syntax (which GDL 2 expressions, modelled in its own `cds.expression` package, are loosely based on; GDL 2 does not use `LANG/EL`), and `BASE/resource` plus openEHR ODIN for serialisation.
 - Consumed by: CDS execution engines, guideline authoring tools, and platform services that expose decision-support endpoints; GDL 2 is also intended to interoperate with ISO 13606 and HL7 FHIR data sources via alternative bindings.
+- Successors: `PROC/overview` notes that GDL 2 systems may in future be implemented with Task Planning, Decision Language and EL instead.
 
 ## Architectural Placement
 
-Sits in the openEHR CDS component as the authoring-level formalism between clinical models (AM archetypes/templates) and runtime decision services: guidelines consume typed data via model paths, evaluate rules using expressions related to the openEHR Expression Language, and emit template-shaped results. It is deliberately orthogonal to the Reference Model so the same guideline can run on non-openEHR back-ends.
+Sits in the openEHR CDS component as the authoring-level formalism between clinical models (AM archetypes/templates) and runtime decision services: guidelines consume typed data via model paths, evaluate rules using GDL 2's own expression syntax (loosely based on ADL assertions), and emit template-shaped results. It is deliberately orthogonal to the Reference Model so the same guideline can run on non-openEHR back-ends.
 
 ## When to Read the Full Spec
 
@@ -50,4 +51,4 @@ Read the full specification when authoring or implementing a GDL 2 engine (parse
 
 - Full spec (HTML): https://specifications.openehr.org/releases/CDS/development/GDL2.html
 - Full spec (Markdown): https://specifications.openehr.org/releases/CDS/development/GDL2.md
-- Related digests: specs/lang-EL, specs/am2-ADL2
+- Related digests: specs/proc-decision_language, specs/am2-ADL2

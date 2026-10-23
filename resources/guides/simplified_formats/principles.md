@@ -12,7 +12,7 @@ Simplified Formats are **JSON serializations** of openEHR data that use **human-
 
 - **Flat format**: key–value pairs at a single level; keys are full paths (root node id derived from the template id + node path + suffixes).
 - **Structured format**: nested JSON preserving hierarchy; same semantics, different structure.
-- **MIME types**: Flat `application/openehr.wt.flat+json`; Structured `application/openehr.wt.structured+json`.
+- **MIME types**: see openehr://guides/templates/serialization-formats.
 
 ---
 

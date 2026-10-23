@@ -21,7 +21,7 @@
 ### Metadata Case and Punctuation
 
 - **B1:** Concept names and data element names SHALL use sentence case: first letter uppercase, subsequent letters lowercase, except proper nouns and acronyms.
-  - Correct: "Neurologic assessment in neuro-oncology (NANO) scale"
+  - Correct: "Neurologic Assessment in Neuro-Oncology (NANO) scale" (instrument name is a proper noun; "scale" stays lowercase)
   - Incorrect: "Neurologic Assessment In Neuro-Oncology Scale (NANO)"
 
 - **B2:** Abbreviations SHALL be placed immediately after the words they abbreviate, not at the end.
@@ -104,8 +104,8 @@ Example: `Category` for an overarching grouping for an intervention identified i
   - External terminology bindings (SNOMED CT, LOINC, etc.) providing semantic equivalence
   - Translation mechanisms preserving clinical intent across languages
 
-- **D4:** Spelling variants (e.g., British "haemoglobin" vs. American "hemoglobin", or "foetus" vs. "fetus") are handled by external terminology bindings, not by creating multiple archetype terms.
-  - Rationale: A single SNOMED CT concept code represents the same clinical entity regardless of spelling variant; external bindings provide disambiguation.
+- **D4:** Spelling variants (e.g., British "haemoglobin" vs. American "hemoglobin", or "foetus" vs. "fetus") are handled by one at-code with one consistent spelling, not by creating multiple archetype terms.
+  - Rationale: the at-code and its definition carry the meaning (see `openehr://guides/archetypes/terminology`); an optional SNOMED CT binding refers to the same concept whatever the spelling.
 
 - **D5:** Do not create separate at-codes for spelling or terminology variants of the same clinical concept.
 
@@ -124,7 +124,7 @@ Example: `Category` for an overarching grouping for an intervention identified i
 - **E4:** All metadata elements (Purpose, Use, Misuse, descriptions) SHALL be translated to reflect clinical practice and terminology in the target language/locale.
 
 - **E5:** Translations SHALL NOT alter:
-  - Internal identifiers (at-codes, ac-codes, id-codes)
+  - Internal identifiers (at-codes, ac-codes; id-codes in ADL 2)
   - Archetype structure (path hierarchy)
   - Constraints (occurrences, cardinalities), units, value sets
   - Existing terminology bindings (SNOMED CT, LOINC codes remain identical)
@@ -157,12 +157,12 @@ Example: `Category` for an overarching grouping for an intervention identified i
 - **F1:** External terminology bindings (SNOMED CT, LOINC, ICD) provide semantic clarity independent of spelling variants or terminology choices in the archetype text.
 
 - **F2:** When multiple spelling variants exist for the same concept (e.g., "fetus" and "foetus", "haemoglobin" and "hemoglobin"), a single SNOMED CT concept code represents both variants.
-  - Example: SNOMED CT code 83418008 represents the concept "Human fetus" regardless of English spelling variant used in an archetype's term text.
+  - Example: SNOMED CT 83418008 |Entire fetus (body structure)| has the synonyms "Fetus" and "Foetus", whichever spelling an archetype's term text uses.
 
 - **F3:** Spelling and terminology variants across languages are handled by:
   - Binding the archetype at-code to the correct SNOMED CT concept
   - Using the target language's standard terminology for the translation
-  - Allowing the external terminology system to manage semantic equivalence
+  - Keeping the shared at-code and its definition as the meaning; the binding adds an external reference
 
 - **F4:** This approach enables:
   - Consistent English source text without spelling variations
@@ -179,7 +179,7 @@ Example: `Category` for an overarching grouping for an intervention identified i
 **English (Original):**
 
 ```text
-Concept: Blood Pressure
+Concept: Blood pressure
 Purpose: To record the measurement of systemic arterial blood pressure at a specified time.
 Description: The force exerted by blood on the walls of arteries during and after each heartbeat,
 expressed as systolic/diastolic in mmHg.
@@ -189,7 +189,7 @@ expressed as systolic/diastolic in mmHg.
 
 ```text
 Concept: Blodtrykk
-Purpose: Å registrere målingen av systemisk arterielt blodtrykk på et spesifisert tidspunkt.
+Purpose: For å registrere målingen av systemisk arterielt blodtrykk på et spesifisert tidspunkt.
 Description: Kraften som blod utøver på arterieveggen under og etter hvert hjerteslag,
 uttrykt som systolisk/diastolisk i mmHg.
 ```
@@ -238,7 +238,7 @@ uttrykt som systolisk/diastolisk i mmHg.
 
 - **H3:** Do NOT translate archetype class names (e.g., ACTION, OBSERVATION, CLUSTER, INSTRUCTION) or internal RM type names.
 
-- **H4:** During translation, NEVER change: node identifiers (at-codes, ac-codes, id-codes); reference model structure or paths; constraints (occurrences, cardinalities); units; value sets; or existing terminology bindings.
+- **H4:** During translation, NEVER change: node identifiers (at-codes, ac-codes; id-codes in ADL 2); reference model structure or paths; constraints (occurrences, cardinalities); units; value sets; or existing terminology bindings.
 
 - **H5:** Do NOT invent new concepts, merge/split terms, change scope, or alter numeric/code systems when translating.
 
@@ -301,9 +301,9 @@ Each language guide SHALL:
 
 ### Cross-Language Terminology Equivalence
 
-When concepts translate to different terminology across languages, semantic equivalence is maintained through external terminology bindings (SNOMED CT, LOINC), not through identical phrasing across language guides.
+When concepts translate to different terminology across languages, semantic equivalence is maintained through the shared at-code and its definition, not through identical phrasing across language guides; external bindings (SNOMED CT, LOINC) add a supplementary reference.
 
-**Example:** The concept "unsure" may translate to different Norwegian or German terms appropriate to each language's clinical register, but all translations bind to the same SNOMED CT concept code, ensuring unambiguous semantic reference.
+**Example:** The concept "unsure" may translate to different Norwegian or German terms appropriate to each language's clinical register, but all translations share the same at-code (and any SNOMED CT binding stays identical).
 
 Each language guide MAY specify terminology choices appropriate for that language while documenting the clinical reasoning when terminology differs significantly from literal translation.
 

@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/ITS-REST/development/simplified_formats.html
 **Markdown URL:** https://specifications.openehr.org/releases/ITS-REST/development/simplified_formats.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/its-rest-api, openehr://guides/simplified_formats/principles, openehr://guides/simplified_formats/rules
 **Keywords:** simplified format, FLAT, STRUCTURED, JSON, web template, ctx, pipe suffix, serialisation
 
@@ -19,14 +19,14 @@ Defines two template-driven JSON serialisations — FLAT and STRUCTURED — that
 ## Scope
 
 - In: normative rules for FLAT path notation (slash-separated web-template node IDs, `:n` instance indices, `|suffix` attribute accessors), normative rules for STRUCTURED nested-object/array form, the `ctx` object for composition-level metadata, underscore-prefixed RM attribute keys (`_uid`, `_feeder_audit`, `_link:n`), the `|raw` escape hatch, and the associated MIME types `application/openehr.wt.flat+json` and `application/openehr.wt.structured+json`.
-- Out: the HTTP endpoint catalogue (covered by `ITS-REST/openapi_ehr` and siblings), the canonical RM JSON/XML bindings (`ITS-JSON`, `ITS-XML`), template and archetype formalisms (`AM`), AQL result-set shape (`QUERY`), and terminology content (`TERM`).
+- Out: the HTTP endpoint catalogue (covered by `ITS-REST/overview` and the per-area documents such as `ITS-REST/ehr`; see digest `its-rest-api`), the canonical RM JSON/XML bindings (`ITS-JSON`, `ITS-XML`), template and archetype formalisms (`AM`), AQL result-set shape (`QUERY`), and terminology content (`TERM`).
 
 ## Key Classes / Constructs
 
 - Web Template path — slash-joined, lowercased, snake-cased node IDs rooted at the template id; identifies one leaf or subtree.
 - FLAT path notation — single-level `key: value` JSON map using full paths with `:n` for list indices and `|suffix` for typed attributes.
 - STRUCTURED tree form — nested JSON objects and arrays that mirror the template shape; every node is an array even when cardinality is one.
-- `ctx` object — composition-level defaults and metadata (`ctx/language`, `ctx/territory`, `ctx/composer_name`, `ctx/time`, `ctx/setting|code`, participations).
+- `ctx` object — composition-level defaults and metadata (`ctx/language`, `ctx/territory`, `ctx/composer_name`, `ctx/time`, `ctx/setting`, participations).
 - Pipe suffixes — typed attribute accessors such as `|magnitude`, `|unit`, `|code`, `|value`, `|terminology`, `|ordinal`, plus `|raw` for embedding canonical JSON.
 - Underscore-prefix metadata keys — access optional RM attributes outside the template skeleton (e.g. `_uid`, `_link:0`, `_feeder_audit`, `_health_care_facility`).
 - RM mapping rules — concrete serialisation recipes for `COMPOSITION`, entry classes, `ELEMENT`, `CLUSTER`, `DV_QUANTITY`, `DV_CODED_TEXT`, `CODE_PHRASE`, `PARTY_IDENTIFIED`, `LINK`, `FEEDER_AUDIT`.

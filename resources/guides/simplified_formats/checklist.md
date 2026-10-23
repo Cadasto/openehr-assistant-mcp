@@ -10,7 +10,7 @@
 
 - [ ] **Target OPT** (and Web Template if used) is identified; field identifiers are valid for that template only.
 - [ ] **Format variant** chosen: Flat (key–value) or Structured (nested) per use case.
-- [ ] **MIME type** acknowledged: `application/openehr.wt.flat+json` or `application/openehr.wt.structured+json`.
+- [ ] **MIME type** acknowledged: the canonical Flat or Structured media type (see openehr://guides/templates/serialization-formats).
 
 ---
 
@@ -54,7 +54,7 @@
 - [ ] **Cardinality** of repeated nodes not exceeded; mandatory nodes present where required.
 - [ ] **Terminology** codes and terminology ids valid where applicable.
 - [ ] **Data types** match template (number, string, ISO datetime as appropriate).
-- [ ] **`|other`** (free-text branch) only on open value-set (`listOpen: true`) coded leaves, never combined with `|code`/`|value`/`|terminology`.
+- [ ] **`|other`** (free-text branch) only on open value-set (`listOpen: true`) coded leaves, never combined with `|code`/`|value`/`|terminology`/`|preferred_term`.
 
 ---
 

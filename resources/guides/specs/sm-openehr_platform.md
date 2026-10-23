@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/SM/development/openehr_platform.html
 **Markdown URL:** https://specifications.openehr.org/releases/SM/development/openehr_platform.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-demographic
 **Keywords:** SM, platform, service model, I_EHR_SERVICE, I_DEFINITION_ADL2, I_SUBJECT_PROXY_SERVICE, UPDATE_VERSION, CALL_STATUS, RESULT_SET, REST
 
@@ -18,7 +18,7 @@ Defines the coarse-grained service interfaces that any openEHR platform implemen
 
 ## Scope
 
-- In: the logical platform architecture with standardised component naming (Definition, EHR, Demographic, EHR Index, Query, Message, Subject Proxy, Terminology, Admin services); abstract interface call specifications in a functional, nearly-stateless style; shared call-status mechanism (`CALL_STATUS` / `CALL_STATUS_TYPE`); list handling; `UPDATE_VERSION<T>` update semantics for versioned resources; registered-query naming and formalism conventions.
+- In: the logical platform architecture with standardised component naming (Definition, EHR, Demographic, EHR Index, Query, Message, System Log (IHE ATNA), Subject Proxy, Terminology, Admin services); abstract interface call specifications in a functional, nearly-stateless style; shared call-status mechanism (`CALL_STATUS` / `CALL_STATUS_TYPE`); list handling; `UPDATE_VERSION<T>` update semantics for versioned resources; registered-query naming and formalism conventions.
 - Out: wire formats and HTTP mappings (those live in `ITS-REST`, `ITS-XML`, `ITS-JSON`); the data models being served (`RM/*`, archetype formalism in `AM`); terminology content itself (`TERM`); conformance rules (`CNF`).
 
 ## Key Classes / Constructs

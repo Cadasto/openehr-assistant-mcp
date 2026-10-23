@@ -11,7 +11,7 @@ use Mcp\Schema\Content\PromptMessage;
 readonly final class DesignOrReviewArchetype extends AbstractPrompt
 {
     /**
-     * Design or Review an openEHR Archetype, based on the provided inputs and guides.
+     * Design, review or specialise an openEHR Archetype, based on the provided inputs and guides.
      *
      * @param mixed $task_type design | review | specialise
      * @param mixed $concept Archetype concept

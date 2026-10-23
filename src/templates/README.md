@@ -62,7 +62,7 @@ Spec digests are short structured summaries (250–900 words body) of openEHR sp
 - **250–900 words body** (header block excluded), enforced by `SpecDigestsTest`
 - **No invented class names** — every named class must exist in the upstream spec
 - **All URLs must resolve** — verify with `curl -sI` before commit. When the upstream doc has no `.md` twin (e.g. OpenAPI-rendered ITS-REST endpoints whose source is YAML), set `**Markdown URL:** N/A` and let the Spec URL carry the HTML reference. The validator recognises the `N/A` sentinel and skips the pattern check.
-- **Terse Key Classes / Constructs section** — 5–8 top constructs with half-line roles. Per-class attribute / function / invariant detail belongs in `type_specification_get`, not here. Cite that tool explicitly when recommending deeper lookups.
+- **Terse Key Classes / Constructs section** — 5–12 top constructs with half-line roles. Per-class attribute / function / invariant detail belongs in `type_specification_get`, not here. Cite that tool explicitly when recommending deeper lookups.
 - **Update `**Last updated:**`** on any edit
 - **Default to `**Release:** development`** with `/releases/<COMPONENT>/development/` URLs so digests track the living spec rather than a year-old snapshot. Fork to a `-release-X.Y.Z.md` sibling if you need a point-in-time pinned digest for a specific openEHR release.
 - **Use the repo's `**Field:**` header convention** — do not add YAML frontmatter

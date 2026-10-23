@@ -52,8 +52,8 @@ Active voice is the preferred form in Norwegian archetype documentation. Passive
   - "-s passive" (reflexive): "Målingen registreres…" (The measurement is recorded…) — preferred for archetype metadata
   - Auxiliary passive (periphrastic): "Målingen blir registrert…" (The measurement gets recorded…) — less formal, avoid in formal archetype text
 
-- **B1.3:** Example from published archetypes:
-  - OBSERVATION.blood_pressure.v2 Purpose: "For å registrere…" — active imperative form, preferred
+- **B1.3:** Examples:
+  - OBSERVATION.pulse.v2 Purpose (CKM): "For å registrere…" — active infinitive form, preferred
   - Data element names: "Systolisk trykk undersøkt" — implicit active subject, appropriate for element naming
 
 - **B1.4:** Avoid multiple passive layers or unclear agent omission; if the clinical actor is important, state it explicitly in active form.
@@ -116,42 +116,42 @@ Grammatical gender assignment is largely lexical (must be learned per word), but
 
 #### Predictable Gender Patterns (from Archetype Terminology)
 
+Genders below are per Bokmålsordboka (ord.uib.no).
+
 **Masculine gender (hankjønn):**
 
-- Most nouns ending in -ing: "måling" (measurement — en måling, den gamle målingen)
+- Nouns ending in -else: "undersøkelse" (examination — en undersøkelse, undersøkelsen)
 - Many occupations and agent nouns: "lege" (physician — en lege)
-- Example from blood_pressure.v2: "dataelement" is actually masculine in some contexts
+- "reaksjon" (reaction — en reaksjon, reaksjonen), "metode" (metoden), "arketype" (arketypen)
 
-**Feminine gender (hunkjønn):**
+**Feminine or masculine (Bokmål allows both):**
 
-- Many nouns ending in -else, -else, -ing derived nominally: "undersøkelse" (examination — ei undersøkelse, den gamle undersøkelsen)
-- Nouns ending in -ing when derived from verbs: "vurdering" (assessment — ei vurdering, den gamle vurderinga)
-- "reaksjon" (reaction — ei reaksjon, den gamle reaksjonen)
+- Nouns ending in -ing: "måling", "vurdering", "registrering" (ei måling, målinga — or en måling, målingen)
 
 **Neuter gender (intetkjønn):**
 
 - Nouns ending in -trykk: "blodtrykk" (blood pressure — et blodtrykk, det gamle blodtrykket)
-- Nouns ending in -ment: many medical terms
-- Nouns ending in -skjema: "dataskjema" (data form — et dataskjema)
+- Nouns ending in -ment: "medikament", "instrument"
+- Compounds take the gender of the last element: "dataskjema" (et dataskjema, from "skjema"), "dataelement" (et dataelement, from "element")
 - "trykk" (pressure — et trykk, det gamle trykket)
 
-**Archetype Note:** Gender assignment is highly irregular and must be verified against published CKM Norwegian archetypes. Validated against 11+ Norwegian (v1+) archetypes including OBSERVATION.blood_pressure.v2, OBSERVATION.body_weight.v2, OBSERVATION.pulse.v2, OBSERVATION.laboratory_test_result.v1, OBSERVATION.s_gaf.v1, OBSERVATION.madrs_no.v1, and others.
+**Archetype Note:** Gender assignment is highly irregular and must be verified against Bokmålsordboka and published CKM Norwegian archetypes. Validated against 11+ Norwegian (v1+) archetypes including OBSERVATION.blood_pressure.v2, OBSERVATION.body_weight.v2, OBSERVATION.pulse.v2, OBSERVATION.laboratory_test_result.v1, OBSERVATION.s_gaf.v1, OBSERVATION.madrs_no.v1, and others.
 
 ### Number Conjugation
 
 - **B3.1:** Singular and plural forms affect article choice and, in some cases, adjective endings. The three-gender system produces different article and plural patterns:
 
-  | Form | Masculine | Feminine | Neuter |
+  | Form | Masculine | Feminine (or masculine) | Neuter |
   |---|---|---|---|
-  | Indefinite singular | en måling | ei undersøkelse | et blodtrykk |
-  | Definite singular | målingen | undersøkelsen | blodtrykket |
-  | Indefinite plural | målinger | undersøkelser | blodtrykk |
-  | Definite plural | målingene | undersøkelsene | blodtrykkene |
+  | Indefinite singular | en metode | ei/en måling | et blodtrykk |
+  | Definite singular | metoden | målinga/målingen | blodtrykket |
+  | Indefinite plural | metoder | målinger | blodtrykk |
+  | Definite plural | metodene | målingene | blodtrykkene/blodtrykka |
 
 - **B3.2:** Data element names and descriptions in archetypes SHALL use consistent number forms:
   - **Singular preferred:** "Systolisk trykk" (singular form) rather than "Systoliske trykk"
   - **Plural used when semantically appropriate:** "Allergier" (plural when multiple allergies are expected)
-  - Example from OBSERVATION.blood_pressure.v2: "Systolisk trykk", "Diastolisk trykk" (singular forms, standard in archetype element naming)
+  - Example from OBSERVATION.blood_pressure.v2: "Systolisk", "Diastolisk" (CKM element names; singular, standard in archetype element naming)
 
 - **B3.3:** When referencing elements in descriptions, use appropriate gender and number agreement:
   - Correct: "Målingen av systemisk arterielt blodtrykk" (measurement [common] + agreement)
@@ -186,6 +186,8 @@ Grammatical gender assignment is largely lexical (must be learned per word), but
 
 ---
 
+## C. Metadata Statement Patterns
+
 ### Purpose Statements (Formål)
 
 - **C1:** Purpose statements SHALL begin with "For å registrere…" followed by a clinically-oriented definition.
@@ -198,8 +200,8 @@ Grammatical gender assignment is largely lexical (must be learned per word), but
 ### Use Statements (Bruk)
 
 - **C3:** Use statements SHALL begin with "Brukes for å registrere…" followed by clinical context and application scope.
-  - Example: "Brukes for å registrere alle typer av systemisk arteriell blodtrykksmåling, uansett hvilken metode eller kroppsplassering som anvendes…" (OBSERVATION.blood_pressure.v2)
-  - Example: "Brukes for å registrere målingen av midjeomkrets." (OBSERVATION.waist_circumference.v1)
+  - Example: "Brukes for å registrere alle typer av systemisk arteriell blodtrykksmåling, uansett hvilken metode eller kroppsplassering som anvendes…" (adapted from OBSERVATION.blood_pressure.v2, which has "Brukes til å registrere…")
+  - Example: "Brukes for å registrere målingen av midjeomkrets." (adapted from OBSERVATION.waist_circumference.v1, which has "Bruk for å registrere målingen midjeomkrets.")
   - Note: Some published CKM Norwegian archetypes use "Brukes til å registrere…" or "Bruk for å registrere…"; these are inconsistencies that should be corrected toward the "Brukes for å registrere…" standard.
 
 - **C4:** Use statements SHOULD align with Purpose while clarifying implementation context and boundaries.
@@ -215,7 +217,7 @@ Grammatical gender assignment is largely lexical (must be learned per word), but
 ### Concept Descriptions
 
 - **C7:** Concept descriptions SHALL define the concept as clinicians understand and apply it, not as academic or technical definitions.
-  - Example: "Den lokale målingen av arteriell blodtrykk som er et surrogatparameter for arterielt trykk i systemisk sirkulasjon."
+  - Example: "Den lokale målingen av arterielt blodtrykk som er en surrogatparameter for arterielt trykk i systemisk sirkulasjon."
 
 ---
 
@@ -391,7 +393,7 @@ Semantic equivalence in archetypes is maintained through internal archetype code
 
 - **G1:** Each language's archetype translation MUST use the same internal at-codes (e.g., "at0001", "at0002") as the English original.
 
-- **G2:** The textual descriptions of at-codes (in the Description section) form the primary semantic definition. Translations must preserve the meaning of these descriptions even when terminology differs.
+- **G2:** The textual descriptions of at-codes (`description` in `ontology` → `term_definitions`) form the primary semantic definition. Translations must preserve the meaning of these descriptions even when terminology differs.
 
 - **G3:** Document in language-specific guides when terminology differs significantly from literal translation, and explain the clinical reasoning.
 
@@ -401,7 +403,7 @@ Semantic equivalence in archetypes is maintained through internal archetype code
 
 ### Example 1: Blood Pressure Observation (from OBSERVATION.blood_pressure.v2)
 
-**Norwegian Metadata from CKM:**
+**Norwegian metadata adapted from CKM** (wording normalised to Section C; CKM 2.0.16 has "For registrering av…", "Brukes til å registrere…", "Anvendes ikke til…"):
 
 Purpose:
 
@@ -469,7 +471,7 @@ av reaksjoner, fra trivielle til livstruende:
 - Use extensively documents scope with examples and bullet points
 - Terminology matches Norwegian clinical standards: "overfølsomhetsreaksjoner", "immunmediert", "hypersensitivitet"
 - Lists are formatted with bullet points and clear categorization
-- Medical concepts translated idiomatically: "passient jornalen" (patient record), "legemiddel" (medicinal product)
+- Medical concepts translated idiomatically: "pasientjournalen" (patient record), "legemiddel" (medicinal product)
 - Technical classifications preserved in English where necessary (Types I-IV) with Norwegian explanations
 
 ### Example 3: Norwegian Terminology Patterns
@@ -488,7 +490,7 @@ systolisk, diastolisk, blodtrykk
 
 - Abbreviations preserved when established in Norwegian clinical practice (BT = Blodtrykk, MAP, SAP, DAP, PP)
 - Descriptive Norwegian terms pair with English abbreviations
-- Keywords use sentence case, not capitalized abbreviations
+- Keywords are lowercase, except established abbreviations (BT, MAP)
 - Compound nouns use Norwegian conventions: "middelarterietrykk", "radialispalpasjon"
 - Clinical terminology reflects published CKM Norwegian archetype translations
 
@@ -535,11 +537,11 @@ This guide has been validated against 11+ published Norwegian (v1+) archetypes f
 
 | Archetype | Version | Status | Organization | Key Language Patterns |
 |-----------|---------|--------|---------------|----------------------|
-| OBSERVATION.blood_pressure | v2 | Stable | openEHR International | Standard reference; "For registrering av…" Purpose; feminine metadata forms |
-| OBSERVATION.body_weight | v2 | Stable | openEHR International | "Brukes til registrering av…" Use; feminine forms (vekten, målingen) |
+| OBSERVATION.blood_pressure | v2 | Stable | openEHR International | Standard reference; "For registrering av…" Purpose; -en definite forms in metadata |
+| OBSERVATION.body_weight | v2 | Stable | openEHR International | "Brukes til registrering av…" Use; -en definite forms (vekten, målingen) |
 | OBSERVATION.pulse | v2 | Recently Updated | openEHR International | "For å registrere…" Purpose; multiple translator involvement |
 | OBSERVATION.height | v2 | Stable | openEHR International | Compound word patterns (kroppshøyde, kroppslengde, antropometri) validated |
-| OBSERVATION.body_temperature | v2 | Stable | openEHR International | Multiple Norwegian translators; feminine forms consistent |
+| OBSERVATION.body_temperature | v2 | Stable | openEHR International | Multiple Norwegian translators; -en definite forms consistent |
 | OBSERVATION.laboratory_test_result | v1 | Stable | openEHR International | Extensive compound words (laboratorieundersøkelse, prøvemateriale, analyseresultat) |
 | OBSERVATION.waist_circumference | v1 | Published | openEHR International | Modern translation; "For å registrere…" Purpose pattern |
 | SECTION.adhoc | v1 | Published | openEHR International | Generic section template; generic Purpose and Use statements |
@@ -570,7 +572,7 @@ This guide has been validated against 11+ published Norwegian (v1+) archetypes f
 
 **Gender and Number Consistency:**
 
-- ✓ Feminine forms predominate in metadata across ALL validated archetypes: "arketypen", "registreringen", "målingen", "undersøkelsen", "metoden"
+- ✓ Masculine -en definite forms predominate in metadata across ALL validated archetypes, also for -ing nouns that allow feminine -a (målingen, not målinga): "arketypen", "registreringen", "målingen", "undersøkelsen", "metoden"
 - ✓ Element names follow domain-specific patterns; consistency maintained within semantic domains
 - ✓ Adjective agreement follows standard Norwegian three-gender system (masculine/feminine/neuter)
 
@@ -585,7 +587,7 @@ This guide has been validated against 11+ published Norwegian (v1+) archetypes f
 1. No major discrepancies found between language-standards-nb.md and published archetype practice
 2. Variations in Purpose, Use, and Misuse statement phrasing found in some published archetypes are due to human inconsistency; the standard forms defined in Section C should be used consistently
 3. Norwegian-native archetypes (s_gaf.v1, madrs_no.v1) contain specialized terminology specific to Norwegian healthcare contexts and assessment frameworks
-4. Feminine forms in metadata are a consistent pattern across all validated archetypes and should be maintained in new translations
+4. Masculine -en definite forms in metadata (målingen, registreringen) are a consistent pattern across all validated archetypes and should be maintained in new translations
 5. Glossary terms validated against 11+ published archetypes remain accurate and representative of CKM Norwegian practice
 
 ---

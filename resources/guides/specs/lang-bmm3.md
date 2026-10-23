@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/LANG/development/bmm3.html
 **Markdown URL:** https://specifications.openehr.org/releases/LANG/development/bmm3.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/lang-bmm, openehr://guides/specs/lang-bmm_persistence, openehr://guides/specs/lang-EL
 **Keywords:** BMM3, basic meta-model, expression meta-model, EL, decision table, tuple type, signature, enumeration, meta-classes
 
@@ -32,22 +32,22 @@ BMM3 is the v3 development line of the Basic Meta-Model — "a model of object m
 - `BMM_ASSERTION` / `BMM_LITERAL_VALUE` — Design-by-Contract invariants and typed literal value wrappers.
 - Expression meta-classes — `EL_EXPRESSION`, `EL_LITERAL`, `EL_FEATURE_REF`, `EL_AGENT`, `EL_PREDICATE`, `EL_OPERATOR`, `EL_CONDITION_CHAIN`, `EL_DECISION_TABLE`, `EL_TUPLE` — sufficient for first-order predicate logic over model entities.
 
-Per-meta-class attribute detail is best retrieved via the BMM-backed `type_specification_get` tool rather than duplicated here.
+`type_specification_get` does not cover BMM3: its LANG entries are the BMM v2 `core`/`rm_access`, `bmm_persistence` (`P_BMM_*`) and BEOM classes. Read the full spec for BMM3 meta-class detail.
 
 ## Relations to Other Specs
 
 - Evolves: `LANG/bmm` (stable BMM v2 — rm_access/core/persistence packages); BMM3 renames `rm_access` to `model_access` and splits `core` into five sub-packages.
 - Depends on / paired with: `LANG/bmm_persistence` (`org.openehr.lang.bmm_persistence` package for serialised schemas in ODIN, JSON, or XML).
-- Shares lineage with: `LANG/EL` and `LANG/BEL` — the `expression` sub-package is the meta-model side of the openEHR expression-language work, also reused by `AM/AOM2` rules.
+- Shares lineage with: `LANG/EL` and `LANG/BEL` — the `expression` sub-package is the meta-model side of the openEHR expression-language work. `AM/AOM2` rules do not use it; they use BEL's Basic Expression Object Model (`lang.beom`).
 - Describes: `RM/*`, `BASE`, and `AM` object models when those are published as BMM schemas.
 
 ## Architectural Placement
 
-BMM3 occupies the same LANG-layer slot as stable BMM: the computable schema formalism below AM and RM against which archetype validation, AQL path typing, and code generation can operate. Its expression meta-model additionally positions it as the semantic foundation for invariants and rules across the specifications. Because the document is PAUSED, implementers should treat it as a design reference for where BMM is heading, not as a current conformance target.
+BMM3 occupies the same LANG-layer slot as stable BMM: the computable schema formalism below AM and RM against which archetype validation, AQL path typing, and code generation can operate. Its expression meta-model additionally positions it as a candidate foundation for model-level invariants and computable expressions. Because the document is PAUSED, implementers should treat it as a design reference for where BMM is heading, not as a current conformance target.
 
 ## When to Read the Full Spec
 
-Read the full document when implementing or evaluating next-generation model tooling that needs tuple types, routine signatures, enumeration/range-constrained classes, or computable invariants; when mapping the EL expression meta-classes used by AOM2 rules back to their meta-model definitions; or when reconciling differences between a v2 (`LANG/bmm`) schema consumer and v3 concepts such as `model_access` and the sub-packaged core.
+Read the full document when implementing or evaluating next-generation model tooling that needs tuple types, routine signatures, enumeration/range-constrained classes, or computable invariants; when mapping EL expression meta-classes back to their meta-model definitions; or when reconciling differences between a v2 (`LANG/bmm`) schema consumer and v3 concepts such as `model_access` and the sub-packaged core.
 
 ## References
 

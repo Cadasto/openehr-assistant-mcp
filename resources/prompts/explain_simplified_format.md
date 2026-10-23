@@ -15,7 +15,6 @@ Task-specific guidance:
 Focus points:
 - Field identifier meaning and template path mapping.
 - `ctx` usage and composition metadata.
-- Common anti-patterns in flat/structured payloads.
 
 Required Output:
 1) Format variant: Flat (key–value) or Structured (nested).

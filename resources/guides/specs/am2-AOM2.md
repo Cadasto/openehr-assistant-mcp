@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/AM/development/AOM2.html
 **Markdown URL:** https://specifications.openehr.org/releases/AM/development/AOM2.md
-**Last updated:** 2026-07-18
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/am2-ADL2, openehr://guides/specs/am2-OPT2, openehr://guides/specs/am-AOM1.4
 **Keywords:** AOM, AOM 2, archetype object model, C_OBJECT, constraint, differential, validity
 
@@ -26,18 +26,12 @@ Archetype Definition Language 2 (ADL 2) validator (`valid_value()`,
 
 ## Scope
 
-AOM 2 covers the full archetype artifact: identification and governance
-metadata, the constraint tree over a reference model, terminology bindings,
-second-order (tuple) constraints, predicate-logic rules, slot semantics, and
-template/operational-template composition. It is intentionally decoupled from
-the Reference Model (RM) being constrained; AOM instances refer to RM class
-and attribute names but do not import RM classes themselves. Out of scope:
-concrete textual/JSON syntax (see ADL 2), RM semantics (see RM specs),
-persistence/versioning (see CM/SM), and CKM governance workflows.
+- In: the full archetype artifact — identification and governance metadata, the constraint tree over a reference model, terminology bindings, second-order (tuple) constraints, rules, slot semantics, template/operational-template composition, validity rules, and flattening. AOM instances name RM classes and attributes but do not import RM classes.
+- Out: concrete textual/JSON syntax (ADL 2), RM semantics (RM specs), persistence and versioning, and CKM governance workflows.
 
 ## Key Classes / Constructs
 
-- `ARCHETYPE`, `AUTHORED_ARCHETYPE`, `DIFFERENTIAL_ARCHETYPE`, `FLAT_ARCHETYPE` — root artifact variants; differential carries only specialization deltas, flat is the fully-expanded inherited form used for validation.
+- `ARCHETYPE` (abstract), `AUTHORED_ARCHETYPE` — root artifact classes; the `is_differential` flag separates the differential source form (only specialization deltas) from the flat, fully-expanded form used for validation. The BMM defines no `DIFFERENTIAL_ARCHETYPE` or `FLAT_ARCHETYPE` class, although some prose still uses those names.
 - `TEMPLATE`, `TEMPLATE_OVERLAY`, `OPERATIONAL_TEMPLATE` — slot-filling composition; OPT is the self-contained, fully flattened artifact for runtime use.
 - `ARCHETYPE_HRID` — structured human-readable identifier (namespace, RM publisher/package/class, concept, version), with computed `semantic_id` / `physical_id` forms; machine identification via `ARCHETYPE.uid`.
 - `C_OBJECT`, `C_DEFINED_OBJECT`, `C_COMPLEX_OBJECT`, `C_COMPLEX_OBJECT_PROXY`, `C_ARCHETYPE_ROOT` — object-level constraint hierarchy; proxies and roots support internal references and external archetype embedding.
@@ -50,12 +44,10 @@ persistence/versioning (see CM/SM), and CKM governance workflows.
 
 ## Relations to Other Specs
 
-- **ADL 2** (`am2-ADL2`): textual serialization; every AOM 2 class maps to an ADL 2 construct. Read AOM 2 first to understand what ADL 2 is expressing.
-- **OPT 2** (`am2-OPT2`): operational template is an AOM 2 `OPERATIONAL_TEMPLATE` produced by flattening archetype + overlays.
-- **AOM 1.4** (`am-AOM1.4`): predecessor; differs in differential form, id-code/at-code/ac-code separation, URI-based terminology bindings, tuple constraints, and rules.
-- **BASE** (`foundation_types`, `resource`, `expressions`): AOM reuses `AUTHORED_RESOURCE`, `RESOURCE_DESCRIPTION`, interval and expression types.
-- **RM**: constraint targets RM class/attribute names; validation requires an RM BMM.
-- **ISO 13606-2:2019**: AOM 2 is broadly aligned with the ISO 13606-2 archetype constraint model and contributes to its revision lineage, while adding differential specialization and URI terminology bindings.
+- Depends on: `BASE/foundation_types` (leaf types, `Interval<T>`), `BASE/base_types` (`VALIDITY_KIND`, `VERSION_STATUS`), `BASE/resource` (`AUTHORED_RESOURCE`, `RESOURCE_DESCRIPTION`), `LANG/BEL` (rules, `lang.beom`); validation against RM class/attribute names needs an RM BMM.
+- Consumed by: `AM/ADL2` (textual serialization; every AOM 2 class maps to an ADL 2 construct), `AM/OPT2` (`OPERATIONAL_TEMPLATE` produced by flattening archetype + overlays).
+- Supersedes: `AM/AOM1.4` — differs in differential form, the id/at/ac-code scheme (ADL/AOM 2.4 re-introduces the ADL 1.4 at-code system as the openEHR primary one), URI-based terminology bindings, tuple constraints, and rules.
+- Aligns with: ISO 13606-2:2019 — AOM 2 is broadly aligned with the ISO 13606-2 archetype constraint model and contributes to its revision lineage, while adding differential specialization and URI terminology bindings.
 
 ## Architectural Placement
 
@@ -65,7 +57,7 @@ OPT/flattener and downstream tooling. It is the in-memory contract between
 archetype editors (e.g. Archetype Designer, LinkEHR, ADL Workbench) and
 runtime consumers (validators, template compilers, form/UI generators,
 terminology resolvers). Concretely: parsers produce AOM 2 objects; flatteners
-consume `DIFFERENTIAL_ARCHETYPE` plus parents and emit `FLAT_ARCHETYPE` or
+consume differential archetypes plus their flat parents and emit flat archetypes or an
 `OPERATIONAL_TEMPLATE`; persistence/versioning layers (CKM, repositories)
 treat AOM 2 as the canonical object graph; runtime data validation walks the
 `C_OBJECT`/`C_ATTRIBUTE` tree against RM instances.
@@ -86,8 +78,7 @@ and the formal flattening and conformance algorithms.
 
 ## References
 
-- openEHR AM — AOM 2 specification: https://specifications.openehr.org/releases/AM/development/AOM2.html
-- openEHR AM — ADL 2 specification: https://specifications.openehr.org/releases/AM/development/ADL2.html
-- openEHR AM — Operational Template (OPT 2): https://specifications.openehr.org/releases/AM/development/OPT2.html
-- openEHR AM — AOM 1.4 (legacy): https://specifications.openehr.org/releases/AM/development/AOM1.4.html
+- Full spec (HTML): https://specifications.openehr.org/releases/AM/development/AOM2.html
+- Full spec (Markdown): https://specifications.openehr.org/releases/AM/development/AOM2.md
+- Related digests: specs/am2-ADL2, specs/am2-OPT2, specs/am-AOM1.4, specs/am-Identification, specs/lang-BEL
 - ISO 13606-2:2019 — Health informatics — EHR communication — Part 2: Archetype interchange specification.

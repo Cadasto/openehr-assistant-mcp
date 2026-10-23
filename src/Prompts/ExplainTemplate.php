@@ -13,7 +13,7 @@ readonly final class ExplainTemplate extends AbstractPrompt
     /**
      * Explain and interpret the semantic meaning of an openEHR Template, grounded in the bundled guides.
      *
-     * @param mixed $template_text Template (OET) to explain
+     * @param mixed $template_text Template (OET or OPT) to explain
      * @param mixed $audience Intended audience: clinician, developer, data-analyst, mixed (optional)
      * @return PromptMessage[]
      */

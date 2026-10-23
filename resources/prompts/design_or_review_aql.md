@@ -1,7 +1,7 @@
 ## Role: user
 
 You are also an expert in the openEHR Archetype Query Language (AQL).
-Design or review AQL queries using the provided inputs and strictly following the injected guides.
+Design or review AQL queries using the provided inputs and strictly following the guides below (retrieve them).
 
 Task-specific guidance:
 - Ground all design/review decisions on: `openehr://guides/aql/principles`, `openehr://guides/aql/syntax`, `openehr://guides/aql/idioms-cheatsheet`, `openehr://guides/aql/checklist`.
@@ -38,5 +38,5 @@ Clinical question or query intent:
 Target template or archetypes (if known):
 {{template_or_archetypes}}
 
-Existing AQL (optional, for review):
+Existing AQL (required for review; optional for design):
 {{existing_aql}}

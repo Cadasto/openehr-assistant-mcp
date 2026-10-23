@@ -29,7 +29,7 @@
 ## D. Terminology and Annotations
 
 - **Rule D1:** Prefer `DV_CODED_TEXT` over free text whenever possible.
-- **Rule D2:** Use the `limitToList="true"` constraint to ensure data quality by forcing users to pick from the provided list.
+- **Rule D2:** Keep `limitToList="true"` (the OET default) to ensure data quality by forcing users to pick from the provided list.
 - **Rule D3:** Add **Annotations** to elements to provide implementation hints, such as FHIR mappings or specific UI instructions.
 
 ## E. Metadata and Documentation
@@ -46,8 +46,6 @@
 
 ## G. Dataset Splitting and Composition Type (CGEM)
 
-- **Rule G1:** When splitting a complex dataset across templates, classify datapoints as Global Background, Contextual Situation, Event Assessment, or Managed Response so each template has a clear composition semantics (full framework: openehr://guides/templates/cgem-framework; summary: openehr://guides/templates/principles).
-- **Rule G2:** Use **event** compositions for data submitted repeatedly (each submission is a new composition). Use **persistent** compositions (longitudinal or episodic) when a single “current version” is maintained; episodic when scoped to a care journey (e.g. cancer pathway), longitudinal for lifetime scope (e.g. allergies).
-- **Rule G3:** Use Instruction and Action archetypes only for datapoints that require order/fulfilment tracking. If a form field is merely a record (e.g. “Seen by Key worker Y/N”), model it as simple data in a Contextual or Event template, not as Managed Response.
+- **Rule G1:** When splitting a complex dataset across templates, classify datapoints with CGEM and set each template's `COMPOSITION.category` and INSTRUCTION/ACTION use to match: see openehr://guides/templates/cgem-framework.
 
 ---

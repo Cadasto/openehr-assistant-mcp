@@ -52,7 +52,7 @@ Rules often contain a `<constraint>` child element of a specific `xsi:type`.
 ### `textConstraint`
 Used for `DV_TEXT` and `DV_CODED_TEXT`.
 - `<includedValues>`: List of permitted codes/strings.
-- `limitToList="true"`: Forces selection from the list.
+- `limitToList="true"` (XSD default): Forces selection from the list.
 
 ### `quantityConstraint`
 Used for `DV_QUANTITY`.
@@ -77,7 +77,7 @@ A direct child of `<Rule>` (alongside or instead of `<constraint>`) restricting 
 ```
 
 ## Metadata and Annotations
-- **`<description>`**: Contains `lifecycle_state`, `purpose`, `use`, `misuse`, and `other_details` (key/value items).
+- **`<description>`**: Contains `original_author`, `lifecycle_state`, `details` (holding `purpose`, `use`, `misuse`, `copyright`), and `other_details` (key/value items).
 - **`<annotations>`**: Stores free-form node-level metadata, often used for mappings (e.g., `fhir_mapping`, `source`). Each `<annotations>` element is a top-level sibling of `<definition>` (CKM exports place them between `<description>` and `<definition>`), carries a `path` XML attribute holding the fully-qualified template path (starting `[archetype_id]/...`, with `'name'` qualifiers for cloned/renamed nodes), and contains `<items><item><key>...</key><value>...</value></item></items>`.
 
 ## Implementation Note
@@ -87,7 +87,7 @@ OET is a design-time format. For runtime systems, it should be compiled into an 
 
 ## Attribute Reference (by element)
 
-Grounded in real CKM OETs (CID `1013.26.1`, `1013.26.380`); do not invent attributes beyond those listed.
+Grounded in real CKM OETs (CID `1013.26.1`, `1013.26.380`) and the OET XSD (`CompositionTemplate.xsd`); do not invent attributes beyond those listed.
 
 > **Namespace note.** Some Ocean Template Designer exports prefix the template types (`xsi:type="tem:OBSERVATION"`); others omit the prefix (`xsi:type="OBSERVATION"`). Both are valid; the `tem:` prefix maps to `xmlns:tem="openEHR/v1/Template"`.
 
@@ -98,13 +98,13 @@ Grounded in real CKM OETs (CID `1013.26.1`, `1013.26.380`); do not invent attrib
 | `<Item>` | A single archetype placed into a SECTION/structure node (Ocean Designer style). | `archetype_id`, `concept_name`, `name`, `path`, `min`, `max`, `xsi:type` |
 | `<Items>` | An archetype filling a slot (often nested CLUSTER). | `archetype_id`, `concept_name`, `name`, `path`, `min`, `max`, `xsi:type` |
 | `<Rule>` | Constrains an existing node located by `path`. | `path`, `name`, `min`, `max`, `hide_on_form`, `default`, `clone` |
-| `<constraint>` | Child of `<Rule>` carrying a typed value constraint. | `xsi:type` (`textConstraint`, `quantityConstraint`, `multipleConstraint`, `countConstraint`), `limitToList` (on `textConstraint`) |
+| `<constraint>` | Child of `<Rule>` carrying a typed value constraint. | `xsi:type` (`textConstraint`, `quantityConstraint`, `multipleConstraint`, `countConstraint`, `ordinalConstraint`, `dateConstraint`, `durationConstraint`, `parsableConstraint`), `limitToList` (on `textConstraint`, default `true`; on `parsableConstraint`, default `false`) |
 | `<eventConstraint>` | Child of `<Rule>` restricting an EVENT node's type. | (child only: `<allowedType>`, e.g. `PointInTime`) |
-| `<Context>` | Optional trailing container for `EVENT_CONTEXT` constraints. | (children only: `<Items>`, `<Rule>`, `<hide_on_form>`) |
+| `<Context>` | Optional trailing container for `EVENT_CONTEXT` constraints. | (children only: `<OtherContext>`, `<participation>`, `<Items>`, `<Rule>`, `<hide_on_form>`) |
 
 Notes:
 - `archetype_id` / `template_id` and `xsi:type` appear on the *placement* elements (`Content`/`Item`/`Items`), never on `<Rule>` — a `<Rule>` only re-points at an already-placed node via `path`.
-- `min`/`max` are occurrence overrides; `name` is a display-label override; `hide_on_form` and `default` are tooling hints (not normative OPT 2 — see openehr://guides/templates/principles).
+- `min`/`max` are occurrence overrides; `name` is a display-label override; `default` sets a template default value, which is normative (carried into the OPT as `default_value` — see openehr://guides/templates/principles); `hide_on_form` is a tooling hint (not normative OPT 2).
 - `clone="true"` produces a named variant of a repeatable node (pair it with `name`).
 
 ### Worked snippets
@@ -124,7 +124,7 @@ Notes:
 <Rule path="/activities[at0001]/description[at0002]/items[at0009]" name="dosageInstructions"/>
 ```
 
-**Inline `textConstraint` + value-set narrowing (`limitToList`)** — subset a coded list; `limitToList="true"` blocks free-text leakage, `"false"` allows additional free text:
+**Inline `textConstraint` + value-set narrowing (`limitToList`)** — subset a coded list; `limitToList="true"` (the default) blocks free-text leakage, `"false"` allows additional free text:
 ```xml
 <Rule path="/data[at0001]/items[at0003]/items[at0008]/items[at0009]">
   <constraint limitToList="true" xsi:type="tem:textConstraint">
@@ -136,7 +136,7 @@ Notes:
 ```
 (Also: `<excludedValues>local::at1002</excludedValues>` drops one at-code; `<constraint xsi:type="tem:multipleConstraint"><includedTypes>Coded_text</includedTypes></constraint>` picks one RM type from a choice.)
 
-**Fix a context value to a code (`/context/setting`)** — `EVENT_CONTEXT.setting` is a `DV_CODED_TEXT` from the openEHR `setting` group; narrow it with a `textConstraint` inside `<Context>` (runtime value via `ctx/setting|code`):
+**Fix a context value to a code (`/context/setting`)** — `EVENT_CONTEXT.setting` is a `DV_CODED_TEXT` from the openEHR `setting` group; narrow it with a `textConstraint` inside `<Context>` (runtime value via `ctx/setting`, which takes the value or the code):
 ```xml
 <Context>
   <Rule path="/context/setting">

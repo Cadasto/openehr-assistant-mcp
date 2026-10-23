@@ -97,7 +97,7 @@ See `openehr://guides/archetypes/language-standards` for full guidance.
 
 - Original language: English (en) mandatory for international CKM.
 - Translations preserve clinical intent, not literal wording; use target language's natural clinical register.
-- Internal codes (at/ac/id), paths, structure, and class names are never translated.
+- Internal codes (at/ac; id in ADL 2), paths, structure, and class names are never translated.
 
 ---
 

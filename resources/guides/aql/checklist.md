@@ -16,7 +16,7 @@
 
 ## 2. Containment Correctness
 
-- [ ] Containment chain matches RM hierarchy (EHR → COMPOSITION → content; COMPOSITION can contain SECTION, OBSERVATION, EVALUATION, ACTION, ADMIN_ENTRY, etc.).
+- [ ] Containment chain matches RM hierarchy (EHR → COMPOSITION → content; see openehr://guides/aql/syntax, FROM and CONTAINS).
 - [ ] Contained RM type matches concept (not only ENTRY: e.g. SECTION, or OBSERVATION, EVALUATION, ACTION as appropriate).
 - [ ] Archetype-id restriction applied in containment for each targeted node.
 - [ ] Multiple or alternative containments use AND/OR correctly; NOT CONTAINS used for exclusions where needed (see openehr://guides/aql/syntax).
@@ -26,7 +26,7 @@
 
 ## 3. Path Correctness (Archetype Paths)
 
-Paths in AQL are **archetype paths** (or RM class attribute paths), grounded in the archetype definition and constraints; segments and predicates are tightly coupled to RM class properties. See openehr://guides/archetypes/adl-syntax where applicable.
+Path semantics and predicate forms: see openehr://guides/aql/syntax (Paths and Predicates).
 
 - [ ] Every path starts from a declared alias.
 - [ ] Node-id predicates (`[atNNNN]`) used on repeating segments; paths validated against deployed template.
@@ -57,7 +57,7 @@ Paths in AQL are **archetype paths** (or RM class attribute paths), grounded in 
 
 - [ ] ORDER BY present when using LIMIT/OFFSET for stable paging.
 - [ ] Tie-breaker included if primary sort can collide (e.g. UID).
-- [ ] LIMIT/OFFSET values bounded and parameterized.
+- [ ] LIMIT/OFFSET bounded integer literals (no `$parameters`); runtime paging goes through the query API (`offset`/`fetch`).
 
 ---
 
@@ -72,7 +72,7 @@ Paths in AQL are **archetype paths** (or RM class attribute paths), grounded in 
 ## 8. Engine Compatibility
 
 - [ ] Query uses only features supported by the target engine (docs/tests).
-- [ ] Functions/aggregates verified — aggregates (COUNT, MIN, MAX, SUM, AVG) and core single-row functions (LENGTH, CONTAINS, POSITION, SUBSTRING, CONCAT, CONCAT_WS; ABS, MOD, CEIL, FLOOR, ROUND; CURRENT_DATE, CURRENT_TIME, CURRENT_DATE_TIME/NOW, CURRENT_TIMEZONE; TERMINOLOGY) are spec-defined, but engine coverage varies (COUNT, MIN, MAX are safest); any other function is an engine extension.
+- [ ] Functions/aggregates verified against the engine — spec core list in openehr://guides/aql/syntax (Functions and Aggregates); COUNT, MIN, MAX are safest; any other function is an engine extension.
 - [ ] Text/pattern operators — MATCHES and LIKE are spec-normative; IN is engine-dependent.
 - [ ] Tested with representative data and edge cases.
 
@@ -103,9 +103,8 @@ Paths in AQL are **archetype paths** (or RM class attribute paths), grounded in 
 
 ## 12. Versioning Queries (if applicable)
 
-- [ ] `CONTAINS VERSION` predicate stated explicitly (`[LATEST_VERSION]` / `[ALL_VERSIONS]`); no reliance on the unspecified no-predicate default.
-- [ ] Engine support for VERSION/VERSIONED_OBJECT containment verified (grammar-level constructs; semantics not defined in spec prose).
-- [ ] VERSIONED_OBJECT included only when container-level attributes (e.g. trunk_lifecycle_state) are projected or filtered.
-- [ ] Audit projections use canonical paths (v/uid/value, v/preceding_version_uid/value, v/commit_audit/time_committed/value, v/commit_audit/change_type, v/lifecycle_state/defining_code/code_string).
+- [ ] `CONTAINS VERSION` predicate stated explicitly (`[LATEST_VERSION]` / `[ALL_VERSIONS]`) and engine support verified (see openehr://guides/aql/syntax, VERSION in FROM).
+- [ ] VERSIONED_OBJECT included only when its attributes (uid, owner_id, time_created) are projected or filtered.
+- [ ] Audit projections use the canonical paths listed in openehr://guides/aql/syntax (VERSION in FROM).
 
 ---

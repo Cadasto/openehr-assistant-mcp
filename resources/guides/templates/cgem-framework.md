@@ -35,9 +35,9 @@ The acronym is **C-G-E-M**:
 | Global Background | `persistent` (431) | One current version per patient, maintained for life; updates in place (new versions of the same composition) | EVALUATION (problem, allergy), often maintained lists | Small number per patient; frequently **read** by many forms (often via AQL, read-only in a given form) |
 | Contextual Situation | `episodic` (451) | One current version per journey/condition; updated in place, but bounded to the episode; a re-admission/new journey creates a new instance | EVALUATION, ADMIN_ENTRY, care-plan structures | One instance per pathway; the "source of truth" for that pathway |
 | Event Assessment | `event` (433) | New composition per submission; not overwritten; many over time | OBSERVATION, EVALUATION | High volume, low versions/instance; strong candidate for a reusable event template |
-| Managed Response | usually `event` (or `persistent`) | Order state tracked across ACTIONs via the ISM | INSTRUCTION + ACTION | Not a distinct category code — see the note below |
+| Managed Response | usually `event` (or `persistent`) | Order state tracked across ACTIONs via the ISM | INSTRUCTION + ACTION | Dedicated or encounter template; not a distinct category code — see the note below |
 
-The three category codes (`431 persistent`, `451 episodic`, `433 event`) are defined in the openEHR Terminology (`openehr` code set, group "composition category") and described in the openEHR EHR IM. Persistent and episodic compositions are both "single source of truth" forms (persistent for life, episodic for an episode); event compositions record occurrents at a point in time.
+The category codes used here (`431 persistent`, `451 episodic`, `433 event`; the group also has `815 report`, outside CGEM) are defined in the openEHR Terminology (`openehr` code set, group "composition category") and described in the openEHR EHR IM. Persistent and episodic compositions are both "single source of truth" forms (persistent for life, episodic for an episode); `episodic` is its own category, not a subtype of `persistent`. Event compositions record occurrents at a point in time.
 
 ## Applying CGEM in practice
 
@@ -51,7 +51,7 @@ The three category codes (`431 persistent`, `451 episodic`, `433 event`) are def
 ## Alignment notes and caveats
 
 - **No contradiction with the specs.** CGEM's categories map 1:1 onto openEHR's own temporal composition model and the Instruction/Action design; it adds vocabulary and method, not new serialisation or validation semantics. It does not change ADL, AOM or OPT.
-- **Four CGEM categories, three category codes.** `Global Background → persistent`, `Contextual Situation → episodic`, `Event Assessment → event`. **Managed Response is *not* a distinct `COMPOSITION.category`** — a Managed Response composition is typically an `event` (or sometimes `persistent`) composition, distinguished by its use of INSTRUCTION/ACTION entries and the ISM, not by its category code.
+- **Four CGEM categories, three of the four category codes.** `Global Background → persistent`, `Contextual Situation → episodic`, `Event Assessment → event`. **Managed Response is *not* a distinct `COMPOSITION.category`** — a Managed Response composition is typically an `event` (or sometimes `persistent`) composition, distinguished by its use of INSTRUCTION/ACTION entries and the ISM, not by its category code.
 - **`episodic` is less widely implemented.** The `451 episodic` code is normative, but some CDRs and tools in practice use only `persistent` and `event`. Confirm your target platform's support before relying on episodic-specific behaviour; if unsupported, `persistent` with governance conventions is a common fallback.
 - **CGEM is a design aid, not a conformance rule.** Nothing in openEHR *requires* CGEM; it is one proven way to reach clean, reusable, correctly-versioned models.
 

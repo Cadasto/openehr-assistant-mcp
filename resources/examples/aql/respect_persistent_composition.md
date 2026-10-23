@@ -36,7 +36,7 @@ FROM EHR e
 WHERE e/ehr_id/value = $ehrId
     AND c/name/value = 'ReSPECT_v3-6-7'
 ORDER BY c/context/start_time/value DESC
-OFFSET 0 LIMIT 1
+LIMIT 1
 ```
 
 ## Notes
@@ -44,5 +44,5 @@ OFFSET 0 LIMIT 1
 - **OR-containment across four entry types** — each row has *at most one* of `t`/`g`/`h`/`r` populated; the other three are `NULL`. A flattened projection like this returns one row per matched entry, which the client must regroup by composition uid.
 - **Name-predicate disambiguation** — `items[at0002, 'What I most value']` and `items[at0002, 'What I most fear']` pick two runtime clones of the same at-code by their `name/value`. Spec-legal but implementation-fragile: **EHRbase has historically handled multi-name at-codes inconsistently** — before committing to this idiom in new templates, prefer specialised at-codes (`at0002.1`, `at0002.2`). For existing templates you cannot change (like ReSPECT), this is the pattern.
 - **Deep CLUSTER navigation** into `protocol[at0015]` traces two levels of clinician metadata — this is what "full authorship provenance" looks like in AQL.
-- **Persistent-composition singleton pattern** — ReSPECT is a patient-level singleton resuscitation-wishes form (`category = persistent`). The trailing `ORDER BY ... DESC OFFSET 0 LIMIT 1` is defensive: pick the most recent if duplicates ever exist.
+- **Persistent-composition singleton pattern** — ReSPECT is a patient-level singleton resuscitation-wishes form (`category = persistent`). The trailing `ORDER BY ... DESC LIMIT 1` is defensive: pick the most recent if duplicates ever exist.
 - Tested in freshEHR's NHS Scotland National Digital Platform tutorials; node IDs match the ReSPECT v3 template.

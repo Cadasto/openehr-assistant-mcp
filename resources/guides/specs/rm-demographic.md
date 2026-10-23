@@ -6,7 +6,7 @@
 **Release:** development
 **Spec URL:** https://specifications.openehr.org/releases/RM/development/demographic.html
 **Markdown URL:** https://specifications.openehr.org/releases/RM/development/demographic.md
-**Last updated:** 2026-04-20
+**Last updated:** 2026-10-22
 **Related:** openehr://guides/specs/rm-ehr, openehr://guides/specs/rm-common
 **Keywords:** demographic, PARTY, ACTOR, PERSON, ORGANISATION, ROLE, CAPABILITY, PARTY_RELATIONSHIP, PARTY_IDENTITY, PMI
 
@@ -19,7 +19,7 @@ Defines the generic structures required to represent the real-world parties refe
 ## Scope
 
 - In: party hierarchy (`ACTOR` / `ROLE`); party identities, contacts, and addresses; capabilities and credentials; directed relationships between parties; archetyping hooks on `details` attributes; versioning of parties via the shared change-control machinery; domain-neutral structural patterns.
-- Out: the clinical record itself (`RM/ehr`); the change-control classes themselves (`RM/common`); data-type values inside archetyped structures (`RM/data_types`); service APIs (`SM`); identifier formats (`RM/support`).
+- Out: the clinical record itself (`RM/ehr`); the change-control classes themselves (`RM/common`); data-type values inside archetyped structures (`RM/data_types`); service APIs (`SM`); identifier formats (`BASE/base_types`).
 
 ## Key Classes / Constructs
 
@@ -38,7 +38,7 @@ Defines the generic structures required to represent the real-world parties refe
 
 ## Relations to Other Specs
 
-- Depends on: `RM/common` (`VERSIONED_OBJECT`, `ORIGINAL_VERSION`, `AUDIT_DETAILS`, `CONTRIBUTION`, `LOCATABLE`, `PATHABLE`), `RM/data_types` (archetyped `details` attribute values), `RM/support` (identifiers, terminology interface).
+- Depends on: `RM/common` (`VERSIONED_OBJECT`, `ORIGINAL_VERSION`, `AUDIT_DETAILS`, `CONTRIBUTION`, `LOCATABLE`, `PATHABLE`), `RM/data_structures` (`details` is an `ITEM_STRUCTURE`), `RM/data_types` (values inside those structures), `RM/support` (terminology interface), `BASE/base_types` (identifiers).
 - Consumed by: `RM/ehr` via `PARTY_PROXY` subtypes (`PARTY_SELF`, `PARTY_IDENTIFIED`, `PARTY_RELATED`) as the clinical-side reference mechanism; `SM` platform services that expose demographic CRUD; archetypes (`AM`) that constrain the `details` slots.
 
 ## Architectural Placement
@@ -47,7 +47,7 @@ The Demographic IM is the deliberately decoupled peer of the EHR IM: clinical co
 
 ## When to Read the Full Spec
 
-Consult the full spec when implementing the `ACTOR` / `ROLE` split with shared vs role-specific identities, when modelling capability credentials and their temporal validity, when designing a PMI adapter (external-identifier placement in `PARTY.details` vs `PARTY_IDENTITY`), when serialising parties for EHR Extract inclusion, or when deciding which demographic attributes (age, sex, ethnicity) belong in the clinical record as Observations rather than in the demographic service.
+Consult the full spec when implementing the `ACTOR` / `ROLE` split with shared vs role-specific identities, when modelling capability credentials and their temporal validity, when designing a PMI adapter (external-identifier placement in `PARTY.details` vs `PARTY_IDENTITY`), when serialising parties for EHR Extract inclusion, or when deciding which demographic attributes (age, sex, ethnicity) belong in the clinical record as Observations rather than in the demographic service. For per-class attribute, function, and invariant detail use the BMM-backed `type_specification_get` tool rather than the rendered HTML.
 
 ## References
 
