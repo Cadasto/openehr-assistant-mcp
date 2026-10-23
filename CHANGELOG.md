@@ -29,7 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Tools: `guide_search` publishes `taskType` as a plain string, which single-`type` schema dialects accept — **breaking** for clients that send an explicit `null`.
 - Tools: CKM lookups validate identifiers before they reach the request URL, and a CKM outage during archetype-id resolution is reported as one.
 - Tools: `ckm_archetype_get` and `ckm_template_get` report an unknown format as a tool error.
-- Tools: `type_specification_search` ignores dots in a pattern as `type_specification_get` does, instead of matching nothing.
+- Tools: `type_specification_search` drops dots from a pattern as `type_specification_get` does, so the two agree and a dotted pattern no longer raises PHP warnings.
 - Tools/resources: a terminology load failure is reported once and keeps its cause.
 - Helpers: a malformed terminology file no longer prints libxml warnings to stdout, which could corrupt the stdio transport.
 - Tools/resources: guide, example and type-spec lookups refuse dot-only names and report not-found, invalid-name and decode errors accurately.
